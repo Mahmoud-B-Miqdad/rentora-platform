@@ -1,0 +1,354 @@
+/* ═══════════════════════════════════════════════════════════════
+   auth.css — Rentora Auth Page Styles
+   Scope: users/auth.html only
+   Depends on: base.css (design tokens must be loaded first)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Page Layout ───────────────────────────────────────────── */
+.auth-page .site-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
+    background: var(--clr-page-bg);
+}
+
+/* ── Auth Card ─────────────────────────────────────────────── */
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--clr-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+/* ── Card Logo ─────────────────────────────────────────────── */
+.auth-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 32px 32px 0;
+}
+
+.auth-logo__icon {
+    width: 52px;
+    height: 52px;
+    background: var(--clr-brand-dark);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+    box-shadow: 0 8px 20px rgba(15, 118, 110, 0.30);
+}
+
+.auth-logo__wordmark {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--clr-text);
+}
+
+.auth-logo__wordmark span { color: var(--clr-brand); }
+
+/* ── Flash Messages ────────────────────────────────────────── */
+.auth-flashes {
+    padding: 0 32px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.auth-flash {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.auth-flash i { flex-shrink: 0; }
+
+.auth-flash--error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+
+.auth-flash--success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+}
+
+/* ── Form Panel ────────────────────────────────────────────── */
+.auth-panel {
+    display: none;
+    padding: 28px 32px 36px;
+}
+
+.auth-panel--active {
+    display: block;
+    animation: panel-enter 0.25s var(--ease) both;
+}
+
+@keyframes panel-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Panel Header ──────────────────────────────────────────── */
+.auth-panel__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--clr-text);
+    letter-spacing: -0.4px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.auth-panel__subtitle {
+    font-size: 13.5px;
+    color: var(--clr-text-2);
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.auth-panel__subtitle--brand {
+    color: var(--clr-brand);
+}
+
+/* ── Form ──────────────────────────────────────────────────── */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.auth-form--two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+/* ── Field ─────────────────────────────────────────────────── */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.field__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--clr-text);
+}
+
+.field__label sup {
+    color: var(--clr-error);
+    font-size: 11px;
+}
+
+.field__link {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--clr-brand);
+    text-decoration: none;
+    transition: color var(--duration) var(--ease);
+}
+
+.field__link:hover { color: var(--clr-brand-dark); }
+
+.field__control {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.field__icon {
+    position: absolute;
+    left: 13px;
+    color: var(--clr-muted);
+    font-size: 14px;
+    pointer-events: none;
+    transition: color var(--duration) var(--ease);
+    z-index: 1;
+}
+
+.field__input {
+    width: 100%;
+    padding: 11px 40px;
+    background: var(--clr-input-bg);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-md);
+    color: var(--clr-text);
+    font-family: var(--font);
+    font-size: 14px;
+    outline: none;
+    transition: border-color var(--duration) var(--ease),
+                box-shadow   var(--duration) var(--ease),
+                background   var(--duration) var(--ease);
+}
+
+.field__input::placeholder { color: var(--clr-muted); font-size: 13.5px; }
+
+.field__input:focus {
+    border-color: var(--clr-brand);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+}
+
+.field__control:has(.field__input:focus) .field__icon {
+    color: var(--clr-brand);
+}
+
+.field__eye {
+    position: absolute;
+    right: 11px;
+    background: transparent;
+    border: none;
+    color: var(--clr-muted);
+    padding: 5px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: color var(--duration) var(--ease);
+}
+
+.field__eye:hover { color: var(--clr-text-2); }
+
+/* ── Submit Button ─────────────────────────────────────────── */
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 20px;
+    margin-top: 6px;
+    background: var(--clr-brand-dark);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    transition: background  var(--duration) var(--ease),
+                transform   var(--duration) var(--ease),
+                box-shadow  var(--duration) var(--ease);
+    box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+}
+
+.btn-submit:hover {
+    background: #115e59;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
+}
+
+.btn-submit:focus-visible {
+    outline: 2px solid var(--clr-brand);
+    outline-offset: 3px;
+}
+
+/* ── Switch Link ───────────────────────────────────────────── */
+.auth-switch {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13.5px;
+    color: var(--clr-text-2);
+}
+
+.auth-switch__link {
+    font-weight: 600;
+    color: var(--clr-brand);
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+    transition: color var(--duration) var(--ease);
+}
+
+.auth-switch__link:hover { color: var(--clr-brand-dark); }
+
+/* ── Divider ───────────────────────────────────────────────── */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    color: var(--clr-muted);
+    font-size: 12px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--clr-border);
+}
+
+/* ── Demo Credentials ──────────────────────────────────────── */
+.auth-demo {
+    text-align: center;
+    margin-top: 16px;
+    padding-top: 4px;
+}
+
+.auth-demo__label {
+    font-size: 12.5px;
+    color: var(--clr-muted);
+    margin-bottom: 10px;
+}
+
+.btn-demo {
+    display: inline-block;
+    padding: 9px 20px;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-md);
+    background: var(--clr-input-bg);
+    color: var(--clr-brand);
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: background var(--duration) var(--ease),
+                border-color var(--duration) var(--ease);
+}
+
+.btn-demo:hover {
+    background: var(--clr-brand-light);
+    border-color: var(--clr-brand);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .auth-page .site-main { padding: 32px 12px; }
+    .auth-panel { padding: 24px 20px 28px; }
+    .auth-logo  { padding: 26px 20px 0; }
+    .auth-flashes { padding: 0 20px; }
+    .auth-form--two-col { grid-template-columns: 1fr; }
+}

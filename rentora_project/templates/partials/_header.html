@@ -1,0 +1,46 @@
+{% load static %}
+<header class="site-header">
+    <div class="container header-inner">
+
+        <!-- Brand -->
+        <a href="/" class="header-brand">
+            <div class="header-brand__icon" aria-hidden="true">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <span class="header-brand__name">Rent<span>ora</span></span>
+        </a>
+
+        <!-- Primary Navigation -->
+        <nav class="header-nav" aria-label="Main navigation">
+            <a href="/" class="header-nav__link">Home</a>
+            <a href="#" class="header-nav__link">Browse Tools</a>
+            <a href="#" class="header-nav__link">About Us</a>
+        </nav>
+
+        <!-- Right-side Actions -->
+        <div class="header-actions">
+            <a href="#" class="btn-list-tool">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                <span>List Your Tool</span>
+            </a>
+
+            <a href="#" class="header-icon-btn" title="Dashboard" aria-label="Dashboard">
+                <i class="fa-solid fa-border-all" aria-hidden="true"></i>
+            </a>
+
+            {% if request.session.user_id %}
+                <a href="#" class="header-icon-btn" title="Profile" aria-label="Your profile">
+                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                </a>
+                <a href="{% url 'users:logout' %}" class="header-icon-btn" title="Log out" aria-label="Log out">
+                    <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="header-icon-btn" title="Sign in" aria-label="Sign in">
+                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                </a>
+            {% endif %}
+        </div>
+
+    </div>
+</header>
