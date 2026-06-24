@@ -1,6 +1,14 @@
 asgiref==3.11.1
+<<<<<<< HEAD
 Django==6.0.6
 django-environ==0.14.0
 mysqlclient==2.2.8
+=======
+bcrypt==5.0.0
+Django==6.0.6
+django-environ==0.14.0
+mysqlclient==2.2.8
+pillow==12.2.0
+>>>>>>> develop
 sqlparse==0.5.5
 tzdata==2026.2

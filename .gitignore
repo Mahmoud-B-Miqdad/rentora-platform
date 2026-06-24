@@ -33,3 +33,9 @@ Thumbs.db
 
 # Environments
 .env
+<<<<<<< HEAD
+=======
+
+
+media/
+>>>>>>> develop
