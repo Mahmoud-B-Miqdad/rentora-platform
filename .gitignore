@@ -1,0 +1,38 @@
+# --- Virtual Environment ---
+venv/
+ENV/
+env/
+.venv/
+
+# --- Python Temporary Files ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+*.pyo
+.pytest_cache/
+
+# --- Django Specific Files ---
+db.sqlite3
+*.log
+local_settings.py
+*.bak
+
+# --- IDEs and Editors ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# --- OS temporary files ---
+.DS_Store
+Thumbs.db
+
+# Environments
+.env
+
+
+media/
