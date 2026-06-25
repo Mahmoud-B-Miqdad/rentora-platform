@@ -16,14 +16,7 @@ class BookingStatus(models.TextChoices):
     COMPLETED = "completed", "Completed"
     CANCELLED = "cancelled", "Cancelled"
 
-
-# ─────────────────────────────────────────────
-#  Manager
-# ─────────────────────────────────────────────
-
 class BookingManager(models.Manager):
-
-    # ── private helpers ───────────────────────────────────────────────────────
 
     @staticmethod
     def _parse_date(value, field_name, errors, label):
