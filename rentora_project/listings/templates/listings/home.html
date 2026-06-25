@@ -84,20 +84,21 @@
             <p class="section-subtitle">Find exactly what you need across our most popular tool categories</p>
         </div>
 
-        <div class="categories-grid">
+        <div class="cat-grid">
             {% for cat in categories %}
-            <a href="#" class="cat-card" title="Browse {{ cat.name }}">
-                <div class="cat-card__icon-wrap">
+            <a href="#" class="cat-item" title="Browse {{ cat.name }}">
+                <div class="cat-item__icon">
                     {% if cat.icon %}
                         <i class="{{ cat.icon }}" aria-hidden="true"></i>
                     {% else %}
                         <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
                     {% endif %}
                 </div>
-                <span class="cat-card__name">{{ cat.name }}</span>
+                <span class="cat-item__name">{{ cat.name }}</span>
+                <i class="fa-solid fa-chevron-right cat-item__arrow" aria-hidden="true"></i>
             </a>
             {% empty %}
-            <div class="categories-empty">
+            <div class="cat-empty">
                 <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
                 <p>No categories yet &mdash; check back soon.</p>
             </div>
@@ -184,7 +185,7 @@
             {% for tool in featured_tools %}
 
             {% with primary_img=tool.primary_images.0 %}
-            <article class="tool-card">
+            <a href="{% url 'listings:detail' tool.pk %}" class="tool-card" aria-label="View {{ tool.title }}">
 
                 <!-- Image -->
                 <div class="tool-card__img-wrap">
@@ -203,7 +204,7 @@
                         {{ tool.get_condition_display }}
                     </span>
 
-                    <button class="tool-card__wishlist" aria-label="Save to wishlist">
+                    <button class="tool-card__wishlist" aria-label="Save to wishlist" onclick="event.preventDefault()">
                         <i class="fa-regular fa-heart" aria-hidden="true"></i>
                     </button>
 
@@ -259,7 +260,7 @@
                     </div>
 
                 </div>
-            </article>
+            </a>
             {% endwith %}
 
             {% empty %}
@@ -291,6 +292,7 @@
 
         <div class="steps-grid">
 
+            <!-- Step 1 -->
             <div class="step">
                 <div class="step__icon-wrap">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -298,12 +300,18 @@
                 <span class="step__num">Step 01</span>
                 <h3 class="step__title">Find Your Tool</h3>
                 <p class="step__desc">
-                    Browse thousands of tools or use <mark>AI smart search</mark> &ndash;
-                    even in Arabic. <mark>Filter</mark> by category, price, and location
-                    in seconds.
+                    Browse thousands of tools or use <mark>AI smart search</mark> &mdash;
+                    even in Arabic. <mark>Filter</mark> by category, price, and location in seconds.
                 </p>
+                <span class="step__bg-number" aria-hidden="true">01</span>
             </div>
 
+            <!-- Arrow -->
+            <div class="steps-arrow" aria-hidden="true">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+
+            <!-- Step 2 -->
             <div class="step">
                 <div class="step__icon-wrap">
                     <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
@@ -314,8 +322,15 @@
                     Pick your dates, review <mark>pricing</mark> and deposit details,
                     then send a booking request. Owners respond fast.
                 </p>
+                <span class="step__bg-number" aria-hidden="true">02</span>
             </div>
 
+            <!-- Arrow -->
+            <div class="steps-arrow" aria-hidden="true">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+
+            <!-- Step 3 -->
             <div class="step">
                 <div class="step__icon-wrap">
                     <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
@@ -324,8 +339,9 @@
                 <h3 class="step__title">Get the Job Done</h3>
                 <p class="step__desc">
                     Pick up the tool, complete your project, and return it.
-                    Leave a review to help build <mark>community trust</mark>.
+                    Leave a <mark>review</mark> to help build community trust.
                 </p>
+                <span class="step__bg-number" aria-hidden="true">03</span>
             </div>
 
         </div>

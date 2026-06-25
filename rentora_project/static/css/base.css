@@ -84,22 +84,49 @@ button { cursor: pointer; font-family: inherit; }
 
 /* ── Site Main ─────────────────────────────────────────────── */
 .site-main {
+    margin-top: var(--header-h);
     min-height: calc(100vh - var(--header-h));
 }
 
-/* ══════════════════════════════════════════════════════════════
+/* Home page: hero fills full viewport behind transparent header */
+.home-page .site-main { margin-top: 0; }
+
+/* ======================================================
    HEADER
-   ══════════════════════════════════════════════════════════════ */
+   ====================================================== */
 
 .site-header {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
+    left: 0;
+    right: 0;
+    z-index: 200;
     height: var(--header-h);
     background: var(--clr-surface);
     border-bottom: 1px solid var(--clr-border);
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: background 0.35s var(--ease),
+                border-color 0.35s var(--ease),
+                box-shadow 0.35s var(--ease);
 }
+
+/* Transparent when home page is at the top */
+.home-page .site-header:not(.scrolled) {
+    background: transparent;
+    border-bottom-color: transparent;
+    box-shadow: none;
+}
+
+/* Solid after scroll */
+.site-header.scrolled {
+    background: var(--clr-surface) !important;
+    border-bottom: 1px solid var(--clr-border) !important;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08) !important;
+}
+
+/* Brand white text over hero */
+.home-page .site-header:not(.scrolled) .header-brand__name { color: #fff; }
+.home-page .site-header:not(.scrolled) .header-brand__name span { color: #5eead4; }
 
 .header-inner {
     height: 100%;
@@ -215,6 +242,63 @@ button { cursor: pointer; font-family: inherit; }
     color: var(--clr-text);
     background: var(--clr-input-bg);
 }
+
+/* ── Pill Navigation ──────────────────────────────────── */
+.header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.header-nav__pills {
+    display: flex;
+    align-items: center;
+    background: var(--clr-input-bg);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-full);
+    padding: 4px;
+    gap: 2px;
+    transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+/* Transparent header: pill container is glass */
+.home-page .site-header:not(.scrolled) .header-nav__pills {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.18);
+    backdrop-filter: blur(10px);
+}
+
+.header-nav__link {
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--clr-text-2);
+    transition: color var(--duration) var(--ease),
+                background var(--duration) var(--ease);
+    white-space: nowrap;
+}
+
+.header-nav__link:hover {
+    color: var(--clr-text);
+    background: rgba(0,0,0,0.05);
+}
+
+.header-nav__link--active {
+    background: var(--clr-surface);
+    color: var(--clr-text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+
+/* Active link white pill when transparent */
+.home-page .site-header:not(.scrolled) .header-nav__link { color: rgba(255,255,255,0.80); }
+.home-page .site-header:not(.scrolled) .header-nav__link:hover { color: #fff; background: rgba(255,255,255,0.12); }
+.home-page .site-header:not(.scrolled) .header-nav__link--active { background: rgba(255,255,255,0.20); color: #fff; box-shadow: none; }
+
+/* Icon buttons white when transparent */
+.home-page .site-header:not(.scrolled) .header-icon-btn { color: rgba(255,255,255,0.85); }
+.home-page .site-header:not(.scrolled) .header-icon-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
 
 /* ══════════════════════════════════════════════════════════════
    FOOTER
