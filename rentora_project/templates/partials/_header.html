@@ -1,5 +1,5 @@
 {% load static %}
-<header class="site-header">
+<header class="site-header" id="site-header">
     <div class="container header-inner">
 
         <!-- Brand -->
@@ -10,11 +10,13 @@
             <span class="header-brand__name">Rent<span>ora</span></span>
         </a>
 
-        <!-- Primary Navigation -->
+        <!-- Pill Navigation (centered) -->
         <nav class="header-nav" aria-label="Main navigation">
-            <a href="{% url 'listings:home' %}" class="header-nav__link">Home</a>
-            <a href="#" class="header-nav__link">Browse Tools</a>
-            <a href="#" class="header-nav__link">About Us</a>
+            <div class="header-nav__pills">
+                <a href="{% url 'listings:home' %}" class="header-nav__link">Home</a>
+                <a href="#" class="header-nav__link">Browse Tools</a>
+                <a href="#" class="header-nav__link">About Us</a>
+            </div>
         </nav>
 
         <!-- Right-side Actions -->
