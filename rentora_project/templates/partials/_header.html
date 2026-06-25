@@ -3,7 +3,7 @@
     <div class="container header-inner">
 
         <!-- Brand -->
-        <a href="/" class="header-brand">
+        <a href="{% url 'listings:home' %}" class="header-brand">
             <div class="header-brand__icon" aria-hidden="true">
                 <i class="fa-solid fa-screwdriver-wrench"></i>
             </div>
@@ -12,7 +12,7 @@
 
         <!-- Primary Navigation -->
         <nav class="header-nav" aria-label="Main navigation">
-            <a href="/" class="header-nav__link">Home</a>
+            <a href="{% url 'listings:home' %}" class="header-nav__link">Home</a>
             <a href="#" class="header-nav__link">Browse Tools</a>
             <a href="#" class="header-nav__link">About Us</a>
         </nav>
