@@ -1,8 +1,9 @@
-from django.urls import path
-from listings.views.browse_views import home_view
+from django.urls import include, path
 
 app_name = 'listings'
 
 urlpatterns = [
-    path('', home_view, name='home'),
+    path('', include('listings.urls.browse_urls')),
+    path('', include('listings.urls.tool_urls')),
+    path('', include('listings.urls.booking_urls')),
 ]
