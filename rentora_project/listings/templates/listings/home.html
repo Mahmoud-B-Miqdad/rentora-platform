@@ -5,7 +5,7 @@
 {% block body_class %}home-page{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'listings/css/home.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -392,27 +392,11 @@
 
 {% block extra_js %}
 <script>
-function toggleWishlist(btn, toolId) {
-    fetch("{% url 'listings:toggle_wishlist' 0 %}".replace('/0/', '/' + toolId + '/'), {
-        method: 'POST',
-        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
-    })
-    .then(r => {
-        if (r.status === 401) { window.location.href = "{% url 'users:login' %}"; return null; }
-        return r.json();
-    })
-    .then(data => {
-        if (!data) return;
-        const icon = btn.querySelector('i');
-        if (data.saved) {
-            icon.className = 'fa-solid fa-heart';
-            btn.classList.add('tool-card__wishlist--saved');
-        } else {
-            icon.className = 'fa-regular fa-heart';
-            btn.classList.remove('tool-card__wishlist--saved');
-        }
-    })
-    .catch(console.error);
-}
+window.AppConfig = {
+    csrfToken:          '{{ csrf_token }}',
+    toggleWishlistUrl:  '{% url "listings:toggle_wishlist" 0 %}',
+    loginUrl:           '{% url "users:login" %}',
+};
 </script>
+<script src="{% static 'listings/js/home.js' %}"></script>
 {% endblock %}
