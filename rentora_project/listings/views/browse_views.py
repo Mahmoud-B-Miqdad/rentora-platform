@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.db.models import Avg, Count, Prefetch
+from django.db.models import Avg, Prefetch, Q
 
-from listings.models import Category, Tool, ToolImage, Booking, Review, BookingStatus
+from listings.models import *
 from users.models    import User
 
 
@@ -35,7 +35,13 @@ def home_view(request):
         .filter(is_available=True)
         .select_related('owner', 'category')
         .prefetch_related(primary_img_prefetch)
-        .order_by('-created_at')[:6]
+        .annotate(
+            avg_rating_computed=Avg(
+                'bookings__reviews__rating',
+                filter=Q(bookings__reviews__review_type='for_tool')
+            )
+        )
+        .order_by('id')[:6]
     )
 
     # ── Platform stats ────────────────────────────────────────────────────────
@@ -50,9 +56,17 @@ def home_view(request):
     avg_data   = Review.objects.aggregate(avg=Avg('rating'))
     avg_rating = round(float(avg_data['avg']), 1) if avg_data['avg'] else 0.0
 
+    # ── Wishlist IDs for the logged-in user ───────────────────────────────────
+    user_id = request.session.get('user_id')
+    wishlist_ids = (
+        set(Wishlist.objects.filter(user_id=user_id).values_list('tool_id', flat=True))
+        if user_id else set()
+    )
+
     context = {
         'categories':     categories,
         'featured_tools': featured_tools,
+        'wishlist_ids':   wishlist_ids,
         'stats': {
             'tools_count':   tools_count,
             'rentals_count': rentals_count,
