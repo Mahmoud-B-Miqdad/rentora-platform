@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Prefetch
+from django.http     import JsonResponse
+from django.db.models import Prefetch, Avg
 
-from listings.models import Tool, ToolImage, Review, Booking, BookingStatus
+from listings.models import Tool, ToolImage, Review, Booking, BookingStatus, Wishlist
+from users.models    import User
 
 
 def tool_detail_view(request, pk):
@@ -44,6 +46,20 @@ def tool_detail_view(request, pk):
         status=BookingStatus.COMPLETED,
     ).count()
 
+    owner_avg_raw = Review.objects.filter(
+    booking__tool__owner=tool.owner,
+    review_type='for_owner' 
+    ).aggregate(Avg('rating'))['rating__avg']
+
+    owner_rating = round(float(owner_avg_raw), 1) if owner_avg_raw else None
+
+    # ── Wishlist state ────────────────────────────────────────────────────────
+    user_id        = request.session.get('user_id')
+    is_wishlisted  = (
+        Wishlist.objects.filter(user_id=user_id, tool=tool).exists()
+        if user_id else False
+    )
+
     # ── Pop one-time session flash messages ───────────────────────────────────
     booking_success = request.session.pop('booking_success', None)
     booking_error   = request.session.pop('booking_error', None)
@@ -58,7 +74,28 @@ def tool_detail_view(request, pk):
         'avg_rating':           avg_rating,
         'owner_tools_count':    owner_tools_count,
         'owner_rentals_count':  owner_rentals_count,
+        'owner_rating':         owner_rating,
+        'is_wishlisted':        is_wishlisted,
         'booking_success':      booking_success,
         'booking_error':        booking_error,
     }
     return render(request, 'listings/tool_detail.html', context)
+
+
+def toggle_wishlist_view(request, pk):
+    """AJAX POST — toggle a tool in/out of the user's wishlist."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return JsonResponse({'error': 'login_required'}, status=401)
+
+    tool = get_object_or_404(Tool, pk=pk)
+    user = get_object_or_404(User, pk=user_id)
+
+    obj, created = Wishlist.objects.get_or_create(user=user, tool=tool)
+    if not created:
+        obj.delete()
+        return JsonResponse({'saved': False})
+    return JsonResponse({'saved': True})
