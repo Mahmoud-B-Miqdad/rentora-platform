@@ -5,7 +5,7 @@
 {% block body_class %}detail-page{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/tool_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'listings/css/tool_detail.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -358,91 +358,14 @@
 
 {% block extra_js %}
 <script>
-/* ── Wishlist toggle ─────────────────────────────────────── */
-function toggleWishlist(btn, toolId) {
-    fetch("{% url 'listings:toggle_wishlist' 0 %}".replace('/0/', '/' + toolId + '/'), {
-        method: 'POST',
-        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
-    })
-    .then(r => {
-        if (r.status === 401) { window.location.href = "{% url 'users:login' %}"; return null; }
-        return r.json();
-    })
-    .then(data => {
-        if (!data) return;
-        const icon = btn.querySelector('i');
-        if (data.saved) {
-            icon.className = 'fa-solid fa-heart';
-            btn.classList.add('detail-wishlist-btn--saved');
-            btn.setAttribute('aria-label', 'Remove from wishlist');
-        } else {
-            icon.className = 'fa-regular fa-heart';
-            btn.classList.remove('detail-wishlist-btn--saved');
-            btn.setAttribute('aria-label', 'Save to wishlist');
-        }
-    })
-    .catch(console.error);
-}
-
-(function () {
-    const dailyRate = parseFloat("{{ tool.daily_rate }}");
-
-    /* ── Image Slider ────────────────────────────────────────── */
-    const images = [
-        {% for img in all_images %}
-        "{{ img.image.url }}"{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    ];
-
-    if (images.length > 1) {
-        let current = 0;
-        const mainImg   = document.getElementById('sliderMainImg');
-        const dots      = document.querySelectorAll('.img-slider__dot');
-        const thumbs    = document.querySelectorAll('.img-slider__thumb');
-        const prevBtn   = document.getElementById('sliderPrev');
-        const nextBtn   = document.getElementById('sliderNext');
-
-        function goTo(index) {
-            current = (index + images.length) % images.length;
-            mainImg.src = images[current];
-            dots.forEach((d, i)  => d.classList.toggle('img-slider__dot--active',  i === current));
-            thumbs.forEach((t, i) => t.classList.toggle('img-slider__thumb--active', i === current));
-        }
-
-        prevBtn && prevBtn.addEventListener('click', () => goTo(current - 1));
-        nextBtn && nextBtn.addEventListener('click', () => goTo(current + 1));
-        dots.forEach(d  => d.addEventListener('click',  () => goTo(+d.dataset.index)));
-        thumbs.forEach(t => t.addEventListener('click',  () => goTo(+t.dataset.index)));
-    }
-
-    /* ── Price Estimate ──────────────────────────────────────── */
-    const startInput   = document.getElementById('start_date');
-    const endInput     = document.getElementById('end_date');
-    const estimateBox  = document.getElementById('priceEstimate');
-    const estimateVal  = document.getElementById('estimateValue');
-
-    function updateEstimate() {
-        if (!startInput || !endInput || !estimateBox) return;
-        const s = new Date(startInput.value);
-        const e = new Date(endInput.value);
-        if (isNaN(s) || isNaN(e) || e <= s) { estimateBox.style.display = 'none'; return; }
-        const days  = Math.max(Math.ceil((e - s) / 86400000), 1);
-        const total = (days * dailyRate).toFixed(2);
-        estimateVal.textContent = `$${total} (${days} day${days > 1 ? 's' : ''})`;
-        estimateBox.style.display = 'flex';
-    }
-
-    startInput && startInput.addEventListener('change', updateEstimate);
-    endInput   && endInput.addEventListener('change', updateEstimate);
-
-    /* Set min date = today */
-    const today = new Date().toISOString().split('T')[0];
-    if (startInput) startInput.min = today;
-    if (endInput)   endInput.min   = today;
-
-    startInput && startInput.addEventListener('change', function () {
-        if (endInput) endInput.min = this.value;
-    });
-})();
+/* Dynamic data only — all logic lives in tool_detail.js */
+window.AppConfig = {
+    csrfToken:         '{{ csrf_token }}',
+    toggleWishlistUrl: '{% url "listings:toggle_wishlist" 0 %}',
+    loginUrl:          '{% url "users:login" %}',
+    dailyRate:         {{ tool.daily_rate }},
+    images: [{% for img in all_images %}"{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+};
 </script>
+<script src="{% static 'listings/js/tool_detail.js' %}"></script>
 {% endblock %}

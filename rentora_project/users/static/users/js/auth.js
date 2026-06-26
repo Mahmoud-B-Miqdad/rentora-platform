@@ -35,17 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* ── Demo Credentials Fill ────────────────────────────────  */
-    const demoBtn = document.getElementById('btn-demo');
-    if (demoBtn) {
-        demoBtn.addEventListener('click', () => {
-            const emailInput    = document.querySelector('#panel-login [name="email"]');
-            const passwordInput = document.querySelector('#panel-login [name="password"]');
-            if (emailInput)    emailInput.value    = 'demo@rentora.com';
-            if (passwordInput) passwordInput.value = 'Demo1234';
-        });
-    }
-
     /* ── Auto-dismiss Flash Messages ──────────────────────────  */
     document.querySelectorAll('.auth-flash').forEach(flash => {
         setTimeout(() => {

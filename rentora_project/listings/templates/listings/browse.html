@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Browse Tools — Rentora{% endblock %}
+{% block body_class %}browse-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'listings/css/browse.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="browse-wrapper">
+<div class="container">
+
+    <!-- Page heading -->
+    <div class="browse-heading">
+        <h1 class="browse-heading__title">Browse Tools</h1>
+        <p class="browse-heading__sub">
+            <span>{{ total_count }}</span> tool{{ total_count|pluralize }} found
+            {% if page_obj.paginator.num_pages > 1 %}
+            &mdash; showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- 2-column layout -->
+    <div class="browse-layout">
+
+        <!-- ══════════════════════════════════
+             SIDEBAR FILTERS
+             ══════════════════════════════════ -->
+        <aside>
+            <form method="GET" id="filterForm" class="filter-card">
+                <p class="filter-card__heading">Filters</p>
+
+                <!-- Search (real-time) -->
+                <div class="filter-search">
+                    <i class="fa-solid fa-magnifying-glass filter-search__icon" aria-hidden="true"></i>
+                    <input type="text"
+                           id="liveSearch"
+                           name="q"
+                           class="filter-search__input"
+                           placeholder="Search tools..."
+                           value="{{ filters.q }}"
+                           autocomplete="off">
+                    <span class="filter-search__spinner" id="searchSpinner" aria-hidden="true"></span>
+                </div>
+
+                <!-- Category -->
+                <div class="filter-group">
+                    <span class="filter-group__label">Category</span>
+                    <div class="filter-cats">
+                        {% for cat in categories %}
+                        <button type="submit"
+                                name="category"
+                                value="{{ cat.pk }}"
+                                class="filter-cat-btn {% if filters.category == cat.pk|stringformat:'s' %}filter-cat-btn--active{% endif %}">
+                            {% if cat.icon %}<i class="{{ cat.icon }}" aria-hidden="true"></i>{% endif %}
+                            {{ cat.name }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Price Range -->
+                <div class="filter-group">
+                    <span class="filter-group__label">Price Range</span>
+                    <div class="filter-price-row">
+                        <span>$0</span>
+                        <strong id="priceLabel">Up to ${{ filters.max_price }}</strong>
+                    </div>
+                    <input type="range"
+                           id="priceRange"
+                           name="max_price"
+                           class="filter-range"
+                           min="0" max="500" step="5"
+                           value="{{ filters.max_price }}"
+                           style="--pct:{{ filters.max_price|floatformat:0 }}%">
+                </div>
+
+                <!-- Availability -->
+                <div class="filter-group">
+                    <span class="filter-group__label">Availability</span>
+                    {% if filters.availability == '1' %}
+                    <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&sort={{ filters.sort }}"
+                       class="filter-avail-btn filter-avail-btn--active">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Available Only
+                    </a>
+                    {% else %}
+                    <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&availability=1&sort={{ filters.sort }}"
+                       class="filter-avail-btn">
+                        Available Only
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Location -->
+                <div class="filter-group">
+                    <span class="filter-group__label">Location</span>
+                    <select name="location" class="filter-select" onchange="this.form.submit()">
+                        <option value="">All Locations</option>
+                        {% for loc in locations %}
+                        <option value="{{ loc }}" {% if filters.location == loc %}selected{% endif %}>{{ loc }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Sort By -->
+                <div class="filter-group" style="margin-bottom:0">
+                    <span class="filter-group__label">Sort By</span>
+                    <select name="sort" class="filter-select" onchange="this.form.submit()">
+                        <option value="newest"    {% if filters.sort == 'newest'    %}selected{% endif %}>Newest First</option>
+                        <option value="top_rated" {% if filters.sort == 'top_rated' %}selected{% endif %}>Top Rated</option>
+                        <option value="price_asc" {% if filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_desc"{% if filters.sort == 'price_desc'%}selected{% endif %}>Price: High to Low</option>
+                    </select>
+                </div>
+
+                <!-- Hidden fields to preserve other filters on submit -->
+                {% if filters.availability %}<input type="hidden" name="availability" value="{{ filters.availability }}">{% endif %}
+
+                <!-- Reset -->
+                <a href="{% url 'listings:browse' %}" class="filter-reset">
+                    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reset all filters
+                </a>
+
+            </form>
+        </aside>
+
+        <!-- ══════════════════════════════════
+             TOOLS GRID
+             ══════════════════════════════════ -->
+        <section>
+            <!-- count line updates via JS -->
+            <p class="browse-heading__sub" id="liveCount" style="margin-bottom:16px">
+                <span id="liveCountNum">{{ total_count }}</span>
+                tool{{ total_count|pluralize }} found
+            </p>
+
+            <div class="tools-grid" id="toolsGrid">
+
+                {% for tool in page_obj %}
+                {% with primary=tool.primary_images.0 %}
+
+                <a href="{% url 'listings:detail' tool.pk %}" class="bcard">
+
+                    <!-- Image area -->
+                    <div class="bcard__img-wrap">
+                        {% if primary %}
+                        <img class="bcard__img"
+                             src="{{ primary.image.url }}"
+                             alt="{{ tool.title }}"
+                             loading="lazy">
+                        {% else %}
+                        <div class="bcard__img" style="display:flex;align-items:center;justify-content:center;color:#cbd5e1;font-size:44px;">
+                            <i class="fa-solid fa-image" aria-hidden="true"></i>
+                        </div>
+                        {% endif %}
+
+                        <!-- Condition badge -->
+                        <span class="bcard__condition bcard__condition--{{ tool.condition }}">
+                            {{ tool.get_condition_display }}
+                        </span>
+
+                        <!-- Wishlist button -->
+                        <button class="bcard__wish {% if tool.pk in wishlist_ids %}bcard__wish--saved{% endif %}"
+                                type="button"
+                                aria-label="Save to wishlist"
+                                onclick="event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
+                            <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
+                        </button>
+
+                        <!-- Price badge -->
+                        <div class="bcard__price-badge">
+                            ${{ tool.daily_rate }}<span>/day</span>
+                        </div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="bcard__body">
+
+                        <!-- Category + Location -->
+                        <div class="bcard__meta">
+                            {% if tool.category %}
+                            <span class="bcard__cat">{{ tool.category.name }}</span>
+                            <span class="bcard__sep">|</span>
+                            {% endif %}
+                            <span class="bcard__loc">
+                                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                                {{ tool.location }}
+                            </span>
+                        </div>
+
+                        <!-- Title -->
+                        <h2 class="bcard__title">{{ tool.title }}</h2>
+
+                        <!-- Rating -->
+                        <div class="bcard__stars">
+                            {% with r=tool.avg_rating|default:0 %}
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= r %}
+                                    <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-star" aria-hidden="true"></i>
+                                {% endif %}
+                            {% endfor %}
+                            {% endwith %}
+                            {% if tool.avg_rating %}
+                            <span class="bcard__rating-num">{{ tool.avg_rating|floatformat:1 }}</span>
+                            {% endif %}
+                            <span class="bcard__review-cnt">({{ tool.review_count }})</span>
+                        </div>
+
+                        <!-- Owner -->
+                        <div class="bcard__owner">
+                            {% if tool.owner.profile_image %}
+                            <img class="bcard__owner-avatar"
+                                 src="{{ tool.owner.profile_image.url }}"
+                                 alt="{{ tool.owner.name }}">
+                            {% else %}
+                            <div class="bcard__owner-init">{{ tool.owner.name|first|upper }}</div>
+                            {% endif %}
+                            <span class="bcard__owner-name">{{ tool.owner.name }}</span>
+                        </div>
+
+                    </div>
+                </a>
+                {% endwith %}
+                {% empty %}
+
+                <div class="tools-empty">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <p>No tools match your filters.</p>
+                    <a href="{% url 'listings:browse' %}">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                        Clear all filters
+                    </a>
+                </div>
+
+                {% endfor %}
+
+            </div><!-- / tools-grid -->
+
+            <!-- Pagination -->
+            {% if page_obj.paginator.num_pages > 1 %}
+            <nav class="browse-pagination" aria-label="Pagination">
+
+                {% if page_obj.has_previous %}
+                <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&{% if filters.availability %}availability={{ filters.availability }}&{% endif %}{% if filters.location %}location={{ filters.location }}&{% endif %}sort={{ filters.sort }}&page={{ page_obj.previous_page_number }}"
+                   class="page-btn" aria-label="Previous page">
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </a>
+                {% else %}
+                <span class="page-btn page-btn--disabled" aria-hidden="true">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </span>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                    <span class="page-btn page-btn--active" aria-current="page">{{ num }}</span>
+                    {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+                    <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&{% if filters.availability %}availability={{ filters.availability }}&{% endif %}{% if filters.location %}location={{ filters.location }}&{% endif %}sort={{ filters.sort }}&page={{ num }}"
+                       class="page-btn">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&{% if filters.availability %}availability={{ filters.availability }}&{% endif %}{% if filters.location %}location={{ filters.location }}&{% endif %}sort={{ filters.sort }}&page={{ page_obj.next_page_number }}"
+                   class="page-btn" aria-label="Next page">
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </a>
+                {% else %}
+                <span class="page-btn page-btn--disabled" aria-hidden="true">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </span>
+                {% endif %}
+
+            </nav>
+            {% endif %}
+
+        </section>
+
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.AppConfig = {
+    csrfToken:         '{{ csrf_token }}',
+    toggleWishlistUrl: '{% url "listings:toggle_wishlist" 0 %}',
+    loginUrl:          '{% url "users:login" %}',
+    browseUrl:         '{% url "listings:browse" %}',
+};
+</script>
+<script src="{% static 'listings/js/browse.js' %}"></script>
+{% endblock %}
