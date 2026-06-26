@@ -23,6 +23,7 @@ from listings.models.tool       import Tool, ConditionChoices
 from listings.models.tool_image import ToolImage
 from listings.models.booking    import Booking, BookingStatus
 from listings.models.review     import Review, ReviewType
+from listings.models.wishlist   import Wishlist
 
 __all__ = [
     # ── Core entities ──────────────────────────────────────────────
@@ -31,6 +32,7 @@ __all__ = [
     "ToolImage",
     "Booking",
     "Review",
+    "Wishlist",
 
     # ── Choices enums (re-exported for convenience in views/templates)
     "ConditionChoices",
