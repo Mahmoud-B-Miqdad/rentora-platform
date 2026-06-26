@@ -86,16 +86,20 @@
 
         <div class="cat-grid">
             {% for cat in categories %}
-            <a href="#" class="cat-item" title="Browse {{ cat.name }}">
-                <div class="cat-item__icon">
-                    {% if cat.icon %}
-                        <i class="{{ cat.icon }}" aria-hidden="true"></i>
-                    {% else %}
-                        <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
-                    {% endif %}
+            <a href="#" class="cat-card" title="Browse {{ cat.name }}">
+                <div class="cat-card__visual">
+                    <div class="cat-card__icon">
+                        {% if cat.icon %}
+                            <i class="{{ cat.icon }}" aria-hidden="true"></i>
+                        {% else %}
+                            <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
+                        {% endif %}
+                    </div>
                 </div>
-                <span class="cat-item__name">{{ cat.name }}</span>
-                <i class="fa-solid fa-chevron-right cat-item__arrow" aria-hidden="true"></i>
+                <div class="cat-card__body">
+                    <span class="cat-card__name">{{ cat.name }}</span>
+                    <span class="cat-card__cta">Explore <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                </div>
             </a>
             {% empty %}
             <div class="cat-empty">
@@ -189,11 +193,11 @@
 
                 <!-- Image -->
                 <div class="tool-card__img-wrap">
-                    {% if primary_img %}
+                    {% if tool.primary_images %}
                         <img class="tool-card__img"
-                             src="{{ primary_img.image.url }}"
-                             alt="{{ tool.title }}"
-                             loading="lazy">
+                            src="{{ tool.primary_images.0.image.url }}"
+                            alt="{{ tool.title }}"
+                            loading="lazy">
                     {% else %}
                         <div class="tool-card__img-placeholder">
                             <i class="fa-solid fa-image" aria-hidden="true"></i>
@@ -204,8 +208,11 @@
                         {{ tool.get_condition_display }}
                     </span>
 
-                    <button class="tool-card__wishlist" aria-label="Save to wishlist" onclick="event.preventDefault()">
-                        <i class="fa-regular fa-heart" aria-hidden="true"></i>
+                    <button class="tool-card__wishlist {% if tool.pk in wishlist_ids %}tool-card__wishlist--saved{% endif %}"
+                            aria-label="Save to wishlist"
+                            data-tool-id="{{ tool.pk }}"
+                            onclick="event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
+                        <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
                     </button>
 
                     <span class="tool-card__price">${{ tool.daily_rate }}/day</span>
@@ -228,18 +235,18 @@
 
                     <!-- Stars (based on owner rating as proxy) -->
                     <div class="tool-card__rating">
-                        <div class="stars" aria-label="Rating: {{ tool.owner.rating }} out of 5">
-                            {% with r=tool.owner.rating|floatformat:0 %}
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= r|add:"0" %}
-                                    <i class="fa-solid fa-star star-filled" aria-hidden="true"></i>
-                                {% else %}
-                                    <i class="fa-regular fa-star star-empty" aria-hidden="true"></i>
-                                {% endif %}
-                            {% endfor %}
-                            {% endwith %}
-                        </div>
-                        <span class="tool-card__review-count">{{ tool.owner.rating }}</span>
+                        {% with r=tool.avg_rating_computed|default:0|floatformat:0 %}
+                            <div class="stars" aria-label="Rating: {{ tool.avg_rating_computed|default:'0.0' }} out of 5">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= r|add:"0" %}
+                                        <i class="fa-solid fa-star star-filled" aria-hidden="true" style="color: #ffc107;"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-star star-empty" aria-hidden="true" style="color: #e4e5e9;"></i>
+                                    {% endif %}
+                                    {% endfor %}
+                            </div>
+                                <span class="tool-card__review-count">{{ tool.avg_rating_computed|floatformat:1|default:"0.0" }}</span>
+                        {% endwith %}
                     </div>
 
                     <hr class="tool-card__divider">
@@ -381,4 +388,31 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleWishlist(btn, toolId) {
+    fetch("{% url 'listings:toggle_wishlist' 0 %}".replace('/0/', '/' + toolId + '/'), {
+        method: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+    })
+    .then(r => {
+        if (r.status === 401) { window.location.href = "{% url 'users:login' %}"; return null; }
+        return r.json();
+    })
+    .then(data => {
+        if (!data) return;
+        const icon = btn.querySelector('i');
+        if (data.saved) {
+            icon.className = 'fa-solid fa-heart';
+            btn.classList.add('tool-card__wishlist--saved');
+        } else {
+            icon.className = 'fa-regular fa-heart';
+            btn.classList.remove('tool-card__wishlist--saved');
+        }
+    })
+    .catch(console.error);
+}
+</script>
 {% endblock %}

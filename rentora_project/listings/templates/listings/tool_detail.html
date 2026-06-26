@@ -47,39 +47,25 @@
                  ══════════════════════════════════════════════════════ -->
             <div class="detail-left">
 
-                <!-- Image Slider -->
+                <!-- ── Image Slider ──────────────────────────────── -->
                 <div class="img-slider" id="imgSlider">
+
+                    <!-- Main image frame -->
                     <div class="img-slider__main">
 
-                        <!-- Main image -->
-                        <img
-                            id="sliderMainImg"
-                            class="img-slider__primary"
-                            src="{% if primary_image %}{{ primary_image.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
-                            alt="{{ tool.title }}">
+                        <img id="sliderMainImg"
+                             class="img-slider__primary"
+                             src="{% if primary_image %}{{ primary_image.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
+                             alt="{{ tool.title }}">
 
-                        <!-- Placeholder when no image -->
                         {% if not primary_image %}
                         <div class="img-slider__placeholder">
                             <i class="fa-solid fa-image" aria-hidden="true"></i>
                         </div>
                         {% endif %}
 
-                        <!-- Condition badge -->
-                        <span class="img-slider__badge img-slider__badge--{{ tool.condition }}">
-                            {{ tool.get_condition_display }}
-                        </span>
-
-                        <!-- Availability badge -->
-                        {% if tool.is_available %}
-                        <span class="img-slider__badge img-slider__badge--available">
-                            <i class="fa-solid fa-circle" style="font-size:7px" aria-hidden="true"></i>
-                            Available Now
-                        </span>
-                        {% endif %}
-
-                        <!-- Navigation arrows (only if more than 1 image) -->
                         {% if all_images|length > 1 %}
+                        <!-- Arrows -->
                         <button class="img-slider__arrow img-slider__arrow--prev" id="sliderPrev" aria-label="Previous image">
                             <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                         </button>
@@ -87,30 +73,36 @@
                             <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                         </button>
 
-                        <!-- Dots -->
+                        <!-- Dots indicator -->
                         <div class="img-slider__dots" id="sliderDots">
                             {% for img in all_images %}
                             <button class="img-slider__dot {% if forloop.first %}img-slider__dot--active{% endif %}"
                                     data-index="{{ forloop.counter0 }}"
-                                    aria-label="Go to image {{ forloop.counter }}"></button>
+                                    aria-label="Image {{ forloop.counter }}"></button>
                             {% endfor %}
                         </div>
                         {% endif %}
                     </div>
+                    <!-- / Main image frame -->
 
-                    <!-- Thumbnails -->
+                    <!-- Thumbnail strip -->
                     {% if all_images|length > 1 %}
                     <div class="img-slider__thumbs" id="sliderThumbs">
                         {% for img in all_images %}
                         <button class="img-slider__thumb {% if forloop.first %}img-slider__thumb--active{% endif %}"
                                 data-index="{{ forloop.counter0 }}"
                                 data-src="{{ img.image.url }}"
-                                aria-label="View image {{ forloop.counter }}">
-                            <img src="{{ img.image.url }}" alt="{{ tool.title }} thumbnail {{ forloop.counter }}" loading="lazy">
+                                aria-label="View image {{ forloop.counter }}"
+                                type="button">
+                            <img src="{{ img.image.url }}"
+                                 alt="{{ tool.title }} photo {{ forloop.counter }}"
+                                 loading="lazy">
                         </button>
                         {% endfor %}
                     </div>
                     {% endif %}
+                    <!-- / Thumbnail strip -->
+
                 </div>
 
                 <!-- Tags row -->
@@ -125,7 +117,15 @@
                 </div>
 
                 <!-- Title + rating -->
-                <h1 class="detail-title">{{ tool.title }}</h1>
+                <div class="detail-title-row">
+                    <h1 class="detail-title">{{ tool.title }}</h1>
+                    <button class="detail-wishlist-btn {% if is_wishlisted %}detail-wishlist-btn--saved{% endif %}"
+                            data-tool-id="{{ tool.pk }}"
+                            onclick="toggleWishlist(this, {{ tool.pk }})"
+                            aria-label="{% if is_wishlisted %}Remove from wishlist{% else %}Save to wishlist{% endif %}">
+                        <i class="{% if is_wishlisted %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
+                    </button>
+                </div>
 
                 <div class="detail-rating-row">
                     {% if avg_rating %}
@@ -180,7 +180,7 @@
                         <div class="detail-owner-card__stats">
                             <span class="detail-owner-stat">
                                 <i class="fa-solid fa-star" aria-hidden="true"></i>
-                                {{ tool.owner.rating|default:"—" }} rating
+                                {{ owner_rating|default:"—" }} rating
                             </span>
                             <span class="detail-owner-stat">
                                 <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
@@ -358,6 +358,32 @@
 
 {% block extra_js %}
 <script>
+/* ── Wishlist toggle ─────────────────────────────────────── */
+function toggleWishlist(btn, toolId) {
+    fetch("{% url 'listings:toggle_wishlist' 0 %}".replace('/0/', '/' + toolId + '/'), {
+        method: 'POST',
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+    })
+    .then(r => {
+        if (r.status === 401) { window.location.href = "{% url 'users:login' %}"; return null; }
+        return r.json();
+    })
+    .then(data => {
+        if (!data) return;
+        const icon = btn.querySelector('i');
+        if (data.saved) {
+            icon.className = 'fa-solid fa-heart';
+            btn.classList.add('detail-wishlist-btn--saved');
+            btn.setAttribute('aria-label', 'Remove from wishlist');
+        } else {
+            icon.className = 'fa-regular fa-heart';
+            btn.classList.remove('detail-wishlist-btn--saved');
+            btn.setAttribute('aria-label', 'Save to wishlist');
+        }
+    })
+    .catch(console.error);
+}
+
 (function () {
     const dailyRate = parseFloat("{{ tool.daily_rate }}");
 
