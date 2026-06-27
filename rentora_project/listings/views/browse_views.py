@@ -190,3 +190,26 @@ def browse_view(request):
         return JsonResponse({'html': html, 'count': paginator.count})
 
     return render(request, 'listings/browse.html', context)
+
+
+# ─────────────────────────────────────────────
+#  About View
+# ─────────────────────────────────────────────
+
+def about_view(request):
+    """Static about page with live platform stats."""
+    tools_count   = Tool.objects.filter(is_available=True).count()
+    rentals_count = Booking.objects.filter(status=BookingStatus.COMPLETED).count()
+    owners_count  = User.objects.filter(tools__is_available=True).distinct().count()
+    avg_data      = Review.objects.aggregate(avg=Avg('rating'))
+    avg_rating    = round(float(avg_data['avg']), 1) if avg_data['avg'] else 0.0
+
+    context = {
+        'stats': {
+            'tools_count':   tools_count,
+            'rentals_count': rentals_count,
+            'owners_count':  owners_count,
+            'avg_rating':    avg_rating,
+        }
+    }
+    return render(request, 'listings/about.html', context)
