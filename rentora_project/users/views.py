@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib    import messages
-from users.models      import User
+from django.db.models  import Avg, Count, Prefetch, Q
+
+from users.models   import User
+from listings.models import Tool, ToolImage, Booking, BookingStatus, Review, ReviewType
 
 
 # ─────────────────────────────────────────────
@@ -49,3 +52,87 @@ def login_view(request):
 def logout_view(request):
     request.session.flush()
     return redirect("users:login")
+
+
+# ─────────────────────────────────────────────
+#  Profile View
+# ─────────────────────────────────────────────
+
+def profile_view(request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return redirect("users:login")
+
+    user      = get_object_or_404(User, pk=user_id)
+    edit_mode = request.GET.get("edit") == "1"
+    errors    = {}
+
+    # ── Handle profile update (POST) ──────────────────────────────────────────
+    if request.method == "POST":
+        user, errors = User.objects.update_profile(user, request.POST, request.FILES)
+        if not errors:
+            request.session["user_name"] = user.name
+            return redirect("users:profile")
+        edit_mode = True
+
+    # ── Stats ─────────────────────────────────────────────────────────────────
+    tools_listed = Tool.objects.filter(owner=user).count()
+    rentals_done = Booking.objects.filter(
+        renter=user, status=BookingStatus.COMPLETED
+    ).count()
+
+    reviews_received = (
+        Review.objects
+        .filter(
+            Q(review_type=ReviewType.FOR_OWNER,  booking__tool__owner=user) |
+            Q(review_type=ReviewType.FOR_RENTER, booking__renter=user)
+        )
+        .select_related("reviewer")
+        .order_by("-created_at")
+    )
+
+    reviews_given = (
+        Review.objects
+        .filter(reviewer=user)
+        .select_related(
+            "booking__tool",
+            "booking__tool__owner",
+            "booking__tool__category",
+            "booking__renter",
+        )
+        .order_by("-created_at")
+    )
+
+    avg_data   = reviews_received.aggregate(avg=Avg("rating"))
+    avg_rating = round(float(avg_data["avg"]), 1) if avg_data["avg"] else None
+
+    # ── Listed tools ──────────────────────────────────────────────────────────
+    primary_img_prefetch = Prefetch(
+        "images",
+        queryset=ToolImage.objects.filter(is_primary=True),
+        to_attr="primary_images",
+    )
+    listed_tools = (
+        Tool.objects
+        .filter(owner=user)
+        .select_related("category")
+        .prefetch_related(primary_img_prefetch)
+        .order_by("-created_at")
+    )
+
+    context = {
+        "profile_user":     user,
+        "edit_mode":        edit_mode,
+        "errors":           errors,
+        "listed_tools":     listed_tools,
+        "reviews_received": reviews_received,
+        "reviews_given":    reviews_given,
+        "given_count":      reviews_given.count(),
+        "stats": {
+            "tools_listed":  tools_listed,
+            "rentals_done":  rentals_done,
+            "avg_rating":    avg_rating,
+            "reviews_count": reviews_received.count(),
+        },
+    }
+    return render(request, "users/profile.html", context)
