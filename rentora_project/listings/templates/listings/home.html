@@ -34,18 +34,19 @@
         </p>
 
         <!-- Search Bar -->
-        <form class="hero__search" action="{% url 'listings:home' %}" method="GET">
+        <form class="hero__search" id="heroSearchForm" novalidate>
             <i class="fa-solid fa-magnifying-glass hero__search-icon" aria-hidden="true"></i>
             <input
                 type="text"
+                id="heroSearchInput"
                 name="q"
                 value="{{ request.GET.q }}"
                 placeholder="Try &ldquo;concrete drill&rdquo; or &ldquo;بدي شي أحفر فيه الجدار&rdquo;..."
                 aria-label="Search tools"
                 autocomplete="off">
-            <button type="submit" class="hero__search-btn">
-                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                <span>Search Tools</span>
+            <button type="submit" class="hero__search-btn" id="heroSearchBtn">
+                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                <span>AI Search</span>
             </button>
         </form>
 
@@ -396,6 +397,8 @@ window.AppConfig = {
     csrfToken:          '{{ csrf_token }}',
     toggleWishlistUrl:  '{% url "listings:toggle_wishlist" 0 %}',
     loginUrl:           '{% url "users:login" %}',
+    smartSearchUrl:     '{% url "listings:smart_search" %}',
+    browseUrl:          '{% url "listings:browse" %}',
 };
 </script>
 <script src="{% static 'listings/js/home.js' %}"></script>

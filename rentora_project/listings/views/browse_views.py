@@ -1,7 +1,10 @@
+import urllib.parse
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Avg, Count, Prefetch, Q
+from django.urls import reverse
 
 from listings.models import Category, Tool, ToolImage, Booking, Review, BookingStatus, Wishlist
 from users.models    import User
@@ -213,3 +216,34 @@ def about_view(request):
         }
     }
     return render(request, 'listings/about.html', context)
+
+
+# ─────────────────────────────────────────────
+#  AI Smart Search View
+# ─────────────────────────────────────────────
+
+def smart_search_view(request):
+    """
+    AJAX endpoint: receives a natural-language query, calls Gemini Flash
+    to extract English tool keywords, and returns a browse redirect URL.
+
+    Falls back to the raw query if AI is unavailable or fails.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    query = request.POST.get('q', '').strip()
+    if not query:
+        return JsonResponse({'keywords': '', 'redirect': reverse('listings:browse')})
+
+    from listings.services.ai_search_service import extract_search_keywords
+    keywords = extract_search_keywords(query)
+
+    search_term  = keywords if keywords else query
+    redirect_url = reverse('listings:browse') + '?q=' + urllib.parse.quote(search_term)
+
+    return JsonResponse({
+        'keywords': search_term,
+        'ai_used':  keywords is not None,
+        'redirect': redirect_url,
+    })
