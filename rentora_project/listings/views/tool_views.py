@@ -79,7 +79,7 @@ def tool_detail_view(request, pk):
         'booking_success':      booking_success,
         'booking_error':        booking_error,
     }
-    return render(request, 'listings/tool_detail.html', context)
+    return render(request, 'listings/tool/tool_detail.html', context)
 
 
 def toggle_wishlist_view(request, pk):
