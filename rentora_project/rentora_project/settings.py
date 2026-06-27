@@ -139,3 +139,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# ── AI Integration ───────────────────────────────────────────
+# Google Gemini Flash — free tier (15 RPM / 1M tokens per day).
+# Get your key at: https://aistudio.google.com/app/apikey
+GEMINI_API_KEY = env('GEMINI_API_KEY', default='')
