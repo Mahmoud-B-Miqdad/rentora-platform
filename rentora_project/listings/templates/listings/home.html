@@ -86,7 +86,7 @@
 
         <div class="cat-grid">
             {% for cat in categories %}
-            <a href="#" class="cat-card" title="Browse {{ cat.name }}">
+            <a href="{% url 'listings:browse' %}?category={{ cat.pk }}" class="cat-card" title="Browse {{ cat.name }}">
                 <div class="cat-card__visual">
                     <div class="cat-card__icon">
                         {% if cat.icon %}
@@ -179,7 +179,7 @@
                 </div>
                 <h2 class="section-title" style="margin-bottom:0">Popular Tools Near You</h2>
             </div>
-            <a href="#" class="featured-header__right">
+            <a href="{% url 'listings:browse' %}" class="featured-header__right">
                 View All Tools
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </a>
@@ -378,7 +378,7 @@
                     <i class="fa-solid fa-plus" aria-hidden="true"></i>
                     List Your Tool Now
                 </a>
-                <a href="#" class="btn-cta-secondary">
+                <a href="{% url 'listings:browse' %}" class="btn-cta-secondary">
                     Browse Available Tools
                     <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </a>
