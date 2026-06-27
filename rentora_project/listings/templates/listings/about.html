@@ -1,0 +1,516 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us — Rentora{% endblock %}
+{% block body_class %}about-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'listings/css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════════════
+     1. HERO
+     ══════════════════════════════════════════════════════════ -->
+<section class="about-hero">
+    <div class="about-hero__bg-dots" aria-hidden="true"></div>
+    <div class="about-hero__glow"    aria-hidden="true"></div>
+
+    <div class="container">
+        <div class="about-hero__content">
+
+            <div class="about-hero__badge">
+                <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+                Our Story
+            </div>
+
+            <h1 class="about-hero__title">
+                We're Making Tools <mark>Accessible</mark><br>
+                to <mark>Everyone</mark>
+            </h1>
+
+            <p class="about-hero__sub">
+                Rentora was born from a simple idea — your neighbor probably owns the drill
+                you need for the weekend. We built the platform that connects them,
+                turning idle tools into income and saving renters from unnecessary purchases.
+            </p>
+
+            <div class="about-hero__actions">
+                <a href="{% url 'listings:browse' %}" class="btn-about-primary">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    Browse Tools
+                </a>
+                {% if not request.session.user_id %}
+                <a href="{% url 'users:register' %}" class="btn-about-outline">
+                    Join the Community
+                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Floating stat cards (desktop only) -->
+    <div class="about-hero__visual" aria-hidden="true">
+        <div class="hero-float-card">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            <span class="hero-float-card__val">
+                {% if stats.tools_count %}{{ stats.tools_count }}+{% else %}0{% endif %}
+            </span>
+            <span class="hero-float-card__lbl">Tools Listed</span>
+        </div>
+        <div class="hero-float-card">
+            <i class="fa-solid fa-handshake"></i>
+            <span class="hero-float-card__val">
+                {% if stats.rentals_count %}{{ stats.rentals_count }}+{% else %}0{% endif %}
+            </span>
+            <span class="hero-float-card__lbl">Rentals Done</span>
+        </div>
+        <div class="hero-float-card">
+            <i class="fa-solid fa-users"></i>
+            <span class="hero-float-card__val">
+                {% if stats.owners_count %}{{ stats.owners_count }}+{% else %}0{% endif %}
+            </span>
+            <span class="hero-float-card__lbl">Active Owners</span>
+        </div>
+        <div class="hero-float-card">
+            <i class="fa-solid fa-star"></i>
+            <span class="hero-float-card__val">
+                {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}&mdash;{% endif %}
+            </span>
+            <span class="hero-float-card__lbl">Avg Rating</span>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     2. MISSION
+     ══════════════════════════════════════════════════════════ -->
+<section class="mission-section">
+    <div class="container">
+        <div class="mission-grid">
+
+            <!-- Left: text -->
+            <div>
+                <span class="mission-badge">
+                    <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
+                    Our Mission
+                </span>
+                <h2 class="mission-title">
+                    Rent Smarter,<br><span>Live Better</span>
+                </h2>
+                <p class="mission-body">
+                    Every year, billions of dollars' worth of tools sit unused in garages and storage rooms.
+                    At the same time, people pay full price for tools they'll use once or twice.
+                    Rentora exists to close that gap — creating a circular economy where tools are
+                    shared, not stockpiled.
+                </p>
+                <div class="mission-points">
+                    <div class="mission-point">
+                        <div class="mission-point__icon">
+                            <i class="fa-solid fa-leaf" aria-hidden="true"></i>
+                        </div>
+                        <span>Reduce waste by keeping tools in active use within the community.</span>
+                    </div>
+                    <div class="mission-point">
+                        <div class="mission-point__icon">
+                            <i class="fa-solid fa-coins" aria-hidden="true"></i>
+                        </div>
+                        <span>Help owners earn passive income from tools sitting idle.</span>
+                    </div>
+                    <div class="mission-point">
+                        <div class="mission-point__icon">
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        </div>
+                        <span>Build trust through verified profiles, ratings, and secure bookings.</span>
+                    </div>
+                    <div class="mission-point">
+                        <div class="mission-point__icon">
+                            <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                        </div>
+                        <span>Use AI smart pricing to ensure fair rates for everyone.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: metric cards -->
+            <div class="mission-visual">
+                <div class="mv-card">
+                    <div class="mv-card__icon mv-card__icon--teal">
+                        <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+                    </div>
+                    <div class="mv-card__val">
+                        {% if stats.tools_count %}{{ stats.tools_count }}+{% else %}0{% endif %}
+                    </div>
+                    <div class="mv-card__lbl">Tools Available</div>
+                </div>
+                <div class="mv-card">
+                    <div class="mv-card__icon mv-card__icon--blue">
+                        <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                    </div>
+                    <div class="mv-card__val">
+                        {% if stats.rentals_count %}{{ stats.rentals_count }}+{% else %}0{% endif %}
+                    </div>
+                    <div class="mv-card__lbl">Rentals Completed</div>
+                </div>
+                <div class="mv-card">
+                    <div class="mv-card__icon mv-card__icon--amber">
+                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                    </div>
+                    <div class="mv-card__val">
+                        {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}&mdash;{% endif %}
+                    </div>
+                    <div class="mv-card__lbl">Avg Rating</div>
+                </div>
+                <div class="mv-card">
+                    <div class="mv-card__icon mv-card__icon--green">
+                        <i class="fa-solid fa-users" aria-hidden="true"></i>
+                    </div>
+                    <div class="mv-card__val">
+                        {% if stats.owners_count %}{{ stats.owners_count }}+{% else %}0{% endif %}
+                    </div>
+                    <div class="mv-card__lbl">Active Owners</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     3. VALUES
+     ══════════════════════════════════════════════════════════ -->
+<section class="values-section">
+    <div class="container">
+
+        <div style="text-align:center">
+            <span class="about-section-badge about-section-badge--teal">
+                <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                What We Stand For
+            </span>
+            <h2 class="about-section-title">Our Core <span>Values</span></h2>
+            <p class="about-section-sub" style="margin:0 auto">
+                Every decision we make comes back to these four principles that define who we are.
+            </p>
+        </div>
+
+        <div class="values-grid">
+
+            <div class="value-card value-card--teal">
+                <div class="value-card__icon">
+                    <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+                </div>
+                <h3 class="value-card__title">Community First</h3>
+                <p class="value-card__body">
+                    We believe in the power of neighbors helping neighbors.
+                    Every rental strengthens local connections and builds trust within communities.
+                </p>
+            </div>
+
+            <div class="value-card value-card--blue">
+                <div class="value-card__icon">
+                    <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                </div>
+                <h3 class="value-card__title">Trust & Safety</h3>
+                <p class="value-card__body">
+                    Verified profiles, transparent reviews, and secure booking flows
+                    ensure every interaction on Rentora is safe and accountable.
+                </p>
+            </div>
+
+            <div class="value-card value-card--amber">
+                <div class="value-card__icon">
+                    <i class="fa-solid fa-leaf" aria-hidden="true"></i>
+                </div>
+                <h3 class="value-card__title">Sustainability</h3>
+                <p class="value-card__body">
+                    Sharing tools means fewer tools manufactured and less waste.
+                    We're committed to a circular economy that's better for the planet.
+                </p>
+            </div>
+
+            <div class="value-card value-card--green">
+                <div class="value-card__icon">
+                    <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                </div>
+                <h3 class="value-card__title">Smart Innovation</h3>
+                <p class="value-card__body">
+                    From AI-powered pricing to real-time search, we use technology
+                    to make renting tools as effortless as possible.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     4. STORY / TIMELINE
+     ══════════════════════════════════════════════════════════ -->
+<section class="story-section">
+    <div class="container">
+
+        <div style="text-align:center">
+            <span class="about-section-badge about-section-badge--blue">
+                <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+                How We Got Here
+            </span>
+            <h2 class="about-section-title">Our <span>Journey</span></h2>
+            <p class="about-section-sub" style="margin:0 auto">
+                From a garage idea to a growing platform — here's how Rentora came to be.
+            </p>
+        </div>
+
+        <div class="story-grid">
+
+            <!-- Timeline -->
+            <div class="story-timeline">
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-content__year">The Idea</div>
+                        <h3 class="timeline-content__title">A Weekend Problem Becomes a Business</h3>
+                        <p class="timeline-content__body">
+                            Our founder needed a concrete drill for a weekend project.
+                            After paying $80 to buy one he'd use once, he realized:
+                            his neighbor had the exact same tool sitting unused.
+                            Rentora was born from that frustration.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <i class="fa-solid fa-code" aria-hidden="true"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-content__year">Building</div>
+                        <h3 class="timeline-content__title">Platform Development Begins</h3>
+                        <p class="timeline-content__body">
+                            A small team started building the core marketplace —
+                            listings, bookings, and a trust system that would make
+                            strangers comfortable sharing their valuable tools.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-content__year">Launch</div>
+                        <h3 class="timeline-content__title">First Rentals Go Live</h3>
+                        <p class="timeline-content__body">
+                            The first tool was listed. The first booking was made.
+                            Real neighbors, real tools, real money — the model worked.
+                            Word spread fast within the community.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">
+                        <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-content__year">AI Integration</div>
+                        <h3 class="timeline-content__title">Smart Pricing & Arabic Search</h3>
+                        <p class="timeline-content__body">
+                            We integrated GPT-powered AI for smart pricing suggestions
+                            and bilingual search — because renting should be easy
+                            in any language.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Feature card -->
+            <div class="story-feature">
+                <div class="story-feature__icon">
+                    <i class="fa-solid fa-store" aria-hidden="true"></i>
+                </div>
+                <h3 class="story-feature__title">
+                    Built for the Community,<br>Powered by Trust
+                </h3>
+                <p class="story-feature__body">
+                    Rentora isn't just a marketplace — it's a community-driven
+                    platform where verified owners and responsible renters create
+                    a cycle of sharing that benefits everyone involved.
+                </p>
+                <ul class="story-feature__list">
+                    <li class="story-feature__item">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Verified owner badges build instant credibility
+                    </li>
+                    <li class="story-feature__item">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Dual reviews for renters and owners after every booking
+                    </li>
+                    <li class="story-feature__item">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Security deposits protect both parties on every rental
+                    </li>
+                    <li class="story-feature__item">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        AI pricing ensures fair rates for the whole market
+                    </li>
+                    <li class="story-feature__item">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Bilingual support — search and rent in Arabic or English
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     5. LIVE STATS STRIP
+     ══════════════════════════════════════════════════════════ -->
+<section class="about-stats" aria-label="Platform statistics">
+    <div class="container">
+        <div class="about-stats__grid">
+
+            <div class="astat">
+                <span class="astat__value">
+                    {% if stats.tools_count %}{{ stats.tools_count }}<span>+</span>{% else %}0{% endif %}
+                </span>
+                <span class="astat__label">Tools Available Right Now</span>
+            </div>
+
+            <div class="astat">
+                <span class="astat__value">
+                    {% if stats.rentals_count %}{{ stats.rentals_count }}<span>+</span>{% else %}0{% endif %}
+                </span>
+                <span class="astat__label">Successful Rentals</span>
+            </div>
+
+            <div class="astat">
+                <span class="astat__value">
+                    {% if stats.owners_count %}{{ stats.owners_count }}<span>+</span>{% else %}0{% endif %}
+                </span>
+                <span class="astat__label">Verified Tool Owners</span>
+            </div>
+
+            <div class="astat">
+                <span class="astat__value">
+                    {% if stats.avg_rating %}{{ stats.avg_rating }}<span>★</span>{% else %}&mdash;{% endif %}
+                </span>
+                <span class="astat__label">Average Platform Rating</span>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     6. TEAM
+     ══════════════════════════════════════════════════════════ -->
+<section class="team-section">
+    <div class="container">
+
+        <div style="text-align:center">
+            <span class="about-section-badge about-section-badge--amber">
+                <i class="fa-solid fa-users" aria-hidden="true"></i>
+                Meet the Team
+            </span>
+            <h2 class="about-section-title">The People Behind <span>Rentora</span></h2>
+            <p class="about-section-sub" style="margin:0 auto">
+                A small, passionate team obsessed with making tool sharing effortless.
+            </p>
+        </div>
+
+        <div class="team-grid">
+
+            <div class="team-card">
+                <div class="team-card__avatar team-card__avatar--teal">M</div>
+                <h3 class="team-card__name">Mahmoud Miqdad</h3>
+                <div class="team-card__role">Founder & Full-Stack Developer</div>
+                <p class="team-card__bio">
+                    The visionary behind Rentora — built the platform from the ground up,
+                    from database architecture to pixel-perfect UI. Passionate about
+                    peer-to-peer markets and community-driven products.
+                </p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-card__avatar team-card__avatar--blue">M</div>
+                <h3 class="team-card__name">Mona Al-Akhras</h3>
+                <div class="team-card__role">Co-Founder & Product Strategist</div>
+                <p class="team-card__bio">
+                    Shapes the product vision and user experience of Rentora.
+                    Ensures every feature we ship solves a real problem for
+                    the community we're building for.
+                </p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-card__avatar team-card__avatar--amber">A</div>
+                <h3 class="team-card__name">Ahmad Al-Shuwaiki</h3>
+                <div class="team-card__role">Co-Founder & Operations Lead</div>
+                <p class="team-card__bio">
+                    Drives growth and community partnerships at Rentora.
+                    Focused on expanding the platform's reach and making sure
+                    both owners and renters have an outstanding experience.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     7. CTA
+     ══════════════════════════════════════════════════════════ -->
+<section class="about-cta">
+    <div class="container">
+        <div class="about-cta__card">
+
+            <div class="about-cta__icon">
+                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+            </div>
+
+            <h2 class="about-cta__title">Ready to Join the Community?</h2>
+            <p class="about-cta__sub">
+                Whether you want to rent a tool for the weekend or earn from the ones
+                sitting in your garage — Rentora has a place for you.
+            </p>
+
+            <div class="about-cta__actions">
+                <a href="{% url 'listings:browse' %}" class="btn-about-primary">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    Browse Available Tools
+                </a>
+                {% if not request.session.user_id %}
+                <a href="{% url 'users:register' %}" class="btn-about-outline">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                    Create Free Account
+                </a>
+                {% else %}
+                <a href="{% url 'users:profile' %}" class="btn-about-outline">
+                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                    View My Profile
+                </a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
