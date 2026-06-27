@@ -186,6 +186,54 @@ class UserManager(BaseUserManager):
         """
         return self.filter(email=email.strip().lower()).first()
 
+    def update_profile(self, user, post_data, files=None):
+        """
+        Validates and applies profile edits for name, phone, location,
+        and optional profile_image upload.
+
+        Returns (user, errors). Callers should check errors before trusting
+        the returned user instance.
+        """
+        errors = {}
+
+        name     = post_data.get("name",     "").strip()
+        phone    = post_data.get("phone",    "").strip()
+        location = post_data.get("location", "").strip()
+
+        if not name:
+            errors["name"] = "Full name is required."
+        elif not self._NAME_REGEX.match(name):
+            errors["name"] = (
+                "Name must be 2–80 characters and may only contain "
+                "letters (Arabic or Latin), spaces, hyphens, and apostrophes."
+            )
+
+        if phone and not self._PHONE_REGEX.match(phone):
+            errors["phone"] = (
+                "Phone number must be 7–20 digits and may include "
+                "spaces, hyphens, or a leading '+'."
+            )
+
+        if not location:
+            errors["location"] = "Location is required."
+        elif len(location) < 2 or len(location) > 100:
+            errors["location"] = "Location must be 2–100 characters."
+
+        if errors:
+            return user, errors
+
+        user.name     = name
+        user.phone    = phone or None
+        user.location = location
+
+        if files:
+            img = files.get("profile_image")
+            if img and img.size > 0:
+                user.profile_image = img
+
+        user.save()
+        return user, {}
+
 
 # ─────────────────────────────────────────────
 #  Model
@@ -225,7 +273,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text="City or district used for proximity-based tool discovery.",
     )
     profile_image = models.ImageField(
-        upload_to="users/profiles/%Y/%m/",
+        upload_to="profiles/",
         null=True,
         blank=True,
         help_text="Optional avatar displayed on profile and review cards.",

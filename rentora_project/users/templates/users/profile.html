@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile_user.name }} — Profile — Rentora{% endblock %}
+{% block body_class %}profile-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-wrapper">
+
+    <!-- ══════════════════════════════════════════
+         BANNER + AVATAR
+         ══════════════════════════════════════════ -->
+    <div class="profile-banner" aria-hidden="true"></div>
+
+    <div class="container">
+
+        <!-- Meta row: avatar | name + badges | action button -->
+        <div class="profile-meta-row">
+
+            {% if edit_mode %}
+            {# In edit mode: avatar is a label that opens the file picker #}
+            <label class="profile-avatar-wrap profile-avatar-wrap--editable"
+                   for="f-img"
+                   title="Click to change photo">
+                {% if profile_user.profile_image %}
+                    <img src="{{ profile_user.profile_image.url }}"
+                         alt="{{ profile_user.name }}"
+                         class="profile-avatar"
+                         id="avatarPreview">
+                {% else %}
+                    <div class="profile-avatar profile-avatar--init" id="avatarInitDiv">
+                        {{ profile_user.name|first|upper }}
+                    </div>
+                {% endif %}
+                <div class="profile-avatar-overlay" aria-hidden="true">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Change</span>
+                </div>
+                {% if profile_user.is_verified %}
+                <span class="profile-verified-dot" title="Verified account">
+                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                </span>
+                {% endif %}
+            </label>
+            {% else %}
+            {# View mode: plain div #}
+            <div class="profile-avatar-wrap">
+                {% if profile_user.profile_image %}
+                    <img src="{{ profile_user.profile_image.url }}"
+                         alt="{{ profile_user.name }}"
+                         class="profile-avatar">
+                {% else %}
+                    <div class="profile-avatar profile-avatar--init">
+                        {{ profile_user.name|first|upper }}
+                    </div>
+                {% endif %}
+                {% if profile_user.is_verified %}
+                <span class="profile-verified-dot" title="Verified account">
+                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                </span>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="profile-meta">
+                <h1 class="profile-name">
+                    {{ profile_user.name }}
+                    {% if profile_user.is_verified %}
+                    <span class="profile-verified-label">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Verified
+                    </span>
+                    {% endif %}
+                </h1>
+                <div class="profile-badges">
+                    {% if profile_user.location %}
+                    <span class="profile-badge">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                        {{ profile_user.location }}
+                    </span>
+                    {% endif %}
+                    {% if stats.avg_rating %}
+                    <span class="profile-badge">
+                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                        {{ stats.avg_rating }} rating
+                    </span>
+                    {% endif %}
+                    <span class="profile-badge profile-badge--risk">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        Low Risk
+                    </span>
+                </div>
+            </div>
+
+            <div class="profile-action-wrap">
+                {% if not edit_mode %}
+                <a href="?edit=1" class="btn-edit-profile">
+                    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                    Edit Profile
+                </a>
+                {% else %}
+                <button type="submit" form="editProfileForm" class="btn-save-profile">
+                    <i class="fa-solid fa-check" aria-hidden="true"></i>
+                    Save Changes
+                </button>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- ══════════════════════════════════════════
+             STATS CARDS
+             ══════════════════════════════════════════ -->
+        <div class="profile-stats">
+
+            <div class="pstat">
+                <div class="pstat__icon pstat__icon--tools">
+                    <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+                </div>
+                <span class="pstat__value">{{ stats.tools_listed }}</span>
+                <span class="pstat__label">Tools Listed</span>
+            </div>
+
+            <div class="pstat">
+                <div class="pstat__icon pstat__icon--rentals">
+                    <i class="fa-regular fa-square-check" aria-hidden="true"></i>
+                </div>
+                <span class="pstat__value">{{ stats.rentals_done }}</span>
+                <span class="pstat__label">Rentals Done</span>
+            </div>
+
+            <div class="pstat">
+                <div class="pstat__icon pstat__icon--rating">
+                    <i class="fa-regular fa-star" aria-hidden="true"></i>
+                </div>
+                <span class="pstat__value">{{ stats.avg_rating|default:"&mdash;" }}</span>
+                <span class="pstat__label">Avg Rating</span>
+            </div>
+
+            <div class="pstat">
+                <div class="pstat__icon pstat__icon--reviews">
+                    <i class="fa-regular fa-comment-dots" aria-hidden="true"></i>
+                </div>
+                <span class="pstat__value">{{ stats.reviews_count }}</span>
+                <span class="pstat__label">Reviews</span>
+            </div>
+
+        </div>
+
+        <!-- ══════════════════════════════════════════
+             INFO SECTION  (view mode)
+             ══════════════════════════════════════════ -->
+        {% if not edit_mode %}
+        <div class="profile-info-card">
+            <div class="profile-info-grid">
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Full Name</span>
+                    <span class="profile-info-value">{{ profile_user.name }}</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Email</span>
+                    <span class="profile-info-value">{{ profile_user.email }}</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Phone</span>
+                    <span class="profile-info-value">{{ profile_user.phone|default:"&mdash;" }}</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">Location</span>
+                    <span class="profile-info-value">{{ profile_user.location }}</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+             EDIT FORM  (edit mode)
+             ══════════════════════════════════════════ -->
+        {% else %}
+        <form id="editProfileForm"
+              method="POST"
+              enctype="multipart/form-data"
+              class="profile-edit-card"
+              novalidate>
+            {% csrf_token %}
+
+            {% if errors %}
+            <div class="profile-errors">
+                {% for msg in errors.values %}
+                <p class="profile-error-msg">
+                    <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                    {{ msg }}
+                </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="profile-edit-grid">
+
+                <div class="profile-edit-field">
+                    <label class="profile-info-label" for="f-name">Full Name</label>
+                    <div class="profile-input-wrap {% if errors.name %}profile-input-wrap--error{% endif %}">
+                        <i class="fa-regular fa-user profile-input-icon" aria-hidden="true"></i>
+                        <input type="text"
+                               id="f-name"
+                               name="name"
+                               value="{{ profile_user.name }}"
+                               class="profile-input"
+                               autocomplete="name">
+                    </div>
+                    {% if errors.name %}
+                    <span class="profile-field-error">{{ errors.name }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="profile-edit-field">
+                    <label class="profile-info-label">Email</label>
+                    <div class="profile-input-wrap profile-input-wrap--disabled">
+                        <i class="fa-regular fa-envelope profile-input-icon" aria-hidden="true"></i>
+                        <input type="email"
+                               value="{{ profile_user.email }}"
+                               class="profile-input"
+                               disabled>
+                    </div>
+                    <span class="profile-field-hint">Email cannot be changed.</span>
+                </div>
+
+                <div class="profile-edit-field">
+                    <label class="profile-info-label" for="f-phone">Phone</label>
+                    <div class="profile-input-wrap {% if errors.phone %}profile-input-wrap--error{% endif %}">
+                        <i class="fa-solid fa-phone profile-input-icon" aria-hidden="true"></i>
+                        <input type="tel"
+                               id="f-phone"
+                               name="phone"
+                               value="{{ profile_user.phone|default:'' }}"
+                               class="profile-input"
+                               autocomplete="tel">
+                    </div>
+                    {% if errors.phone %}
+                    <span class="profile-field-error">{{ errors.phone }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="profile-edit-field">
+                    <label class="profile-info-label" for="f-location">Location</label>
+                    <div class="profile-input-wrap {% if errors.location %}profile-input-wrap--error{% endif %}">
+                        <i class="fa-solid fa-location-dot profile-input-icon" aria-hidden="true"></i>
+                        <input type="text"
+                               id="f-location"
+                               name="location"
+                               value="{{ profile_user.location }}"
+                               class="profile-input"
+                               autocomplete="address-level2">
+                    </div>
+                    {% if errors.location %}
+                    <span class="profile-field-error">{{ errors.location }}</span>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            {# Hidden file input — triggered by clicking the avatar label above #}
+            <input type="file"
+                   id="f-img"
+                   name="profile_image"
+                   accept="image/*"
+                   class="profile-file-input"
+                   aria-label="Upload profile photo"
+                   style="display:none">
+
+            <div class="profile-edit-actions">
+                <button type="submit" class="btn-save-profile">
+                    <i class="fa-solid fa-check" aria-hidden="true"></i>
+                    Save Changes
+                </button>
+                <a href="{% url 'users:profile' %}" class="btn-cancel-edit">Cancel</a>
+            </div>
+
+        </form>
+        {% endif %}
+
+        <!-- ══════════════════════════════════════════
+             LISTED TOOLS
+             ══════════════════════════════════════════ -->
+        {% if listed_tools %}
+        <div class="profile-section">
+            <h2 class="profile-section__title">
+                Listed Tools
+                <span class="profile-section__count">({{ stats.tools_listed }})</span>
+            </h2>
+
+            <div class="profile-tools-grid">
+                {% for tool in listed_tools %}
+                {% with primary=tool.primary_images.0 %}
+                <a href="{% url 'listings:detail' tool.pk %}" class="ptool-card">
+                    <div class="ptool-card__img-wrap">
+                        {% if primary %}
+                        <img src="{{ primary.image.url }}"
+                             alt="{{ tool.title }}"
+                             class="ptool-card__img"
+                             loading="lazy">
+                        {% else %}
+                        <div class="ptool-card__img-placeholder">
+                            <i class="fa-solid fa-image" aria-hidden="true"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="ptool-card__body">
+                        <h3 class="ptool-card__title">{{ tool.title }}</h3>
+                        <div class="ptool-card__meta">
+                            <span class="ptool-card__cat">
+                                {{ tool.category.name|default:"Uncategorized" }}
+                            </span>
+                            <span class="ptool-card__price">${{ tool.daily_rate }}/day</span>
+                        </div>
+                    </div>
+                </a>
+                {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- ══════════════════════════════════════════
+             REVIEWS
+             ══════════════════════════════════════════ -->
+        <div class="profile-section">
+
+            <div class="profile-reviews-header">
+                <h2 class="profile-section__title">Reviews</h2>
+                <div class="review-tabs" role="tablist">
+                    <button class="review-tab review-tab--active"
+                            role="tab"
+                            aria-selected="true"
+                            data-tab="received">
+                        Received ({{ stats.reviews_count }})
+                    </button>
+                    <button class="review-tab"
+                            role="tab"
+                            aria-selected="false"
+                            data-tab="given">
+                        Given ({{ given_count }})
+                    </button>
+                </div>
+            </div>
+
+            <!-- Received -->
+            <div class="review-panel" id="tab-received" role="tabpanel">
+                {% if reviews_received %}
+                <div class="profile-reviews-grid">
+                    {% for review in reviews_received %}
+                    <div class="rcard">
+                        <div class="rcard__header">
+                            {% if review.reviewer.profile_image %}
+                            <img src="{{ review.reviewer.profile_image.url }}"
+                                 alt="{{ review.reviewer.name }}"
+                                 class="rcard__avatar">
+                            {% else %}
+                            <div class="rcard__avatar rcard__avatar--init">
+                                {{ review.reviewer.name|first|upper }}
+                            </div>
+                            {% endif %}
+                            <div class="rcard__meta">
+                                <div class="rcard__name-row">
+                                    <span class="rcard__name">{{ review.reviewer.name }}</span>
+                                    <span class="rcard__badge">
+                                        {% if review.review_type == 'for_renter' %}Owner{% else %}Renter{% endif %}
+                                    </span>
+                                </div>
+                                <div class="rcard__stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %}
+                                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                        {% else %}
+                                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="rcard__date">{{ review.created_at|date:"Y-m-d" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if review.comment %}
+                        <p class="rcard__text">{{ review.comment }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="profile-reviews-empty">
+                    <i class="fa-regular fa-star" aria-hidden="true"></i>
+                    <p>No reviews received yet.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Given -->
+            <div class="review-panel" id="tab-given" role="tabpanel" hidden>
+                {% if reviews_given %}
+                <div class="profile-reviews-grid">
+                    {% for review in reviews_given %}
+                    <div class="rcard">
+                        <div class="rcard__header">
+                            <div class="rcard__avatar rcard__avatar--init">
+                                {{ review.booking.tool.title|first|upper }}
+                            </div>
+                            <div class="rcard__meta">
+                                <div class="rcard__name-row">
+                                    <span class="rcard__name">{{ review.booking.tool.title }}</span>
+                                    <span class="rcard__badge rcard__badge--given">
+                                        {{ review.get_review_type_display }}
+                                    </span>
+                                </div>
+                                <div class="rcard__stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %}
+                                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                        {% else %}
+                                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="rcard__date">{{ review.created_at|date:"Y-m-d" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if review.comment %}
+                        <p class="rcard__text">{{ review.comment }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="profile-reviews-empty">
+                    <i class="fa-regular fa-comment-dots" aria-hidden="true"></i>
+                    <p>No reviews given yet.</p>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+        <!-- / Reviews -->
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'users/js/profile.js' %}"></script>
+{% endblock %}

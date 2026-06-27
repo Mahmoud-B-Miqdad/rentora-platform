@@ -31,7 +31,7 @@
             </a>
 
             {% if request.session.user_id %}
-                <a href="#" class="header-icon-btn" title="Profile" aria-label="Your profile">
+                <a href="{% url 'users:profile' %}" class="header-icon-btn" title="Profile" aria-label="Your profile">
                     <i class="fa-regular fa-user" aria-hidden="true"></i>
                 </a>
                 <a href="{% url 'users:logout' %}" class="header-icon-btn" title="Log out" aria-label="Log out">
