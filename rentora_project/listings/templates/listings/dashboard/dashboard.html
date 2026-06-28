@@ -1,0 +1,550 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+  :root {
+    --teal:   #0d9488;
+    --yellow: #f59e0b;
+    --light:  #f8fafc;
+    --border: #e2e8f0;
+  }
+
+  .dashboard-wrapper {
+    display: flex;
+    min-height: calc(100vh - 60px);
+    background: var(--light);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 260px;
+    background: #fff;
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    flex-shrink: 0;
+  }
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--teal);
+    margin-bottom: 32px;
+  }
+  .sidebar-brand span {
+    background: var(--teal);
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 0.85rem;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-item:hover, .nav-item.active {
+    background: #f0fdfa;
+    color: var(--teal);
+    font-weight: 600;
+  }
+  .sidebar-profile {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .profile-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    display: grid; place-items: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .profile-info small { color: #94a3b8; font-size: 0.78rem; }
+  .btn-list-tool {
+    display: block;
+    margin-top: 16px;
+    background: var(--yellow);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .btn-list-tool:hover { opacity: 0.85; color: #fff; }
+
+  /* ── Main ── */
+  .main-content {
+    flex: 1;
+    padding: 32px;
+  }
+  .main-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+  }
+  .main-content .subtitle {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+
+  /* ── Stats Cards ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+  .stat-card .stat-icon {
+    color: var(--teal);
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .stat-card .stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  .stat-card .stat-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  /* ── Section Card ── */
+  .section-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .section-card h5 {
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 16px;
+  }
+
+  /* ── Booking Tabs ── */
+  .booking-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .booking-tab {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    color: #64748b;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .booking-tab.active {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+    font-weight: 600;
+  }
+
+  /* ── Booking Row ── */
+  .booking-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .booking-row:last-child { border-bottom: none; }
+  .booking-tool-img {
+    width: 48px; height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f1f5f9;
+    flex-shrink: 0;
+  }
+  .booking-info { flex: 1; }
+  .booking-info strong { font-size: 0.95rem; color: #1e293b; }
+  .booking-info small  { color: #94a3b8; font-size: 0.8rem; display: block; }
+  .booking-actions { display: flex; gap: 8px; }
+
+  .btn-approve {
+    background: #dcfce7; color: #16a34a;
+    border: none; border-radius: 6px;
+    padding: 6px 12px; font-size: 0.85rem;
+    cursor: pointer; font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-approve:hover { background: #bbf7d0; color: #16a34a; }
+
+  .btn-reject {
+    background: #fee2e2; color: #dc2626;
+    border: none; border-radius: 6px;
+    padding: 6px 12px; font-size: 0.85rem;
+    cursor: pointer; font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-reject:hover { background: #fecaca; color: #dc2626; }
+
+  /* ── Status Badge ── */
+  .badge-status {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .badge-pending   { background: #fef9c3; color: #854d0e; }
+  .badge-approved  { background: #dcfce7; color: #16a34a; }
+  .badge-rejected  { background: #fee2e2; color: #dc2626; }
+  .badge-completed { background: #e0f2fe; color: #0369a1; }
+
+  /* ── Empty State ── */
+  .empty-state {
+    text-align: center;
+    padding: 32px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+  }
+
+  /* ── Tab Panels ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+</style>
+
+
+<div class="dashboard-wrapper">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span>R</span> Rentora
+    </div>
+
+    <a href="/dashboard/?tab=overview"
+       class="nav-item {% if active_tab == 'overview' %}active{% endif %}">
+      ⊞ Overview
+    </a>
+    <a href="/dashboard/?tab=my-tools"
+       class="nav-item {% if active_tab == 'my-tools' %}active{% endif %}">
+      🔧 My Tools
+    </a>
+    <a href="/dashboard/?tab=booking-requests"
+       class="nav-item {% if active_tab == 'booking-requests' %}active{% endif %}">
+      📋 Booking Requests
+    </a>
+    <a href="/dashboard/?tab=my-rentals"
+       class="nav-item {% if active_tab == 'my-rentals' %}active{% endif %}">
+      📦 My Rentals
+    </a>
+
+    <div class="sidebar-profile">
+      <div class="profile-avatar">
+        {{ user.name|first|upper }}
+      </div>
+      <div class="profile-info">
+        <strong style="font-size:0.9rem;">{{ user.name }}</strong>
+        <small>{{ user.email }}</small>
+      </div>
+    </div>
+
+    <a href="/tools/add/" class="btn-list-tool">+ List New Tool</a>
+  </aside>
+
+
+  <!-- ── Main Content ── -->
+  <main class="main-content">
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+
+    <!-- ════════ OVERVIEW ════════ -->
+    <div class="tab-panel {% if active_tab == 'overview' %}active{% endif %}">
+      <h2>Overview</h2>
+      <p class="subtitle">Welcome back, {{ user.name }}</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🔧</div>
+          <div class="stat-value">{{ my_tools_count }}</div>
+          <div class="stat-label">My Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value">{{ active_rentals }}</div>
+          <div class="stat-label">Active Rentals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-value">{{ pending_requests|length }}</div>
+          <div class="stat-label">Pending Requests</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-value">{{ user.rating }}</div>
+          <div class="stat-label">Your Rating</div>
+        </div>
+      </div>
+
+      <!-- Pending Requests Preview -->
+      {% if pending_requests %}
+      <div class="section-card">
+        <h5>Pending Requests</h5>
+        {% for booking in pending_requests|slice:":3" %}
+        <div class="booking-row">
+          <div class="booking-tool-img">🔧</div>
+          <div class="booking-info">
+            <strong>{{ booking.tool.name }}</strong>
+            <small>{{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · {{ booking.total_price }} ₪</small>
+          </div>
+          <div class="booking-actions">
+            <a href="{% url 'approve_booking' booking.id %}" class="btn-approve">✓</a>
+            <a href="{% url 'reject_booking'  booking.id %}" class="btn-reject">✕</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+
+    <!-- ════════ BOOKING REQUESTS (Owner view) ════════ -->
+    <div class="tab-panel {% if active_tab == 'booking-requests' %}active{% endif %}">
+      <h2>Booking Requests</h2>
+      <p class="subtitle">Welcome back, {{ user.name }}</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🔧</div>
+          <div class="stat-value">{{ my_tools_count }}</div>
+          <div class="stat-label">My Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value">{{ active_rentals }}</div>
+          <div class="stat-label">Active Rentals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-value">{{ pending_requests|length }}</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value">{{ approved_requests|length }}</div>
+          <div class="stat-label">Approved</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="booking-tabs">
+          <button class="booking-tab active" onclick="switchTab(this,'tab-pending')">
+            Pending ({{ pending_requests|length }})
+          </button>
+          <button class="booking-tab" onclick="switchTab(this,'tab-approved')">
+            Approved ({{ approved_requests|length }})
+          </button>
+          <button class="booking-tab" onclick="switchTab(this,'tab-rejected')">
+            Rejected ({{ rejected_requests|length }})
+          </button>
+          <button class="booking-tab" onclick="switchTab(this,'tab-completed')">
+            Completed ({{ completed_requests|length }})
+          </button>
+        </div>
+
+        <!-- Pending -->
+        <div id="tab-pending">
+          {% for booking in pending_requests %}
+          <div class="booking-row">
+            <div class="booking-tool-img">🔧</div>
+            <div class="booking-info">
+              <strong>{{ booking.tool.name }}</strong>
+              <small>{{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · {{ booking.total_price }} ₪</small>
+            </div>
+            <div class="booking-actions">
+              <a href="{% url 'approve_booking' booking.id %}" class="btn-approve">✓ Approve</a>
+              <a href="{% url 'reject_booking'  booking.id %}" class="btn-reject">✕ Reject</a>
+            </div>
+          </div>
+          {% empty %}
+          <div class="empty-state">No pending requests.</div>
+          {% endfor %}
+        </div>
+
+        <!-- Approved -->
+        <div id="tab-approved" style="display:none;">
+          {% for booking in approved_requests %}
+          <div class="booking-row">
+            <div class="booking-tool-img">🔧</div>
+            <div class="booking-info">
+              <strong>{{ booking.tool.name }}</strong>
+              <small>{{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · {{ booking.total_price }} ₪</small>
+            </div>
+            <span class="badge-status badge-approved">Approved</span>
+          </div>
+          {% empty %}
+          <div class="empty-state">No approved bookings.</div>
+          {% endfor %}
+        </div>
+
+        <!-- Rejected -->
+        <div id="tab-rejected" style="display:none;">
+          {% for booking in rejected_requests %}
+          <div class="booking-row">
+            <div class="booking-tool-img">🔧</div>
+            <div class="booking-info">
+              <strong>{{ booking.tool.name }}</strong>
+              <small>{{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · {{ booking.total_price }} ₪</small>
+            </div>
+            <span class="badge-status badge-rejected">Rejected</span>
+          </div>
+          {% empty %}
+          <div class="empty-state">No rejected bookings.</div>
+          {% endfor %}
+        </div>
+
+        <!-- Completed -->
+        <div id="tab-completed" style="display:none;">
+          {% for booking in completed_requests %}
+          <div class="booking-row">
+            <div class="booking-tool-img">🔧</div>
+            <div class="booking-info">
+              <strong>{{ booking.tool.name }}</strong>
+              <small>{{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · {{ booking.total_price }} ₪</small>
+            </div>
+            <span class="badge-status badge-completed">Completed</span>
+          </div>
+          {% empty %}
+          <div class="empty-state">No completed bookings.</div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ════════ MY RENTALS (Renter view) ════════ -->
+    <div class="tab-panel {% if active_tab == 'my-rentals' %}active{% endif %}">
+      <h2>My Rentals</h2>
+      <p class="subtitle">Welcome back, {{ user.name }}</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value">{{ active_rentals }}</div>
+          <div class="stat-label">Active Rentals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-value">{{ booking_history|length }}</div>
+          <div class="stat-label">Past Rentals</div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+        <!-- Current Rentals -->
+        <div class="section-card">
+          <h5>Current Rentals</h5>
+          {% for booking in current_rentals %}
+          <div class="booking-row">
+            <div class="booking-tool-img">🔧</div>
+            <div class="booking-info">
+              <strong>{{ booking.tool.name }}</strong>
+              <small>{{ booking.start_date }} → {{ booking.end_date }}</small>
+              <small>{{ booking.total_price }} ₪</small>
+            </div>
+            <span class="badge-status badge-approved">Active</span>
+          </div>
+          {% empty %}
+          <div class="empty-state">No active rentals.</div>
+          {% endfor %}
+        </div>
+
+        <!-- Booking History -->
+        <div class="section-card">
+          <h5>Booking History</h5>
+          {% for booking in booking_history %}
+          <div class="booking-row">
+            <div class="booking-tool-img">🔧</div>
+            <div class="booking-info">
+              <strong>{{ booking.tool.name }}</strong>
+              <small>{{ booking.start_date }} → {{ booking.end_date }} · {{ booking.total_price }} ₪</small>
+            </div>
+            {% if booking.status == 'completed' %}
+              <span class="badge-status badge-completed">Completed</span>
+            {% else %}
+              <span class="badge-status badge-rejected">Rejected</span>
+            {% endif %}
+          </div>
+          {% empty %}
+          <div class="empty-state">No rental history yet.</div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ════════ MY TOOLS placeholder ════════ -->
+    <div class="tab-panel {% if active_tab == 'my-tools' %}active{% endif %}">
+      <h2>My Tools</h2>
+      <p class="subtitle">This section is handled by your teammate.</p>
+    </div>
+
+  </main>
+</div>
+
+
+<script>
+  function switchTab(btn, targetId) {
+    // Update tab buttons
+    document.querySelectorAll('.booking-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show target panel
+    ['tab-pending','tab-approved','tab-rejected','tab-completed'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+    document.getElementById(targetId).style.display = 'block';
+  }
+</script>
+
+{% endblock %}
