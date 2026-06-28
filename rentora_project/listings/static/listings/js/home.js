@@ -4,6 +4,61 @@
 
     var cfg = window.AppConfig || {};
 
+    /* ── AI Smart Search ─────────────────────────────────────────────────── */
+    var form  = document.getElementById('heroSearchForm');
+    var input = document.getElementById('heroSearchInput');
+    var btn   = document.getElementById('heroSearchBtn');
+
+    function setLoading(on) {
+        if (!btn) return;
+        if (on) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span>AI thinking…</span>';
+            btn.classList.add('hero__search-btn--loading');
+            if (input) input.disabled = true;
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-robot"></i><span>AI Search</span>';
+            btn.classList.remove('hero__search-btn--loading');
+            if (input) input.disabled = false;
+        }
+    }
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var query = (input ? input.value : '').trim();
+            if (!query) return;
+
+            /* If no smart-search URL configured, fall back immediately */
+            if (!cfg.smartSearchUrl) {
+                window.location.href = cfg.browseUrl + '?q=' + encodeURIComponent(query);
+                return;
+            }
+
+            setLoading(true);
+
+            fetch(cfg.smartSearchUrl, {
+                method:  'POST',
+                headers: {
+                    'X-CSRFToken':  cfg.csrfToken,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'q=' + encodeURIComponent(query),
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                window.location.href = data.redirect ||
+                    (cfg.browseUrl + '?q=' + encodeURIComponent(query));
+            })
+            .catch(function () {
+                /* Network / server error — degrade silently */
+                window.location.href = cfg.browseUrl + '?q=' + encodeURIComponent(query);
+            });
+        });
+    }
+
     /* ── Wishlist toggle (called via onclick on tool cards) ─────────────── */
     window.toggleWishlist = function toggleWishlist(btn, toolId) {
         var url = cfg.toggleWishlistUrl.replace('/0/', '/' + toolId + '/');

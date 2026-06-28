@@ -8,6 +8,43 @@ from listings.models import Tool, ToolImage, Review, Booking, BookingStatus, Wis
 from users.models    import User
  
  
+from django.core.cache import cache
+
+import requests
+
+from listings.models import Tool, ToolImage, Review, Booking, BookingStatus, Wishlist
+from users.models    import User
+
+
+def _geocode(location: str) -> tuple[float, float] | None:
+    """
+    Convert a location string to (lat, lon) using Nominatim (OpenStreetMap).
+    Results are cached for 24 hours so Nominatim is called at most once per location.
+    Returns None silently on any failure — the map is simply not shown.
+    """
+    if not location:
+        return None
+    cache_key = 'geo_' + location.lower().strip()[:120]
+    cached = cache.get(cache_key)
+    if cached:
+        return cached
+    try:
+        resp = requests.get(
+            'https://nominatim.openstreetmap.org/search',
+            params={'q': location, 'format': 'json', 'limit': 1},
+            headers={'User-Agent': 'Rentora/1.0 (tool-rental-platform)'},
+            timeout=5,
+        )
+        data = resp.json()
+        if data:
+            coords = (float(data[0]['lat']), float(data[0]['lon']))
+            cache.set(cache_key, coords, 60 * 60 * 24)
+            return coords
+    except Exception:
+        pass
+    return None
+
+
 def tool_detail_view(request, pk):
     """Public detail page for a single Tool listing."""
  
@@ -62,24 +99,32 @@ def tool_detail_view(request, pk):
         if user_id else False
     )
  
+
+    # ── Geocode tool location for map ─────────────────────────────────────────
+    coords   = _geocode(tool.location)
+    tool_lat = coords[0] if coords else None
+    tool_lon = coords[1] if coords else None
+
     # ── Pop one-time session flash messages ───────────────────────────────────
     booking_success = request.session.pop('booking_success', None)
     booking_error    = request.session.pop('booking_error', None)
  
     context = {
-        'tool':                tool,
-        'primary_image':       primary_image,
-        'gallery':             gallery,
-        'all_images':          tool.all_images,
-        'reviews':             reviews[:12],
-        'review_count':        review_count,
-        'avg_rating':          avg_rating,
-        'owner_tools_count':   owner_tools_count,
-        'owner_rentals_count': owner_rentals_count,
-        'owner_rating':        owner_rating,
-        'is_wishlisted':       is_wishlisted,
-        'booking_success':     booking_success,
-        'booking_error':       booking_error,
+        'tool':                 tool,
+        'primary_image':        primary_image,
+        'gallery':              gallery,
+        'all_images':           tool.all_images,
+        'reviews':              reviews[:12],
+        'review_count':         review_count,
+        'avg_rating':           avg_rating,
+        'owner_tools_count':    owner_tools_count,
+        'owner_rentals_count':  owner_rentals_count,
+        'owner_rating':         owner_rating,
+        'is_wishlisted':        is_wishlisted,
+        'booking_success':      booking_success,
+        'booking_error':        booking_error,
+        'tool_lat':             tool_lat,
+        'tool_lon':             tool_lon,
     }
     return render(request, 'listings/tool/tool_detail.html', context)
  
