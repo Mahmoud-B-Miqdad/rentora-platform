@@ -207,6 +207,56 @@
 .detail-about { margin-bottom:24px; }
 .detail-about__text { font-size:14.5px;color:var(--clr-text-2);line-height:1.72; }
 
+/* ── Pickup Location Map ─────────────────────────────────────────────── */
+.detail-map-section { margin-bottom:32px; }
+.detail-map-section .detail-section-title { display:flex;align-items:center;gap:8px; }
+.detail-map-section .detail-section-title i { color:#2563eb;font-size:16px; }
+.detail-map-address { font-size:13.5px;color:var(--clr-muted);margin:-4px 0 12px;display:flex;align-items:center;gap:6px; }
+.detail-map-address i { color:#2563eb;font-size:12px; }
+
+.detail-map-container {
+    width: 100%;
+    height: 300px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--clr-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 0;
+}
+
+/* Custom map pin */
+.tool-map-pin {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg,#2563eb,#1e40af);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.45);
+    border: 2px solid #fff;
+}
+.tool-map-pin i {
+    transform: rotate(45deg);
+    color: #fff;
+    font-size: 16px;
+}
+
+/* Popup */
+.tool-map-popup { display:flex;flex-direction:column;gap:3px;min-width:140px; }
+.tool-map-popup strong { font-size:13px;font-weight:700;color:#0f172a; }
+.tool-map-popup span { font-size:11.5px;color:#64748b; }
+
+/* Leaflet popup overrides */
+.leaflet-popup-content-wrapper { border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.15);border:none; }
+.leaflet-popup-tip { background:#fff; }
+.leaflet-container { font-family: inherit; }
+
+.detail-map-note { font-size:12px;color:var(--clr-muted);margin-top:8px;display:flex;align-items:center;gap:5px; }
+.detail-map-note i { color:#2563eb;font-size:11px; }
+
 /* Deposit card */
 .detail-deposit-card { display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--clr-surface);border:1px solid var(--clr-border);border-radius:12px;margin-bottom:32px; }
 .detail-deposit-card__icon { width:40px;height:40px;background:#f0fdfa;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--clr-brand-dark);flex-shrink:0; }
