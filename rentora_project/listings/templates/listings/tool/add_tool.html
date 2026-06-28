@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+{% load static %}
+ 
+{% block title %}List Your Tool | Rentora{% endblock %}
+ 
+{% block content %}
+ 
+<link rel="stylesheet" href="{% static 'listings/css/add_tool.css' %}">
+ 
+<div class="add-tool-page">
+ 
+    <!-- Header -->
+ 
+    <div class="page-title">
+ 
+        <h1>List Your Tool</h1>
+ 
+        <p>
+            Fill in the details and let Rentora's AI help you create the perfect listing.
+        </p>
+ 
+    </div>
+ 
+ 
+    <!-- Django Messages (errors / success) -->
+ 
+    {% if messages %}
+    <div class="form-messages">
+        {% for message in messages %}
+        <div class="form-message form-message--{{ message.tags }}">
+            <i class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+            <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+ 
+ 
+    <!-- Card -->
+ 
+    <div class="tool-card">
+ 
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+ 
+            {% csrf_token %}
+ 
+            <h2>Tool Information</h2>
+ 
+            <!-- Tool Name -->
+ 
+            <div class="form-group">
+ 
+                <label>
+                    Tool Name
+                    <span>*</span>
+                </label>
+ 
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="e.g. DeWalt Heavy-Duty Jackhammer"
+                    maxlength="120"
+                    value="{{ form_data.title|default:'' }}"
+                    required
+                >
+ 
+            </div>
+ 
+ 
+            <!-- Description -->
+ 
+            <div class="form-group">
+ 
+                <div class="label-row">
+ 
+                    <label>
+                        Description
+                        <span>*</span>
+                    </label>
+ 
+                    <button
+                        type="button"
+                        class="ai-btn"
+                    >
+                        ✨ Generate with AI
+                    </button>
+ 
+                </div>
+ 
+                <textarea
+                    name="description"
+                    rows="6"
+                    maxlength="2000"
+                    placeholder="Describe your tool, its features, and what's included..."
+                    required
+                    id="descriptionField"
+                >{{ form_data.description|default:'' }}</textarea>
+ 
+                <small>
+                    <span id="charCount">0</span>/2000 characters
+                    <span id="minCharWarning" class="min-char-warning"></span>
+                </small>
+ 
+            </div>
+ 
+ 
+ 
+            <!-- Category + Condition -->
+ 
+            <div class="double-grid">
+ 
+                <!-- Category -->
+ 
+                <div class="form-group">
+ 
+                    <label>
+                        Category
+                        <span>*</span>
+                    </label>
+ 
+                    <select
+                        name="category_id"
+                        required
+                    >
+ 
+                        <option value="">
+                            Select a category
+                        </option>
+ 
+                        {% for category in categories %}
+ 
+                        <option value="{{ category.id }}" {% if form_data.category_id == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+ 
+                        {% endfor %}
+ 
+                    </select>
+ 
+                </div>
+ 
+ 
+ 
+                <!-- Condition -->
+ 
+                <div class="form-group">
+ 
+                    <div class="label-row">
+ 
+                        <label>
+                            Condition
+                            <span>*</span>
+                        </label>
+ 
+                        <button
+                            type="button"
+                            class="detect-btn"
+                        >
+                            🔍 Detect Condition
+                        </button>
+ 
+                    </div>
+ 
+                    <div class="condition-buttons">
+ 
+                        <button
+                            type="button"
+                            class="condition-btn {% if form_data.condition == 'excellent' %}active{% endif %}"
+                            data-value="excellent"
+                        >
+                            Excellent
+                        </button>
+ 
+                        <button
+                            type="button"
+                            class="condition-btn {% if form_data.condition == 'good' or not form_data %}active{% endif %}"
+                            data-value="good"
+                        >
+                            Good
+                        </button>
+ 
+                        <button
+                            type="button"
+                            class="condition-btn {% if form_data.condition == 'fair' %}active{% endif %}"
+                            data-value="fair"
+                        >
+                            Fair
+                        </button>
+ 
+                    </div>
+ 
+                    <input
+                        type="hidden"
+                        name="condition"
+                        value="{{ form_data.condition|default:'good' }}"
+                        id="conditionInput"
+                    >
+ 
+                </div>
+ 
+            </div>
+ 
+ 
+ 
+            <!-- Location + Price + Deposit -->
+ 
+            <div class="triple-grid">
+ 
+                <!-- Location -->
+ 
+                <div class="form-group">
+ 
+                    <label>
+                        Location
+                        <span>*</span>
+                    </label>
+ 
+                    <input
+                        type="text"
+                        name="location"
+                        placeholder="e.g. Gaza City"
+                        value="{{ form_data.location|default:'' }}"
+                        required
+                    >
+ 
+                </div>
+ 
+ 
+ 
+                <!-- Daily Rate -->
+ 
+                <div class="form-group">
+ 
+                    <div class="label-row">
+ 
+                        <label>
+                            Price / Day ($)
+                            <span>*</span>
+                        </label>
+ 
+                        <button
+                            type="button"
+                            class="suggest-btn"
+                        >
+                            💡 Suggest
+                        </button>
+ 
+                    </div>
+ 
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="daily_rate"
+                        placeholder="0"
+                        value="{{ form_data.daily_rate|default:'' }}"
+                        required
+                    >
+ 
+                </div>
+ 
+ 
+ 
+                <!-- Deposit -->
+ 
+                <div class="form-group">
+ 
+                    <label>
+                        Deposit ($)
+                    </label>
+ 
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="deposit"
+                        placeholder="Security Deposit"
+                        value="{{ form_data.deposit|default:'' }}"
+                        required
+                    >
+ 
+                    <small>
+                        Refundable upon safe return.
+                    </small>
+ 
+                </div>
+ 
+            </div>
+ 
+ 
+ 
+            <!-- Upload -->
+ 
+            <div class="form-group">
+ 
+                <label>
+                    Upload Images
+                </label>
+ 
+                <input
+                    type="file"
+                    name="images"
+                    multiple
+                    accept="image/*"
+                >
+ 
+                <small>
+                    Maximum 8 images.
+                </small>
+ 
+            </div>
+ 
+ 
+ 
+            <!-- Submit -->
+ 
+            <button
+                class="submit-btn"
+                type="submit"
+            >
+                List Your Tool
+            </button>
+ 
+        </form>
+ 
+    </div>
+ 
+</div>
+ 
+<script src="{% static 'listings/js/add_tool.js' %}"></script>
+ 
+{% endblock %}

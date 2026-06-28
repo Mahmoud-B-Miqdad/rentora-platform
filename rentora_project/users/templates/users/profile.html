@@ -299,7 +299,7 @@
             <div class="profile-tools-grid">
                 {% for tool in listed_tools %}
                 {% with primary=tool.primary_images.0 %}
-                <a href="{% url 'listings:detail' tool.pk %}" class="ptool-card">
+                <a href="{% url 'listings:tools:detail' tool.pk %}" class="ptool-card">
                     <div class="ptool-card__img-wrap">
                         {% if primary %}
                         <img src="{{ primary.image.url }}"

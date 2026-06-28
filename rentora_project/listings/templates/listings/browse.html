@@ -165,7 +165,7 @@
                 {% for tool in page_obj %}
                 {% with primary=tool.primary_images.0 %}
 
-                <a href="{% url 'listings:detail' tool.pk %}" class="bcard">
+                <a href="{% url 'listings:tools:detail' tool.pk %}" class="bcard">
 
                     <!-- Image area -->
                     <div class="bcard__img-wrap">
@@ -313,7 +313,7 @@
 <script>
 window.AppConfig = {
     csrfToken:         '{{ csrf_token }}',
-    toggleWishlistUrl: '{% url "listings:toggle_wishlist" 0 %}',
+    toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
     loginUrl:          '{% url "users:login" %}',
     browseUrl:         '{% url "listings:browse" %}',
 };
