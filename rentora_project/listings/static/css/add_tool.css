@@ -1,0 +1,827 @@
+/* ==========================================
+   Google Font
+========================================== */
+ 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
+ 
+ 
+ 
+/* ==========================================
+   Page
+========================================== */
+ 
+.add-tool-page{
+ 
+    max-width:1200px;
+    margin:auto;
+    padding:60px 20px 80px;
+ 
+    font-family:'Inter',sans-serif;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Page Header
+========================================== */
+ 
+.page-title{
+ 
+    text-align:center;
+    margin-bottom:40px;
+ 
+}
+ 
+.page-title h1{
+ 
+    font-size:42px;
+    font-weight:700;
+    color:#172554;
+ 
+    margin-bottom:10px;
+ 
+}
+ 
+.page-title p{
+ 
+    color:#6b7280;
+    font-size:17px;
+ 
+}
+ 
+ 
+ 
+
+ 
+ 
+/* ==========================================
+   Card
+========================================== */
+ 
+.tool-card{
+ 
+    background:white;
+ 
+    border-radius:20px;
+ 
+    padding:45px;
+ 
+    box-shadow:
+ 
+        0 10px 40px rgba(0,0,0,.06);
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Tab Panels
+========================================== */
+ 
+.tab-panel{
+ 
+    display:none;
+ 
+}
+ 
+.tab-panel.active{
+ 
+    display:block;
+ 
+}
+ 
+.panel-subtitle{
+ 
+    color:#6b7280;
+ 
+    font-size:15px;
+ 
+    margin-top:-14px;
+ 
+    margin-bottom:30px;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Section Title
+========================================== */
+ 
+.tool-card h2{
+ 
+    margin-bottom:30px;
+ 
+    font-size:24px;
+    font-weight:700;
+ 
+    color:#111827;
+ 
+}
+ 
+.tab-panel[data-panel="images"] h2{
+ 
+    margin-bottom:6px;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Form
+========================================== */
+ 
+.form-group{
+ 
+    margin-bottom:28px;
+ 
+}
+ 
+.form-group label{
+ 
+    display:block;
+ 
+    font-weight:600;
+ 
+    margin-bottom:10px;
+ 
+    color:#1f2937;
+ 
+    font-size:15px;
+ 
+}
+ 
+.form-group span{
+ 
+    color:#f97316;
+ 
+    margin-left:2px;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Inputs
+========================================== */
+ 
+input,
+ 
+textarea,
+ 
+select{
+ 
+    width:100%;
+ 
+    padding:15px 18px;
+ 
+    border-radius:12px;
+ 
+    border:1px solid #e6e9ee;
+ 
+    font-size:15px;
+    font-family:inherit;
+ 
+    transition:.2s;
+ 
+    outline:none;
+ 
+    background:#eef1f5;
+ 
+    color:#0f172a;
+ 
+}
+ 
+input::placeholder,
+ 
+textarea::placeholder{
+ 
+    color:#94a3b8;
+ 
+}
+ 
+textarea{
+ 
+    resize:none;
+ 
+}
+ 
+input:focus,
+ 
+textarea:focus,
+ 
+select:focus{
+ 
+    background:#ffffff;
+ 
+    border-color:#0f9d8f;
+ 
+    box-shadow:0 0 0 4px rgba(15,157,143,.12);
+ 
+}
+ 
+select{
+ 
+    appearance:none;
+ 
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+ 
+    background-repeat:no-repeat;
+ 
+    background-position:right 18px center;
+ 
+    cursor:pointer;
+ 
+    padding-right:44px;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Grid
+========================================== */
+ 
+.double-grid{
+ 
+    display:grid;
+ 
+    grid-template-columns:1fr 1fr;
+ 
+    gap:30px;
+ 
+}
+ 
+.triple-grid{
+ 
+    display:grid;
+ 
+    grid-template-columns:repeat(3,1fr);
+ 
+    gap:30px;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Label Row
+========================================== */
+ 
+.label-row{
+ 
+    display:flex;
+ 
+    justify-content:space-between;
+ 
+    align-items:center;
+ 
+    margin-bottom:10px;
+ 
+}
+ 
+.label-row label{
+ 
+    margin-bottom:0;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   AI Buttons
+========================================== */
+ 
+.ai-btn,
+ 
+.detect-btn,
+ 
+.suggest-btn{
+ 
+    border:none;
+ 
+    cursor:pointer;
+ 
+    padding:6px 4px;
+ 
+    border-radius:8px;
+ 
+    background:transparent;
+ 
+    display:flex;
+    align-items:center;
+    gap:6px;
+ 
+    font-size:13px;
+    font-weight:600;
+    font-family:inherit;
+ 
+    transition:.2s;
+ 
+    white-space:nowrap;
+ 
+}
+ 
+.ai-btn{
+ 
+    color:#0f9d8f;
+ 
+}
+ 
+.detect-btn,
+ 
+.suggest-btn{
+ 
+    color:#d97706;
+ 
+}
+ 
+.ai-btn:hover,
+ 
+.detect-btn:hover,
+ 
+.suggest-btn:hover{
+ 
+    opacity:.7;
+ 
+}
+ 
+.detect-btn:disabled{
+ 
+    opacity:.4;
+ 
+    cursor:not-allowed;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Condition
+========================================== */
+ 
+.condition-buttons{
+ 
+    display:flex;
+ 
+    gap:10px;
+ 
+}
+ 
+.condition-btn{
+ 
+    flex:1;
+ 
+    border:none;
+ 
+    background:#eef1f5;
+ 
+    color:#475569;
+ 
+    padding:14px 10px;
+ 
+    border-radius:12px;
+ 
+    cursor:pointer;
+ 
+    font-weight:600;
+    font-size:14px;
+    font-family:inherit;
+ 
+    transition:.2s;
+ 
+}
+ 
+.condition-btn:hover{
+ 
+    background:#e2e7ee;
+ 
+}
+ 
+.condition-btn.active{
+ 
+    background:#0f766e;
+ 
+    color:white;
+ 
+}
+ 
+.condition-btn.active:hover{
+ 
+    background:#0d6359;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Dropzone (Upload Images tab)
+========================================== */
+ 
+.dropzone{
+ 
+    border:2px dashed #cbd5e1;
+ 
+    border-radius:16px;
+ 
+    background:#fafbfc;
+ 
+    padding:50px 20px;
+ 
+    text-align:center;
+ 
+    cursor:pointer;
+ 
+    transition:.2s;
+ 
+}
+ 
+.dropzone:hover,
+ 
+.dropzone.dragover{
+ 
+    border-color:#0f9d8f;
+ 
+    background:#f0faf8;
+ 
+}
+ 
+.dropzone__icon{
+ 
+    width:56px;
+    height:56px;
+ 
+    margin:0 auto 18px;
+ 
+    border-radius:14px;
+ 
+    background:#e6f5f3;
+ 
+    color:#0f9d8f;
+ 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+ 
+    font-size:22px;
+ 
+}
+ 
+.dropzone__title{
+ 
+    font-weight:600;
+ 
+    color:#1f2937;
+ 
+    margin-bottom:4px;
+ 
+    font-size:16px;
+ 
+}
+ 
+.dropzone__subtitle{
+ 
+    color:#94a3b8;
+ 
+    font-size:14px;
+ 
+    margin-bottom:18px;
+ 
+}
+ 
+.dropzone__btn{
+ 
+    border:1px solid #e6e9ee;
+ 
+    background:#eef1f5;
+ 
+    color:#1f2937;
+ 
+    padding:10px 22px;
+ 
+    border-radius:10px;
+ 
+    font-weight:600;
+    font-size:14px;
+    font-family:inherit;
+ 
+    cursor:pointer;
+ 
+    transition:.2s;
+ 
+}
+ 
+.dropzone__btn:hover{
+ 
+    background:#e2e7ee;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Upload Hint
+========================================== */
+ 
+.upload-hint{
+ 
+    display:flex;
+ 
+    align-items:flex-start;
+ 
+    gap:10px;
+ 
+    margin-top:20px;
+ 
+    padding:14px 18px;
+ 
+    border-radius:12px;
+ 
+    background:#eef1f5;
+ 
+    color:#64748b;
+ 
+    font-size:14px;
+ 
+    transition:.2s;
+ 
+}
+ 
+.upload-hint i{
+ 
+    margin-top:2px;
+ 
+}
+ 
+.upload-hint.has-images{
+ 
+    background:#e6f5f3;
+ 
+    color:#0f766e;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Small text
+========================================== */
+ 
+small{
+ 
+    display:block;
+ 
+    margin-top:8px;
+ 
+    color:#94a3b8;
+    font-size:13px;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Submit Button
+========================================== */
+ 
+.submit-btn{
+ 
+    width:100%;
+ 
+    margin-top:30px;
+ 
+    padding:18px;
+ 
+    border:none;
+ 
+    border-radius:14px;
+ 
+    background:#0f766e;
+ 
+    color:white;
+ 
+    font-size:16px;
+    font-weight:700;
+    font-family:inherit;
+ 
+    cursor:pointer;
+ 
+    transition:.2s;
+ 
+}
+ 
+.submit-btn:hover{
+ 
+    background:#0d6359;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Image Preview
+========================================== */
+ 
+.preview-container{
+ 
+    display:flex;
+ 
+    flex-wrap:wrap;
+ 
+    gap:15px;
+ 
+    margin-top:20px;
+ 
+}
+ 
+.preview-item{
+ 
+    position:relative;
+ 
+    width:110px;
+    height:110px;
+ 
+}
+ 
+.preview-image{
+ 
+    width:110px;
+ 
+    height:110px;
+ 
+    object-fit:cover;
+ 
+    border-radius:12px;
+ 
+    border:2px solid #e5e7eb;
+ 
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+ 
+}
+ 
+.preview-remove{
+ 
+    position:absolute;
+ 
+    top:-8px;
+    right:-8px;
+ 
+    width:24px;
+    height:24px;
+ 
+    border-radius:50%;
+ 
+    background:#1f2937;
+ 
+    color:white;
+ 
+    border:none;
+ 
+    cursor:pointer;
+ 
+    font-size:12px;
+ 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+ 
+}
+
+/* ==========================================
+   Form Messages (Django messages: errors / success)
+========================================== */
+ 
+.form-messages{
+ 
+    max-width:700px;
+ 
+    margin:0 auto 24px;
+ 
+    display:flex;
+    flex-direction:column;
+ 
+    gap:10px;
+ 
+}
+ 
+.form-message{
+ 
+    display:flex;
+    align-items:flex-start;
+ 
+    gap:10px;
+ 
+    padding:14px 18px;
+ 
+    border-radius:12px;
+ 
+    font-size:14px;
+    font-weight:500;
+ 
+}
+ 
+.form-message i{
+ 
+    margin-top:2px;
+ 
+}
+ 
+.form-message--error{
+ 
+    background:#fef2f2;
+ 
+    color:#b91c1c;
+ 
+    border:1px solid #fecaca;
+ 
+}
+ 
+.form-message--success{
+ 
+    background:#f0fdf4;
+ 
+    color:#15803d;
+ 
+    border:1px solid #bbf7d0;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Minimum character warning
+========================================== */
+ 
+.min-char-warning{
+ 
+    color:#d97706;
+ 
+    display:none;
+ 
+}
+ 
+.min-char-warning.visible{
+ 
+    display:inline;
+ 
+}
+ 
+ 
+ 
+/* ==========================================
+   Responsive
+========================================== */
+ 
+@media(max-width:992px){
+ 
+    .double-grid{
+ 
+        grid-template-columns:1fr;
+ 
+    }
+ 
+    .triple-grid{
+ 
+        grid-template-columns:1fr;
+ 
+    }
+ 
+}
+ 
+ 
+ 
+@media(max-width:768px){
+ 
+    .tool-progress{
+ 
+        max-width:100%;
+ 
+    }
+ 
+    .progress-step{
+ 
+        font-size:13px;
+        padding:12px 14px;
+ 
+    }
+ 
+    .tool-card{
+ 
+        padding:25px;
+ 
+    }
+ 
+    .page-title h1{
+ 
+        font-size:32px;
+ 
+    }
+ 
+    .dropzone{
+ 
+        padding:35px 15px;
+ 
+    }
+ 
+}

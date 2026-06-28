@@ -21,6 +21,7 @@
             &mdash; showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
             {% endif %}
         </p>
+
     </div>
 
     <!-- 2-column layout -->
@@ -49,16 +50,38 @@
                 <!-- Category -->
                 <div class="filter-group">
                     <span class="filter-group__label">Category</span>
-                    <div class="filter-cats">
+                    <div class="filter-cat-list">
+
+                        <button type="submit" name="category" value=""
+                                class="filter-cat-item {% if not filters.category %}filter-cat-item--active{% endif %}">
+                            <span class="filter-cat-item__icon">
+                                <i class="fa-solid fa-border-all" aria-hidden="true"></i>
+                            </span>
+                            <span class="filter-cat-item__name">All Categories</span>
+                            {% if not filters.category %}
+                            <i class="fa-solid fa-check filter-cat-item__check" aria-hidden="true"></i>
+                            {% endif %}
+                        </button>
+
                         {% for cat in categories %}
                         <button type="submit"
                                 name="category"
                                 value="{{ cat.pk }}"
-                                class="filter-cat-btn {% if filters.category == cat.pk|stringformat:'s' %}filter-cat-btn--active{% endif %}">
-                            {% if cat.icon %}<i class="{{ cat.icon }}" aria-hidden="true"></i>{% endif %}
-                            {{ cat.name }}
+                                class="filter-cat-item {% if filters.category == cat.pk|stringformat:'s' %}filter-cat-item--active{% endif %}">
+                            <span class="filter-cat-item__icon">
+                                {% if cat.icon %}
+                                <i class="{{ cat.icon }}" aria-hidden="true"></i>
+                                {% else %}
+                                <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
+                                {% endif %}
+                            </span>
+                            <span class="filter-cat-item__name">{{ cat.name }}</span>
+                            {% if filters.category == cat.pk|stringformat:'s' %}
+                            <i class="fa-solid fa-check filter-cat-item__check" aria-hidden="true"></i>
+                            {% endif %}
                         </button>
                         {% endfor %}
+
                     </div>
                 </div>
 
@@ -142,7 +165,7 @@
                 {% for tool in page_obj %}
                 {% with primary=tool.primary_images.0 %}
 
-                <a href="{% url 'listings:detail' tool.pk %}" class="bcard">
+                <a href="{% url 'listings:tools:detail' tool.pk %}" class="bcard">
 
                     <!-- Image area -->
                     <div class="bcard__img-wrap">
@@ -290,7 +313,7 @@
 <script>
 window.AppConfig = {
     csrfToken:         '{{ csrf_token }}',
-    toggleWishlistUrl: '{% url "listings:toggle_wishlist" 0 %}',
+    toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
     loginUrl:          '{% url "users:login" %}',
     browseUrl:         '{% url "listings:browse" %}',
 };

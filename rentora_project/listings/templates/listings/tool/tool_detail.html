@@ -6,6 +6,9 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'listings/css/tool_detail.css' %}">
+    {% if tool_lat and tool_lon %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -204,6 +207,25 @@
                     <p class="detail-about__text">{{ tool.description }}</p>
                 </div>
 
+                <!-- Pickup Location Map -->
+                {% if tool_lat and tool_lon %}
+                <div class="detail-map-section">
+                    <h2 class="detail-section-title">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                        Pickup Location
+                    </h2>
+                    <p class="detail-map-address">
+                        <i class="fa-solid fa-map-pin" aria-hidden="true"></i>
+                        {{ tool.location }}
+                    </p>
+                    <div id="toolMap" class="detail-map-container"></div>
+                    <p class="detail-map-note">
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        Exact pickup spot will be shared after booking confirmation.
+                    </p>
+                </div>
+                {% endif %}
+
                 <!-- Security Deposit -->
                 <div class="detail-deposit-card">
                     <div class="detail-deposit-card__icon">
@@ -361,11 +383,68 @@
 /* Dynamic data only — all logic lives in tool_detail.js */
 window.AppConfig = {
     csrfToken:         '{{ csrf_token }}',
-    toggleWishlistUrl: '{% url "listings:toggle_wishlist" 0 %}',
+    toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
     loginUrl:          '{% url "users:login" %}',
     dailyRate:         {{ tool.daily_rate }},
     images: [{% for img in all_images %}"{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],
 };
 </script>
 <script src="{% static 'listings/js/tool_detail.js' %}"></script>
+
+{% if tool_lat and tool_lon %}
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<script>
+(function () {
+    var lat  = {{ tool_lat }};
+    var lon  = {{ tool_lon }};
+    var name = "{{ tool.title|escapejs }}";
+    var loc  = "{{ tool.location|escapejs }}";
+
+    var map = L.map('toolMap', {
+        center: [lat, lon],
+        zoom: 14,
+        zoomControl: true,
+        scrollWheelZoom: false,
+        attributionControl: true,
+    });
+
+    /* CartoDB Positron — clean, modern, no API key needed */
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+    }).addTo(map);
+
+    /* Custom div-icon using brand colors */
+    var pin = L.divIcon({
+        className: '',
+        html: '<div class="tool-map-pin"><i class="fa-solid fa-screwdriver-wrench"></i></div>',
+        iconSize:   [44, 44],
+        iconAnchor: [22, 44],
+        popupAnchor:[0, -46],
+    });
+
+    L.marker([lat, lon], { icon: pin })
+        .addTo(map)
+        .bindPopup(
+            '<div class="tool-map-popup">' +
+            '<strong>' + name + '</strong>' +
+            '<span>' + loc + '</span>' +
+            '</div>',
+            { maxWidth: 200 }
+        )
+        .openPopup();
+
+    /* Approximate area circle (privacy-friendly) */
+    L.circle([lat, lon], {
+        radius: 400,
+        color: '#2563eb',
+        fillColor: '#2563eb',
+        fillOpacity: 0.06,
+        weight: 1.5,
+        dashArray: '6 4',
+    }).addTo(map);
+}());
+</script>
+{% endif %}
 {% endblock %}

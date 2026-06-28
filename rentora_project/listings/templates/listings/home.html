@@ -34,18 +34,19 @@
         </p>
 
         <!-- Search Bar -->
-        <form class="hero__search" action="{% url 'listings:home' %}" method="GET">
+        <form class="hero__search" id="heroSearchForm" novalidate>
             <i class="fa-solid fa-magnifying-glass hero__search-icon" aria-hidden="true"></i>
             <input
                 type="text"
+                id="heroSearchInput"
                 name="q"
                 value="{{ request.GET.q }}"
                 placeholder="Try &ldquo;concrete drill&rdquo; or &ldquo;بدي شي أحفر فيه الجدار&rdquo;..."
                 aria-label="Search tools"
                 autocomplete="off">
-            <button type="submit" class="hero__search-btn">
-                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                <span>Search Tools</span>
+            <button type="submit" class="hero__search-btn" id="heroSearchBtn">
+                <i class="fa-solid fa-robot" aria-hidden="true"></i>
+                <span>AI Search</span>
             </button>
         </form>
 
@@ -86,7 +87,7 @@
 
         <div class="cat-grid">
             {% for cat in categories %}
-            <a href="#" class="cat-card" title="Browse {{ cat.name }}">
+            <a href="{% url 'listings:browse' %}?category={{ cat.pk }}" class="cat-card" title="Browse {{ cat.name }}">
                 <div class="cat-card__visual">
                     <div class="cat-card__icon">
                         {% if cat.icon %}
@@ -179,7 +180,7 @@
                 </div>
                 <h2 class="section-title" style="margin-bottom:0">Popular Tools Near You</h2>
             </div>
-            <a href="#" class="featured-header__right">
+            <a href="{% url 'listings:browse' %}" class="featured-header__right">
                 View All Tools
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </a>
@@ -189,7 +190,7 @@
             {% for tool in featured_tools %}
 
             {% with primary_img=tool.primary_images.0 %}
-            <a href="{% url 'listings:detail' tool.pk %}" class="tool-card" aria-label="View {{ tool.title }}">
+            <a href="{% url 'listings:tools:detail' tool.pk %}" class="tool-card" aria-label="View {{ tool.title }}">
 
                 <!-- Image -->
                 <div class="tool-card__img-wrap">
@@ -374,11 +375,11 @@
             </p>
 
             <div class="cta-card__actions">
-                <a href="#" class="btn-cta-primary">
+                <a href="{% url 'listings:tools:add_tool' %}" class="btn-cta-primary">
                     <i class="fa-solid fa-plus" aria-hidden="true"></i>
                     List Your Tool Now
                 </a>
-                <a href="#" class="btn-cta-secondary">
+                <a href="{% url 'listings:browse' %}" class="btn-cta-secondary">
                     Browse Available Tools
                     <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </a>
@@ -394,8 +395,10 @@
 <script>
 window.AppConfig = {
     csrfToken:          '{{ csrf_token }}',
-    toggleWishlistUrl:  '{% url "listings:toggle_wishlist" 0 %}',
+    toggleWishlistUrl:  '{% url "listings:tools:toggle_wishlist" 0 %}',
     loginUrl:           '{% url "users:login" %}',
+    smartSearchUrl:     '{% url "listings:smart_search" %}',
+    browseUrl:          '{% url "listings:browse" %}',
 };
 </script>
 <script src="{% static 'listings/js/home.js' %}"></script>

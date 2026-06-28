@@ -1,7 +1,10 @@
+import urllib.parse
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Avg, Count, Prefetch, Q
+from django.urls import reverse
 
 from listings.models import Category, Tool, ToolImage, Booking, Review, BookingStatus, Wishlist
 from users.models    import User
@@ -190,3 +193,57 @@ def browse_view(request):
         return JsonResponse({'html': html, 'count': paginator.count})
 
     return render(request, 'listings/browse.html', context)
+
+
+# ─────────────────────────────────────────────
+#  About View
+# ─────────────────────────────────────────────
+
+def about_view(request):
+    """Static about page with live platform stats."""
+    tools_count   = Tool.objects.filter(is_available=True).count()
+    rentals_count = Booking.objects.filter(status=BookingStatus.COMPLETED).count()
+    owners_count  = User.objects.filter(tools__is_available=True).distinct().count()
+    avg_data      = Review.objects.aggregate(avg=Avg('rating'))
+    avg_rating    = round(float(avg_data['avg']), 1) if avg_data['avg'] else 0.0
+
+    context = {
+        'stats': {
+            'tools_count':   tools_count,
+            'rentals_count': rentals_count,
+            'owners_count':  owners_count,
+            'avg_rating':    avg_rating,
+        }
+    }
+    return render(request, 'listings/about.html', context)
+
+
+# ─────────────────────────────────────────────
+#  AI Smart Search View
+# ─────────────────────────────────────────────
+
+def smart_search_view(request):
+    """
+    AJAX endpoint: receives a natural-language query, calls Gemini Flash
+    to extract English tool keywords, and returns a browse redirect URL.
+
+    Falls back to the raw query if AI is unavailable or fails.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    query = request.POST.get('q', '').strip()
+    if not query:
+        return JsonResponse({'keywords': '', 'redirect': reverse('listings:browse')})
+
+    from listings.services.ai_search_service import extract_search_keywords
+    keywords = extract_search_keywords(query)
+
+    search_term  = keywords if keywords else query
+    redirect_url = reverse('listings:browse') + '?q=' + urllib.parse.quote(search_term)
+
+    return JsonResponse({
+        'keywords': search_term,
+        'ai_used':  keywords is not None,
+        'redirect': redirect_url,
+    })

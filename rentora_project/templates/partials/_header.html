@@ -15,13 +15,13 @@
             <div class="header-nav__pills">
                 <a href="{% url 'listings:home' %}" class="header-nav__link">Home</a>
                 <a href="{% url 'listings:browse' %}" class="header-nav__link">Browse Tools</a>
-                <a href="#" class="header-nav__link">About Us</a>
+                <a href="{% url 'listings:about' %}" class="header-nav__link">About Us</a>
             </div>
         </nav>
 
         <!-- Right-side Actions -->
         <div class="header-actions">
-            <a href="#" class="btn-list-tool">
+            <a href="{% url 'listings:tools:add_tool' %}" class="btn-list-tool">
                 <i class="fa-solid fa-plus" aria-hidden="true"></i>
                 <span>List Your Tool</span>
             </a>
@@ -31,7 +31,7 @@
             </a>
 
             {% if request.session.user_id %}
-                <a href="#" class="header-icon-btn" title="Profile" aria-label="Your profile">
+                <a href="{% url 'users:profile' %}" class="header-icon-btn" title="Profile" aria-label="Your profile">
                     <i class="fa-regular fa-user" aria-hidden="true"></i>
                 </a>
                 <a href="{% url 'users:logout' %}" class="header-icon-btn" title="Log out" aria-label="Log out">
