@@ -361,7 +361,7 @@
 /* Dynamic data only — all logic lives in tool_detail.js */
 window.AppConfig = {
     csrfToken:         '{{ csrf_token }}',
-    toggleWishlistUrl: '{% url "listings:toggle_wishlist" 0 %}',
+    toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
     loginUrl:          '{% url "users:login" %}',
     dailyRate:         {{ tool.daily_rate }},
     images: [{% for img in all_images %}"{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],

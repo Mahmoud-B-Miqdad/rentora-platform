@@ -189,7 +189,7 @@
             {% for tool in featured_tools %}
 
             {% with primary_img=tool.primary_images.0 %}
-            <a href="{% url 'listings:detail' tool.pk %}" class="tool-card" aria-label="View {{ tool.title }}">
+            <a href="{% url 'listings:tools:detail' tool.pk %}" class="tool-card" aria-label="View {{ tool.title }}">
 
                 <!-- Image -->
                 <div class="tool-card__img-wrap">
@@ -374,7 +374,7 @@
             </p>
 
             <div class="cta-card__actions">
-                <a href="#" class="btn-cta-primary">
+                <a href="{% url 'listings:tools:add_tool' %}" class="btn-cta-primary">
                     <i class="fa-solid fa-plus" aria-hidden="true"></i>
                     List Your Tool Now
                 </a>
@@ -394,7 +394,7 @@
 <script>
 window.AppConfig = {
     csrfToken:          '{{ csrf_token }}',
-    toggleWishlistUrl:  '{% url "listings:toggle_wishlist" 0 %}',
+    toggleWishlistUrl:  '{% url "listings:tools:toggle_wishlist" 0 %}',
     loginUrl:           '{% url "users:login" %}',
 };
 </script>
