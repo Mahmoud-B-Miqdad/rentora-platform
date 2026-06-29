@@ -37,26 +37,28 @@ document.addEventListener('DOMContentLoaded', function () {
   activateTab(initTab);
 
 
-  // ── Booking Sub-Tabs ────────────────────────────────────
-  const bookingTabBtns     = document.querySelectorAll('.booking-tab-btn');
-  const bookingTabContents = document.querySelectorAll('.booking-tab-content');
+  // ── Booking Sub-Tabs (scoped per header group) ──────────
+  document.querySelectorAll('.booking-tabs-header, .booking-tabs-nav').forEach(header => {
+    const btns     = header.querySelectorAll('.booking-tab-btn');
+    const panel    = header.closest('.tab-panel, .section-card');
+    const contents = panel ? panel.querySelectorAll('.booking-tab-content') : [];
 
-  bookingTabBtns.forEach(btn => {
-    btn.addEventListener('click', function () {
-      bookingTabBtns.forEach(b => b.classList.remove('active'));
-      bookingTabContents.forEach(c => c.classList.remove('active'));
-
-      this.classList.add('active');
-      const target = document.getElementById(this.dataset.target);
-      if (target) target.classList.add('active');
+    btns.forEach(btn => {
+      btn.addEventListener('click', function () {
+        btns.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const target = document.getElementById(this.dataset.target);
+        if (target) target.classList.add('active');
+      });
     });
-  });
 
-  // Activate first booking tab by default
-  if (bookingTabBtns.length > 0) {
-    bookingTabBtns[0].classList.add('active');
-    bookingTabContents[0].classList.add('active');
-  }
+    // Activate first tab in each group by default
+    if (btns.length > 0) {
+      btns[0].classList.add('active');
+      if (contents.length > 0) contents[0].classList.add('active');
+    }
+  });
 
 
   // ── Auto-dismiss Alerts ─────────────────────────────────

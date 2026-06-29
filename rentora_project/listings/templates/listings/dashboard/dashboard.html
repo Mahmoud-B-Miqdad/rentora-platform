@@ -53,7 +53,9 @@
           <div class="profile-email">{{ user.email }}</div>
         </div>
       </div>
-      <a href="{% url 'users:profile' %}" class="btn-view-profile">View Profile</a>
+      <a href="{% url 'users:profile' %}" class="btn-view-profile">
+        <i class="fa-regular fa-user"></i> View Profile
+      </a>
       <a href="{% url 'listings:tools:add_tool' %}" class="sidebar-add-btn">
         <i class="fa-solid fa-plus"></i> List New Tool
       </a>
@@ -344,7 +346,16 @@
             <div class="booking-info">
               <div class="booking-tool-name">{{ booking.tool.title }}</div>
               <div class="booking-meta">
-                {{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · ${{ booking.total_price }}
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
               </div>
             </div>
             <div class="booking-actions">
@@ -384,10 +395,32 @@
             <div class="booking-info">
               <div class="booking-tool-name">{{ booking.tool.title }}</div>
               <div class="booking-meta">
-                {{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · ${{ booking.total_price }}
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
               </div>
             </div>
-            <span class="badge badge-approved">Approved</span>
+            <div class="booking-actions">
+              {% if booking.status == 'payment_pending' %}
+                <span class="badge badge-payment">Awaiting Payment</span>
+              {% else %}
+                <span class="badge badge-approved">Approved</span>
+                <form method="POST" action="{% url 'listings:complete_booking' booking.id %}"
+                      onsubmit="return confirm('Mark this booking as completed and add ${{ booking.total_price }} to your earnings?')">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-complete" title="Mark as returned & completed">
+                    <i class="fa-solid fa-circle-check"></i> Mark as Returned
+                  </button>
+                </form>
+              {% endif %}
+            </div>
           </div>
           {% empty %}
           <div class="empty-state">
@@ -411,7 +444,16 @@
             <div class="booking-info">
               <div class="booking-tool-name">{{ booking.tool.title }}</div>
               <div class="booking-meta">
-                {{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · ${{ booking.total_price }}
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
               </div>
             </div>
             <span class="badge badge-rejected">Rejected</span>
@@ -438,7 +480,16 @@
             <div class="booking-info">
               <div class="booking-tool-name">{{ booking.tool.title }}</div>
               <div class="booking-meta">
-                {{ booking.renter.name }} · {{ booking.start_date }} → {{ booking.end_date }} · ${{ booking.total_price }}
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
               </div>
             </div>
             <span class="badge badge-completed">Completed</span>
@@ -486,73 +537,109 @@
         </div>
       </div>
 
-      <div class="rentals-grid">
+      <!-- Rentals tabbed card -->
+      <div class="section-card" style="margin-top:0">
 
-        <!-- Current Rentals -->
-        <div class="section-card">
-          <div class="section-header">
-            <span class="section-title">Current Rentals</span>
-          </div>
-          {% for booking in current_rentals %}
-          <div class="booking-row">
-            <div class="booking-thumb">
-              {% if booking.tool.primary_images %}
-                <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
-              {% else %}
-                <i class="fa-solid fa-wrench"></i>
-              {% endif %}
-            </div>
-            <div class="booking-info">
-              <div class="booking-tool-name">{{ booking.tool.title }}</div>
-              <div class="booking-meta">
-                From {{ booking.tool.owner.name }} · {{ booking.start_date }} → {{ booking.end_date }} · ${{ booking.total_price }}
-              </div>
-            </div>
-            <span class="badge badge-approved">Active</span>
-          </div>
-          {% empty %}
-          <div class="empty-state">
-            <i class="fa-regular fa-calendar-xmark"></i>
-            No active rentals.
-          </div>
-          {% endfor %}
+        <div class="booking-tabs-header" style="padding: 0 20px">
+          <button class="booking-tab-btn active" data-target="rtab-awaiting">
+            Awaiting ({{ pending_my_rentals|length }})
+          </button>
+          <button class="booking-tab-btn" data-target="rtab-active">
+            Active ({{ current_rentals|length }})
+          </button>
+          <button class="booking-tab-btn" data-target="rtab-history">
+            History ({{ booking_history|length }})
+          </button>
         </div>
 
-        <!-- Booking History -->
-        <div class="section-card">
-          <div class="section-header">
-            <span class="section-title">Booking History</span>
-          </div>
-          {% for booking in booking_history %}
-          <div class="booking-row">
-            <div class="booking-thumb">
-              {% if booking.tool.primary_images %}
-                <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
+        <div class="rentals-tab-body">
+
+          <!-- Awaiting tab -->
+          <div class="booking-tab-content active" id="rtab-awaiting">
+            {% for booking in pending_my_rentals %}
+            <div class="booking-row">
+              <div class="booking-thumb">
+                {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+              </div>
+              <div class="booking-info">
+                <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                <div class="booking-meta">
+                  <a href="{% url 'users:public_profile' booking.tool.owner.pk %}" class="renter-chip">
+                    <span class="renter-chip__avatar">{% if booking.tool.owner.profile_image %}<img src="{{ booking.tool.owner.profile_image.url }}" alt="">{% else %}{{ booking.tool.owner.name|first|upper }}{% endif %}</span>
+                    <span class="renter-chip__name">{{ booking.tool.owner.name }}</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                  </a>
+                  <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                </div>
+              </div>
+              {% if booking.status == 'payment_pending' %}
+                <a href="{% url 'listings:payment' booking.id %}" class="btn-pay-now"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
               {% else %}
-                <i class="fa-solid fa-wrench"></i>
+                <span class="badge badge-pending">Pending</span>
               {% endif %}
             </div>
-            <div class="booking-info">
-              <div class="booking-tool-name">{{ booking.tool.title }}</div>
-              <div class="booking-meta">
-                From {{ booking.tool.owner.name }} · {{ booking.start_date }} → {{ booking.end_date }} · ${{ booking.total_price }}
-              </div>
-            </div>
-            {% if booking.status == 'completed' %}
-              <span class="badge badge-completed">Completed</span>
-            {% else %}
-              <span class="badge badge-rejected">Rejected</span>
-            {% endif %}
+            {% empty %}
+            <div class="empty-state"><i class="fa-regular fa-clock"></i>No pending bookings.</div>
+            {% endfor %}
           </div>
-          {% empty %}
-          <div class="empty-state">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            No rental history yet.
-          </div>
-          {% endfor %}
-        </div>
 
+          <!-- Active tab -->
+          <div class="booking-tab-content" id="rtab-active">
+            {% for booking in current_rentals %}
+            <div class="booking-row">
+              <div class="booking-thumb">
+                {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+              </div>
+              <div class="booking-info">
+                <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                <div class="booking-meta">
+                  <a href="{% url 'users:public_profile' booking.tool.owner.pk %}" class="renter-chip">
+                    <span class="renter-chip__avatar">{% if booking.tool.owner.profile_image %}<img src="{{ booking.tool.owner.profile_image.url }}" alt="">{% else %}{{ booking.tool.owner.name|first|upper }}{% endif %}</span>
+                    <span class="renter-chip__name">{{ booking.tool.owner.name }}</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                  </a>
+                  <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                </div>
+              </div>
+              <span class="badge badge-approved">Active</span>
+            </div>
+            {% empty %}
+            <div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i>No active rentals.</div>
+            {% endfor %}
+          </div>
+
+          <!-- History tab -->
+          <div class="booking-tab-content" id="rtab-history">
+            {% for booking in booking_history %}
+            <div class="booking-row">
+              <div class="booking-thumb">
+                {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+              </div>
+              <div class="booking-info">
+                <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                <div class="booking-meta">
+                  <a href="{% url 'users:public_profile' booking.tool.owner.pk %}" class="renter-chip">
+                    <span class="renter-chip__avatar">{% if booking.tool.owner.profile_image %}<img src="{{ booking.tool.owner.profile_image.url }}" alt="">{% else %}{{ booking.tool.owner.name|first|upper }}{% endif %}</span>
+                    <span class="renter-chip__name">{{ booking.tool.owner.name }}</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                  </a>
+                  <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                </div>
+              </div>
+              {% if booking.status == 'completed' %}<span class="badge badge-completed">Completed</span>
+              {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
+            </div>
+            {% empty %}
+            <div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i>No rental history yet.</div>
+            {% endfor %}
+          </div>
+
+        </div>
       </div>
+
     </div>
 
   </main>
