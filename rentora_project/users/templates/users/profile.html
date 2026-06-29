@@ -75,6 +75,36 @@
                     </span>
                     {% endif %}
                 </h1>
+
+                {% if not profile_user.is_verified %}
+                <div class="email-verify-card">
+                    <div class="evc-icon-wrap">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                    </div>
+                    <div class="evc-content">
+                        <h4 class="evc-title">Verify your email address</h4>
+                        <p class="evc-desc">
+                            We sent a verification link to
+                            <strong>{{ profile_user.email }}</strong>.
+                            Check your inbox and click the link to activate your account.
+                        </p>
+                        <div class="evc-footer">
+                            <form method="POST" action="{% url 'users:resend_verification' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="evc-resend-btn">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    Resend verification email
+                                </button>
+                            </form>
+                            <span class="evc-spam-note">
+                                <i class="fa-regular fa-lightbulb"></i>
+                                Can't find it? Check your spam folder.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="profile-badges">
                     {% if profile_user.location %}
                     <span class="profile-badge">

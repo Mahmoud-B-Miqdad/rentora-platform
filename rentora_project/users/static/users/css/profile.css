@@ -123,6 +123,115 @@
     align-items: center;
     gap: 4px;
 }
+/* ── Email Verification Card ─────────────────────────────────── */
+.email-verify-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfb 100%);
+    border: 1px solid #a7f3d0;
+    border-left: 4px solid #0f766e;
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(15, 118, 110, .08);
+}
+
+.evc-icon-wrap {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    background: linear-gradient(135deg, #0f766e, #0d9488);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(15, 118, 110, .28);
+}
+
+.evc-icon-wrap i {
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.evc-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.evc-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 5px;
+}
+
+.evc-desc {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.55;
+    margin: 0 0 14px;
+}
+
+.evc-desc strong {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.evc-footer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.evc-resend-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    background: #0f766e;
+    color: #ffffff;
+    border: none;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: .2px;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 3px 10px rgba(15, 118, 110, .32);
+}
+
+.evc-resend-btn:hover {
+    background: #0d6359;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(15, 118, 110, .38);
+}
+
+.evc-resend-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(15, 118, 110, .28);
+}
+
+.evc-spam-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.evc-spam-note i {
+    font-size: 12px;
+    color: #64748b;
+}
+
+@media (max-width: 600px) {
+    .email-verify-card { flex-direction: column; gap: 14px; }
+    .evc-footer         { flex-direction: column; align-items: flex-start; }
+}
+
 .profile-badges {
     display: flex;
     align-items: center;

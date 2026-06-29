@@ -22,18 +22,7 @@
         <span class="auth-logo__wordmark">Rent<span>ora</span></span>
     </div>
 
-    <!-- ── Flash Messages ─────────────────────────────────── -->
-    {% if messages %}
-    <div class="auth-flashes" role="alert" aria-live="polite">
-        {% for message in messages %}
-        <div class="auth-flash auth-flash--{{ message.tags }}">
-            <i class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"
-               aria-hidden="true"></i>
-            <span>{{ message }}</span>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+
 
     <!-- ══════════════════════════════════════════════════════
          LOGIN PANEL

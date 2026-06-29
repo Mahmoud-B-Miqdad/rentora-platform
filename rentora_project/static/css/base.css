@@ -3,6 +3,89 @@
    Scope: design tokens, reset, header, footer, utilities
    ═══════════════════════════════════════════════════════════════ */
 
+/* ── Global Flash Messages ──────────────────────────────────── */
+.global-messages {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    width: calc(100% - 40px);
+    pointer-events: none;
+}
+
+.global-msg {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 8px 32px rgba(0,0,0,.15);
+    animation: slideInRight .3s ease;
+    pointer-events: all;
+    line-height: 1.4;
+}
+
+.global-msg--success {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #166534;
+}
+.global-msg--error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+.global-msg--warning {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+.global-msg--info {
+    background: #eff6ff;
+    border: 1px solid #93c5fd;
+    color: #1e40af;
+}
+
+.global-msg i:first-child { font-size: 15px; flex-shrink: 0; }
+
+.global-msg span { flex: 1; }
+
+.global-msg-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    opacity: .5;
+    font-size: 13px;
+    padding: 0;
+    flex-shrink: 0;
+    transition: opacity .15s;
+}
+.global-msg-close:hover { opacity: 1; }
+
+@keyframes slideInRight {
+    from { transform: translateX(110%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+@media (max-width: 600px) {
+    .global-messages {
+        top: auto;
+        bottom: 20px;
+        right: 10px;
+        left: 10px;
+        width: auto;
+        max-width: none;
+    }
+}
+
 /* ── Design Tokens ─────────────────────────────────────────── */
 :root {
     /* Brand */
