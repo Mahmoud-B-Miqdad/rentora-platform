@@ -1,537 +1,514 @@
-/* ==========================================
-   Google Font
-========================================== */
- 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
- 
- 
- 
-/* ==========================================
-   Page
-========================================== */
- 
-.add-tool-page{
- 
-    max-width:1200px;
-    margin:auto;
-    padding:60px 20px 80px;
- 
-    font-family:'Inter',sans-serif;
- 
-}
- 
- 
- 
-/* ==========================================
-   Page Header
-========================================== */
- 
-.page-title{
- 
-    text-align:center;
-    margin-bottom:40px;
- 
-}
- 
-.page-title h1{
- 
-    font-size:42px;
-    font-weight:700;
-    color:#172554;
- 
-    margin-bottom:10px;
- 
-}
- 
-.page-title p{
- 
-    color:#6b7280;
-    font-size:17px;
- 
-}
- 
+/* ── Font ────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
- 
- 
- 
-/* ==========================================
-   Card
-========================================== */
- 
-.tool-card{
- 
-    background:white;
- 
-    border-radius:20px;
- 
-    padding:45px;
- 
-    box-shadow:
- 
-        0 10px 40px rgba(0,0,0,.06);
- 
+/* ── Page Shell ──────────────────────────────────────────────────── */
+.add-tool-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 20px 80px;
+    font-family: 'Inter', sans-serif;
 }
- 
- 
- 
-/* ==========================================
-   Section Title
-========================================== */
- 
-.tool-card h2{
- 
-    margin-bottom:30px;
- 
-    font-size:24px;
-    font-weight:700;
- 
-    color:#111827;
- 
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.page-header {
+    text-align: center;
+    margin-bottom: 36px;
 }
- 
- 
- 
-/* ==========================================
-   Form
-========================================== */
- 
-.form-group{
- 
-    margin-bottom:28px;
- 
+
+.page-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
 }
- 
-.form-group label{
- 
-    display:block;
- 
-    font-weight:600;
- 
-    margin-bottom:10px;
- 
-    color:#1f2937;
- 
-    font-size:15px;
- 
+
+.page-header p {
+    font-size: 16px;
+    color: #64748b;
 }
- 
-.form-group span{
- 
-    color:#f97316;
- 
-    margin-left:2px;
- 
+
+.page-header .highlight {
+    color: #0f766e;
+    font-weight: 600;
 }
- 
- 
- 
-/* ==========================================
-   Inputs
-========================================== */
- 
-input,
- 
-textarea,
- 
-select{
- 
-    width:100%;
- 
-    padding:15px 18px;
- 
-    border-radius:12px;
- 
-    border:1px solid #e6e9ee;
- 
-    font-size:15px;
-    font-family:inherit;
- 
-    transition:.2s;
- 
-    outline:none;
- 
-    background:#eef1f5;
- 
-    color:#0f172a;
- 
+
+/* ── Messages ────────────────────────────────────────────────────── */
+.form-messages {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
- 
-input::placeholder,
- 
-textarea::placeholder{
- 
-    color:#94a3b8;
- 
+
+.form-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
 }
- 
-textarea{
- 
-    resize:none;
- 
+
+.form-message--error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
 }
- 
-input:focus,
- 
-textarea:focus,
- 
-select:focus{
- 
-    background:#ffffff;
- 
-    border-color:#0f9d8f;
- 
-    box-shadow:0 0 0 4px rgba(15,157,143,.12);
- 
+
+.form-message--success {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
 }
- 
-select{
- 
-    appearance:none;
- 
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
- 
-    background-repeat:no-repeat;
- 
-    background-position:right 18px center;
- 
-    cursor:pointer;
- 
-    padding-right:44px;
- 
+
+/* ── Step Tabs ───────────────────────────────────────────────────── */
+.step-tabs {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 14px;
+    padding: 5px;
+    gap: 4px;
+    margin-bottom: 28px;
 }
- 
- 
- 
-/* ==========================================
-   Grid
-========================================== */
- 
-.double-grid{
- 
-    display:grid;
- 
-    grid-template-columns:1fr 1fr;
- 
-    gap:30px;
- 
+
+.step-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
 }
- 
-.triple-grid{
- 
-    display:grid;
- 
-    grid-template-columns:repeat(3,1fr);
- 
-    gap:30px;
- 
+
+.step-tab.active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .10);
 }
- 
- 
- 
-/* ==========================================
-   Label Row
-========================================== */
- 
-.label-row{
- 
-    display:flex;
- 
-    justify-content:space-between;
- 
-    align-items:center;
- 
-    margin-bottom:10px;
- 
+
+.step-tab i {
+    font-size: 15px;
 }
- 
-.label-row label{
- 
-    margin-bottom:0;
- 
+
+/* ── Card ────────────────────────────────────────────────────────── */
+.tool-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 40px 44px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, .07);
 }
- 
- 
- 
-/* ==========================================
-   AI Buttons
-========================================== */
- 
-.ai-btn,
- 
-.detect-btn,
- 
-.suggest-btn{
- 
-    border:none;
- 
-    cursor:pointer;
- 
-    padding:6px 4px;
- 
-    border-radius:8px;
- 
-    background:transparent;
- 
-    display:flex;
-    align-items:center;
-    gap:6px;
- 
-    font-size:13px;
-    font-weight:600;
-    font-family:inherit;
- 
-    transition:.2s;
- 
-    white-space:nowrap;
- 
+
+.tool-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 28px;
 }
- 
-.ai-btn{
- 
-    color:#0f9d8f;
- 
+
+/* ── Form Groups ─────────────────────────────────────────────────── */
+.form-group {
+    margin-bottom: 26px;
 }
- 
-.detect-btn,
- 
-.suggest-btn{
- 
-    color:#d97706;
- 
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
 }
- 
-.ai-btn:hover,
- 
-.detect-btn:hover,
- 
-.suggest-btn:hover{
- 
-    opacity:.7;
- 
+
+.req {
+    color: #f97316;
+    margin-left: 2px;
 }
- 
- 
- 
-/* ==========================================
-   Condition
-========================================== */
- 
-.condition-buttons{
- 
-    display:flex;
- 
-    gap:10px;
- 
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 }
- 
-.condition-btn{
- 
-    flex:1;
- 
-    border:none;
- 
-    background:#eef1f5;
- 
-    color:#475569;
- 
-    padding:14px 10px;
- 
-    border-radius:12px;
- 
-    cursor:pointer;
- 
-    font-weight:600;
-    font-size:14px;
-    font-family:inherit;
- 
-    transition:.2s;
- 
+
+.label-row label {
+    margin-bottom: 0;
 }
- 
-.condition-btn:hover{
- 
-    background:#e2e7ee;
- 
+
+/* ── Inputs ──────────────────────────────────────────────────────── */
+.tool-card input[type="text"],
+.tool-card input[type="number"],
+.tool-card textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid #e5e9f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0f172a;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    box-sizing: border-box;
 }
- 
-.condition-btn.active{
- 
-    background:#0f766e;
- 
-    color:white;
- 
+
+.tool-card input[type="text"]::placeholder,
+.tool-card input[type="number"]::placeholder,
+.tool-card textarea::placeholder {
+    color: #b0bec5;
 }
- 
-.condition-btn.active:hover{
- 
-    background:#0d6359;
- 
+
+.tool-card input[type="text"]:focus,
+.tool-card input[type="number"]:focus,
+.tool-card textarea:focus {
+    border-color: #0f766e;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(15, 118, 110, .10);
 }
- 
- 
- 
-/* ==========================================
-   Upload
-========================================== */
- 
-.add-tool-page input[type=file]{
- 
-    padding:18px;
- 
-    border-radius:12px;
- 
-    border:1px solid #e6e9ee;
- 
-    background:#eef1f5;
- 
-    cursor:pointer;
- 
+
+.tool-card textarea {
+    resize: none;
 }
- 
-.add-tool-page input[type=file]:hover{
- 
-    border-color:#0f9d8f;
- 
+
+/* ── Select ──────────────────────────────────────────────────────── */
+.select-wrapper {
+    position: relative;
 }
- 
- 
- 
-/* ==========================================
-   Small text
-========================================== */
- 
-small{
- 
-    display:block;
- 
-    margin-top:8px;
- 
-    color:#94a3b8;
-    font-size:13px;
- 
+
+.select-wrapper select {
+    width: 100%;
+    padding: 13px 44px 13px 16px;
+    border: 1.5px solid #e5e9f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0f172a;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+    box-sizing: border-box;
 }
- 
- 
- 
-/* ==========================================
-   Submit Button
-========================================== */
- 
-.submit-btn{
- 
-    width:100%;
- 
-    margin-top:10px;
- 
-    padding:18px;
- 
-    border:none;
- 
-    border-radius:14px;
- 
-    background:#0f766e;
- 
-    color:white;
- 
-    font-size:16px;
-    font-weight:700;
-    font-family:inherit;
- 
-    cursor:pointer;
- 
-    transition:.2s;
- 
+
+.select-wrapper select:focus {
+    border-color: #0f766e;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(15, 118, 110, .10);
 }
- 
-.submit-btn:hover{
- 
-    background:#0d6359;
- 
+
+.select-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 12px;
+    pointer-events: none;
 }
- 
- 
- 
-/* ==========================================
-   Image Preview
-========================================== */
- 
-.preview-container{
- 
-    display:flex;
- 
-    flex-wrap:wrap;
- 
-    gap:15px;
- 
-    margin-top:20px;
- 
+
+small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #94a3b8;
 }
- 
-.preview-image{
- 
-    width:120px;
- 
-    height:120px;
- 
-    object-fit:cover;
- 
-    border-radius:12px;
- 
-    border:2px solid #e5e7eb;
- 
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
- 
+
+/* ── AI Action Buttons ───────────────────────────────────────────── */
+.ai-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 2px;
+    background: none;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity .2s;
+    white-space: nowrap;
 }
- 
- 
- 
-/* ==========================================
-   Responsive
-========================================== */
- 
-@media(max-width:992px){
- 
-    .double-grid{
- 
-        grid-template-columns:1fr;
- 
+
+.ai-action-btn.teal {
+    color: #0f766e;
+}
+
+.ai-action-btn.amber {
+    color: #d97706;
+}
+
+.ai-action-btn:hover {
+    opacity: .7;
+}
+
+/* ── Condition Buttons ───────────────────────────────────────────── */
+.condition-group {
+    display: flex;
+    gap: 8px;
+}
+
+.cond-btn {
+    flex: 1;
+    padding: 12px 10px;
+    border: 1.5px solid #e5e9f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.cond-btn:hover {
+    border-color: #0f766e;
+    color: #0f766e;
+}
+
+.cond-btn.active {
+    background: #0f766e;
+    border-color: #0f766e;
+    color: #ffffff;
+}
+
+/* ── Grids ───────────────────────────────────────────────────────── */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* ── Next Button ─────────────────────────────────────────────────── */
+.next-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #0f766e;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.next-btn:hover {
+    background: #0d6359;
+}
+
+/* ── Upload Hint ─────────────────────────────────────────────────── */
+.upload-hint {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+/* ── Drop Zone ───────────────────────────────────────────────────── */
+.drop-zone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+    padding: 52px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    background: #f8fafc;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+    border-color: #0f766e;
+    background: #f0fdfb;
+}
+
+.drop-icon {
+    font-size: 40px;
+    color: #94a3b8;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.drop-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.drop-sub {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.browse-btn {
+    display: inline-block;
+    padding: 10px 28px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color .2s, color .2s;
+}
+
+.browse-btn:hover {
+    border-color: #0f766e;
+    color: #0f766e;
+}
+
+/* ── Hidden Input ────────────────────────────────────────────────── */
+.hidden-input {
+    display: none;
+}
+
+/* ── Image Counter ───────────────────────────────────────────────── */
+.img-counter {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #94a3b8;
+    text-align: center;
+    min-height: 20px;
+}
+
+/* ── Preview Grid ────────────────────────────────────────────────── */
+.preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.preview-item {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #e5e9f0;
+    flex-shrink: 0;
+}
+
+.preview-item.preview-primary {
+    border-color: #0f766e;
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, .55);
+    color: #ffffff;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s;
+    padding: 0;
+}
+
+.preview-remove:hover {
+    background: rgba(220, 38, 38, .85);
+}
+
+.preview-badge {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background: #0f766e;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+/* ── Submit Button ───────────────────────────────────────────────── */
+.submit-btn {
+    width: 100%;
+    margin-top: 32px;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: #0f766e;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.submit-btn:hover {
+    background: #0d6359;
+}
+
+/* ── Tab Panel ───────────────────────────────────────────────────── */
+.tab-panel.hidden {
+    display: none;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .tool-card {
+        padding: 28px 22px;
     }
- 
-    .triple-grid{
- 
-        grid-template-columns:1fr;
- 
+
+    .page-header h1 {
+        font-size: 28px;
     }
- 
-}
- 
- 
- 
-@media(max-width:768px){
- 
-    .tool-progress{
- 
-        max-width:100%;
- 
+
+    .two-col,
+    .three-col {
+        grid-template-columns: 1fr;
     }
- 
-    .progress-step{
- 
-        font-size:13px;
-        padding:12px 14px;
- 
+
+    .step-tab span {
+        display: none;
     }
- 
-    .tool-card{
- 
-        padding:25px;
- 
-    }
- 
-    .page-title h1{
- 
-        font-size:32px;
- 
-    }
- 
 }

@@ -3,6 +3,7 @@ import bcrypt
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
 
 
 # ─────────────────────────────────────────────
@@ -315,3 +316,31 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         verified = " ✓" if self.is_verified else ""
         return f"{self.name} <{self.email}>{verified}"
+
+
+# ─────────────────────────────────────────────
+#  Email Verification Token
+# ─────────────────────────────────────────────
+
+class EmailVerification(models.Model):
+    """
+    One-time token sent to a user's email address.
+    Deleted automatically after successful verification.
+    """
+    user       = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="email_verification",
+    )
+    token      = models.CharField(max_length=64, unique=True)
+    expires_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self) -> bool:
+        return timezone.now() > self.expires_at
+
+    class Meta:
+        verbose_name = "Email Verification"
+
+    def __str__(self):
+        return f"Verification for {self.user.email}"

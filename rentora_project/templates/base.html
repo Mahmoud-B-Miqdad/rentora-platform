@@ -26,6 +26,21 @@
 
     {% include "partials/_header.html" %}
 
+    <!-- ── Global Flash Messages ───────────────────────────────── -->
+    {% if messages %}
+    <div class="global-messages" id="globalMessages">
+        {% for message in messages %}
+        <div class="global-msg global-msg--{{ message.tags }}" role="alert">
+            <i class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% elif message.tags == 'info' %}fa-circle-info{% else %}fa-circle-check{% endif %}"></i>
+            <span>{{ message }}</span>
+            <button class="global-msg-close" onclick="this.parentElement.remove()" aria-label="Dismiss">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <main class="site-main" id="main-content">
         {% block content %}{% endblock %}
     </main>

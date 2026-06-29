@@ -1,154 +1,145 @@
-// ==========================================
-// Character Counter
-// ==========================================
+// ── Tab Switching ─────────────────────────────────────────────────────────────
 
-const description = document.querySelector("textarea[name='description']");
-const counter = document.getElementById("charCount");
+const tabs   = document.querySelectorAll('.step-tab');
+const panels = document.querySelectorAll('.tab-panel');
 
-if (description && counter) {
-
-    counter.textContent = description.value.length;
-
-    description.addEventListener("input", function () {
-
-        counter.textContent = this.value.length;
-
-    });
-
+function activateTab(targetId) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.target === targetId));
+    panels.forEach(p => p.classList.toggle('hidden', p.id !== targetId));
 }
 
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => activateTab(tab.dataset.target));
+});
 
-
-// ==========================================
-// Condition Buttons
-// ==========================================
-
-const buttons = document.querySelectorAll(".condition-btn");
-const hiddenInput = document.getElementById("conditionInput");
-
-buttons.forEach(button => {
-
-    button.addEventListener("click", function () {
-
-        buttons.forEach(btn => btn.classList.remove("active"));
-
-        this.classList.add("active");
-
-        hiddenInput.value = this.dataset.value;
-
-    });
-
+// "Continue" button → switch to images panel
+document.getElementById('btnNext').addEventListener('click', () => {
+    activateTab('panelImages');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 
+// ── Character Counter ─────────────────────────────────────────────────────────
 
-// ==========================================
-// Image Preview
-// ==========================================
+const descTA   = document.getElementById('id_description');
+const charSpan = document.getElementById('charCount');
 
-const imageInput = document.querySelector("input[type='file']");
+if (descTA && charSpan) {
+    charSpan.textContent = descTA.value.length;
+    descTA.addEventListener('input', () => {
+        charSpan.textContent = descTA.value.length;
+    });
+}
 
-if (imageInput) {
 
-    // إنشاء مكان للمعاينة إذا لم يكن موجودًا
-    let preview = document.getElementById("previewContainer");
+// ── Condition Buttons ─────────────────────────────────────────────────────────
 
-    if (!preview) {
+const condBtns  = document.querySelectorAll('.cond-btn');
+const condInput = document.getElementById('conditionInput');
 
-        preview = document.createElement("div");
+condBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        condBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        condInput.value = btn.dataset.value;
+    });
+});
 
-        preview.id = "previewContainer";
 
-        preview.className = "preview-container";
+// ── Image Drag & Drop + Preview ───────────────────────────────────────────────
 
-        imageInput.parentNode.appendChild(preview);
+const dropZone   = document.getElementById('dropZone');
+const imageInput = document.getElementById('imageInput');
+const browseBtn  = document.getElementById('browseBtn');
+const previewGrid = document.getElementById('previewGrid');
+const imgCounter  = document.getElementById('imgCounter');
 
-    }
+const MAX_IMAGES = 8;
+let dt = new DataTransfer();
 
-    imageInput.addEventListener("change", function () {
+// Open file browser
+browseBtn.addEventListener('click', e => { e.stopPropagation(); imageInput.click(); });
+dropZone.addEventListener('click', () => imageInput.click());
 
-        preview.innerHTML = "";
+// File input change (browser dialog)
+imageInput.addEventListener('change', function () {
+    addFiles(Array.from(this.files));
+    this.value = '';          // reset so the same file can be re-added if removed
+});
 
-        const files = Array.from(this.files);
+// Drag events
+dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    addFiles(Array.from(e.dataTransfer.files));
+});
 
-        if (files.length > 8) {
-
-            alert("You can upload a maximum of 8 images.");
-
-            this.value = "";
-
+function addFiles(files) {
+    files.forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        if (dt.files.length >= MAX_IMAGES) {
+            alert(`You can upload a maximum of ${MAX_IMAGES} images.`);
             return;
-
         }
-
-        files.forEach(file => {
-
-            if (!file.type.startsWith("image/")) return;
-
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-
-                const img = document.createElement("img");
-
-                img.src = e.target.result;
-
-                img.className = "preview-image";
-
-                preview.appendChild(img);
-
-            };
-
-            reader.readAsDataURL(file);
-
-        });
-
+        dt.items.add(file);
     });
+    imageInput.files = dt.files;
+    renderPreviews();
+    updateCounter();
+}
 
+function removeFile(idx) {
+    const newDt = new DataTransfer();
+    Array.from(dt.files).forEach((f, i) => { if (i !== idx) newDt.items.add(f); });
+    dt = newDt;
+    imageInput.files = dt.files;
+    renderPreviews();
+    updateCounter();
+}
+
+function updateCounter() {
+    const n = dt.files.length;
+    imgCounter.textContent = n > 0 ? `${n} / ${MAX_IMAGES} image${n !== 1 ? 's' : ''} selected` : '';
+}
+
+function renderPreviews() {
+    previewGrid.innerHTML = '';
+    Array.from(dt.files).forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const item = document.createElement('div');
+            item.className = 'preview-item' + (i === 0 ? ' preview-primary' : '');
+            item.innerHTML = `
+                <img src="${e.target.result}" alt="">
+                <button type="button" class="preview-remove" title="Remove">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                ${i === 0 ? '<span class="preview-badge">Cover</span>' : ''}
+            `;
+            item.querySelector('.preview-remove').addEventListener('click', e => {
+                e.stopPropagation();
+                removeFile(i);
+            });
+            previewGrid.appendChild(item);
+        };
+        reader.readAsDataURL(file);
+    });
 }
 
 
+// ── AI Placeholder Alerts ─────────────────────────────────────────────────────
 
-// ==========================================
-// AI Buttons (Temporary)
-// ==========================================
-
-const aiBtn = document.querySelector(".ai-btn");
-
-if (aiBtn) {
-
-    aiBtn.addEventListener("click", function () {
-
-        alert("AI Description Generator will be added soon.");
-
-    });
-
-}
-
-
-
-const suggestBtn = document.querySelector(".suggest-btn");
-
-if (suggestBtn) {
-
-    suggestBtn.addEventListener("click", function () {
-
-        alert("AI Price Suggestion will be available soon.");
-
-    });
-
-}
-
-
-
-const detectBtn = document.querySelector(".detect-btn");
-
-if (detectBtn) {
-
-    detectBtn.addEventListener("click", function () {
-
-        alert("AI Condition Detection will be available soon.");
-
-    });
-
-}
+document.getElementById('btnAI')?.addEventListener('click', () =>
+    alert('AI Description Generator — coming soon!')
+);
+document.getElementById('btnSuggest')?.addEventListener('click', () =>
+    alert('AI Price Suggestion — coming soon!')
+);
+document.getElementById('btnDetect')?.addEventListener('click', () =>
+    alert('AI Condition Detection — coming soon!')
+);
