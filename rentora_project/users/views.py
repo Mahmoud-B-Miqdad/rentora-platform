@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib    import messages
 from django.db.models  import Avg, Count, Prefetch, Q
 
-from users.models   import User
+from users.models    import User, EmailVerification
+from users.services  import send_verification_email
 from listings.models import Tool, ToolImage, Booking, BookingStatus, Review, ReviewType
 
 
@@ -18,8 +19,21 @@ def register_view(request):
                 messages.error(request, msg)
             return render(request, "users/auth.html", {"active_form": "register"})
 
-        User.objects.create_user(request.POST)
-        messages.success(request, "Account created successfully! Please sign in.")
+        user = User.objects.create_user(request.POST)
+
+        try:
+            send_verification_email(request, user)
+            messages.success(
+                request,
+                "Account created! We've sent a verification link to "
+                f"{user.email} — please check your inbox.",
+            )
+        except Exception:
+            messages.success(
+                request,
+                "Account created successfully! Please sign in.",
+            )
+
         return render(request, "users/auth.html", {"active_form": "login"})
 
     return render(request, "users/auth.html", {"active_form": "login"})
@@ -52,6 +66,69 @@ def login_view(request):
 def logout_view(request):
     request.session.flush()
     return redirect("users:login")
+
+
+# ─────────────────────────────────────────────
+#  Email Verification
+# ─────────────────────────────────────────────
+
+def verify_email_view(request, token):
+    """
+    Called when the user clicks the link in their verification email.
+    Marks the account as verified and auto-logs them in.
+    """
+    verification = get_object_or_404(EmailVerification, token=token)
+
+    if verification.is_expired():
+        verification.delete()
+        messages.error(
+            request,
+            "This verification link has expired. Please request a new one.",
+        )
+        return redirect("users:login")
+
+    user = verification.user
+    user.is_verified = True
+    user.save(update_fields=["is_verified"])
+    verification.delete()
+
+    request.session["user_id"]   = user.id
+    request.session["user_name"] = user.name
+
+    messages.success(request, "Your email has been verified. Welcome to Rentora!")
+    return redirect("listings:home")
+
+
+def resend_verification_view(request):
+    """
+    POST — resend the verification email to the currently logged-in user.
+    """
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return redirect("users:login")
+
+    if request.method != "POST":
+        return redirect("users:profile")
+
+    user = get_object_or_404(User, pk=user_id)
+
+    if user.is_verified:
+        messages.info(request, "Your account is already verified.")
+        return redirect("users:profile")
+
+    try:
+        send_verification_email(request, user)
+        messages.success(
+            request,
+            f"Verification email sent to {user.email}. Please check your inbox.",
+        )
+    except Exception:
+        messages.error(
+            request,
+            "Could not send the email right now. Please try again later.",
+        )
+
+    return redirect("users:profile")
 
 
 # ─────────────────────────────────────────────
