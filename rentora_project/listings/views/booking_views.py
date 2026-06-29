@@ -79,6 +79,11 @@ def dashboard(request):
     # Stats
     my_tools_count   = Tool.objects.filter(owner=user).count()
     active_rentals   = current_rentals.count()
+    recent_tools = Tool.objects.filter(
+        owner=user
+	).select_related('category').order_by('-id')[:3]
+
+	
 
     context = {
         'user'               : user,
@@ -91,6 +96,7 @@ def dashboard(request):
         'my_tools_count'     : my_tools_count,
         'active_rentals'     : active_rentals,
         'active_tab'         : request.GET.get('tab', 'overview'),
+        'recent_tools'		 : recent_tools,
     }
     return render(request, 'listings/dashboard/dashboard.html', context)
 
