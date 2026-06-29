@@ -1,9 +1,10 @@
-from django.shortcuts import  render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Prefetch, Sum
 
-from listings.models import Tool, Booking
+from listings.models import Tool, Booking, ToolImage
 from users.models    import User
-from django.contrib import messages
-from datetime import date
+from django.contrib  import messages
+from datetime        import date
 
 
 def create_booking_view(request, pk):
@@ -47,43 +48,47 @@ def login_required_session(view_func):
 def dashboard(request):
     user = User.objects.get(id=request.session['user_id'])
 
-    # Booking Requests 
-    pending_requests   = Booking.objects.filter(
+    primary_img_qs  = ToolImage.objects.filter(is_primary=True)
+    tool_img_pf     = Prefetch('tool__images', queryset=primary_img_qs, to_attr='primary_images')
+
+    # Booking Requests
+    pending_requests = Booking.objects.filter(
         tool__owner=user, status='pending'
-    ).select_related('tool', 'renter').order_by('-created_at')
+    ).select_related('tool', 'tool__category', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
-    approved_requests  = Booking.objects.filter(
+    approved_requests = Booking.objects.filter(
         tool__owner=user, status='approved'
-    ).select_related('tool', 'renter').order_by('-created_at')
+    ).select_related('tool', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
-    rejected_requests  = Booking.objects.filter(
+    rejected_requests = Booking.objects.filter(
         tool__owner=user, status='rejected'
-    ).select_related('tool', 'renter').order_by('-created_at')
+    ).select_related('tool', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
     completed_requests = Booking.objects.filter(
         tool__owner=user, status='completed'
-    ).select_related('tool', 'renter').order_by('-created_at')
+    ).select_related('tool', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
-    # My Rentals 
+    # My Rentals
     current_rentals = Booking.objects.filter(
-        renter=user,
-        status='approved',
-        end_date__gte=date.today()
-    ).select_related('tool').order_by('start_date')
+        renter=user, status='approved', end_date__gte=date.today()
+    ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf).order_by('start_date')
 
     booking_history = Booking.objects.filter(
-        renter=user,
-        status__in=['completed', 'rejected']
-    ).select_related('tool').order_by('-created_at')
+        renter=user, status__in=['completed', 'rejected']
+    ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf).order_by('-created_at')
 
     # Stats
-    my_tools_count   = Tool.objects.filter(owner=user).count()
-    active_rentals   = current_rentals.count()
-    recent_tools = Tool.objects.filter(
-        owner=user
-	).select_related('category').order_by('-id')[:3]
+    my_tools_count = Tool.objects.filter(owner=user).count()
+    active_rentals = current_rentals.count()
+    total_earnings = Booking.objects.filter(
+        tool__owner=user, status='completed'
+    ).aggregate(total=Sum('total_price'))['total'] or 0
 
-	
+    all_tools = Tool.objects.filter(owner=user).select_related('category').prefetch_related(
+        Prefetch('images', queryset=primary_img_qs, to_attr='primary_images')
+    ).order_by('-id')
+
+    recent_tools = all_tools[:3]
 
     context = {
         'user'               : user,
@@ -95,8 +100,10 @@ def dashboard(request):
         'booking_history'    : booking_history,
         'my_tools_count'     : my_tools_count,
         'active_rentals'     : active_rentals,
+        'total_earnings'     : total_earnings,
+        'all_tools'          : all_tools,
+        'recent_tools'       : recent_tools,
         'active_tab'         : request.GET.get('tab', 'overview'),
-        'recent_tools'		 : recent_tools,
     }
     return render(request, 'listings/dashboard/dashboard.html', context)
 
