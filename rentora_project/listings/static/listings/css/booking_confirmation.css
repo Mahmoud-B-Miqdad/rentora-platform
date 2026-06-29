@@ -1,0 +1,199 @@
+.confirm-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 16px;
+  background: #f8fafc;
+}
+
+.confirm-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  max-width: 560px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ── Header band ── */
+.confirm-header {
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  padding: 36px 32px 28px;
+  text-align: center;
+  color: #fff;
+}
+.confirm-check-wrap {
+  width: 72px; height: 72px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  animation: pop .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes pop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.confirm-check-wrap i { font-size: 34px; }
+.confirm-header h1 { font-size: 1.45rem; font-weight: 700; margin: 0 0 6px; }
+.confirm-header p  { font-size: 0.9rem; opacity: .85; margin: 0; }
+
+/* ── Status pill ── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 14px;
+  letter-spacing: .3px;
+}
+.status-pill .dot {
+  width: 7px; height: 7px;
+  background: #fbbf24;
+  border-radius: 50%;
+  animation: pulse 1.4s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .5; transform: scale(.75); }
+}
+
+/* ── Body ── */
+.confirm-body { padding: 28px 32px 32px; }
+
+/* Tool summary row */
+.tool-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+}
+.tool-thumb {
+  width: 72px; height: 60px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #e2e8f0;
+  display: flex; align-items: center; justify-content: center;
+  color: #94a3b8; font-size: 22px;
+}
+.tool-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.tool-info-name { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 3px; }
+.tool-info-owner {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+.tool-info-owner a {
+  color: #0d9488;
+  text-decoration: none;
+  font-weight: 500;
+}
+.tool-info-owner a:hover { text-decoration: underline; }
+
+/* Details grid */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.detail-item {
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+.detail-label { font-size: 0.72rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+.detail-value { font-size: 0.92rem; font-weight: 600; color: #0f172a; }
+.detail-item.highlight {
+  background: #f0fdfb;
+  border-color: #a7f3d0;
+}
+.detail-item.highlight .detail-value { color: #0d9488; font-size: 1.05rem; }
+
+/* What's next */
+.next-steps {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.next-steps-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.next-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  font-size: 0.84rem;
+  color: #78350f;
+}
+.next-step:last-child { margin-bottom: 0; }
+.step-num {
+  width: 20px; height: 20px;
+  background: #fbbf24;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Actions */
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+}
+.btn-primary-confirm {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 13px 0;
+  background: #0d9488;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .18s;
+}
+.btn-primary-confirm:hover { background: #0f766e; color: #fff; }
+.btn-secondary-confirm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 13px 20px;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .18s;
+}
+.btn-secondary-confirm:hover { background: #e2e8f0; color: #334155; }

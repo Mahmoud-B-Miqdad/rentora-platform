@@ -97,6 +97,7 @@ def browse_view(request):
 
     tools_qs = (
         Tool.objects
+        .filter(is_available=True)
         .select_related('owner', 'category')
         .prefetch_related(primary_img_prefetch)
         .annotate(

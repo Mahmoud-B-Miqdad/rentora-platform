@@ -29,12 +29,9 @@ def create_booking_view(request, pk):
         request.session['booking_error'] = first_error
         return redirect('listings:detail', pk=pk)
 
-    Booking.objects.create_booking(request.POST, renter, tool)
-    request.session['booking_success'] = (
-        f'Booking request sent for “{tool.title}”. '
-        'The owner will confirm shortly.'
-    )
-    return redirect('listings:detail', pk=pk)
+    booking = Booking.objects.create_booking(request.POST, renter, tool)
+    return redirect('listings:booking_confirmation', booking_id=booking.id)
+
 def login_required_session(view_func):
     """Custom login check using session."""
     def wrapper(request, *args, **kwargs):
@@ -48,6 +45,13 @@ def login_required_session(view_func):
 def dashboard(request):
     user = User.objects.get(id=request.session['user_id'])
 
+    # Auto-complete approved bookings whose end_date has passed
+    Booking.objects.filter(
+        tool__owner=user,
+        status='approved',
+        end_date__lt=date.today()
+    ).update(status='completed')
+
     primary_img_qs  = ToolImage.objects.filter(is_primary=True)
     tool_img_pf     = Prefetch('tool__images', queryset=primary_img_qs, to_attr='primary_images')
 
@@ -57,7 +61,7 @@ def dashboard(request):
     ).select_related('tool', 'tool__category', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
     approved_requests = Booking.objects.filter(
-        tool__owner=user, status='approved'
+        tool__owner=user, status__in=['payment_pending', 'approved']
     ).select_related('tool', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
     rejected_requests = Booking.objects.filter(
@@ -69,6 +73,10 @@ def dashboard(request):
     ).select_related('tool', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
     # My Rentals
+    pending_my_rentals = Booking.objects.filter(
+        renter=user, status__in=['pending', 'payment_pending']
+    ).select_related('tool', 'tool__owner', 'tool__category').prefetch_related(tool_img_pf).order_by('-created_at')
+
     current_rentals = Booking.objects.filter(
         renter=user, status='approved', end_date__gte=date.today()
     ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf).order_by('start_date')
@@ -96,6 +104,7 @@ def dashboard(request):
         'approved_requests'  : approved_requests,
         'rejected_requests'  : rejected_requests,
         'completed_requests' : completed_requests,
+        'pending_my_rentals' : pending_my_rentals,
         'current_rentals'    : current_rentals,
         'booking_history'    : booking_history,
         'my_tools_count'     : my_tools_count,
@@ -114,9 +123,9 @@ def approve_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, tool__owner=user)
 
     if booking.status == 'pending':
-        booking.status = 'approved'
+        booking.status = 'payment_pending'
         booking.save()
-        messages.success(request, "Booking approved.")
+        messages.success(request, "Booking approved. Renter has been notified to complete payment.")
     return redirect('/dashboard/?tab=booking-requests')
 
 
@@ -133,60 +142,51 @@ def reject_booking(request, booking_id):
 
 
 @login_required_session
-def create_booking(request, tool_id):
-    user = User.objects.get(id=request.session['user_id'])
-    tool = get_object_or_404(Tool, id=tool_id, is_available=True)
+def payment_view(request, booking_id):
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(Booking, id=booking_id, renter=user, status='payment_pending')
+    return render(request, 'listings/booking/payment.html', {'booking': booking, 'user': user})
 
-    if tool.owner == user:
-        messages.error(request, "You cannot book your own tool.")
-        return redirect('tool_detail', pk=tool_id)
 
-    if request.method == 'POST':
-        start_str = request.POST.get('start_date')
-        end_str   = request.POST.get('end_date')
+@login_required_session
+def confirm_payment_view(request, booking_id):
+    if request.method != 'POST':
+        return redirect('listings:payment', booking_id=booking_id)
 
-        if not start_str or not end_str:
-            messages.error(request, "Please select both dates.")
-            return redirect('tool_detail', pk=tool_id)
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(Booking, id=booking_id, renter=user, status='payment_pending')
+    booking.status = 'approved'
+    booking.save()
+    return redirect('listings:payment_success', booking_id=booking.id)
 
-        start_date = date.fromisoformat(start_str)
-        end_date   = date.fromisoformat(end_str)
 
-        if start_date < date.today():
-            messages.error(request, "Start date cannot be in the past.")
-            return redirect('tool_detail', pk=tool_id)
+@login_required_session
+def payment_success_view(request, booking_id):
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(Booking, id=booking_id, renter=user, status='approved')
+    return render(request, 'listings/booking/payment_success.html', {'booking': booking, 'user': user})
 
-        if start_date >= end_date:
-            messages.error(request, "End date must be after start date.")
-            return redirect('tool_detail', pk=tool_id)
 
-        conflict = Booking.objects.filter(
-            tool=tool,
-            status__in=['pending', 'approved'],
-            start_date__lte=end_date,
-            end_date__gte=start_date,
-        ).exists()
+@login_required_session
+def booking_confirmation_view(request, booking_id):
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(Booking, id=booking_id, renter=user)
+    return render(request, 'listings/booking/booking_confirmation.html', {
+        'booking': booking,
+        'user':    user,
+    })
 
-        if conflict:
-            messages.error(request, "This tool is already booked for the selected dates.")
-            return redirect('tool_detail', pk=tool_id)
 
-        num_days    = (end_date - start_date).days
-        total_price = num_days * tool.price_per_day
+@login_required_session
+def complete_booking(request, booking_id):
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(Booking, id=booking_id, tool__owner=user)
 
-        Booking.objects.create(
-            tool=tool,
-            renter=user,
-            start_date=start_date,
-            end_date=end_date,
-            total_price=total_price,
-            status='pending',
-        )
-
-        messages.success(request, f"Booking request sent! Total: {total_price} ₪")
-        return redirect('/dashboard/?tab=my-rentals')
-
-    return redirect('tool_detail', pk=tool_id)
+    if booking.status == 'approved':
+        booking.status = 'completed'
+        booking.save()
+        messages.success(request, f'Booking marked as completed. ${booking.total_price} added to your earnings.')
+    return redirect('/dashboard/?tab=booking-requests')
 
 
 

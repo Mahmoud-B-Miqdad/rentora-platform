@@ -10,11 +10,12 @@ from django.db import models
 # ─────────────────────────────────────────────
 
 class BookingStatus(models.TextChoices):
-    PENDING   = "pending",   "Pending"
-    APPROVED  = "approved",  "Approved"
-    REJECTED  = "rejected",  "Rejected"
-    COMPLETED = "completed", "Completed"
-    CANCELLED = "cancelled", "Cancelled"
+    PENDING         = "pending",         "Pending"
+    PAYMENT_PENDING = "payment_pending", "Payment Pending"
+    APPROVED        = "approved",        "Approved"
+    REJECTED        = "rejected",        "Rejected"
+    COMPLETED       = "completed",       "Completed"
+    CANCELLED       = "cancelled",       "Cancelled"
 
 
 # ─────────────────────────────────────────────
