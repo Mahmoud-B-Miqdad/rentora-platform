@@ -1,19 +1,46 @@
+import io
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http     import JsonResponse
 from django.db.models import Prefetch, Avg
 from django.contrib import messages
- 
- 
-from listings.models import Tool, ToolImage, Review, Booking, BookingStatus, Wishlist, Category
-from users.models    import User
- 
- 
 from django.core.cache import cache
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
+from PIL import Image
 import requests
 
-from listings.models import Tool, ToolImage, Review, Booking, BookingStatus, Wishlist
+from listings.models import Tool, ToolImage, Review, Booking, BookingStatus, Wishlist, Category
 from users.models    import User
+
+
+def _to_webp(upload_file, quality: int = 85, max_width: int = 1200):
+    """
+    Convert an uploaded image to WebP (max 1200 px wide, quality 85).
+    Falls back to the original file on any processing error.
+    """
+    try:
+        img = Image.open(upload_file)
+        if img.mode not in ("RGB", "RGBA"):
+            img = img.convert("RGB")
+        if img.width > max_width:
+            new_height = int(img.height * max_width / img.width)
+            img = img.resize((max_width, new_height), Image.LANCZOS)
+        buf = io.BytesIO()
+        img.save(buf, format="WEBP", quality=quality, method=6)
+        buf.seek(0)
+        stem = upload_file.name.rsplit(".", 1)[0]
+        return InMemoryUploadedFile(
+            file=buf,
+            field_name=None,
+            name=f"{stem}.webp",
+            content_type="image/webp",
+            size=buf.getbuffer().nbytes,
+            charset=None,
+        )
+    except Exception:
+        upload_file.seek(0)
+        return upload_file
 
 
 def _geocode(location: str) -> tuple[float, float] | None:
@@ -201,13 +228,12 @@ def add_tool_view(request):
     )
  
     images = request.FILES.getlist("images")
- 
+
     for index, image in enumerate(images):
- 
         ToolImage.objects.create(
             tool=tool,
-            image=image,
-            is_primary=(index == 0)
+            image=_to_webp(image),
+            is_primary=(index == 0),
         )
  
     messages.success(
