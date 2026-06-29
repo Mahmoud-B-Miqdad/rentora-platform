@@ -201,12 +201,69 @@
 }
 
 .btn-view-profile {
-  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 0;
+  background: transparent;
   color: var(--teal);
+  border: 1.5px solid var(--teal);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
   text-decoration: none;
-  font-weight: 500;
+  transition: background .18s, color .18s;
 }
-.btn-view-profile:hover { text-decoration: underline; }
+.btn-view-profile:hover {
+  background: var(--teal);
+  color: var(--white);
+}
+
+/* ── Renter chip (clickable renter name in booking rows) ── */
+.renter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 3px;
+  background: #f0fdfb;
+  border: 1px solid #a7f3d0;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #0f766e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: background .15s, border-color .15s, transform .12s;
+  vertical-align: middle;
+}
+.renter-chip:hover {
+  background: #0d9488;
+  color: #fff;
+  border-color: #0d9488;
+  transform: translateY(-1px);
+}
+.renter-chip__avatar {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #0d9488;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.renter-chip__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.renter-chip__icon {
+  font-size: 8px;
+  opacity: 0.65;
+  margin-left: 1px;
+}
+.renter-chip:hover .renter-chip__icon { opacity: 1; }
+
+.meta-sep { color: #94a3b8; margin: 0 3px; }
+.meta-price { font-weight: 600; color: var(--teal); }
 
 .sidebar-add-btn {
   display: flex;
@@ -582,6 +639,17 @@
 .booking-tab-content { display: none; }
 .booking-tab-content.active { display: block; }
 
+/* Rentals tab scrollable body */
+.rentals-tab-body {
+  max-height: 420px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+  padding: 4px 0;
+}
+.rentals-tab-body::-webkit-scrollbar { width: 4px; }
+.rentals-tab-body::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+
 /* ══════════════════════════════════
    BOOKING ROW
 ══════════════════════════════════ */
@@ -630,7 +698,29 @@
   text-overflow: ellipsis;
 }
 
-.booking-actions { display: flex; gap: 7px; flex-shrink: 0; }
+.booking-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.btn-complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: var(--teal-lt);
+  color: var(--teal);
+  border: 1px solid #a7f3d0;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .18s, color .18s, transform .15s;
+}
+.btn-complete:hover {
+  background: var(--teal);
+  color: var(--white);
+  transform: translateY(-1px);
+}
 
 /* ══════════════════════════════════
    ACTION BUTTONS
@@ -683,9 +773,31 @@
 .badge-live      { background: #dcfce7; color: #15803d; }
 .badge-inactive  { background: #f3f4f6; color: var(--text-lt); }
 .badge-pending   { background: #fef9c3; color: #854d0e; }
+.badge-payment   { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
 .badge-approved  { background: #dcfce7; color: #15803d; }
 .badge-rejected  { background: var(--red-lt); color: var(--red); }
 .badge-completed { background: var(--blue-lt); color: var(--blue); }
+
+.btn-pay-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  background: #f97316;
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .15s, transform .12s;
+  animation: glow-pay 2s ease-in-out infinite;
+}
+.btn-pay-now:hover { background: #ea580c; color: #fff; transform: translateY(-1px); }
+@keyframes glow-pay {
+  0%,100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
+  50%      { box-shadow: 0 0 0 5px rgba(249,115,22,0.25); }
+}
 
 /* ══════════════════════════════════
    GRIDS
