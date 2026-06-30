@@ -344,6 +344,174 @@
     border-color: var(--clr-brand);
 }
 
+/* ==========================================================================
+   Rentora - Forgot Password Success (Check Your Inbox) - FIXED
+   ========================================================================== */
+
+/* الحاوية الرئيسية للتأكيد لمنع أي وراثة تنسيق قديمة وتوسيط العناصر تماماً */
+.auth-panel--success {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* توسيط أفقي لجميع الأبناء */
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* حاوية الأيقونة الدائرية للايميل */
+.email-success-icon {
+    background-color: #e2f6f5 !important; /* لون الخلفية التركواز الفاتح */
+    color: #00796b !important;            /* لون الأيقونة التركواز الغامق */
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;       /* توسيط الأيقونة داخل الدائرة رأسياً */
+    justify-content: center !important;    /* توسيط الأيقونة داخل الدائرة أفقياً */
+    margin: 24px auto !important;          /* إجبار التوسيط عبر الهوامش */
+    font-size: 2.2rem !important;
+    box-shadow: 0 4px 10px rgba(0, 121, 107, 0.05) !important;
+}
+
+.auth-panel__title-success {
+    color: #1a2530 !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    margin-top: 10px !important;
+    margin-bottom: 12px !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.auth-panel__description {
+    color: #6b7280 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 24px !important;
+    text-align: center !important;
+    max-width: 320px !important; /* للمحافظة على أبعاد النص كما في الصورة */
+}
+
+.auth-panel__retry-link {
+    color: #00796b !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: color 0.2s ease !important;
+}
+
+.auth-panel__retry-link:hover {
+    color: #004d40 !important;
+    text-decoration: underline !important;
+}
+
+.auth-switch--border {
+    border-top: 1px solid #f3f4f6 !important;
+    padding-top: 20px !important;
+    margin-top: 15px !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+/* ==========================================================================
+   Rentora - Password Reset Flow (Confirm & Complete) Styles
+   ========================================================================== */
+
+/* كلاس مخصص لتوسيط العناصر بشكل عمودي وأفقي داخل الـ panel */
+.auth-panel--center {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* الأيقونات الدائرية لصفحات الأمان والنجاح */
+.auth-panel--center .email-success-icon {
+    background-color: #e2f6f5 !important; /* الخلفية التركوازية الفاتحة */
+    color: #00796b !important;            /* لون الأيقونة التركوازي الغامق */
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 20px auto !important;
+    font-size: 2.2rem !important;
+    box-shadow: 0 4px 10px rgba(0, 121, 107, 0.05) !important;
+}
+
+/* تنسيق الفليكس لحقول الإدخال لتجعل الأيقونات متناسقة وفي مكانها */
+.auth-form .field__control {
+    position: relative;
+    width: 100%;
+}
+
+/* أيقونة القفل داخل الحقل */
+.auth-form .field__icon-lock {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+/* تخصيص الـ input ليعطي مساحة للأيقونة على اليسار */
+.auth-form .field__input--has-icon {
+    width: 100% !important;
+    padding: 12px 14px 12px 38px !important; /* مسافة 38px من اليسار للأيقونة */
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    background-color: #f9fafb !important;
+    font-size: 0.95rem !important;
+    color: #1a2530 !important;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-form .field__input--has-icon:focus {
+    border-color: #00796b !important;
+    background-color: #ffffff !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1) !important;
+}
+
+/* حاوية الأخطاء الخاصة بالفورم */
+.auth-error-container {
+    width: 100%;
+    max-width: 340px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.auth-error-msg {
+    background-color: #fde8e8;
+    color: #e02424;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    border-left: 4px solid #e02424;
+}
+
+/* نص المساعدة السفلي للدعم الفني */
+.auth-panel__support-text {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    margin-top: 32px;
+    margin-bottom: 0;
+}
+
+.auth-panel__support-link {
+    color: #00796b;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-panel__support-link:hover {
+    text-decoration: underline;
+}
+
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 480px) {
     .auth-page .site-main { padding: 32px 12px; }
