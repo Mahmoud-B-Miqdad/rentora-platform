@@ -12,6 +12,23 @@
 {% endblock %}
 
 {% block content %}
+
+{% if is_owner and not tool.is_available %}
+<div style="background:#fefce8; border-bottom:2px solid #fde047; padding:12px 0;">
+  <div class="container" style="display:flex; align-items:center; gap:12px;">
+    <i class="fa-solid fa-eye-slash" style="color:#a16207; font-size:16px;"></i>
+    <div>
+      <strong style="color:#92400e; font-size:14px;">This tool is currently hidden from public listings.</strong>
+      <span style="color:#a16207; font-size:13px; margin-left:8px;">Only you can see this page.</span>
+    </div>
+    <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
+       style="margin-left:auto; background:#0f766e; color:#fff; padding:7px 16px; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap;">
+      <i class="fa-solid fa-pen-to-square"></i> Make Available
+    </a>
+  </div>
+</div>
+{% endif %}
+
 <div class="detail-wrapper">
     <div class="container">
 
@@ -307,34 +324,41 @@
                     </div>
 
                     <!-- Booking Form -->
-                    {% if request.session.user_id %}
+                    {% if is_owner %}
+                    <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
+                       class="btn-book-now" style="justify-content:center; background:#475569; text-decoration:none;">
+                        <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                        Manage This Tool
+                    </a>
+
+                    {% elif not tool.is_available %}
+                    <div style="text-align:center; padding:18px 12px; color:#94a3b8;">
+                        <i class="fa-solid fa-ban" style="font-size:26px; display:block; margin-bottom:8px; color:#d1d5db;"></i>
+                        <span style="font-size:14px; font-weight:500;">Currently unavailable</span>
+                    </div>
+
+                    {% elif request.session.user_id %}
                     <form class="booking-form"
                           method="POST"
                           action="{% url 'listings:create_booking' tool.pk %}">
                         {% csrf_token %}
-
                         <div class="booking-form__field">
                             <label class="booking-form__label" for="start_date">Start Date</label>
                             <input class="booking-form__input" type="date" id="start_date"
                                    name="start_date" required>
                         </div>
-
                         <div class="booking-form__field">
                             <label class="booking-form__label" for="end_date">End Date</label>
                             <input class="booking-form__input" type="date" id="end_date"
                                    name="end_date" required>
                         </div>
-
-                        <!-- Dynamic price estimate -->
                         <div class="booking-form__estimate" id="priceEstimate" style="display:none">
                             <span class="booking-form__estimate-label">Estimated total</span>
                             <span class="booking-form__estimate-value" id="estimateValue"></span>
                         </div>
-
-                        <button type="submit" class="btn-book-now">
-                            Book Now
-                        </button>
+                        <button type="submit" class="btn-book-now">Book Now</button>
                     </form>
+
                     {% else %}
                     <a href="{% url 'users:login' %}" class="btn-book-now btn-book-now--login">
                         <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>

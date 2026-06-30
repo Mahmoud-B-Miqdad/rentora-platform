@@ -12,6 +12,9 @@ urlpatterns = [
     path("profile/",                       views.profile_view,           name="profile"),
     path("verify-email/<str:token>/",      views.verify_email_view,      name="verify_email"),
     path("resend-verification/",           views.resend_verification_view, name="resend_verification"),
+    path("profile/<int:pk>/",              views.public_profile_view,    name="public_profile"),
+    path("verify-email/<str:token>/",      views.verify_email_view,      name="verify_email"),
+    path("resend-verification/",           views.resend_verification_view, name="resend_verification"),
     
     path("forgot-password/", auth_views.PasswordResetView.as_view(
         template_name="users/forgot_password.html",
@@ -31,4 +34,5 @@ urlpatterns = [
     path("reset/done/", auth_views.PasswordResetCompleteView.as_view(
         template_name="users/password_reset_complete.html"
     ), name="password_reset_complete"),
+    
 ]

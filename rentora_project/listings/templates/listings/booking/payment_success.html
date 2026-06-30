@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment Successful — Rentora{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'listings/css/payment_success.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="success-page">
+  <div class="success-card">
+
+    <!-- Header -->
+    <div class="success-header">
+      <div class="success-icon-wrap">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <h1>Payment Successful!</h1>
+      <p>Your rental is confirmed and ready to go</p>
+      <div class="confirmed-pill">
+        <span class="dot"></span>
+        Booking Confirmed
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="success-body">
+
+      <!-- Tool -->
+      <div class="tool-row">
+        <div class="tool-thumb">
+          {% with booking.tool.images.all as imgs %}
+          {% for img in imgs %}{% if img.is_primary %}
+            <img src="{{ img.image.url }}" alt="{{ booking.tool.title }}">
+          {% endif %}{% endfor %}
+          {% endwith %}
+          <i class="fa-solid fa-screwdriver-wrench"></i>
+        </div>
+        <div>
+          <div class="tool-name">{{ booking.tool.title }}</div>
+          <div class="tool-owner">
+            Rented from
+            <a href="{% url 'users:public_profile' booking.tool.owner.pk %}">{{ booking.tool.owner.name }}</a>
+            · {{ booking.tool.location }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Amount -->
+      <div class="amount-paid">
+        <div class="amount-label"><i class="fa-solid fa-circle-check"></i> Amount Paid</div>
+        <div class="amount-value">${{ booking.total_price }}</div>
+        <div class="amount-sub">Held securely · Released to owner after return</div>
+      </div>
+
+      <!-- Details -->
+      <div class="detail-row">
+        <span class="lbl">Booking ID</span>
+        <span class="val">#{{ booking.id }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="lbl">Rental period</span>
+        <span class="val">{{ booking.start_date }} → {{ booking.end_date }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="lbl">Duration</span>
+        <span class="val">{{ booking.end_date|timeuntil:booking.start_date }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="lbl">Receipt sent to</span>
+        <span class="val">{{ user.email }}</span>
+      </div>
+
+      <!-- What's next -->
+      <div class="next-card">
+        <div class="next-title">
+          <i class="fa-solid fa-list-check"></i> What happens next?
+        </div>
+        <div class="next-step">
+          <span class="step-num">1</span>
+          <span>Contact the owner to arrange tool pickup or delivery</span>
+        </div>
+        <div class="next-step">
+          <span class="step-num">2</span>
+          <span>Use the tool during your rental period ({{ booking.start_date }} – {{ booking.end_date }})</span>
+        </div>
+        <div class="next-step">
+          <span class="step-num">3</span>
+          <span>Return the tool to the owner — they'll confirm receipt to complete the rental</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="success-actions">
+        <a href="{% url 'listings:dashboard' %}?tab=my-rentals" class="btn-dashboard">
+          <i class="fa-solid fa-border-all"></i> Go to My Rentals
+        </a>
+        <a href="{% url 'listings:browse' %}" class="btn-browse">
+          <i class="fa-solid fa-magnifying-glass"></i> Browse More
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

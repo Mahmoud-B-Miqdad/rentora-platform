@@ -1,0 +1,73 @@
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ── Sidebar Tab Navigation ──────────────────────────────
+  const navLinks    = document.querySelectorAll('.nav-link[data-tab]');
+  const tabPanels   = document.querySelectorAll('.tab-panel');
+
+  function activateTab(tabId) {
+    // Hide all panels
+    tabPanels.forEach(p => p.classList.remove('active'));
+
+    // Deactivate all nav links
+    navLinks.forEach(l => l.classList.remove('active'));
+
+    // Show target panel
+    const target = document.getElementById('tab-' + tabId);
+    if (target) target.classList.add('active');
+
+    // Activate nav link
+    const link = document.querySelector('.nav-link[data-tab="' + tabId + '"]');
+    if (link) link.classList.add('active');
+
+    // Update URL without reload
+    const url = new URL(window.location);
+    url.searchParams.set('tab', tabId);
+    window.history.pushState({}, '', url);
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', function () {
+      activateTab(this.dataset.tab);
+    });
+  });
+
+  // Read tab from URL on load
+  const params  = new URLSearchParams(window.location.search);
+  const initTab = params.get('tab') || 'overview';
+  activateTab(initTab);
+
+
+  // ── Booking Sub-Tabs (scoped per header group) ──────────
+  document.querySelectorAll('.booking-tabs-header, .booking-tabs-nav').forEach(header => {
+    const btns     = header.querySelectorAll('.booking-tab-btn');
+    const panel    = header.closest('.tab-panel, .section-card');
+    const contents = panel ? panel.querySelectorAll('.booking-tab-content') : [];
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', function () {
+        btns.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const target = document.getElementById(this.dataset.target);
+        if (target) target.classList.add('active');
+      });
+    });
+
+    // Activate first tab in each group by default
+    if (btns.length > 0) {
+      btns[0].classList.add('active');
+      if (contents.length > 0) contents[0].classList.add('active');
+    }
+  });
+
+
+  // ── Auto-dismiss Alerts ─────────────────────────────────
+  document.querySelectorAll('.alert').forEach(alert => {
+    setTimeout(() => {
+      alert.style.opacity = '0';
+      alert.style.transition = 'opacity 0.4s';
+      setTimeout(() => alert.remove(), 400);
+    }, 3500);
+  });
+
+});

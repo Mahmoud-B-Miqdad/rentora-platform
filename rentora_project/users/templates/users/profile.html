@@ -76,7 +76,7 @@
                     {% endif %}
                 </h1>
 
-                {% if not profile_user.is_verified %}
+                {% if is_owner and not profile_user.is_verified %}
                 <div class="email-verify-card">
                     <div class="evc-icon-wrap">
                         <i class="fa-solid fa-envelope-open-text"></i>
@@ -126,12 +126,12 @@
             </div>
 
             <div class="profile-action-wrap">
-                {% if not edit_mode %}
+                {% if is_owner and not edit_mode %}
                 <a href="?edit=1" class="btn-edit-profile">
                     <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                     Edit Profile
                 </a>
-                {% else %}
+                {% elif is_owner and edit_mode %}
                 <button type="submit" form="editProfileForm" class="btn-save-profile">
                     <i class="fa-solid fa-check" aria-hidden="true"></i>
                     Save Changes
@@ -192,6 +192,7 @@
                     <span class="profile-info-value">{{ profile_user.name }}</span>
                 </div>
 
+                {% if is_owner %}
                 <div class="profile-info-item">
                     <span class="profile-info-label">Email</span>
                     <span class="profile-info-value">{{ profile_user.email }}</span>
@@ -201,6 +202,7 @@
                     <span class="profile-info-label">Phone</span>
                     <span class="profile-info-value">{{ profile_user.phone|default:"&mdash;" }}</span>
                 </div>
+                {% endif %}
 
                 <div class="profile-info-item">
                     <span class="profile-info-label">Location</span>

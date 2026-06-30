@@ -74,8 +74,10 @@ def _geocode(location: str) -> tuple[float, float] | None:
 
 def tool_detail_view(request, pk):
     """Public detail page for a single Tool listing."""
- 
+
     # ── Fetch tool with images + owner + category ─────────────────────────────
+    user_id = request.session.get('user_id')
+
     tool = get_object_or_404(
         Tool.objects
         .select_related('owner', 'category')
@@ -87,8 +89,13 @@ def tool_detail_view(request, pk):
             )
         ),
         pk=pk,
-        is_available=True,
     )
+
+    # Unavailable tools are only visible to their owner
+    is_owner = user_id and tool.owner_id == user_id
+    if not tool.is_available and not is_owner:
+        from django.http import Http404
+        raise Http404
  
     # ── Split images ──────────────────────────────────────────────────────────
     primary_image = next((img for img in tool.all_images if img.is_primary), None)
@@ -152,6 +159,7 @@ def tool_detail_view(request, pk):
         'booking_error':        booking_error,
         'tool_lat':             tool_lat,
         'tool_lon':             tool_lon,
+        'is_owner':             is_owner,
     }
     return render(request, 'listings/tool/tool_detail.html', context)
  
@@ -252,25 +260,9 @@ def add_tool_view(request):
 # ==================================================
  
 def my_tools_view(request):
- 
     if "user_id" not in request.session:
         return redirect("users:login")
- 
-    owner = User.objects.get(
-        id=request.session["user_id"]
-    )
- 
-    tools = Tool.objects.owned_by(owner)
- 
-    context = {
-        "tools": tools
-    }
- 
-    return render(
-        request,
-        "listings/tool/my_tools.html",
-        context
-    )
+    return redirect('/dashboard/?tab=my-tools')
  
  
 # ==================================================
@@ -299,36 +291,56 @@ def edit_tool_view(request, tool_id):
             pk=tool.id
         )
  
+    images = ToolImage.objects.filter(tool=tool).order_by('-is_primary', 'id')
+
     if request.method == "GET":
- 
-        return render(
-            request,
-            "listings/tool/edit_tool.html",
-            {
-                "tool": tool,
-                "categories": Category.objects.all()
-            }
-        )
- 
-    tool.title = request.POST.get("title")
-    tool.description = request.POST.get("description")
-    tool.location = request.POST.get("location")
-    tool.daily_rate = request.POST.get("daily_rate")
-    tool.deposit = request.POST.get("deposit")
-    tool.condition = request.POST.get("condition")
-    tool.category_id = request.POST.get("category_id")
- 
+        return render(request, "listings/tool/edit_tool.html", {
+            "tool": tool,
+            "categories": Category.objects.all(),
+            "images": images,
+        })
+
+    # Update basic fields
+    tool.title       = request.POST.get("title", tool.title)
+    tool.description = request.POST.get("description", tool.description)
+    tool.location    = request.POST.get("location", tool.location)
+    tool.daily_rate  = request.POST.get("daily_rate", tool.daily_rate)
+    tool.deposit     = request.POST.get("deposit") or None
+    tool.condition   = request.POST.get("condition", tool.condition)
+    tool.category_id = request.POST.get("category_id", tool.category_id)
+    tool.is_available = request.POST.get("is_available") == "on"
     tool.save()
- 
-    messages.success(
-        request,
-        "Tool updated successfully."
-    )
- 
-    return redirect(
-        "listings:tools:detail",
-        pk=tool.id
-    )
+
+    # Delete selected images
+    delete_ids = request.POST.getlist("delete_image")
+    if delete_ids:
+        ToolImage.objects.filter(id__in=delete_ids, tool=tool).delete()
+
+    # Update primary image
+    primary_id = request.POST.get("primary_image_id")
+    if primary_id:
+        ToolImage.objects.filter(tool=tool).update(is_primary=False)
+        ToolImage.objects.filter(id=primary_id, tool=tool).update(is_primary=True)
+
+    # Upload new images
+    new_images = request.FILES.getlist("new_images")
+    for image in new_images:
+        no_images_yet = not ToolImage.objects.filter(tool=tool).exists()
+        ToolImage.objects.create(
+            tool=tool,
+            image=_to_webp(image),
+            is_primary=no_images_yet,
+        )
+
+    # If no primary set after all changes, make the first image primary
+    if not ToolImage.objects.filter(tool=tool, is_primary=True).exists():
+        first = ToolImage.objects.filter(tool=tool).first()
+        if first:
+            first.is_primary = True
+            first.save()
+
+    messages.success(request, "Tool updated successfully.")
+    return redirect('/dashboard/?tab=my-tools')
  
  
 # ==================================================
@@ -364,6 +376,4 @@ def delete_tool_view(request, tool_id):
         "Tool deleted successfully."
     )
  
-    return redirect(
-        "listings:tools:my_tools"
-    )
+    return redirect('/dashboard/?tab=my-tools')

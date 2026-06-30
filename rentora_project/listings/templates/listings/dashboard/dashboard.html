@@ -1,0 +1,651 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+
+  <!-- ══════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════ -->
+  <aside class="sidebar">
+
+    <a href="{% url 'listings:home' %}" class="sidebar-brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+      </div>
+      <span class="brand-name">Rentora</span>
+    </a>
+
+    <nav class="sidebar-nav">
+      <button class="nav-link" data-tab="overview">
+        <i class="fa-solid fa-chart-pie"></i>
+        Overview
+      </button>
+      <button class="nav-link" data-tab="my-tools">
+        <i class="fa-solid fa-wrench"></i>
+        My Tools
+      </button>
+      <button class="nav-link" data-tab="booking-requests">
+        <i class="fa-regular fa-envelope"></i>
+        Booking Requests
+      </button>
+      <button class="nav-link" data-tab="my-rentals">
+        <i class="fa-regular fa-calendar-check"></i>
+        My Rentals
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-profile">
+        <div class="profile-avatar">
+          {% if user.profile_image %}
+            <img src="{{ user.profile_image.url }}" alt="{{ user.name }}">
+          {% else %}
+            {{ user.name|first|upper }}
+          {% endif %}
+        </div>
+        <div class="profile-info">
+          <div class="profile-name">{{ user.name }}</div>
+          <div class="profile-email">{{ user.email }}</div>
+        </div>
+      </div>
+      <a href="{% url 'users:profile' %}" class="btn-view-profile">
+        <i class="fa-regular fa-user"></i> View Profile
+      </a>
+      <a href="{% url 'listings:tools:add_tool' %}" class="sidebar-add-btn">
+        <i class="fa-solid fa-plus"></i> List New Tool
+      </a>
+    </div>
+
+  </aside>
+
+
+  <!-- ══════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════ -->
+  <main class="main-content">
+
+
+    <!-- ════════ OVERVIEW ════════ -->
+    <div class="tab-panel" id="tab-overview">
+
+      <div class="page-header">
+        <h1 class="page-title">Overview</h1>
+        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <div class="stat-value">{{ my_tools_count }}</div>
+          <div class="stat-label">My Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
+          <div class="stat-value">{{ active_rentals }}</div>
+          <div class="stat-label">Active Rentals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
+          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-label">Total Earnings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="stat-value">Low</div>
+          <div class="stat-label">Risk Score</div>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+
+        <!-- Recent Tools -->
+        <div class="section-card">
+          <div class="section-header">
+            <span class="section-title">Recent Tools</span>
+            <a href="{% url 'listings:tools:add_tool' %}" class="btn-add">
+              <i class="fa-solid fa-plus"></i> Add New
+            </a>
+          </div>
+          {% if recent_tools %}
+            {% for tool in recent_tools %}
+            <div class="tool-row">
+              <div class="tool-thumb">
+                {% if tool.primary_images %}
+                  <img src="{{ tool.primary_images.0.image.url }}" alt="{{ tool.title }}">
+                {% else %}
+                  <i class="fa-solid fa-wrench"></i>
+                {% endif %}
+              </div>
+              <div class="tool-info">
+                <div class="tool-name">{{ tool.title }}</div>
+                <div class="tool-meta">
+                  <span>${{ tool.daily_rate }}/day</span>
+                  <span>· {{ tool.category.name }}</span>
+                </div>
+              </div>
+              <span class="badge badge-live">Live</span>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-state">
+              <i class="fa-solid fa-box-open"></i>
+              No tools listed yet.
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Pending Requests Preview -->
+        <div class="section-card">
+          <div class="section-header">
+            <span class="section-title">Pending Requests</span>
+          </div>
+          {% if pending_requests %}
+            {% for booking in pending_requests|slice:":4" %}
+            <div class="booking-row">
+              <div class="booking-thumb">
+                {% if booking.tool.primary_images %}
+                  <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
+                {% else %}
+                  <i class="fa-solid fa-wrench"></i>
+                {% endif %}
+              </div>
+              <div class="booking-info">
+                <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                <div class="booking-meta">{{ booking.renter.name }} · ${{ booking.total_price }}</div>
+              </div>
+              <div class="booking-actions">
+                <form method="POST" action="{% url 'listings:approve_booking' booking.id %}" style="display:inline">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-approve" title="Approve">
+                    <i class="fa-solid fa-check"></i>
+                  </button>
+                </form>
+                <form method="POST" action="{% url 'listings:reject_booking' booking.id %}" style="display:inline">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-reject" title="Reject">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty-state">
+              <i class="fa-regular fa-envelope-open"></i>
+              No pending requests.
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ════════ MY TOOLS ════════ -->
+    <div class="tab-panel" id="tab-my-tools">
+      <div class="page-header">
+        <h1 class="page-title">My Tools</h1>
+        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <div class="stat-value">{{ my_tools_count }}</div>
+          <div class="stat-label">My Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
+          <div class="stat-value">{{ active_rentals }}</div>
+          <div class="stat-label">Active Rentals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
+          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-label">Total Earnings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="stat-value">Low</div>
+          <div class="stat-label">Risk Score</div>
+        </div>
+      </div>
+
+      <div class="section-card tools-section-card">
+        <div class="section-header">
+          <span class="section-title">My Tool Listings ({{ my_tools_count }})</span>
+          <a href="{% url 'listings:tools:add_tool' %}" class="btn-add">
+            <i class="fa-solid fa-plus"></i> Add Tool
+          </a>
+        </div>
+        {% if all_tools %}
+        <div class="tool-cards-grid">
+          {% for tool in all_tools %}
+          <div class="tool-card-item">
+            <a href="{% url 'listings:tools:detail' tool.pk %}" class="tool-card-img-wrap">
+              {% if tool.primary_images %}
+                <img src="{{ tool.primary_images.0.image.url }}" alt="{{ tool.title }}">
+              {% else %}
+                <div class="tool-card-img-placeholder">
+                  <i class="fa-solid fa-wrench"></i>
+                </div>
+              {% endif %}
+              <span class="tool-card-status-badge {% if tool.is_available %}badge-live{% else %}badge-inactive{% endif %}">
+                {% if tool.is_available %}
+                  <i class="fa-solid fa-circle" style="font-size:7px;"></i> Available
+                {% else %}
+                  <i class="fa-solid fa-circle" style="font-size:7px;"></i> Inactive
+                {% endif %}
+              </span>
+            </a>
+            <div class="tool-card-body">
+              <div class="tool-card-name">{{ tool.title }}</div>
+              <div class="tool-card-meta">
+                <span class="tool-card-price">${{ tool.daily_rate }}<span>/day</span></span>
+                <span class="tool-card-cat">{{ tool.category.name }}</span>
+              </div>
+            </div>
+            <div class="tool-card-footer">
+              <a href="{% url 'listings:tools:detail' tool.pk %}"
+                 class="btn-action btn-view" title="View listing">
+                <i class="fa-regular fa-eye"></i>
+              </a>
+              <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
+                 class="btn-action btn-edit" title="Edit tool">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </a>
+              <form method="POST" action="{% url 'listings:tools:delete_tool' tool.pk %}"
+                    onsubmit="return confirm('Delete &quot;{{ tool.title }}&quot;?')"
+                    style="margin-left:auto;">
+                {% csrf_token %}
+                <button type="submit" class="btn-action btn-delete" title="Delete">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <div class="empty-state">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            No tools listed yet.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+
+    <!-- ════════ BOOKING REQUESTS ════════ -->
+    <div class="tab-panel" id="tab-booking-requests">
+
+      <div class="page-header">
+        <h1 class="page-title">Booking Requests</h1>
+        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <div class="stat-value">{{ my_tools_count }}</div>
+          <div class="stat-label">My Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
+          <div class="stat-value">{{ active_rentals }}</div>
+          <div class="stat-label">Active Rentals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
+          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-label">Total Earnings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="stat-value">Low</div>
+          <div class="stat-label">Risk Score</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <span class="section-title">Booking Requests</span>
+        </div>
+
+        <div class="booking-tabs-nav">
+          <button class="booking-tab-btn" data-target="btab-pending">
+            Pending ({{ pending_requests|length }})
+          </button>
+          <button class="booking-tab-btn" data-target="btab-approved">
+            Approved ({{ approved_requests|length }})
+          </button>
+          <button class="booking-tab-btn" data-target="btab-rejected">
+            Rejected ({{ rejected_requests|length }})
+          </button>
+          <button class="booking-tab-btn" data-target="btab-completed">
+            Completed ({{ completed_requests|length }})
+          </button>
+        </div>
+
+        <!-- Pending -->
+        <div class="booking-tab-content" id="btab-pending">
+          {% for booking in pending_requests %}
+          <div class="booking-row">
+            <div class="booking-thumb">
+              {% if booking.tool.primary_images %}
+                <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
+              {% else %}
+                <i class="fa-solid fa-wrench"></i>
+              {% endif %}
+            </div>
+            <div class="booking-info">
+              <div class="booking-tool-name">{{ booking.tool.title }}</div>
+              <div class="booking-meta">
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
+              </div>
+            </div>
+            <div class="booking-actions">
+              <form method="POST" action="{% url 'listings:approve_booking' booking.id %}" style="display:inline">
+                {% csrf_token %}
+                <button type="submit" class="btn-approve" title="Approve">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              </form>
+              <form method="POST" action="{% url 'listings:reject_booking' booking.id %}" style="display:inline">
+                {% csrf_token %}
+                <button type="submit" class="btn-reject" title="Reject">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+          {% empty %}
+          <div class="empty-state">
+            <i class="fa-regular fa-envelope-open"></i>
+            No pending requests.
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Approved -->
+        <div class="booking-tab-content" id="btab-approved">
+          {% for booking in approved_requests %}
+          <div class="booking-row">
+            <div class="booking-thumb">
+              {% if booking.tool.primary_images %}
+                <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
+              {% else %}
+                <i class="fa-solid fa-wrench"></i>
+              {% endif %}
+            </div>
+            <div class="booking-info">
+              <div class="booking-tool-name">{{ booking.tool.title }}</div>
+              <div class="booking-meta">
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
+              </div>
+            </div>
+            <div class="booking-actions">
+              {% if booking.status == 'payment_pending' %}
+                <span class="badge badge-payment">Awaiting Payment</span>
+              {% else %}
+                <span class="badge badge-approved">Approved</span>
+                <form method="POST" action="{% url 'listings:complete_booking' booking.id %}"
+                      onsubmit="return confirm('Mark this booking as completed and add ${{ booking.total_price }} to your earnings?')">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-complete" title="Mark as returned & completed">
+                    <i class="fa-solid fa-circle-check"></i> Mark as Returned
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+          {% empty %}
+          <div class="empty-state">
+            <i class="fa-regular fa-calendar-check"></i>
+            No approved bookings.
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Rejected -->
+        <div class="booking-tab-content" id="btab-rejected">
+          {% for booking in rejected_requests %}
+          <div class="booking-row">
+            <div class="booking-thumb">
+              {% if booking.tool.primary_images %}
+                <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
+              {% else %}
+                <i class="fa-solid fa-wrench"></i>
+              {% endif %}
+            </div>
+            <div class="booking-info">
+              <div class="booking-tool-name">{{ booking.tool.title }}</div>
+              <div class="booking-meta">
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
+              </div>
+            </div>
+            <span class="badge badge-rejected">Rejected</span>
+          </div>
+          {% empty %}
+          <div class="empty-state">
+            <i class="fa-solid fa-ban"></i>
+            No rejected bookings.
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Completed -->
+        <div class="booking-tab-content" id="btab-completed">
+          {% for booking in completed_requests %}
+          <div class="booking-row">
+            <div class="booking-thumb">
+              {% if booking.tool.primary_images %}
+                <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
+              {% else %}
+                <i class="fa-solid fa-wrench"></i>
+              {% endif %}
+            </div>
+            <div class="booking-info">
+              <div class="booking-tool-name">{{ booking.tool.title }}</div>
+              <div class="booking-meta">
+                <a href="{% url 'users:public_profile' booking.renter.pk %}" class="renter-chip">
+                  <span class="renter-chip__avatar">
+                    {% if booking.renter.profile_image %}<img src="{{ booking.renter.profile_image.url }}" alt="">{% else %}{{ booking.renter.name|first|upper }}{% endif %}
+                  </span>
+                  <span class="renter-chip__name">{{ booking.renter.name }}</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                </a>
+                <span class="meta-sep">·</span>
+                {{ booking.start_date }} → {{ booking.end_date }}
+                <span class="meta-price">${{ booking.total_price }}</span>
+              </div>
+            </div>
+            <span class="badge badge-completed">Completed</span>
+          </div>
+          {% empty %}
+          <div class="empty-state">
+            <i class="fa-solid fa-box-archive"></i>
+            No completed bookings.
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ════════ MY RENTALS ════════ -->
+    <div class="tab-panel" id="tab-my-rentals">
+
+      <div class="page-header">
+        <h1 class="page-title">My Rentals</h1>
+        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <div class="stat-value">{{ my_tools_count }}</div>
+          <div class="stat-label">My Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
+          <div class="stat-value">{{ active_rentals }}</div>
+          <div class="stat-label">Active Rentals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
+          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-label">Total Earnings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="stat-value">Low</div>
+          <div class="stat-label">Risk Score</div>
+        </div>
+      </div>
+
+      <!-- Rentals tabbed card -->
+      <div class="section-card" style="margin-top:0">
+
+        <div class="booking-tabs-header" style="padding: 0 20px">
+          <button class="booking-tab-btn active" data-target="rtab-awaiting">
+            Awaiting ({{ pending_my_rentals|length }})
+          </button>
+          <button class="booking-tab-btn" data-target="rtab-active">
+            Active ({{ current_rentals|length }})
+          </button>
+          <button class="booking-tab-btn" data-target="rtab-history">
+            History ({{ booking_history|length }})
+          </button>
+        </div>
+
+        <div class="rentals-tab-body">
+
+          <!-- Awaiting tab -->
+          <div class="booking-tab-content active" id="rtab-awaiting">
+            {% for booking in pending_my_rentals %}
+            <div class="booking-row">
+              <div class="booking-thumb">
+                {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+              </div>
+              <div class="booking-info">
+                <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                <div class="booking-meta">
+                  <a href="{% url 'users:public_profile' booking.tool.owner.pk %}" class="renter-chip">
+                    <span class="renter-chip__avatar">{% if booking.tool.owner.profile_image %}<img src="{{ booking.tool.owner.profile_image.url }}" alt="">{% else %}{{ booking.tool.owner.name|first|upper }}{% endif %}</span>
+                    <span class="renter-chip__name">{{ booking.tool.owner.name }}</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                  </a>
+                  <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                </div>
+              </div>
+              {% if booking.status == 'payment_pending' %}
+                <a href="{% url 'listings:payment' booking.id %}" class="btn-pay-now"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
+              {% else %}
+                <span class="badge badge-pending">Pending</span>
+              {% endif %}
+            </div>
+            {% empty %}
+            <div class="empty-state"><i class="fa-regular fa-clock"></i>No pending bookings.</div>
+            {% endfor %}
+          </div>
+
+          <!-- Active tab -->
+          <div class="booking-tab-content" id="rtab-active">
+            {% for booking in current_rentals %}
+            <div class="booking-row">
+              <div class="booking-thumb">
+                {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+              </div>
+              <div class="booking-info">
+                <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                <div class="booking-meta">
+                  <a href="{% url 'users:public_profile' booking.tool.owner.pk %}" class="renter-chip">
+                    <span class="renter-chip__avatar">{% if booking.tool.owner.profile_image %}<img src="{{ booking.tool.owner.profile_image.url }}" alt="">{% else %}{{ booking.tool.owner.name|first|upper }}{% endif %}</span>
+                    <span class="renter-chip__name">{{ booking.tool.owner.name }}</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                  </a>
+                  <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                </div>
+              </div>
+              <span class="badge badge-approved">Active</span>
+            </div>
+            {% empty %}
+            <div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i>No active rentals.</div>
+            {% endfor %}
+          </div>
+
+          <!-- History tab -->
+          <div class="booking-tab-content" id="rtab-history">
+            {% for booking in booking_history %}
+            <div class="booking-row">
+              <div class="booking-thumb">
+                {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+              </div>
+              <div class="booking-info">
+                <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                <div class="booking-meta">
+                  <a href="{% url 'users:public_profile' booking.tool.owner.pk %}" class="renter-chip">
+                    <span class="renter-chip__avatar">{% if booking.tool.owner.profile_image %}<img src="{{ booking.tool.owner.profile_image.url }}" alt="">{% else %}{{ booking.tool.owner.name|first|upper }}{% endif %}</span>
+                    <span class="renter-chip__name">{{ booking.tool.owner.name }}</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                  </a>
+                  <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                </div>
+              </div>
+              {% if booking.status == 'completed' %}<span class="badge badge-completed">Completed</span>
+              {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
+            </div>
+            {% empty %}
+            <div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i>No rental history yet.</div>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}
