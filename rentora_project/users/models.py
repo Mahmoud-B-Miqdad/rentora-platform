@@ -130,18 +130,23 @@ class UserManager(BaseUserManager):
         if not password:
             errors["password"] = "Password is required."
 
-        # Only attempt DB lookup when basic field checks pass.
         if not errors:
             user = self.filter(email=email).first()
-            if user is None or not bcrypt.checkpw(
-                password.encode("utf-8"),
-                user.password.encode("utf-8"),
-            ):
-                # Deliberately vague — prevents user enumeration attacks.
+            
+            if user is None:
                 errors["credentials"] = "Invalid email or password."
+            else:
+                is_valid = False
+                try:
+                    is_valid = bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8"))
+                except (ValueError, AttributeError):
+                    is_valid = user.check_password(password)
+
+                if not is_valid:
+                    errors["credentials"] = "Invalid email or password."
 
         return errors
-
+        
     def create_user(self, post_data):
         """
         Hashes the password with bcrypt and persists a new User record.
