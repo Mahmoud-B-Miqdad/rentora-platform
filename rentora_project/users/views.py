@@ -6,6 +6,22 @@ from users.models    import User, EmailVerification
 from users.services  import send_verification_email
 from listings.models import Tool, ToolImage, Booking, BookingStatus, Review, ReviewType
 
+from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+def test_email(request):
+    send_mail(
+        subject="Rentora Test Email",
+        message="Hello! This is a test email from Rentora.",
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=["monaalakhars00@gmail.com"],
+        fail_silently=False,
+    )
+
+    return HttpResponse("Email sent successfully!")
+
 
 # ─────────────────────────────────────────────
 #  Register View
@@ -213,3 +229,17 @@ def profile_view(request):
         },
     }
     return render(request, "users/profile.html", context)
+
+
+    
+# ─────────────────────────────────────────────
+#  Forgot Password
+# ─────────────────────────────────────────────
+
+def forgot_password_view(request):
+    sent = False
+
+    if request.method == "POST":
+        sent = True  
+
+    return render(request, "users/forgot_password.html", {"sent": sent})
