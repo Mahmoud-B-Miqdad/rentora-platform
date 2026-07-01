@@ -142,7 +142,21 @@ def tool_detail_view(request, pk):
     # ── Pop one-time session flash messages ───────────────────────────────────
     booking_success = request.session.pop('booking_success', None)
     booking_error    = request.session.pop('booking_error', None)
- 
+
+    # ── Booked date ranges (for the availability calendar) ─────────────────────
+    booked_ranges = [
+        {'start': b['start_date'].isoformat(), 'end': b['end_date'].isoformat()}
+        for b in Booking.objects.filter(
+            tool=tool,
+            status__in=[
+                BookingStatus.PENDING,
+                BookingStatus.PAYMENT_PENDING,
+                BookingStatus.APPROVED,
+                BookingStatus.RETURN_PENDING,
+            ],
+        ).values('start_date', 'end_date')
+    ]
+
     context = {
         'tool':                 tool,
         'primary_image':        primary_image,
@@ -160,6 +174,7 @@ def tool_detail_view(request, pk):
         'tool_lat':             tool_lat,
         'tool_lon':             tool_lon,
         'is_owner':             is_owner,
+        'booked_ranges':        booked_ranges,
     }
     return render(request, 'listings/tool/tool_detail.html', context)
  

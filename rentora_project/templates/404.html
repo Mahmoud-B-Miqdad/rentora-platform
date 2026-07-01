@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Page Not Found — Rentora{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/error_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="error-page">
+    <div class="error-page__icon">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+        <span class="error-page__badge"><i class="fa-solid fa-magnifying-glass"></i></span>
+    </div>
+
+    <p class="error-page__code">404</p>
+    <h1 class="error-page__title">Page Not Found</h1>
+    <p class="error-page__text">
+        The page you're looking for doesn't exist or may have been moved.
+        Let's get you back to renting and listing tools.
+    </p>
+
+    <div class="error-page__actions">
+        <a href="{% url 'listings:home' %}" class="error-page__btn error-page__btn--primary">
+            <i class="fa-solid fa-house"></i> Back to Home
+        </a>
+        <a href="{% url 'listings:browse' %}" class="error-page__btn error-page__btn--ghost">
+            <i class="fa-solid fa-toolbox"></i> Browse Tools
+        </a>
+    </div>
+</section>
+{% endblock %}

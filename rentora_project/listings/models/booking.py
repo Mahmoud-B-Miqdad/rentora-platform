@@ -14,6 +14,7 @@ class BookingStatus(models.TextChoices):
     PAYMENT_PENDING = "payment_pending", "Payment Pending"
     APPROVED        = "approved",        "Approved"
     REJECTED        = "rejected",        "Rejected"
+    RETURN_PENDING  = "return_pending",  "Return Pending"
     COMPLETED       = "completed",       "Completed"
     CANCELLED       = "cancelled",       "Cancelled"
 
@@ -222,6 +223,10 @@ class Booking(models.Model):
         choices=BookingStatus.choices,
         default=BookingStatus.PENDING,
         help_text="Lifecycle state of this rental request.",
+    )
+    return_requested_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text="When the owner pressed Mark as Returned.",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

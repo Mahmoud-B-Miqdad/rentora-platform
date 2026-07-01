@@ -45,17 +45,10 @@
             <span class="detail-breadcrumb__current">{{ tool.title }}</span>
         </nav>
 
-        <!-- Flash messages -->
         {% if booking_success %}
-        <div class="detail-flash detail-flash--success">
+        <div class="detail-flash detail-flash--success" id="bookingFlash">
             <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-            {{ booking_success }}
-        </div>
-        {% endif %}
-        {% if booking_error %}
-        <div class="detail-flash detail-flash--error">
-            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-            {{ booking_error }}
+            <span>{{ booking_success }}</span>
         </div>
         {% endif %}
 
@@ -224,6 +217,57 @@
                     <p class="detail-about__text">{{ tool.description }}</p>
                 </div>
 
+                <!-- Availability Calendar -->
+                <div class="detail-availability">
+                    <h2 class="detail-section-title">
+                        <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                        Availability
+                    </h2>
+                    <div class="avail-cal" id="availCalendar">
+
+                        <!-- Gradient header: month nav + selection bar -->
+                        <div class="avail-cal__top">
+                            <div class="avail-cal__nav-row">
+                                <button type="button" class="avail-cal__nav" id="availPrev" aria-label="Previous month">
+                                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                                </button>
+                                <div class="avail-cal__month-wrap">
+                                    <span class="avail-cal__month" id="availMonthLabel"></span>
+                                    <span class="avail-cal__year"  id="availYearLabel"></span>
+                                </div>
+                                <button type="button" class="avail-cal__nav" id="availNext" aria-label="Next month">
+                                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="avail-cal__selection" id="availSelection">
+                                <i class="fa-regular fa-calendar-check"></i>
+                                <span id="availSelectionText">Select check-in &amp; check-out dates</span>
+                            </div>
+                        </div>
+
+                        <!-- Calendar body: weekdays + day grid + legend -->
+                        <div class="avail-cal__body">
+                            <div class="avail-cal__weekdays">
+                                <span>Su</span><span>Mo</span><span>Tu</span>
+                                <span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                            </div>
+                            <div class="avail-cal__grid" id="availGrid"></div>
+                            <div class="avail-cal__legend">
+                                <span class="avail-cal__legend-item">
+                                    <i class="avail-dot avail-dot--available"></i>Available
+                                </span>
+                                <span class="avail-cal__legend-item avail-cal__legend-item--booked">
+                                    <i class="avail-dot avail-dot--booked"></i>Booked
+                                </span>
+                                <span class="avail-cal__legend-item avail-cal__legend-item--selected">
+                                    <i class="avail-dot avail-dot--selected"></i>Your selection
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ booked_ranges|json_script:"booked-ranges-data" }}
+
                 <!-- Pickup Location Map -->
                 {% if tool_lat and tool_lon %}
                 <div class="detail-map-section">
@@ -356,7 +400,23 @@
                             <span class="booking-form__estimate-label">Estimated total</span>
                             <span class="booking-form__estimate-value" id="estimateValue"></span>
                         </div>
-                        <button type="submit" class="btn-book-now">Book Now</button>
+
+                        {% if booking_error %}
+                        <div class="booking-alert booking-alert--error" id="bookingErrorAlert">
+                            <div class="booking-alert__icon">
+                                <i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i>
+                            </div>
+                            <div class="booking-alert__body">
+                                <p class="booking-alert__title">Booking Unavailable</p>
+                                <p class="booking-alert__msg">{{ booking_error }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn-book-now">
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            Book Now
+                        </button>
                     </form>
 
                     {% else %}
