@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+ 
+{% block content %}
+<link rel="stylesheet" href="{% static 'listings/css/wishlist.css' %}">
+ 
+<div class="wishlist-page-container">
+    <main class="wishlist-main">
+ 
+        <header class="wishlist-header">
+            <h1 class="wishlist-title">
+                My Wishlist
+                {% if global_wishlist_count > 0 %}
+                <span class="wishlist-count-badge">{{ global_wishlist_count }}</span>
+                {% endif %}
+            </h1>
+            <p class="wishlist-subtitle">Manage and monitor the tools you've saved for your upcoming projects.</p>
+        </header>
+ 
+ 
+        {% if wishlist_items %}
+        <div class="tools-grid">
+ 
+            {% for record in wishlist_items %}
+ 
+            {% with primary=record.tool.images.all|first %}
+ 
+            <div class="tool-card">
+ 
+                <div class="tool-card__image-wrapper">
+ 
+                    {% if primary %}
+                        <img src="{{ primary.image.url }}"
+                             class="tool-card__image"
+                             alt="{{ record.tool.title }}">
+                    {% else %}
+                        <img src="{% static 'listings/images/default-tool.png' %}"
+                             class="tool-card__image"
+                             alt="Default Tool">
+                    {% endif %}
+ 
+                    <!-- Remove from Wishlist Button -->
+                    <form method="POST"
+                          action="{% url 'listings:tools:toggle_wishlist' record.tool.id %}"
+                          class="wishlist-remove-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="tool-card__heart-btn tool-card__heart-btn--active"
+                                title="Remove from wishlist">
+                            <i class="fa-solid fa-heart"></i>
+                        </button>
+                    </form>
+ 
+                </div>
+ 
+                <div class="tool-card__content">
+ 
+                    <span class="tool-card__category">
+                        {{ record.tool.category.name }}
+                    </span>
+ 
+                    <h3 class="tool-card__title">
+                        {{ record.tool.title }}
+                    </h3>
+ 
+                    <p class="tool-card__location">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ record.tool.location }}
+                    </p>
+ 
+                    <div class="tool-card__footer">
+ 
+                        <div class="tool-card__price-box">
+                            <span class="tool-card__price">
+                                ${{ record.tool.daily_rate }}
+                            </span>
+                            <span class="tool-card__unit">
+                                / day
+                            </span>
+                        </div>
+ 
+                        <a href="{% url 'listings:tools:detail' record.tool.id %}"
+                           class="tool-card__btn">
+                            Rent Now
+                        </a>
+ 
+                    </div>
+ 
+                </div>
+ 
+            </div>
+ 
+            {% endwith %}
+ 
+            {% endfor %}
+ 
+        </div>
+ 
+        {% else %}
+ 
+        <div class="wishlist-empty-state">
+ 
+            <div class="wishlist-empty-state__icon-wrapper">
+                <i class="fa-solid fa-heart-circle-check"></i>
+            </div>
+ 
+            <h2 class="wishlist-empty-state__title">
+                Your wishlist is empty
+            </h2>
+ 
+            <p class="wishlist-empty-state__description">
+                Save your favorite tools to access them quickly whenever you need them.
+            </p>
+ 
+            <a href="{% url 'listings:browse' %}" class="wishlist-empty-state__btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Browse Tools
+            </a>
+ 
+        </div>
+ 
+        {% endif %}
+    </main>
+</div>
+ 
+{% endblock %}

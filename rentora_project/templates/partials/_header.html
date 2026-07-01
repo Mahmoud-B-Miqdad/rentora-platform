@@ -2,7 +2,6 @@
 <header class="site-header" id="site-header">
     <div class="container header-inner">
 
-        <!-- Brand -->
         <a href="{% url 'listings:home' %}" class="header-brand">
             <div class="header-brand__icon" aria-hidden="true">
                 <i class="fa-solid fa-screwdriver-wrench"></i>
@@ -10,7 +9,6 @@
             <span class="header-brand__name">Rent<span>ora</span></span>
         </a>
 
-        <!-- Pill Navigation (centered) -->
         <nav class="header-nav" aria-label="Main navigation">
             <div class="header-nav__pills">
                 <a href="{% url 'listings:home' %}" class="header-nav__link">Home</a>
@@ -19,14 +17,23 @@
             </div>
         </nav>
 
-        <!-- Right-side Actions -->
         <div class="header-actions">
+            
             <a href="{% url 'listings:tools:add_tool' %}" class="btn-list-tool">
                 <i class="fa-solid fa-plus" aria-hidden="true"></i>
                 <span>List Your Tool</span>
             </a>
 
             <span class="header-divider" aria-hidden="true"></span>
+
+            <a href="{% url 'listings:wishlist' %}" class="navbar__wishlist-link" title="My Wishlist">
+                <div class="wishlist-icon-wrapper">
+                    <i class="fa-regular fa-heart"></i>
+                    {% if global_wishlist_count > 0 %}
+                        <span class="wishlist-counter">{{ global_wishlist_count }}</span>
+                    {% endif %}
+                </div>
+            </a>
 
             <a href="{% url 'listings:dashboard' %}" class="header-icon-btn" title="Dashboard" aria-label="Dashboard">
                 <i class="fa-solid fa-border-all" aria-hidden="true"></i>
