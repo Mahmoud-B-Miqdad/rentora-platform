@@ -410,13 +410,17 @@
             <div class="booking-actions">
               {% if booking.status == 'payment_pending' %}
                 <span class="badge badge-payment">Awaiting Payment</span>
+              {% elif booking.status == 'return_pending' %}
+                <div class="return-waiting-state">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  <span>Awaiting renter confirmation</span>
+                </div>
               {% else %}
                 <span class="badge badge-approved">Approved</span>
-                <form method="POST" action="{% url 'listings:complete_booking' booking.id %}"
-                      onsubmit="return confirm('Mark this booking as completed and add ${{ booking.total_price }} to your earnings?')">
+                <form method="POST" action="{% url 'listings:request_return' booking.id %}">
                   {% csrf_token %}
-                  <button type="submit" class="btn-complete" title="Mark as returned & completed">
-                    <i class="fa-solid fa-circle-check"></i> Mark as Returned
+                  <button type="submit" class="btn-complete">
+                    <i class="fa-solid fa-rotate-left"></i> Mark as Returned
                   </button>
                 </form>
               {% endif %}
@@ -492,7 +496,52 @@
                 <span class="meta-price">${{ booking.total_price }}</span>
               </div>
             </div>
-            <span class="badge badge-completed">Completed</span>
+            <div class="completed-actions">
+              <span class="badge badge-completed">Completed</span>
+              {% if 'for_renter' in booking.reviewed_types %}
+                <span class="badge badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
+              {% else %}
+                <button type="button" class="btn-leave-review" data-review-modal="renter-{{ booking.id }}">
+                  <i class="fa-regular fa-star"></i> Rate Renter
+                </button>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Review modal: owner rates the renter -->
+          <div class="review-modal-overlay" id="review-modal-renter-{{ booking.id }}">
+            <div class="review-modal">
+              <div class="review-modal__header">
+                <h3><i class="fa-solid fa-star"></i> Rate {{ booking.renter.name }}</h3>
+                <button type="button" class="review-modal__close" data-modal-close aria-label="Close">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+              <form method="POST" action="{% url 'listings:submit_review' booking.id %}" class="review-modal__form">
+                {% csrf_token %}
+                <div class="review-modal__tool-info">
+                  <div class="booking-thumb">
+                    {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+                  </div>
+                  <div>
+                    <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                    <div class="review-modal__sub">{{ booking.start_date }} → {{ booking.end_date }}</div>
+                  </div>
+                </div>
+                <div class="review-field">
+                  <label>How was your experience renting to {{ booking.renter.name }}?</label>
+                  <div class="star-rating" data-input="renter_rating">
+                    <input type="hidden" name="renter_rating" value="0">
+                    {% for i in "12345" %}<i class="fa-regular fa-star" data-value="{{ forloop.counter }}"></i>{% endfor %}
+                  </div>
+                  <textarea name="renter_comment" maxlength="1000" placeholder="Share your experience with this renter (optional)"></textarea>
+                </div>
+                <div class="review-modal__actions">
+                  <button type="button" class="btn-cancel-review" data-modal-close>Cancel</button>
+                  <button type="submit" class="btn-submit-review"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+                </div>
+              </form>
+            </div>
           </div>
           {% empty %}
           <div class="empty-state">
@@ -587,6 +636,54 @@
           <!-- Active tab -->
           <div class="booking-tab-content" id="rtab-active">
             {% for booking in current_rentals %}
+
+            {% if booking.status == 'return_pending' %}
+            <!-- Return confirmation card -->
+            <div class="return-confirm-card">
+              <div class="return-confirm-top">
+                <div class="booking-thumb">
+                  {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+                </div>
+                <div class="booking-info">
+                  <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                  <div class="booking-meta">
+                    <a href="{% url 'users:public_profile' booking.tool.owner.pk %}" class="renter-chip">
+                      <span class="renter-chip__avatar">{% if booking.tool.owner.profile_image %}<img src="{{ booking.tool.owner.profile_image.url }}" alt="">{% else %}{{ booking.tool.owner.name|first|upper }}{% endif %}</span>
+                      <span class="renter-chip__name">{{ booking.tool.owner.name }}</span>
+                      <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
+                    </a>
+                    <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
+                    <span class="meta-price">${{ booking.total_price }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="return-confirm-banner">
+                <div class="return-confirm-msg">
+                  <i class="fa-solid fa-bell"></i>
+                  <div>
+                    <strong>Owner confirmed receipt of the tool</strong>
+                    <p>Please confirm the return to complete this rental. If you have not returned the tool yet, click Dispute.</p>
+                  </div>
+                </div>
+                <div class="return-confirm-actions">
+                  <form method="POST" action="{% url 'listings:confirm_return' booking.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-confirm-return">
+                      <i class="fa-solid fa-circle-check"></i> Confirm Return
+                    </button>
+                  </form>
+                  <form method="POST" action="{% url 'listings:dispute_return' booking.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-dispute-return">
+                      <i class="fa-solid fa-triangle-exclamation"></i> Dispute
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            {% else %}
+            <!-- Normal active/overdue row -->
             <div class="booking-row">
               <div class="booking-thumb">
                 {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
@@ -603,8 +700,14 @@
                   <span class="meta-price">${{ booking.total_price }}</span>
                 </div>
               </div>
-              <span class="badge badge-approved">Active</span>
+              {% if booking.end_date < today %}
+                <span class="badge badge-overdue"><i class="fa-solid fa-clock"></i> Overdue</span>
+              {% else %}
+                <span class="badge badge-approved">Active</span>
+              {% endif %}
             </div>
+            {% endif %}
+
             {% empty %}
             <div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i>No active rentals.</div>
             {% endfor %}
@@ -629,9 +732,74 @@
                   <span class="meta-price">${{ booking.total_price }}</span>
                 </div>
               </div>
-              {% if booking.status == 'completed' %}<span class="badge badge-completed">Completed</span>
-              {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
+              <div class="completed-actions">
+                {% if booking.status == 'completed' %}<span class="badge badge-completed">Completed</span>
+                {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
+                {% if booking.status == 'completed' %}
+                  {% if 'for_tool' in booking.reviewed_types and 'for_owner' in booking.reviewed_types %}
+                    <span class="badge badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
+                  {% else %}
+                    <button type="button" class="btn-leave-review" data-review-modal="rental-{{ booking.id }}">
+                      <i class="fa-regular fa-star"></i> Leave a Review
+                    </button>
+                  {% endif %}
+                {% endif %}
+              </div>
             </div>
+
+            {% if booking.status == 'completed' %}
+            <!-- Review modal: renter rates the tool + the owner -->
+            <div class="review-modal-overlay" id="review-modal-rental-{{ booking.id }}">
+              <div class="review-modal">
+                <div class="review-modal__header">
+                  <h3><i class="fa-solid fa-star"></i> Rate Your Rental</h3>
+                  <button type="button" class="review-modal__close" data-modal-close aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+                <form method="POST" action="{% url 'listings:submit_review' booking.id %}" class="review-modal__form">
+                  {% csrf_token %}
+                  <div class="review-modal__tool-info">
+                    <div class="booking-thumb">
+                      {% if booking.tool.primary_images %}<img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">{% else %}<i class="fa-solid fa-wrench"></i>{% endif %}
+                    </div>
+                    <div>
+                      <div class="booking-tool-name">{{ booking.tool.title }}</div>
+                      <div class="review-modal__sub">{{ booking.start_date }} → {{ booking.end_date }}</div>
+                    </div>
+                  </div>
+
+                  {% if 'for_tool' not in booking.reviewed_types %}
+                  <div class="review-field">
+                    <label>How was the tool?</label>
+                    <div class="star-rating" data-input="tool_rating">
+                      <input type="hidden" name="tool_rating" value="0">
+                      {% for i in "12345" %}<i class="fa-regular fa-star" data-value="{{ forloop.counter }}"></i>{% endfor %}
+                    </div>
+                    <textarea name="tool_comment" maxlength="1000" placeholder="Share your experience with this tool (optional)"></textarea>
+                  </div>
+                  {% endif %}
+
+                  {% if 'for_owner' not in booking.reviewed_types %}
+                  <div class="review-field">
+                    <label>How was {{ booking.tool.owner.name }} as the owner?</label>
+                    <div class="star-rating" data-input="owner_rating">
+                      <input type="hidden" name="owner_rating" value="0">
+                      {% for i in "12345" %}<i class="fa-regular fa-star" data-value="{{ forloop.counter }}"></i>{% endfor %}
+                    </div>
+                    <textarea name="owner_comment" maxlength="1000" placeholder="Share your experience with the owner (optional)"></textarea>
+                  </div>
+                  {% endif %}
+
+                  <div class="review-modal__actions">
+                    <button type="button" class="btn-cancel-review" data-modal-close>Cancel</button>
+                    <button type="submit" class="btn-submit-review"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            {% endif %}
+
             {% empty %}
             <div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i>No rental history yet.</div>
             {% endfor %}
