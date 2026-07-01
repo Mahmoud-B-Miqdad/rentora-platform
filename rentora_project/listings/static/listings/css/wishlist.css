@@ -1,0 +1,376 @@
+.wishlist-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 70vh;
+}
+
+.wishlist-header {
+    margin-bottom: 32px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 20px;
+}
+
+.wishlist-title {
+    font-size: 2rem;
+    color: #1a2530;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 8px 0;
+}
+
+.wishlist-count-badge {
+    background-color: #e2f6f5;
+    color: #00796b;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.wishlist-subtitle {
+    color: #6b7280;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.tool-card{
+    display:flex;
+    flex-direction:column;
+}
+
+.tool-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    overflow:hidden;
+    width:100%;
+}
+
+.tool-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.tool-card__image-wrapper {
+    position: relative;
+    height: 200px;
+    background-color: #f9fafb;
+}
+
+.tool-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tool-card__heart-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #ffffff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.tool-card__heart-btn:hover {
+    transform: scale(1.1);
+}
+
+.tool-card__heart-btn--active i {
+    color: #ff4d4d;
+}
+
+.tool-card__content {
+    padding: 16px;
+}
+
+.tool-card__category {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.tool-card__title {
+    font-size: 1.1rem;
+    color: #1a2530;
+    margin: 4px 0 8px 0;
+    font-weight: 600;
+}
+
+.tool-card__location {
+    color: #6b7280;
+    font-size: 0.88rem;
+    margin: 0 0 16px 0;
+}
+
+.tool-card__location i {
+    color: #00796b;
+    margin-right: 4px;
+}
+
+.tool-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 12px;
+}
+
+.tool-card__price-box {
+    display: flex;
+    align-items: baseline;
+}
+
+.tool-card__price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #00796b;
+}
+
+.tool-card__unit {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-left: 2px;
+}
+
+.tool-card__btn {
+    background-color: #00796b;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.tool-card__btn:hover {
+    background-color: #004d40;
+}
+/* ======================================
+   Empty Wishlist
+====================================== */
+
+.wishlist-empty-state{
+    margin-top:40px;
+    background:#fff;
+    border:2px dashed #d8f1ee;
+    border-radius:22px;
+    padding:70px 40px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.wishlist-empty-state::before{
+    content:"";
+    position:absolute;
+    width:260px;
+    height:260px;
+    background:#0d948810;
+    border-radius:50%;
+    top:-130px;
+    right:-120px;
+}
+
+.wishlist-empty-state::after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    background:#0d948808;
+    border-radius:50%;
+    bottom:-90px;
+    left:-80px;
+}
+
+.wishlist-empty-state__icon-wrapper{
+
+    width:120px;
+    height:120px;
+
+    margin:auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#e8faf7;
+
+    color:#0d9488;
+
+    font-size:52px;
+
+    box-shadow:0 12px 35px rgba(13,148,136,.15);
+
+    margin-bottom:28px;
+
+    position:relative;
+    z-index:2;
+}
+
+.wishlist-empty-state__title{
+
+    font-size:36px;
+    font-weight:700;
+    color:#1f2937;
+
+    margin-bottom:14px;
+
+    position:relative;
+    z-index:2;
+}
+
+.wishlist-empty-state__description{
+
+    max-width:500px;
+
+    margin:0 auto 35px;
+
+    color:#6b7280;
+
+    line-height:1.8;
+
+    font-size:17px;
+
+    position:relative;
+    z-index:2;
+}
+
+.wishlist-empty-state__btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:14px 30px;
+
+    border-radius:12px;
+
+    background:#0d9488;
+
+    color:#fff;
+
+    font-weight:600;
+
+    transition:.25s;
+
+    position:relative;
+    z-index:2;
+}
+
+.wishlist-empty-state__btn:hover{
+
+    background:#0f766e;
+
+    transform:translateY(-3px);
+
+    color:#fff;
+}
+.wishlist-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tool-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   Wishlist Remove Form (يضمن إنه الـ form
+   ما بيكسر تصميم زر القلب)
+========================================== */
+ 
+.wishlist-remove-form {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    margin: 0;
+    padding: 0;
+}
+ 
+.wishlist-remove-form .tool-card__heart-btn {
+    position: static;
+}
+ 
+/* Form Messages */
+.form-messages {
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+ 
+.form-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+}
+ 
+.form-message--error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+ 
+.form-message--success {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+ 
