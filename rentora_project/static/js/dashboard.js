@@ -61,6 +61,70 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
+  // ── Review Modals (open / close) ────────────────────────
+  document.querySelectorAll('[data-review-modal]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const modal = document.getElementById('review-modal-' + this.dataset.reviewModal);
+      if (modal) modal.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.review-modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay || e.target.closest('[data-modal-close]')) {
+        overlay.classList.remove('active');
+      }
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.review-modal-overlay.active').forEach(m => m.classList.remove('active'));
+    }
+  });
+
+  // ── Interactive Star Rating Widgets ──────────────────────
+  document.querySelectorAll('.star-rating').forEach(widget => {
+    const stars = widget.querySelectorAll('i');
+    const input = widget.querySelector('input[type="hidden"]');
+
+    function paint(value) {
+      stars.forEach(star => {
+        const active = Number(star.dataset.value) <= value;
+        star.classList.toggle('is-active', active);
+        star.classList.toggle('fa-solid', active);
+        star.classList.toggle('fa-regular', !active);
+      });
+    }
+
+    stars.forEach(star => {
+      star.addEventListener('click', function () {
+        input.value = this.dataset.value;
+        paint(Number(this.dataset.value));
+      });
+      star.addEventListener('mouseenter', function () {
+        paint(Number(this.dataset.value));
+      });
+    });
+
+    widget.addEventListener('mouseleave', function () {
+      paint(Number(input.value));
+    });
+  });
+
+  // ── Require at least one rating before submitting a review ──
+  document.querySelectorAll('.review-modal__form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+      const ratings = form.querySelectorAll('.star-rating input[type="hidden"]');
+      const hasRating = Array.from(ratings).some(input => Number(input.value) > 0);
+      if (!hasRating) {
+        e.preventDefault();
+        alert('Please select at least one star rating before submitting.');
+      }
+    });
+  });
+
+
   // ── Auto-dismiss Alerts ─────────────────────────────────
   document.querySelectorAll('.alert').forEach(alert => {
     setTimeout(() => {
