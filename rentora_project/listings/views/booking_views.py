@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Prefetch, Sum
+from django.utils     import timezone
 
-from listings.models import Tool, Booking, ToolImage
+from listings.models import Tool, Booking, ToolImage, Review
 from users.models    import User
 from django.contrib  import messages
-from datetime        import date
 
 
 def create_booking_view(request, pk):
@@ -13,7 +13,7 @@ def create_booking_view(request, pk):
     Requires an authenticated session.
     """
     if request.method != 'POST':
-        return redirect('listings:detail', pk=pk)
+        return redirect('listings:tools:detail', pk=pk)
 
     user_id = request.session.get('user_id')
     if not user_id:
@@ -24,10 +24,9 @@ def create_booking_view(request, pk):
 
     errors = Booking.objects.register_validator(request.POST, renter, tool)
     if errors:
-        # Store first error in session so detail page can display it
         first_error = next(iter(errors.values()))
         request.session['booking_error'] = first_error
-        return redirect('listings:detail', pk=pk)
+        return redirect('listings:tools:detail', pk=pk)
 
     booking = Booking.objects.create_booking(request.POST, renter, tool)
     return redirect('listings:booking_confirmation', booking_id=booking.id)
@@ -45,15 +44,10 @@ def login_required_session(view_func):
 def dashboard(request):
     user = User.objects.get(id=request.session['user_id'])
 
-    # Auto-complete approved bookings whose end_date has passed
-    Booking.objects.filter(
-        tool__owner=user,
-        status='approved',
-        end_date__lt=date.today()
-    ).update(status='completed')
 
     primary_img_qs  = ToolImage.objects.filter(is_primary=True)
     tool_img_pf     = Prefetch('tool__images', queryset=primary_img_qs, to_attr='primary_images')
+    my_reviews_pf   = Prefetch('reviews', queryset=Review.objects.filter(reviewer=user), to_attr='my_reviews')
 
     # Booking Requests
     pending_requests = Booking.objects.filter(
@@ -61,7 +55,7 @@ def dashboard(request):
     ).select_related('tool', 'tool__category', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
     approved_requests = Booking.objects.filter(
-        tool__owner=user, status__in=['payment_pending', 'approved']
+        tool__owner=user, status__in=['payment_pending', 'approved', 'return_pending']
     ).select_related('tool', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
 
     rejected_requests = Booking.objects.filter(
@@ -70,7 +64,10 @@ def dashboard(request):
 
     completed_requests = Booking.objects.filter(
         tool__owner=user, status='completed'
-    ).select_related('tool', 'renter').prefetch_related(tool_img_pf).order_by('-created_at')
+    ).select_related('tool', 'renter').prefetch_related(tool_img_pf, my_reviews_pf).order_by('-created_at')
+    completed_requests = list(completed_requests)
+    for b in completed_requests:
+        b.reviewed_types = {r.review_type for r in b.my_reviews}
 
     # My Rentals
     pending_my_rentals = Booking.objects.filter(
@@ -78,12 +75,15 @@ def dashboard(request):
     ).select_related('tool', 'tool__owner', 'tool__category').prefetch_related(tool_img_pf).order_by('-created_at')
 
     current_rentals = Booking.objects.filter(
-        renter=user, status='approved', end_date__gte=date.today()
+        renter=user, status__in=['approved', 'return_pending']
     ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf).order_by('start_date')
 
     booking_history = Booking.objects.filter(
         renter=user, status__in=['completed', 'rejected']
-    ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf).order_by('-created_at')
+    ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf, my_reviews_pf).order_by('-created_at')
+    booking_history = list(booking_history)
+    for b in booking_history:
+        b.reviewed_types = {r.review_type for r in b.my_reviews}
 
     # Stats
     my_tools_count = Tool.objects.filter(owner=user).count()
@@ -113,6 +113,7 @@ def dashboard(request):
         'all_tools'          : all_tools,
         'recent_tools'       : recent_tools,
         'active_tab'         : request.GET.get('tab', 'overview'),
+        'today'              : timezone.now().date(),
     }
     return render(request, 'listings/dashboard/dashboard.html', context)
 
@@ -178,15 +179,42 @@ def booking_confirmation_view(request, booking_id):
 
 
 @login_required_session
-def complete_booking(request, booking_id):
+def request_return(request, booking_id):
+    """Owner marks the tool as returned — awaits renter confirmation."""
     user    = User.objects.get(id=request.session['user_id'])
     booking = get_object_or_404(Booking, id=booking_id, tool__owner=user)
 
     if booking.status == 'approved':
-        booking.status = 'completed'
+        booking.status = 'return_pending'
+        booking.return_requested_at = timezone.now()
         booking.save()
-        messages.success(request, f'Booking marked as completed. ${booking.total_price} added to your earnings.')
+        messages.success(request, "Return request sent. Waiting for renter to confirm.")
     return redirect('/dashboard/?tab=booking-requests')
 
 
+@login_required_session
+def confirm_return(request, booking_id):
+    """Renter confirms they have returned the tool → booking completed."""
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(Booking, id=booking_id, renter=user)
 
+    if booking.status == 'return_pending':
+        booking.status = 'completed'
+        booking.return_requested_at = None
+        booking.save()
+        messages.success(request, "Return confirmed. Rental completed successfully!")
+    return redirect('/dashboard/?tab=my-rentals')
+
+
+@login_required_session
+def dispute_return(request, booking_id):
+    """Renter disputes the return — booking goes back to approved for review."""
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(Booking, id=booking_id, renter=user)
+
+    if booking.status == 'return_pending':
+        booking.status = 'approved'
+        booking.return_requested_at = None
+        booking.save()
+        messages.warning(request, "Return disputed. The owner has been notified to re-confirm.")
+    return redirect('/dashboard/?tab=my-rentals')
