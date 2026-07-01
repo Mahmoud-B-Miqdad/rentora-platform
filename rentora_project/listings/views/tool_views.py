@@ -180,22 +180,35 @@ def tool_detail_view(request, pk):
  
  
 def toggle_wishlist_view(request, pk):
-    """AJAX POST — toggle a tool in/out of the user's wishlist."""
+    """Toggle a tool in/out of the user's wishlist.
+    Supports both AJAX (returns JSON) and regular form POST (redirects).
+    """
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
- 
+
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
     user_id = request.session.get('user_id')
     if not user_id:
-        return JsonResponse({'error': 'login_required'}, status=401)
- 
+        if is_ajax:
+            return JsonResponse({'error': 'login_required'}, status=401)
+        return redirect('users:login')
+
     tool = get_object_or_404(Tool, pk=pk)
     user = get_object_or_404(User, pk=user_id)
- 
+
     obj, created = Wishlist.objects.get_or_create(user=user, tool=tool)
     if not created:
         obj.delete()
-        return JsonResponse({'saved': False})
-    return JsonResponse({'saved': True})
+        if is_ajax:
+            return JsonResponse({'saved': False})
+        messages.success(request, f'"{tool.title}" removed from your wishlist.')
+        return redirect('listings:wishlist')
+
+    if is_ajax:
+        return JsonResponse({'saved': True})
+    messages.success(request, f'"{tool.title}" added to your wishlist.')
+    return redirect('listings:wishlist')
  
  
 # ==================================================
