@@ -264,6 +264,52 @@
 
 .meta-sep { color: #94a3b8; margin: 0 3px; }
 .meta-price { font-weight: 600; color: var(--teal); }
+.meta-price--overdue { font-weight: 700; color: #be123c; }
+.meta-price--early   { font-weight: 700; color: #15803d; }
+
+/* Original agreed price shown as strikethrough before the adjusted amount */
+.price-original {
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: line-through;
+  margin-right: 2px;
+}
+
+/* Price adjustment badges */
+.price-adjustment {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.price-adjustment--overdue {
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+}
+.price-adjustment--early {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Locked return button */
+.badge-return-locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+}
 
 .sidebar-add-btn {
   display: flex;
@@ -1106,3 +1152,4 @@
   .nav-link { flex: 1; justify-content: center; font-size: 0.78rem; padding: 8px 6px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+

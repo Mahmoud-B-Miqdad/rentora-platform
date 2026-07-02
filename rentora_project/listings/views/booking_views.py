@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Prefetch, Sum
 from django.utils     import timezone
@@ -26,7 +28,7 @@ def create_booking_view(request, pk):
     if errors:
         first_error = next(iter(errors.values()))
         request.session['booking_error'] = first_error
-        return redirect('listings:tools:detail', pk=pk)
+        return redirect(f'/{pk}/')
 
     booking = Booking.objects.create_booking(request.POST, renter, tool)
     return redirect('listings:booking_confirmation', booking_id=booking.id)
@@ -186,6 +188,7 @@ def request_return(request, booking_id):
 
     if booking.status == 'approved':
         booking.status = 'return_pending'
+        booking.actual_return_date  = timezone.now().date()
         booking.return_requested_at = timezone.now()
         booking.save()
         messages.success(request, "Return request sent. Waiting for renter to confirm.")
@@ -199,10 +202,33 @@ def confirm_return(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, renter=user)
 
     if booking.status == 'return_pending':
-        booking.status = 'completed'
+        actual_return = booking.actual_return_date or timezone.now().date()
+        actual_days   = max((actual_return - booking.start_date).days, 1)
+        new_total     = Decimal(actual_days) * Decimal(str(booking.tool.daily_rate))
+
+        overdue_days       = max((actual_return - booking.end_date).days, 0)
+        early_return_days  = max((booking.end_date - actual_return).days, 0)
+
+        booking.total_price         = new_total
+        booking.actual_return_date  = actual_return
+        booking.status              = 'completed'
         booking.return_requested_at = None
         booking.save()
-        messages.success(request, "Return confirmed. Rental completed successfully!")
+
+        if overdue_days:
+            messages.success(
+                request,
+                f"Return confirmed. {overdue_days} overdue day(s) added — "
+                f"final total: ${new_total}."
+            )
+        elif early_return_days:
+            messages.success(
+                request,
+                f"Return confirmed. Early return by {early_return_days} day(s) — "
+                f"you were only charged for {actual_days} day(s): ${new_total}."
+            )
+        else:
+            messages.success(request, "Return confirmed. Rental completed successfully!")
     return redirect('/dashboard/?tab=my-rentals')
 
 
