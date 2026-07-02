@@ -180,19 +180,13 @@ def tool_detail_view(request, pk):
  
  
 def toggle_wishlist_view(request, pk):
-    """Toggle a tool in/out of the user's wishlist.
-    Supports both AJAX (returns JSON) and regular form POST (redirects).
-    """
+    """Toggle a tool in/out of the user's wishlist. Always returns JSON."""
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-
     user_id = request.session.get('user_id')
     if not user_id:
-        if is_ajax:
-            return JsonResponse({'error': 'login_required'}, status=401)
-        return redirect('users:login')
+        return JsonResponse({'error': 'login_required'}, status=401)
 
     tool = get_object_or_404(Tool, pk=pk)
     user = get_object_or_404(User, pk=user_id)
@@ -200,15 +194,12 @@ def toggle_wishlist_view(request, pk):
     obj, created = Wishlist.objects.get_or_create(user=user, tool=tool)
     if not created:
         obj.delete()
-        if is_ajax:
-            return JsonResponse({'saved': False})
-        messages.success(request, f'"{tool.title}" removed from your wishlist.')
-        return redirect('listings:wishlist')
+        saved = False
+    else:
+        saved = True
 
-    if is_ajax:
-        return JsonResponse({'saved': True})
-    messages.success(request, f'"{tool.title}" added to your wishlist.')
-    return redirect('listings:wishlist')
+    count = Wishlist.objects.filter(user=user).count()
+    return JsonResponse({'saved': saved, 'count': count})
  
  
 # ==================================================
