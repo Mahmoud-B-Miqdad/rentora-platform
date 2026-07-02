@@ -45,15 +45,21 @@ class BookingManager(models.Manager):
 
     def _has_date_overlap(self, tool, start_date, end_date, exclude_booking_id=None):
         """
-        Returns True if *tool* already has an approved or pending booking
-        whose date range overlaps [start_date, end_date].
+        Returns True if *tool* already has an active booking whose date range
+        overlaps [start_date, end_date].  All non-terminal statuses are checked
+        so that payment-pending and return-pending rentals block new bookings.
 
         Overlap condition (Allen's interval algebra):
             existing.start <= requested.end  AND  existing.end >= requested.start
         """
         qs = self.filter(
             tool=tool,
-            status__in=[BookingStatus.PENDING, BookingStatus.APPROVED],
+            status__in=[
+                BookingStatus.PENDING,
+                BookingStatus.PAYMENT_PENDING,
+                BookingStatus.APPROVED,
+                BookingStatus.RETURN_PENDING,
+            ],
             start_date__lte=end_date,
             end_date__gte=start_date,
         )
@@ -228,6 +234,10 @@ class Booking(models.Model):
         null=True, blank=True,
         help_text="When the owner pressed Mark as Returned.",
     )
+    actual_return_date = models.DateField(
+        null=True, blank=True,
+        help_text="Date the tool was physically returned (recorded when owner marks as returned).",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -248,8 +258,34 @@ class Booking(models.Model):
 
     @property
     def rental_days(self):
-        """Number of billable rental days (minimum 1)."""
+        """Agreed rental days (minimum 1)."""
         return max((self.end_date - self.start_date).days, 1)
+
+    @property
+    def actual_days(self):
+        """Actual days the tool was kept (based on actual_return_date, minimum 1)."""
+        if not self.actual_return_date:
+            return self.rental_days
+        return max((self.actual_return_date - self.start_date).days, 1)
+
+    @property
+    def overdue_days(self):
+        """Extra days beyond the agreed end_date (0 if returned on time or early)."""
+        if not self.actual_return_date:
+            return 0
+        return max((self.actual_return_date - self.end_date).days, 0)
+
+    @property
+    def early_return_days(self):
+        """Days returned early before the agreed end_date (0 if on time or late)."""
+        if not self.actual_return_date:
+            return 0
+        return max((self.end_date - self.actual_return_date).days, 0)
+
+    @property
+    def original_total(self):
+        """Agreed price at booking time: rental_days × tool.daily_rate."""
+        return Decimal(self.rental_days) * Decimal(str(self.tool.daily_rate))
 
     @property
     def is_active(self):
