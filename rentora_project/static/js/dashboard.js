@@ -38,25 +38,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   // ── Booking Sub-Tabs (scoped per header group) ──────────
+  const initSubTab = params.get('subtab') || '';
+
   document.querySelectorAll('.booking-tabs-header, .booking-tabs-nav').forEach(header => {
     const btns     = header.querySelectorAll('.booking-tab-btn');
     const panel    = header.closest('.tab-panel, .section-card');
     const contents = panel ? panel.querySelectorAll('.booking-tab-content') : [];
 
+    function activateSubTab(targetId) {
+      btns.forEach(b => b.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      const btn = header.querySelector(`.booking-tab-btn[data-target="${targetId}"]`);
+      const content = document.getElementById(targetId);
+      if (btn) btn.classList.add('active');
+      if (content) content.classList.add('active');
+    }
+
     btns.forEach(btn => {
       btn.addEventListener('click', function () {
-        btns.forEach(b => b.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
-        this.classList.add('active');
-        const target = document.getElementById(this.dataset.target);
-        if (target) target.classList.add('active');
+        activateSubTab(this.dataset.target);
       });
     });
 
-    // Activate first tab in each group by default
-    if (btns.length > 0) {
-      btns[0].classList.add('active');
-      if (contents.length > 0) contents[0].classList.add('active');
+    // If URL has ?subtab= and it belongs to this group → activate it
+    const subBtn = initSubTab
+      ? header.querySelector(`.booking-tab-btn[data-target="${initSubTab}"]`)
+      : null;
+
+    if (subBtn) {
+      activateSubTab(initSubTab);
+    } else {
+      // Default: activate first sub-tab in group
+      if (btns.length > 0) activateSubTab(btns[0].dataset.target);
     }
   });
 

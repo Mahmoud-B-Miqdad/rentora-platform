@@ -1,6 +1,22 @@
 {% extends "base.html" %}
 {% load static %}
- 
+
+{% block extra_js %}
+<script>
+(function () {
+    var wrapper = document.querySelector('.wishlist-icon-wrapper[data-count]');
+    var count   = wrapper ? (parseInt(wrapper.dataset.count, 10) || 0) : 0;
+
+    // Mark this count as "seen" — badge won't show again until count increases
+    localStorage.setItem('wishlistSeenCount', String(count));
+
+    // Immediately hide the badge on this page
+    var badge = wrapper ? wrapper.querySelector('.wishlist-counter') : null;
+    if (badge) badge.style.display = 'none';
+})();
+</script>
+{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'listings/css/wishlist.css' %}">
  
