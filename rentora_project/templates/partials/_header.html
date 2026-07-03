@@ -1,12 +1,19 @@
-{% load static %}
 <header class="site-header" id="site-header">
     <div class="container header-inner">
 
+        <div class="mobile-nav-trigger">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
         <a href="{% url 'listings:home' %}" class="header-brand">
-            <div class="header-brand__icon" aria-hidden="true">
+            <div class="header-brand__icon">
                 <i class="fa-solid fa-screwdriver-wrench"></i>
             </div>
-            <span class="header-brand__name">Rent<span>ora</span></span>
+            <span class="header-brand__name">
+                Rent<span>ora</span>
+            </span>
         </a>
 
         <nav class="header-nav" aria-label="Main navigation">
@@ -18,7 +25,6 @@
         </nav>
 
         <div class="header-actions">
-            
             <a href="{% url 'listings:tools:add_tool' %}" class="btn-list-tool">
                 <i class="fa-solid fa-plus" aria-hidden="true"></i>
                 <span>List Your Tool</span>
@@ -55,3 +61,33 @@
 
     </div>
 </header>
+
+<div class="mobile-overlay" id="mobileOverlay"></div>
+
+<aside class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu__header">
+        <div class="mobile-logo">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            <span>Rentora</span>
+        </div>
+        <button id="closeMenu">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <nav>
+        <a href="{% url 'listings:home' %}"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="{% url 'listings:browse' %}"><i class="fa-solid fa-screwdriver-wrench"></i> Browse Tools</a>
+        <a href="{% url 'listings:about' %}"><i class="fa-solid fa-circle-info"></i> About Us</a>
+        <a href="{% url 'listings:dashboard' %}"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+        <a href="{% url 'listings:tools:add_tool' %}"><i class="fa-solid fa-plus"></i> List Your Tool</a>
+        <a href="{% url 'listings:wishlist' %}"><i class="fa-solid fa-heart"></i> Wishlist</a>
+
+        {% if request.session.user_id %}
+            <a href="{% url 'users:profile' %}"><i class="fa-regular fa-user"></i> Profile</a>
+            <a href="{% url 'users:logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        {% else %}
+            <a href="{% url 'users:login' %}"><i class="fa-regular fa-user"></i> Login</a>
+        {% endif %}
+    </nav>
+</aside>

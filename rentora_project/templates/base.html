@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +33,8 @@
     <div class="global-messages" id="globalMessages">
         {% for message in messages %}
         <div class="global-msg global-msg--{{ message.tags }}" role="alert">
-            <i class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% elif message.tags == 'info' %}fa-circle-info{% else %}fa-circle-check{% endif %}"></i>
+            <i
+                class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% elif message.tags == 'info' %}fa-circle-info{% else %}fa-circle-check{% endif %}"></i>
             <span>{{ message }}</span>
             <button class="global-msg-close" onclick="this.parentElement.remove()" aria-label="Dismiss">
                 <i class="fa-solid fa-xmark"></i>
@@ -54,5 +56,38 @@
     <!-- Page-specific Scripts -->
     {% block extra_js %}{% endblock %}
 
+    <script>
+
+        const menu = document.getElementById("mobileMenu");
+
+        const overlay = document.getElementById("mobileOverlay");
+
+        document.getElementById("mobileMenuBtn").onclick = function () {
+
+            menu.classList.add("active");
+
+            overlay.classList.add("active");
+
+        }
+
+        document.getElementById("closeMenu").onclick = function () {
+
+            menu.classList.remove("active");
+
+            overlay.classList.remove("active");
+
+        }
+
+        overlay.onclick = function () {
+
+            menu.classList.remove("active");
+
+            overlay.classList.remove("active");
+
+        }
+
+    </script>
+
 </body>
+
 </html>
