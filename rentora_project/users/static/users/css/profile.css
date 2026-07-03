@@ -21,9 +21,9 @@
    ══════════════════════════════════════════════════════════ */
 .profile-meta-row {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-start; /* العودة للمحاذاة الأصلية السليمة للـ Flexbox */
     gap: 20px;
-    margin-top: -56px;
+    margin-top: -30px !important; /* تقليل السحب للأعلى حتى لا تندفع العناصر خلف البانر */
     margin-bottom: 28px;
     flex-wrap: wrap;
 }
@@ -102,13 +102,13 @@
 .profile-meta {
     flex: 1;
     min-width: 200px;
-    padding-top: 64px;
+    padding-top: 35px !important; /* هذه القيمة السحرية التي ستدفع الاسم والبدجات معاً للأسفل في المساحة البيضاء */
 }
+
 .profile-name {
     font-size: 22px;
     font-weight: 800;
-    color: var(--clr-text);
-    letter-spacing: -0.4px;
+    color: #0f172a !important; /* لون داكن صريح ومضمون للظهور على الخلفية الفاتحة */
     display: flex;
     align-items: center;
     gap: 10px;
