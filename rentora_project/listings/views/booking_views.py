@@ -1,8 +1,11 @@
+from decimal import Decimal
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Prefetch, Sum
 from django.utils     import timezone
 
 from listings.models import Tool, Booking, ToolImage, Review
+from listings.models.notification import Notification, NotificationType
 from users.models    import User
 from django.contrib  import messages
 
@@ -26,9 +29,18 @@ def create_booking_view(request, pk):
     if errors:
         first_error = next(iter(errors.values()))
         request.session['booking_error'] = first_error
-        return redirect('listings:tools:detail', pk=pk)
+        return redirect(f'/{pk}/')
 
     booking = Booking.objects.create_booking(request.POST, renter, tool)
+
+    Notification.objects.create_for(
+        user=tool.owner,
+        notification_type=NotificationType.BOOKING_RECEIVED,
+        message=f"{renter.name} requested to rent your \"{tool.title}\" "
+                f"({booking.start_date} → {booking.end_date}).",
+        booking=booking,
+    )
+
     return redirect('listings:booking_confirmation', booking_id=booking.id)
 
 def login_required_session(view_func):
@@ -126,6 +138,15 @@ def approve_booking(request, booking_id):
     if booking.status == 'pending':
         booking.status = 'payment_pending'
         booking.save()
+
+        Notification.objects.create_for(
+            user=booking.renter,
+            notification_type=NotificationType.BOOKING_APPROVED,
+            message=f"Your booking for \"{booking.tool.title}\" was approved! "
+                    f"Complete your payment to confirm the rental.",
+            booking=booking,
+        )
+
         messages.success(request, "Booking approved. Renter has been notified to complete payment.")
     return redirect('/dashboard/?tab=booking-requests')
 
@@ -138,6 +159,15 @@ def reject_booking(request, booking_id):
     if booking.status == 'pending':
         booking.status = 'rejected'
         booking.save()
+
+        Notification.objects.create_for(
+            user=booking.renter,
+            notification_type=NotificationType.BOOKING_REJECTED,
+            message=f"Your booking request for \"{booking.tool.title}\" "
+                    f"({booking.start_date} → {booking.end_date}) was not approved.",
+            booking=booking,
+        )
+
         messages.success(request, "Booking rejected.")
     return redirect('/dashboard/?tab=booking-requests')
 
@@ -158,6 +188,15 @@ def confirm_payment_view(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, renter=user, status='payment_pending')
     booking.status = 'approved'
     booking.save()
+
+    Notification.objects.create_for(
+        user=booking.tool.owner,
+        notification_type=NotificationType.PAYMENT_RECEIVED,
+        message=f"{booking.renter.name} completed payment for \"{booking.tool.title}\" — "
+                f"rental starts {booking.start_date}.",
+        booking=booking,
+    )
+
     return redirect('listings:payment_success', booking_id=booking.id)
 
 
@@ -186,8 +225,18 @@ def request_return(request, booking_id):
 
     if booking.status == 'approved':
         booking.status = 'return_pending'
+        booking.actual_return_date  = timezone.now().date()
         booking.return_requested_at = timezone.now()
         booking.save()
+
+        Notification.objects.create_for(
+            user=booking.renter,
+            notification_type=NotificationType.RETURN_REQUESTED,
+            message=f"The owner marked \"{booking.tool.title}\" as returned. "
+                    f"Please confirm or dispute the return in your dashboard.",
+            booking=booking,
+        )
+
         messages.success(request, "Return request sent. Waiting for renter to confirm.")
     return redirect('/dashboard/?tab=booking-requests')
 
@@ -199,10 +248,59 @@ def confirm_return(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, renter=user)
 
     if booking.status == 'return_pending':
-        booking.status = 'completed'
+        actual_return = booking.actual_return_date or timezone.now().date()
+        actual_days   = max((actual_return - booking.start_date).days, 1)
+        new_total     = Decimal(actual_days) * Decimal(str(booking.tool.daily_rate))
+
+        overdue_days       = max((actual_return - booking.end_date).days, 0)
+        early_return_days  = max((booking.end_date - actual_return).days, 0)
+
+        booking.total_price         = new_total
+        booking.actual_return_date  = actual_return
+        booking.status              = 'completed'
         booking.return_requested_at = None
         booking.save()
-        messages.success(request, "Return confirmed. Rental completed successfully!")
+
+        if overdue_days:
+            owner_msg  = (f"{booking.renter.name} returned \"{booking.tool.title}\" "
+                          f"{overdue_days} day(s) late — final charge: ${new_total}.")
+            renter_msg = (f"Return confirmed for \"{booking.tool.title}\". "
+                          f"{overdue_days} overdue day(s) were added — final charge: ${new_total}.")
+            messages.success(
+                request,
+                f"Return confirmed. {overdue_days} overdue day(s) added — "
+                f"final total: ${new_total}."
+            )
+        elif early_return_days:
+            owner_msg  = (f"{booking.renter.name} returned \"{booking.tool.title}\" "
+                          f"{early_return_days} day(s) early — final charge: ${new_total}.")
+            renter_msg = (f"Return confirmed for \"{booking.tool.title}\". "
+                          f"Early return saved you {early_return_days} day(s) — final charge: ${new_total}.")
+            messages.success(
+                request,
+                f"Return confirmed. Early return by {early_return_days} day(s) — "
+                f"you were only charged for {actual_days} day(s): ${new_total}."
+            )
+        else:
+            owner_msg  = (f"{booking.renter.name} confirmed the return of "
+                          f"\"{booking.tool.title}\" — rental completed.")
+            renter_msg = (f"Return confirmed for \"{booking.tool.title}\" — "
+                          f"rental completed. Thank you!")
+            messages.success(request, "Return confirmed. Rental completed successfully!")
+
+        Notification.objects.create_for(
+            user=booking.tool.owner,
+            notification_type=NotificationType.RETURN_CONFIRMED,
+            message=owner_msg,
+            booking=booking,
+        )
+        Notification.objects.create_for(
+            user=booking.renter,
+            notification_type=NotificationType.RETURN_CONFIRMED,
+            message=renter_msg,
+            booking=booking,
+        )
+
     return redirect('/dashboard/?tab=my-rentals')
 
 

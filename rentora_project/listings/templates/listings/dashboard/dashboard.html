@@ -411,12 +411,18 @@
                 </div>
               {% else %}
                 <span class="badge badge-approved">Approved</span>
-                <form method="POST" action="{% url 'listings:request_return' booking.id %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn-complete">
-                    <i class="fa-solid fa-rotate-left"></i> Mark as Returned
-                  </button>
-                </form>
+                {% if today >= booking.start_date %}
+                  <form method="POST" action="{% url 'listings:request_return' booking.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-complete">
+                      <i class="fa-solid fa-rotate-left"></i> Mark as Returned
+                    </button>
+                  </form>
+                {% else %}
+                  <span class="badge-return-locked" title="Available from {{ booking.start_date }}">
+                    <i class="fa-solid fa-lock"></i> Starts {{ booking.start_date }}
+                  </span>
+                {% endif %}
               {% endif %}
             </div>
           </div>
@@ -487,7 +493,21 @@
                 </a>
                 <span class="meta-sep">·</span>
                 {{ booking.start_date }} → {{ booking.end_date }}
-                <span class="meta-price">${{ booking.total_price }}</span>
+                {% if booking.overdue_days %}
+                  <del class="price-original">${{ booking.original_total }}</del>
+                  <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
+                  <span class="price-adjustment price-adjustment--overdue">
+                    <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}d overdue
+                  </span>
+                {% elif booking.early_return_days %}
+                  <del class="price-original">${{ booking.original_total }}</del>
+                  <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
+                  <span class="price-adjustment price-adjustment--early">
+                    <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}d early
+                  </span>
+                {% else %}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                {% endif %}
               </div>
             </div>
             <div class="completed-actions">
@@ -723,7 +743,21 @@
                     <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
                   </a>
                   <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
-                  <span class="meta-price">${{ booking.total_price }}</span>
+                  {% if booking.status == 'completed' and booking.overdue_days %}
+                    <del class="price-original">${{ booking.original_total }}</del>
+                    <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
+                    <span class="price-adjustment price-adjustment--overdue">
+                      <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}d overdue
+                    </span>
+                  {% elif booking.status == 'completed' and booking.early_return_days %}
+                    <del class="price-original">${{ booking.original_total }}</del>
+                    <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
+                    <span class="price-adjustment price-adjustment--early">
+                      <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}d early return
+                    </span>
+                  {% else %}
+                    <span class="meta-price">${{ booking.total_price }}</span>
+                  {% endif %}
                 </div>
               </div>
               <div class="completed-actions">
