@@ -266,11 +266,8 @@
 .meta-price { font-weight: 600; color: var(--teal); }
 .meta-price--overdue { font-weight: 700; color: #be123c; }
 .meta-price--early   { font-weight: 700; color: #15803d; }
-<<<<<<< HEAD
  
-=======
 
->>>>>>> develop
 /* Original agreed price shown as strikethrough before the adjusted amount */
 .price-original {
   color: var(--text-2);
@@ -279,11 +276,8 @@
   text-decoration: line-through;
   margin-right: 2px;
 }
-<<<<<<< HEAD
  
-=======
 
->>>>>>> develop
 /* Price adjustment badges */
 .price-adjustment {
   display: inline-flex;
@@ -304,11 +298,8 @@
   color: #15803d;
   border: 1px solid #bbf7d0;
 }
-<<<<<<< HEAD
  
-=======
 
->>>>>>> develop
 /* Locked return button */
 .badge-return-locked {
   display: inline-flex;
@@ -322,11 +313,8 @@
   border-radius: 6px;
   padding: 5px 10px;
 }
-<<<<<<< HEAD
  
-=======
 
->>>>>>> develop
 .sidebar-add-btn {
   display: flex;
   align-items: center;
@@ -345,6 +333,7 @@
   transition: background .2s, transform .15s, box-shadow .2s;
   box-shadow: 0 2px 8px rgba(15,118,110,.25);
 }
+
 .sidebar-add-btn:hover {
   background: var(--teal-dk);
   color: var(--white);
