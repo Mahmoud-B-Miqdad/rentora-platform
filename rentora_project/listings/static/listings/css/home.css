@@ -189,10 +189,10 @@
 .cta-card__title { font-size:clamp(22px,3.5vw,32px);font-weight:800;color:var(--clr-text);letter-spacing:-0.6px;margin-bottom:14px; }
 .cta-card__subtitle { font-size:15.5px;color:var(--clr-text-2);line-height:1.65;max-width:520px;margin:0 auto 36px; }
 .cta-card__actions { display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap; }
-.btn-cta-primary { display:inline-flex;align-items:center;gap:7px;padding:14px 28px;background:var(--clr-amber);border:none;border-radius:var(--radius-full);color:#fff;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:background var(--duration) var(--ease),transform var(--duration) var(--ease);box-shadow:0 6px 20px rgba(245,158,11,0.30); }
-.btn-cta-primary:hover { background:var(--clr-amber-dark);transform:translateY(-2px);color:#fff; }
-.btn-cta-secondary { display:inline-flex;align-items:center;gap:7px;padding:14px 28px;background:transparent;border:1.5px solid var(--clr-border);border-radius:var(--radius-full);color:var(--clr-text);font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:border-color var(--duration) var(--ease),background var(--duration) var(--ease); }
-.btn-cta-secondary:hover { border-color:var(--clr-text-2);background:var(--clr-input-bg);color:var(--clr-text); }
+.btn-cta-primary { display:inline-flex;align-items:center;gap:7px;padding:14px 28px;background:#0f766e;border:none;border-radius:var(--radius-full);color:#fff;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:background var(--duration) var(--ease),transform var(--duration) var(--ease);box-shadow:0 10px 25px rgba(15, 118, 110, 0.25); }
+.btn-cta-primary:hover { background:#0f766e;transform:translateY(-2px);color:#fff; }
+.btn-cta-secondary { display:inline-flex;align-items:center;gap:7px;padding:14px 28px;background:transparent;border:1.5px solid var(--clr-border);border-radius:var(--radius-full);color:#0f766e;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:border-color var(--duration) var(--ease),background var(--duration) var(--ease); }
+.btn-cta-secondary:hover { border-color:#0f766e;;background:var(--clr-input-bg);color:#0f766e; }
 
 /* Responsive */
 @media (max-width:1024px) { .cat-grid{grid-template-columns:repeat(3,1fr);} .tools-grid{grid-template-columns:repeat(2,1fr);} .steps-grid{grid-template-columns:1fr;gap:20px;} .steps-arrow{transform:rotate(90deg);padding-bottom:0;} }

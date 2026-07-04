@@ -10,6 +10,13 @@ from listings.models.notification import Notification, NotificationType
 from users.models    import User
 from django.contrib  import messages
 
+import stripe
+from django.conf import settings
+from django.urls import reverse
+from listings.models import Booking
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+
 
 def create_booking_view(request, pk):
     """
@@ -202,11 +209,119 @@ def reject_booking(request, booking_id):
     return redirect('/dashboard/?tab=booking-requests')
 
 
-@login_required_session
 def payment_view(request, booking_id):
-    user    = User.objects.get(id=request.session['user_id'])
-    booking = get_object_or_404(Booking, id=booking_id, renter=user, status='payment_pending')
-    return render(request, 'listings/booking/payment.html', {'booking': booking, 'user': user})
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    checkout_session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[
+            {
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': booking.tool.title,
+                    },
+                    'unit_amount': int(booking.total_price * 100),  # cents
+                },
+                'quantity': 1,
+            }
+        ],
+        mode='payment',
+        success_url=request.build_absolute_uri(
+            reverse('listings:payment_success', args=[booking.id])
+        ),
+        cancel_url=request.build_absolute_uri(
+            reverse('listings:payment', args=[booking.id])
+        ),
+    )
+
+    return redirect(checkout_session.url)
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def create_checkout_session(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        client_reference_id=str(booking_id),
+        line_items=[
+            {
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': booking.tool.title,
+                    },
+                    'unit_amount': int(booking.total_price * 100),
+                },
+                'quantity': 1,
+            }
+        ],
+        mode='payment',
+        success_url=request.build_absolute_uri(
+            reverse('listings:payment_success', args=[booking.id])
+        ),
+        cancel_url=request.build_absolute_uri(
+            reverse('listings:payment', args=[booking.id])
+        ),
+    )
+
+    return redirect(session.url)  
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload    = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except (ValueError, stripe.error.SignatureVerificationError):
+        return HttpResponse(status=400)
+
+    if event['type'] == 'checkout.session.completed':
+        session    = event['data']['object']
+        booking_id = session.get('client_reference_id')
+        if booking_id:
+            try:
+                booking = Booking.objects.get(id=int(booking_id))
+                if booking.status == 'payment_pending':
+                    booking.status = 'approved'
+                    booking.save()
+                    Notification.objects.create_for(
+                        user=booking.tool.owner,
+                        notification_type=NotificationType.PAYMENT_RECEIVED,
+                        message=f"{booking.renter.name} completed payment for \"{booking.tool.title}\".",
+                        booking=booking,
+                    )
+            except Booking.DoesNotExist:
+                pass
+
+    return HttpResponse(status=200)
+
+
+def payment_success_view(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    # Fallback: لو الـ webhook ما وصل بعد، نحدث الـ status هون
+    if booking.status == 'payment_pending':
+        booking.status = 'approved'
+        booking.save()
+        Notification.objects.create_for(
+            user=booking.tool.owner,
+            notification_type=NotificationType.PAYMENT_RECEIVED,
+            message=f"{booking.renter.name} completed payment for \"{booking.tool.title}\".",
+            booking=booking,
+        )
+
+    user = User.objects.filter(id=request.session.get('user_id')).first()
+
+    return render(request, "listings/booking/payment_success.html", {
+        "booking": booking,
+        "user":    user,
+    })
 
 
 @login_required_session
@@ -230,11 +345,16 @@ def confirm_payment_view(request, booking_id):
     return redirect('listings:payment_success', booking_id=booking.id)
 
 
-@login_required_session
 def payment_success_view(request, booking_id):
-    user    = User.objects.get(id=request.session['user_id'])
-    booking = get_object_or_404(Booking, id=booking_id, renter=user, status='approved')
-    return render(request, 'listings/booking/payment_success.html', {'booking': booking, 'user': user})
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    booking.payment_status = "paid"
+    booking.status = "confirmed"
+    booking.save()
+
+    return render(request, "listings/booking/payment_success.html", {
+        "booking": booking
+    })
 
 
 @login_required_session
