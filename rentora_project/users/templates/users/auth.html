@@ -12,205 +12,219 @@
 {% endblock %}
 
 {% block content %}
-<div class="auth-card">
+<div class="auth-split">
 
-    <!-- ── Logo ───────────────────────────────────────────── -->
-    <div class="auth-logo">
-        <div class="auth-logo__icon" aria-hidden="true">
-            <i class="fa-solid fa-screwdriver-wrench"></i>
+    <!-- ── Left: Brand Panel ───────────────────────────────────── -->
+    <div class="auth-brand">
+        <div class="auth-brand__inner">
+            <div class="auth-brand__badge">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                Peer-to-peer Tool Rental
+            </div>
+            <h2 class="auth-brand__headline">
+                Rent smarter,<br>not harder.
+            </h2>
+            <p class="auth-brand__sub">
+                Join thousands of people renting and listing tools
+                across their community — no ownership required.
+            </p>
+            <ul class="auth-brand__features">
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Verified tool owners &amp; renters</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Secure deposits &amp; payments</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Flexible booking &amp; instant approval</span>
+                </li>
+            </ul>
         </div>
-        <span class="auth-logo__wordmark">Rent<span>ora</span></span>
+        <div class="auth-brand__deco auth-brand__deco--1"></div>
+        <div class="auth-brand__deco auth-brand__deco--2"></div>
     </div>
 
+    <!-- ── Right: Form Side ───────────────────────────────────── -->
+    <div class="auth-form-side">
+        <div class="auth-card">
 
+            <!-- ══════════════════════════════════════════════════
+                 LOGIN PANEL
+                 ══════════════════════════════════════════════════ -->
+            <div class="auth-panel {% if active_form == 'login' %}auth-panel--active{% endif %}"
+                 id="panel-login">
 
-    <!-- ══════════════════════════════════════════════════════
-         LOGIN PANEL
-         ══════════════════════════════════════════════════════ -->
-    <div class="auth-panel {% if active_form == 'login' %}auth-panel--active{% endif %}"
-         id="panel-login">
+                <h1 class="auth-panel__title">Welcome Back</h1>
+                <p class="auth-panel__subtitle">Log in to manage your tools and bookings</p>
 
-        <h1 class="auth-panel__title">Welcome Back</h1>
-        <p class="auth-panel__subtitle">Log in to manage your tools and bookings</p>
+                <form action="{% url 'users:login' %}" method="POST" class="auth-form" novalidate>
+                    {% csrf_token %}
 
-        <form action="{% url 'users:login' %}" method="POST" class="auth-form" novalidate>
-            {% csrf_token %}
-
-            <!-- Email -->
-            <div class="field">
-                <label class="field__label" for="login-email">Email Address</label>
-                <div class="field__control">
-                    <i class="fa-regular fa-envelope field__icon" aria-hidden="true"></i>
-                    <input type="email"
-                           id="login-email"
-                           name="email"
-                           class="field__input"
-                           placeholder="you@example.com"
-                           autocomplete="email"
-                           required>
-                </div>
-            </div>
-
-            <!-- Password -->
-            <div class="field">
-                <div class="field__label-row">
-                    <label class="field__label" for="login-password">Password</label>
-                    <a href="{% url 'users:forgot_password' %}" class="field__link">Forgot password?</a>
-                </div>
-                <div class="field__control">
-                    <i class="fa-solid fa-lock field__icon" aria-hidden="true"></i>
-                    <input type="password"
-                           id="login-password"
-                           name="password"
-                           class="field__input"
-                           placeholder="Enter your password"
-                           autocomplete="current-password"
-                           required>
-                    <button type="button" class="field__eye" aria-label="Toggle password visibility">
-                        <i class="fa-regular fa-eye" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit">Log In</button>
-        </form>
-
-        <p class="auth-switch">
-            Don't have an account?
-            <button class="auth-switch__link" data-show-panel="register">Sign Up</button>
-        </p>
-
-    </div>
-    <!-- /#panel-login -->
-
-    <!-- ══════════════════════════════════════════════════════
-         REGISTER PANEL
-         ══════════════════════════════════════════════════════ -->
-    <div class="auth-panel {% if active_form == 'register' %}auth-panel--active{% endif %}"
-         id="panel-register">
-
-        <h1 class="auth-panel__title">Create Your Account</h1>
-        <p class="auth-panel__subtitle auth-panel__subtitle--brand">
-            Join Rentora and start renting or listing tools today
-        </p>
-
-        <form action="{% url 'users:register' %}" method="POST" class="auth-form" novalidate>
-            {% csrf_token %}
-
-            <!-- Full Name -->
-            <div class="field">
-                <label class="field__label" for="reg-name">
-                    Full Name <sup>*</sup>
-                </label>
-                <div class="field__control">
-                    <i class="fa-regular fa-user field__icon" aria-hidden="true"></i>
-                    <input type="text"
-                           id="reg-name"
-                           name="name"
-                           class="field__input"
-                           placeholder="Your full name"
-                           autocomplete="name"
-                           required>
-                </div>
-            </div>
-
-            <!-- Email -->
-            <div class="field">
-                <label class="field__label" for="reg-email">
-                    Email Address <sup>*</sup>
-                </label>
-                <div class="field__control">
-                    <i class="fa-regular fa-envelope field__icon" aria-hidden="true"></i>
-                    <input type="email"
-                           id="reg-email"
-                           name="email"
-                           class="field__input"
-                           placeholder="you@example.com"
-                           autocomplete="email"
-                           required>
-                </div>
-            </div>
-
-            <!-- Phone + Location (two columns) -->
-            <div class="auth-form--two-col">
-                <div class="field">
-                    <label class="field__label" for="reg-phone">Phone</label>
-                    <div class="field__control">
-                        <i class="fa-solid fa-phone field__icon" aria-hidden="true"></i>
-                        <input type="tel"
-                               id="reg-phone"
-                               name="phone"
-                               class="field__input"
-                               placeholder="(555) 000-0000"
-                               autocomplete="tel">
+                    <div class="field">
+                        <label class="field__label" for="login-email">Email Address</label>
+                        <div class="field__control">
+                            <i class="fa-regular fa-envelope field__icon" aria-hidden="true"></i>
+                            <input type="email"
+                                   id="login-email"
+                                   name="email"
+                                   class="field__input"
+                                   placeholder="you@example.com"
+                                   autocomplete="email"
+                                   required>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="field__label" for="reg-location">Location</label>
-                    <div class="field__control">
-                        <i class="fa-solid fa-location-dot field__icon" aria-hidden="true"></i>
-                        <input type="text"
-                               id="reg-location"
-                               name="location"
-                               class="field__input"
-                               placeholder="City, State">
+
+                    <div class="field">
+                        <div class="field__label-row">
+                            <label class="field__label" for="login-password">Password</label>
+                            <a href="{% url 'users:forgot_password' %}" class="field__link">Forgot password?</a>
+                        </div>
+                        <div class="field__control">
+                            <i class="fa-solid fa-lock field__icon" aria-hidden="true"></i>
+                            <input type="password"
+                                   id="login-password"
+                                   name="password"
+                                   class="field__input"
+                                   placeholder="Enter your password"
+                                   autocomplete="current-password"
+                                   required>
+                            <button type="button" class="field__eye" aria-label="Toggle password visibility">
+                                <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Password -->
-            <div class="field">
-                <label class="field__label" for="reg-password">
-                    Password <sup>*</sup>
-                </label>
-                <div class="field__control">
-                    <i class="fa-solid fa-lock field__icon" aria-hidden="true"></i>
-                    <input type="password"
-                           id="reg-password"
-                           name="password"
-                           class="field__input"
-                           placeholder="At least 8 characters"
-                           autocomplete="new-password"
-                           required>
-                    <button type="button" class="field__eye" aria-label="Toggle password visibility">
-                        <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-right-to-bracket"></i> Log In
                     </button>
-                </div>
+                </form>
+
+                <p class="auth-switch">
+                    Don't have an account?
+                    <button class="auth-switch__link" data-show-panel="register">Sign Up</button>
+                </p>
             </div>
 
-            <!-- Confirm Password -->
-            <div class="field">
-                <label class="field__label" for="reg-confirm">
-                    Confirm Password <sup>*</sup>
-                </label>
-                <div class="field__control">
-                    <i class="fa-solid fa-lock field__icon" aria-hidden="true"></i>
-                    <input type="password"
-                           id="reg-confirm"
-                           name="confirm_pw"
-                           class="field__input"
-                           placeholder="Re-enter your password"
-                           autocomplete="new-password"
-                           required>
-                    <button type="button" class="field__eye" aria-label="Toggle password visibility">
-                        <i class="fa-regular fa-eye" aria-hidden="true"></i>
+            <!-- ══════════════════════════════════════════════════
+                 REGISTER PANEL
+                 ══════════════════════════════════════════════════ -->
+            <div class="auth-panel {% if active_form == 'register' %}auth-panel--active{% endif %}"
+                 id="panel-register">
+
+                <h1 class="auth-panel__title">Create Your Account</h1>
+                <p class="auth-panel__subtitle auth-panel__subtitle--brand">
+                    Join Rentora and start renting or listing tools today
+                </p>
+
+                <form action="{% url 'users:register' %}" method="POST" class="auth-form" novalidate>
+                    {% csrf_token %}
+
+                    <div class="field">
+                        <label class="field__label" for="reg-name">Full Name <sup>*</sup></label>
+                        <div class="field__control">
+                            <i class="fa-regular fa-user field__icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="reg-name"
+                                   name="name"
+                                   class="field__input"
+                                   placeholder="Your full name"
+                                   autocomplete="name"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="field__label" for="reg-email">Email Address <sup>*</sup></label>
+                        <div class="field__control">
+                            <i class="fa-regular fa-envelope field__icon" aria-hidden="true"></i>
+                            <input type="email"
+                                   id="reg-email"
+                                   name="email"
+                                   class="field__input"
+                                   placeholder="you@example.com"
+                                   autocomplete="email"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="auth-form--two-col">
+                        <div class="field">
+                            <label class="field__label" for="reg-phone">Phone</label>
+                            <div class="field__control">
+                                <i class="fa-solid fa-phone field__icon" aria-hidden="true"></i>
+                                <input type="tel"
+                                       id="reg-phone"
+                                       name="phone"
+                                       class="field__input"
+                                       placeholder="(555) 000-0000"
+                                       autocomplete="tel">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="field__label" for="reg-location">Location</label>
+                            <div class="field__control">
+                                <i class="fa-solid fa-location-dot field__icon" aria-hidden="true"></i>
+                                <input type="text"
+                                       id="reg-location"
+                                       name="location"
+                                       class="field__input"
+                                       placeholder="City, State">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="field__label" for="reg-password">Password <sup>*</sup></label>
+                        <div class="field__control">
+                            <i class="fa-solid fa-lock field__icon" aria-hidden="true"></i>
+                            <input type="password"
+                                   id="reg-password"
+                                   name="password"
+                                   class="field__input"
+                                   placeholder="At least 8 characters"
+                                   autocomplete="new-password"
+                                   required>
+                            <button type="button" class="field__eye" aria-label="Toggle password visibility">
+                                <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="field__label" for="reg-confirm">Confirm Password <sup>*</sup></label>
+                        <div class="field__control">
+                            <i class="fa-solid fa-lock field__icon" aria-hidden="true"></i>
+                            <input type="password"
+                                   id="reg-confirm"
+                                   name="confirm_pw"
+                                   class="field__input"
+                                   placeholder="Re-enter your password"
+                                   autocomplete="new-password"
+                                   required>
+                            <button type="button" class="field__eye" aria-label="Toggle password visibility">
+                                <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-user-plus"></i> Create Account
                     </button>
-                </div>
+                </form>
+
+                <p class="auth-switch">
+                    Already have an account?
+                    <button class="auth-switch__link" data-show-panel="login">Sign In</button>
+                </p>
             </div>
 
-            <button type="submit" class="btn-submit">Create Account</button>
-        </form>
-
-        <p class="auth-switch">
-            Already have an account?
-            <button class="auth-switch__link" data-show-panel="login">Sign In</button>
-        </p>
-
+        </div>
     </div>
-    <!-- /#panel-register -->
 
 </div>
-<!-- /.auth-card -->
 {% endblock %}
 
 {% block extra_js %}

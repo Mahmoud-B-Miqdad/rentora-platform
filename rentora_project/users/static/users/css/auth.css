@@ -1,63 +1,147 @@
 /* ═══════════════════════════════════════════════════════════════
-   auth.css — Rentora Auth Page Styles
-   Scope: users/auth.html only
-   Depends on: base.css (design tokens must be loaded first)
+   auth.css — Rentora Auth Pages  (v2 — split layout)
+   Scope: auth.html, forgot_password.html, password_reset_*.html
+   Depends on: base.css (design tokens)
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Page Layout ───────────────────────────────────────────── */
+/* ── Page layout: stretch to fill viewport below header ─────── */
 .auth-page .site-main {
+    padding: 0;
+    min-height: calc(100vh - 64px);
+    display: flex;
+    align-items: stretch;
+}
+
+/* ── Split wrapper ──────────────────────────────────────────── */
+.auth-split {
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LEFT — Brand Panel
+   ══════════════════════════════════════════════════════════════ */
+.auth-brand {
+    flex: 0 0 44%;
+    background: linear-gradient(145deg, #060d1a 0%, #0a1628 45%, #0f2a4a 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 64px 56px;
+}
+
+.auth-brand__inner {
+    position: relative;
+    z-index: 2;
+}
+
+.auth-brand__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    background: rgba(13, 148, 136, 0.18);
+    border: 1px solid rgba(13, 148, 136, 0.32);
+    border-radius: 999px;
+    color: #5eead4;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 32px;
+}
+
+.auth-brand__headline {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.12;
+    color: #fff;
+    letter-spacing: -1.4px;
+    margin-bottom: 20px;
+}
+
+.auth-brand__sub {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.7;
+    max-width: 310px;
+    margin-bottom: 40px;
+}
+
+.auth-brand__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.auth-brand__features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.auth-brand__features li i {
+    color: #34d399;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* Decorative blobs */
+.auth-brand__deco {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.auth-brand__deco--1 {
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(13, 148, 136, 0.16) 0%, transparent 70%);
+    bottom: -100px;
+    right: -100px;
+}
+
+.auth-brand__deco--2 {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.13) 0%, transparent 70%);
+    top: 30px;
+    right: 10px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RIGHT — Form Side
+   ══════════════════════════════════════════════════════════════ */
+.auth-form-side {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 48px 16px;
-    background: var(--clr-page-bg);
+    padding: 48px 28px;
+    background: #f1f5f9;
 }
 
 /* ── Auth Card ─────────────────────────────────────────────── */
 .auth-card {
     width: 100%;
     max-width: 440px;
-    background: var(--clr-surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.04);
     overflow: hidden;
 }
 
-/* ── Card Logo ─────────────────────────────────────────────── */
-.auth-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    padding: 32px 32px 0;
-}
-
-.auth-logo__icon {
-    width: 52px;
-    height: 52px;
-    background: var(--clr-brand-dark);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 22px;
-    box-shadow: 0 8px 20px rgba(15, 118, 110, 0.30);
-}
-
-.auth-logo__wordmark {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.4px;
-    color: var(--clr-text);
-}
-
-.auth-logo__wordmark span { color: var(--clr-brand); }
-
 /* ── Flash Messages ────────────────────────────────────────── */
 .auth-flashes {
-    padding: 0 32px;
-    margin-top: 20px;
+    padding: 20px 28px 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -65,16 +149,16 @@
 
 .auth-flash {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     padding: 10px 14px;
-    border-radius: var(--radius-md);
+    border-radius: 10px;
     font-size: 13.5px;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
-.auth-flash i { flex-shrink: 0; }
+.auth-flash i { flex-shrink: 0; margin-top: 1px; }
 
 .auth-flash--error {
     background: #fef2f2;
@@ -91,39 +175,38 @@
 /* ── Form Panel ────────────────────────────────────────────── */
 .auth-panel {
     display: none;
-    padding: 28px 32px 36px;
+    padding: 36px 32px 40px;
 }
 
 .auth-panel--active {
     display: block;
-    animation: panel-enter 0.25s var(--ease) both;
+    animation: panel-enter 0.28s var(--ease) both;
 }
 
 @keyframes panel-enter {
-    from { opacity: 0; transform: translateY(8px); }
+    from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Panel Header ──────────────────────────────────────────── */
 .auth-panel__title {
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 700;
-    color: var(--clr-text);
-    letter-spacing: -0.4px;
-    margin-bottom: 5px;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
     text-align: center;
 }
 
 .auth-panel__subtitle {
     font-size: 13.5px;
-    color: var(--clr-text-2);
+    color: #64748b;
     text-align: center;
-    margin-bottom: 26px;
+    margin-bottom: 28px;
+    line-height: 1.5;
 }
 
-.auth-panel__subtitle--brand {
-    color: var(--clr-brand);
-}
+.auth-panel__subtitle--brand { color: var(--clr-brand); }
 
 /* ── Form ──────────────────────────────────────────────────── */
 .auth-form {
@@ -154,11 +237,11 @@
 .field__label {
     font-size: 13px;
     font-weight: 500;
-    color: var(--clr-text);
+    color: #374151;
 }
 
 .field__label sup {
-    color: var(--clr-error);
+    color: #ef4444;
     font-size: 11px;
 }
 
@@ -181,7 +264,7 @@
 .field__icon {
     position: absolute;
     left: 13px;
-    color: var(--clr-muted);
+    color: #9ca3af;
     font-size: 14px;
     pointer-events: none;
     transition: color var(--duration) var(--ease);
@@ -191,10 +274,10 @@
 .field__input {
     width: 100%;
     padding: 11px 40px;
-    background: var(--clr-input-bg);
-    border: 1px solid var(--clr-border);
-    border-radius: var(--radius-md);
-    color: var(--clr-text);
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    color: #0f172a;
     font-family: var(--font);
     font-size: 14px;
     outline: none;
@@ -203,7 +286,7 @@
                 background   var(--duration) var(--ease);
 }
 
-.field__input::placeholder { color: var(--clr-muted); font-size: 13.5px; }
+.field__input::placeholder { color: #9ca3af; font-size: 13.5px; }
 
 .field__input:focus {
     border-color: var(--clr-brand);
@@ -220,17 +303,18 @@
     right: 11px;
     background: transparent;
     border: none;
-    color: var(--clr-muted);
+    color: #9ca3af;
     padding: 5px;
-    border-radius: var(--radius-sm);
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
+    cursor: pointer;
     transition: color var(--duration) var(--ease);
 }
 
-.field__eye:hover { color: var(--clr-text-2); }
+.field__eye:hover { color: #374151; }
 
 /* ── Submit Button ─────────────────────────────────────────── */
 .btn-submit {
@@ -241,24 +325,27 @@
     width: 100%;
     padding: 13px 20px;
     margin-top: 6px;
-    background: var(--clr-brand-dark);
+    background: linear-gradient(135deg, #0f766e 0%, #0e7490 100%);
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: 10px;
     color: #fff;
     font-family: var(--font);
     font-size: 14.5px;
     font-weight: 600;
     letter-spacing: 0.1px;
-    transition: background  var(--duration) var(--ease),
-                transform   var(--duration) var(--ease),
-                box-shadow  var(--duration) var(--ease);
-    box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(15, 118, 110, 0.35);
+    transition: opacity .2s var(--ease),
+                transform .2s var(--ease),
+                box-shadow .2s var(--ease);
 }
 
 .btn-submit:hover {
-    background: #115e59;
+    opacity: .9;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(15, 118, 110, 0.45);
+    box-shadow: 0 6px 22px rgba(15, 118, 110, 0.45);
+    color: #fff;
 }
 
 .btn-submit:active {
@@ -266,17 +353,12 @@
     box-shadow: 0 2px 8px rgba(15, 118, 110, 0.25);
 }
 
-.btn-submit:focus-visible {
-    outline: 2px solid var(--clr-brand);
-    outline-offset: 3px;
-}
-
 /* ── Switch Link ───────────────────────────────────────────── */
 .auth-switch {
     text-align: center;
-    margin-top: 16px;
+    margin-top: 18px;
     font-size: 13.5px;
-    color: var(--clr-text-2);
+    color: #64748b;
 }
 
 .auth-switch__link {
@@ -294,229 +376,107 @@
 
 .auth-switch__link:hover { color: var(--clr-brand-dark); }
 
-/* ── Divider ───────────────────────────────────────────────── */
-.auth-divider {
+/* ── Success State (forgot password / reset done) ───────────── */
+.auth-success-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.auth-success-icon {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-top: 20px;
-    color: var(--clr-muted);
-    font-size: 12px;
+    justify-content: center;
+    font-size: 28px;
+    color: #065f46;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.20);
 }
 
-.auth-divider::before,
-.auth-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--clr-border);
+.auth-success-state .auth-panel__subtitle {
+    max-width: 340px;
+    margin: 0 auto 26px;
 }
 
-/* ── Demo Credentials ──────────────────────────────────────── */
-.auth-demo {
-    text-align: center;
-    margin-top: 16px;
-    padding-top: 4px;
-}
-
-.auth-demo__label {
-    font-size: 12.5px;
-    color: var(--clr-muted);
-    margin-bottom: 10px;
-}
-
-.btn-demo {
-    display: inline-block;
-    padding: 9px 20px;
-    border: 1px solid var(--clr-border);
-    border-radius: var(--radius-md);
-    background: var(--clr-input-bg);
-    color: var(--clr-brand);
-    font-family: var(--font);
-    font-size: 13.5px;
-    font-weight: 500;
-    transition: background var(--duration) var(--ease),
-                border-color var(--duration) var(--ease);
-}
-
-.btn-demo:hover {
-    background: var(--clr-brand-light);
-    border-color: var(--clr-brand);
-}
-
-/* ==========================================================================
-   Rentora - Forgot Password Success (Check Your Inbox) - FIXED
-   ========================================================================== */
-
-/* الحاوية الرئيسية للتأكيد لمنع أي وراثة تنسيق قديمة وتوسيط العناصر تماماً */
-.auth-panel--success {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important; /* توسيط أفقي لجميع الأبناء */
-    justify-content: center !important;
-    text-align: center !important;
-    width: 100% !important;
-}
-
-/* حاوية الأيقونة الدائرية للايميل */
-.email-success-icon {
-    background-color: #e2f6f5 !important; /* لون الخلفية التركواز الفاتح */
-    color: #00796b !important;            /* لون الأيقونة التركواز الغامق */
-    width: 84px !important;
-    height: 84px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;       /* توسيط الأيقونة داخل الدائرة رأسياً */
-    justify-content: center !important;    /* توسيط الأيقونة داخل الدائرة أفقياً */
-    margin: 24px auto !important;          /* إجبار التوسيط عبر الهوامش */
-    font-size: 2.2rem !important;
-    box-shadow: 0 4px 10px rgba(0, 121, 107, 0.05) !important;
-}
-
-.auth-panel__title-success {
-    color: #1a2530 !important;
-    font-size: 1.4rem !important;
-    font-weight: 700 !important;
-    margin-top: 10px !important;
-    margin-bottom: 12px !important;
-    text-align: center !important;
-    width: 100% !important;
-}
-
-.auth-panel__description {
-    color: #6b7280 !important;
-    font-size: 0.95rem !important;
-    line-height: 1.6 !important;
-    margin-bottom: 24px !important;
-    text-align: center !important;
-    max-width: 320px !important; /* للمحافظة على أبعاد النص كما في الصورة */
-}
-
-.auth-panel__retry-link {
-    color: #00796b !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-    transition: color 0.2s ease !important;
-}
-
-.auth-panel__retry-link:hover {
-    color: #004d40 !important;
-    text-decoration: underline !important;
-}
-
-.auth-switch--border {
-    border-top: 1px solid #f3f4f6 !important;
-    padding-top: 20px !important;
-    margin-top: 15px !important;
-    width: 100% !important;
-    text-align: center !important;
-}
-
-/* ==========================================================================
-   Rentora - Password Reset Flow (Confirm & Complete) Styles
-   ========================================================================== */
-
-/* كلاس مخصص لتوسيط العناصر بشكل عمودي وأفقي داخل الـ panel */
+/* ── Password reset form pages (confirm / complete) ─────────── */
+.auth-panel--success,
 .auth-panel--center {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
-    width: 100% !important;
 }
 
-/* الأيقونات الدائرية لصفحات الأمان والنجاح */
-.auth-panel--center .email-success-icon {
-    background-color: #e2f6f5 !important; /* الخلفية التركوازية الفاتحة */
-    color: #00796b !important;            /* لون الأيقونة التركوازي الغامق */
-    width: 84px !important;
-    height: 84px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 20px auto !important;
-    font-size: 2.2rem !important;
-    box-shadow: 0 4px 10px rgba(0, 121, 107, 0.05) !important;
+.email-success-icon {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #065f46;
+    margin: 20px auto 20px;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.20);
 }
 
-/* تنسيق الفليكس لحقول الإدخال لتجعل الأيقونات متناسقة وفي مكانها */
-.auth-form .field__control {
-    position: relative;
-    width: 100%;
+.auth-panel__title-success {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+    text-align: center;
 }
 
-/* أيقونة القفل داخل الحقل */
-.auth-form .field__icon-lock {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af;
-    font-size: 1.1rem;
-    pointer-events: none;
+.auth-panel__description {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 320px;
+    text-align: center;
 }
 
-/* تخصيص الـ input ليعطي مساحة للأيقونة على اليسار */
-.auth-form .field__input--has-icon {
-    width: 100% !important;
-    padding: 12px 14px 12px 38px !important; /* مسافة 38px من اليسار للأيقونة */
-    border: 1px solid #e5e7eb !important;
-    border-radius: 8px !important;
-    background-color: #f9fafb !important;
-    font-size: 0.95rem !important;
-    color: #1a2530 !important;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.auth-form .field__input--has-icon:focus {
-    border-color: #00796b !important;
-    background-color: #ffffff !important;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1) !important;
-}
-
-/* حاوية الأخطاء الخاصة بالفورم */
-.auth-error-container {
-    width: 100%;
-    max-width: 340px;
-    margin-bottom: 16px;
-    text-align: left;
-}
-
-.auth-error-msg {
-    background-color: #fde8e8;
-    color: #e02424;
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    margin-bottom: 6px;
-    border-left: 4px solid #e02424;
-}
-
-/* نص المساعدة السفلي للدعم الفني */
-.auth-panel__support-text {
-    color: #9ca3af;
-    font-size: 0.85rem;
-    margin-top: 32px;
-    margin-bottom: 0;
-}
-
-.auth-panel__support-link {
-    color: #00796b;
+.auth-panel__retry-link {
+    color: var(--clr-brand);
     text-decoration: none;
     font-weight: 600;
 }
 
-.auth-panel__support-link:hover {
-    text-decoration: underline;
+.auth-panel__retry-link:hover { color: var(--clr-brand-dark); }
+
+.auth-error-container {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.auth-error-msg {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    margin-bottom: 6px;
+    border-left: 3px solid #dc2626;
 }
 
 /* ── Responsive ────────────────────────────────────────────── */
-@media (max-width: 480px) {
-    .auth-page .site-main { padding: 32px 12px; }
-    .auth-panel { padding: 24px 20px 28px; }
-    .auth-logo  { padding: 26px 20px 0; }
-    .auth-flashes { padding: 0 20px; }
+@media (max-width: 900px) {
+    .auth-brand { display: none; }
+    .auth-form-side { background: #f1f5f9; }
+}
+
+@media (max-width: 540px) {
+    .auth-page .site-main { min-height: calc(100vh - 56px); }
+    .auth-form-side { padding: 24px 12px; align-items: flex-start; padding-top: 32px; }
+    .auth-panel { padding: 28px 20px 32px; }
+    .auth-flashes { padding: 16px 20px 0; }
     .auth-form--two-col { grid-template-columns: 1fr; }
+    .auth-card { border-radius: 16px; }
 }
