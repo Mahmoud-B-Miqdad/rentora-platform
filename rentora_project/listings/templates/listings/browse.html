@@ -235,7 +235,9 @@
                         </div>
 
                         <!-- Owner -->
-                        <div class="bcard__owner">
+                        <div class="bcard__owner bcard__owner--link"
+                             onclick="event.preventDefault();event.stopPropagation();window.location.href='{% url 'users:public_profile' tool.owner.pk %}';"
+                             title="View {{ tool.owner.name }}'s profile">
                             {% if tool.owner.profile_image %}
                             <img class="bcard__owner-avatar"
                                  src="{{ tool.owner.profile_image.url }}"

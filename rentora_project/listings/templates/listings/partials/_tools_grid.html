@@ -39,7 +39,9 @@
             {% if tool.avg_rating %}<span class="bcard__rating-num">{{ tool.avg_rating|floatformat:1 }}</span>{% endif %}
             <span class="bcard__review-cnt">({{ tool.review_count }})</span>
         </div>
-        <div class="bcard__owner">
+        <div class="bcard__owner bcard__owner--link"
+             onclick="event.preventDefault();event.stopPropagation();window.location.href='{% url 'users:public_profile' tool.owner.pk %}';"
+             title="View {{ tool.owner.name }}'s profile">
             {% if tool.owner.profile_image %}
             <img class="bcard__owner-avatar" src="{{ tool.owner.profile_image.url }}" alt="{{ tool.owner.name }}">
             {% else %}

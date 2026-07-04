@@ -25,6 +25,7 @@ from listings.models.booking      import Booking, BookingStatus
 from listings.models.review       import Review, ReviewType
 from listings.models.wishlist     import Wishlist
 from listings.models.notification import Notification, NotificationType
+from listings.models.message      import Conversation, Message
 
 __all__ = [
     # ── Core entities ──────────────────────────────────────────────
@@ -35,6 +36,8 @@ __all__ = [
     "Review",
     "Wishlist",
     "Notification",
+    "Conversation",
+    "Message",
 
     # ── Choices enums (re-exported for convenience in views/templates)
     "ConditionChoices",
