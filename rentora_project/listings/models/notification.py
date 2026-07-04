@@ -9,6 +9,7 @@ class NotificationType(models.TextChoices):
     RETURN_REQUESTED  = "return_requested",  "Return Requested"
     RETURN_CONFIRMED  = "return_confirmed",  "Return Confirmed"
     RETURN_REMINDER   = "return_reminder",   "Return Reminder"
+    NEW_MESSAGE       = "new_message",       "New Message"
 
 
 # Maps each type to (fa-icon-class, css-color-token)
@@ -20,6 +21,7 @@ _TYPE_META = {
     NotificationType.RETURN_REQUESTED : ("fa-rotate-left",      "notif-amber"),
     NotificationType.RETURN_CONFIRMED : ("fa-flag-checkered",   "notif-green"),
     NotificationType.RETURN_REMINDER  : ("fa-clock",            "notif-amber"),
+    NotificationType.NEW_MESSAGE      : ("fa-message",          "notif-blue"),
 }
 
 
@@ -91,6 +93,10 @@ class Notification(models.Model):
             return "/dashboard/"
 
         T = NotificationType
+
+        # ── Chat messages → go directly to the conversation ──────────────
+        if self.notification_type == T.NEW_MESSAGE:
+            return f"/chat/{self.booking_id}/"
 
         # ── Owner-only types ──────────────────────────────────────────────
         if self.notification_type == T.BOOKING_RECEIVED:
