@@ -119,7 +119,9 @@
     <div class="stat-item">
       <div class="stat-item__icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
       <div>
-        <div class="stat-item__val" data-target="{{ stats.tools_count }}">
+        <div class="stat-item__val"
+             data-count="{{ stats.tools_count|default:0 }}"
+             data-suffix="+">
           {% if stats.tools_count %}{{ stats.tools_count }}+{% else %}0{% endif %}
         </div>
         <div class="stat-item__lbl">Tools Listed</div>
@@ -129,7 +131,9 @@
     <div class="stat-item">
       <div class="stat-item__icon"><i class="fa-solid fa-handshake"></i></div>
       <div>
-        <div class="stat-item__val" data-target="{{ stats.rentals_count }}">
+        <div class="stat-item__val"
+             data-count="{{ stats.rentals_count|default:0 }}"
+             data-suffix="+">
           {% if stats.rentals_count %}{{ stats.rentals_count }}+{% else %}0{% endif %}
         </div>
         <div class="stat-item__lbl">Successful Rentals</div>
@@ -139,7 +143,9 @@
     <div class="stat-item">
       <div class="stat-item__icon"><i class="fa-solid fa-users"></i></div>
       <div>
-        <div class="stat-item__val" data-target="{{ stats.owners_count }}">
+        <div class="stat-item__val"
+             data-count="{{ stats.owners_count|default:0 }}"
+             data-suffix="+">
           {% if stats.owners_count %}{{ stats.owners_count }}+{% else %}0{% endif %}
         </div>
         <div class="stat-item__lbl">Active Owners</div>
@@ -149,7 +155,8 @@
     <div class="stat-item">
       <div class="stat-item__icon"><i class="fa-solid fa-star"></i></div>
       <div>
-        <div class="stat-item__val">
+        <div class="stat-item__val"
+             {% if stats.avg_rating %}data-count="{{ stats.avg_rating }}" data-decimal="1"{% endif %}>
           {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}—{% endif %}
         </div>
         <div class="stat-item__lbl">Average Rating</div>
@@ -169,7 +176,7 @@
     <div class="featured-hd">
       <div class="featured-hd__left">
         <div class="sec-badge sec-badge--amber"><i class="fa-solid fa-fire"></i> Popular</div>
-        <h2 class="sec-title" style="margin:0">Top Tools Near You</h2>
+        <h2 class="sec-title" style="margin:0">Recently Listed Tools</h2>
       </div>
       <a href="{% url 'listings:browse' %}" class="view-all">
         View All Tools <i class="fa-solid fa-arrow-right"></i>
@@ -301,7 +308,69 @@
 
 
 <!-- ══════════════════════════════════════════════════════════
-     6. CTA
+     6. TESTIMONIALS  (real DB reviews, FOR_TOOL, ≥4 stars)
+══════════════════════════════════════════════════════════ -->
+{% if featured_reviews %}
+<section class="reviews-section">
+  <div class="container">
+
+    <div class="sec-hd sec-hd--center">
+      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-quote-left"></i> Reviews</div>
+      <h2 class="sec-title">Trusted by Our Community</h2>
+      <p class="sec-sub">Real people, real rentals — hear what our community says</p>
+    </div>
+
+    <div class="reviews-grid">
+      {% for review in featured_reviews %}
+      <div class="review-card {% if forloop.counter == 2 %}review-card--featured{% endif %}">
+
+        <!-- Stars -->
+        <div class="review-card__stars">
+          {% for i in "12345" %}
+            <i class="fa-{% if forloop.counter <= review.rating %}solid{% else %}regular{% endif %} fa-star"></i>
+          {% endfor %}
+        </div>
+
+        <!-- Comment -->
+        <p class="review-card__quote">{{ review.comment }}</p>
+
+        <!-- Author -->
+        <a class="review-card__author" href="{% url 'users:public_profile' review.reviewer.pk %}">
+          {% if review.reviewer.profile_image %}
+            <img class="review-card__avi review-card__avi--img"
+                 src="{{ review.reviewer.profile_image.url }}"
+                 alt="{{ review.reviewer.name }}">
+          {% else %}
+            <div class="review-card__avi">{{ review.reviewer.name|first|upper }}</div>
+          {% endif %}
+          <div>
+            <div class="review-card__name">{{ review.reviewer.name }}</div>
+            <div class="review-card__role">
+              Tool Renter
+              {% if review.reviewer.location %} · {{ review.reviewer.location }}{% endif %}
+            </div>
+          </div>
+        </a>
+
+        <!-- Tool reference -->
+        <div class="review-card__tool">
+          <i class="fa-solid fa-screwdriver-wrench"></i>
+          <a href="{% url 'listings:tools:detail' review.booking.tool.pk %}">
+            {{ review.booking.tool.title }}
+          </a>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
+
+<!-- ══════════════════════════════════════════════════════════
+     7. CTA
 ══════════════════════════════════════════════════════════ -->
 <section class="cta-section">
   <div class="cta-section__blob cta-section__blob--1" aria-hidden="true"></div>

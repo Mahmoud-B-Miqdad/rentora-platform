@@ -1,6 +1,4 @@
 /* tool_detail.js — Rentora Tool Detail Page */
-
-/* tool_detail.js — Rentora Tool Detail Page */
 /* toggleWishlist is defined globally in base.js */
 
 (function () {
@@ -247,5 +245,112 @@
         render();
         updateSelectionBar();
     })();
+
+    /* ── Lazy Map (IntersectionObserver + dynamic Leaflet) ──────────────────── */
+    (function () {
+        var mapEl = document.getElementById('toolMap');
+        if (!mapEl) return;
+
+        var mapUrl   = mapEl.dataset.mapUrl;
+        var toolName = mapEl.dataset.toolName;
+        var toolLoc  = mapEl.dataset.toolLocation;
+        var loaded   = false;
+
+        function showError() {
+            mapEl.innerHTML =
+                '<div class="detail-map-no-coords">' +
+                '<i class="fa-solid fa-location-dot"></i>' +
+                '<span>' + toolLoc + '</span>' +
+                '</div>';
+            mapEl.classList.remove('detail-map-container--loading');
+        }
+
+        function initMap(lat, lon) {
+            /* Inject Leaflet CSS */
+            var link  = document.createElement('link');
+            link.rel  = 'stylesheet';
+            link.href = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css';
+            document.head.appendChild(link);
+
+            /* Inject Leaflet JS, init map on load */
+            var script    = document.createElement('script');
+            script.src    = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js';
+            script.onload = function () {
+                mapEl.classList.remove('detail-map-container--loading');
+                mapEl.innerHTML = '';
+
+                var map = L.map(mapEl, {
+                    center: [lat, lon],
+                    zoom: 14,
+                    zoomControl: true,
+                    scrollWheelZoom: false,
+                });
+
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 19,
+                }).addTo(map);
+
+                var pin = L.divIcon({
+                    className: '',
+                    html: '<div class="tool-map-pin"><i class="fa-solid fa-screwdriver-wrench"></i></div>',
+                    iconSize:   [44, 44],
+                    iconAnchor: [22, 44],
+                    popupAnchor:[0, -46],
+                });
+
+                L.marker([lat, lon], { icon: pin })
+                    .addTo(map)
+                    .bindPopup(
+                        '<div class="tool-map-popup">' +
+                        '<strong>' + toolName + '</strong>' +
+                        '<span>' + toolLoc + '</span>' +
+                        '</div>',
+                        { maxWidth: 200 }
+                    )
+                    .openPopup();
+
+                L.circle([lat, lon], {
+                    radius: 400,
+                    color: '#2563eb',
+                    fillColor: '#2563eb',
+                    fillOpacity: 0.06,
+                    weight: 1.5,
+                    dashArray: '6 4',
+                }).addTo(map);
+            };
+            script.onerror = showError;
+            document.head.appendChild(script);
+        }
+
+        function fetchAndRender() {
+            if (loaded) return;
+            loaded = true;
+            fetch(mapUrl)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.lat && data.lon) {
+                        initMap(data.lat, data.lon);
+                    } else {
+                        showError();
+                    }
+                })
+                .catch(showError);
+        }
+
+        /* Trigger when map container nears the viewport */
+        if ('IntersectionObserver' in window) {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) { fetchAndRender(); observer.disconnect(); }
+                });
+            }, { rootMargin: '200px' });
+            observer.observe(mapEl);
+        } else {
+            /* Fallback for old browsers */
+            fetchAndRender();
+        }
+    }());
 
 })();
