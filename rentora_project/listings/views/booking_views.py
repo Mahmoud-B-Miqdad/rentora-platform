@@ -1,10 +1,11 @@
 from decimal import Decimal
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Prefetch, Sum
+from django.db.models import Prefetch, Sum, Count, Q
 from django.utils     import timezone
 
 from listings.models import Tool, Booking, ToolImage, Review
+from listings.models.message import Conversation, Message
 from listings.models.notification import Notification, NotificationType
 from users.models    import User
 from django.contrib  import messages
@@ -110,6 +111,33 @@ def dashboard(request):
 
     recent_tools = all_tools[:3]
 
+    # Conversations inbox
+    last_msg_pf = Prefetch(
+        'messages',
+        queryset=Message.objects.select_related('sender').order_by('-created_at'),
+        to_attr='all_messages',
+    )
+    conv_img_pf = Prefetch(
+        'booking__tool__images',
+        queryset=ToolImage.objects.filter(is_primary=True),
+        to_attr='primary_images',
+    )
+    conversations = list(
+        Conversation.objects.for_user(user)
+        .prefetch_related(last_msg_pf, conv_img_pf)
+        .annotate(
+            unread_count=Count(
+                'messages',
+                filter=Q(messages__is_read=False) & ~Q(messages__sender=user),
+            )
+        )
+    )
+    for conv in conversations:
+        conv.last_msg = conv.all_messages[0] if conv.all_messages else None
+        conv.other    = conv.other_participant(user)
+
+    total_unread = sum(c.unread_count for c in conversations)
+
     context = {
         'user'               : user,
         'pending_requests'   : pending_requests,
@@ -124,6 +152,8 @@ def dashboard(request):
         'total_earnings'     : total_earnings,
         'all_tools'          : all_tools,
         'recent_tools'       : recent_tools,
+        'conversations'      : conversations,
+        'total_unread'       : total_unread,
         'active_tab'         : request.GET.get('tab', 'overview'),
         'today'              : timezone.now().date(),
     }
