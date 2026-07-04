@@ -13,4 +13,5 @@ urlpatterns = [
     path('booking/<int:booking_id>/pay/',         payment_view,             name='payment'),
     path('booking/<int:booking_id>/pay/confirm/', confirm_payment_view,     name='confirm_payment'),
     path('booking/<int:booking_id>/pay/success/', payment_success_view,     name='payment_success'),
+	path('report/<int:user_id>/',                  report_user,              name='report_user'),
 ]
