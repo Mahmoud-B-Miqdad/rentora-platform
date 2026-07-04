@@ -5,388 +5,325 @@
 {% block body_class %}home-page{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'listings/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'listings/css/home.css' %}">
 {% endblock %}
 
 {% block content %}
 
-<!-- ══════════════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      1. HERO
-     ══════════════════════════════════════════════════════════════ -->
+══════════════════════════════════════════════════════════ -->
 <section class="hero">
-    <div class="hero__overlay" aria-hidden="true"></div>
+  <div class="hero__overlay"  aria-hidden="true"></div>
+  <div class="hero__blob hero__blob--teal"  aria-hidden="true"></div>
+  <div class="hero__blob hero__blob--blue"  aria-hidden="true"></div>
+  <div class="hero__blob hero__blob--amber" aria-hidden="true"></div>
+  <div class="hero__grid" aria-hidden="true"></div>
 
-    <div class="hero__content">
+  <div class="container">
+    <div class="hero__copy">
 
-        <div class="hero__badge">
-            <i class="fa-solid fa-robot" aria-hidden="true"></i>
-            AI-Powered Peer-to-Peer Tool Rental
+      <div class="hero__eyebrow">
+        <span class="hero__eyebrow-dot"></span>
+        AI-Powered Peer-to-Peer Tool Rental
+      </div>
+
+      <h1 class="hero__h1">
+        Rent Any Tool<br>
+        <span class="hero__h1-grad">From People Near You</span>
+      </h1>
+
+      <p class="hero__lead">
+        Need a drill for the weekend? Browse thousands of tools listed by local owners.
+        Smart AI search, transparent pricing, and secure booking — no commitment.
+      </p>
+
+      <form class="hero__search" id="heroSearchForm" novalidate>
+        <i class="fa-solid fa-magnifying-glass hero__search-icon" aria-hidden="true"></i>
+        <input type="text" id="heroSearchInput" name="q"
+               value="{{ request.GET.q }}"
+               placeholder='Try "Concrete Drill" or "بدي شي أحفر فيه الجدار"...'
+               autocomplete="off">
+        <button type="submit" id="heroSearchBtn">
+          <i class="fa-solid fa-robot" aria-hidden="true"></i>
+          <span>AI Search</span>
+        </button>
+      </form>
+
+      <div class="hero__trust">
+        <div class="hero__trust-item">
+          <i class="fa-solid fa-shield-halved"></i> Verified Owners
         </div>
-
-        <h1 class="hero__title">
-            Rent Tools From <mark>People Near</mark>
-            <mark>You</mark>
-        </h1>
-
-        <p class="hero__subtitle">
-            Need a tool for the weekend? Rentora connects you with local owners.
-            Smart search, AI pricing, and secure booking &ndash; get the job done without buying.
-        </p>
-
-        <!-- Search Bar -->
-        <form class="hero__search" id="heroSearchForm" novalidate>
-            <i class="fa-solid fa-magnifying-glass hero__search-icon" aria-hidden="true"></i>
-            <input
-                type="text"
-                id="heroSearchInput"
-                name="q"
-                value="{{ request.GET.q }}"
-                placeholder="Try &ldquo;concrete drill&rdquo; or &ldquo;بدي شي أحفر فيه الجدار&rdquo;..."
-                aria-label="Search tools"
-                autocomplete="off">
-            <button type="submit" class="hero__search-btn" id="heroSearchBtn">
-                <i class="fa-solid fa-robot" aria-hidden="true"></i>
-                <span>AI Search</span>
-            </button>
-        </form>
-
-        <!-- Trust Badges -->
-        <div class="hero__trust">
-            <div class="trust-badge">
-                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                Verified Owners
-            </div>
-            <div class="trust-badge">
-                <i class="fa-solid fa-robot" aria-hidden="true"></i>
-                AI Smart Pricing
-            </div>
-            <div class="trust-badge">
-                <i class="fa-solid fa-lock" aria-hidden="true"></i>
-                Secure Booking
-            </div>
+        <div class="hero__trust-sep" aria-hidden="true"></div>
+        <div class="hero__trust-item">
+          <i class="fa-solid fa-robot"></i> AI Pricing
         </div>
+        <div class="hero__trust-sep" aria-hidden="true"></div>
+        <div class="hero__trust-item">
+          <i class="fa-solid fa-lock"></i> Secure Booking
+        </div>
+      </div>
 
     </div>
+  </div>
+
+  <div class="hero__scroll-hint" aria-hidden="true"><span></span></div>
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      2. CATEGORIES
-     ══════════════════════════════════════════════════════════════ -->
-<section class="categories-section">
-    <div class="container">
+══════════════════════════════════════════════════════════ -->
+<section class="cat-section">
+  <div class="container">
 
-        <div class="section-header">
-            <div class="section-badge section-badge--teal">
-                <i class="fa-solid fa-grip" aria-hidden="true"></i>
-                Categories
-            </div>
-            <h2 class="section-title">Browse by Category</h2>
-            <p class="section-subtitle">Find exactly what you need across our most popular tool categories</p>
-        </div>
-
-        <div class="cat-grid">
-            {% for cat in categories %}
-            <a href="{% url 'listings:browse' %}?category={{ cat.pk }}" class="cat-card" title="Browse {{ cat.name }}">
-                <div class="cat-card__visual">
-                    <div class="cat-card__icon">
-                        {% if cat.icon %}
-                            <i class="{{ cat.icon }}" aria-hidden="true"></i>
-                        {% else %}
-                            <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="cat-card__body">
-                    <span class="cat-card__name">{{ cat.name }}</span>
-                    <span class="cat-card__cta">Explore <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
-                </div>
-            </a>
-            {% empty %}
-            <div class="cat-empty">
-                <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
-                <p>No categories yet &mdash; check back soon.</p>
-            </div>
-            {% endfor %}
-        </div>
-
+    <div class="sec-hd">
+      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-grip"></i> Browse</div>
+      <h2 class="sec-title">Explore by Category</h2>
+      <p class="sec-sub">From power tools to garden equipment — find exactly what you need</p>
     </div>
+
+    <div class="cat-grid">
+      {% for cat in categories %}
+      <a href="{% url 'listings:browse' %}?category={{ cat.pk }}" class="cat-card" title="Browse {{ cat.name }}">
+        <div class="cat-card__visual">
+          <div class="cat-card__icon">
+            {% if cat.icon %}<i class="{{ cat.icon }}" aria-hidden="true"></i>
+            {% else %}<i class="fa-solid fa-toolbox" aria-hidden="true"></i>{% endif %}
+          </div>
+        </div>
+        <div class="cat-card__body">
+          <span class="cat-card__name">{{ cat.name }}</span>
+          <span class="cat-card__cta">Explore <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+        </div>
+      </a>
+      {% empty %}
+      <div class="cat-empty">
+        <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+        <p>No categories yet &mdash; check back soon.</p>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      3. STATS
-     ══════════════════════════════════════════════════════════════ -->
-<section class="stats-section" aria-label="Platform statistics">
-    <div class="container">
-        <div class="stats-grid">
+══════════════════════════════════════════════════════════ -->
+<section class="stats-section">
+  <div class="stats-section__pattern" aria-hidden="true"></div>
+  <div class="container stats-grid">
 
-            <div class="stat-item">
-                <div class="stat-item__icon">
-                    <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-                </div>
-                <span class="stat-item__value">
-                    {% if stats.tools_count %}{{ stats.tools_count|floatformat:0 }}+{% else %}0{% endif %}
-                </span>
-                <span class="stat-item__label">Tools Listed</span>
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-item__icon">
-                    <i class="fa-solid fa-handshake" aria-hidden="true"></i>
-                </div>
-                <span class="stat-item__value">
-                    {% if stats.rentals_count %}{{ stats.rentals_count|floatformat:0 }}+{% else %}0{% endif %}
-                </span>
-                <span class="stat-item__label">Successful Rentals</span>
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-item__icon">
-                    <i class="fa-solid fa-users" aria-hidden="true"></i>
-                </div>
-                <span class="stat-item__value">
-                    {% if stats.owners_count %}{{ stats.owners_count|floatformat:0 }}+{% else %}0{% endif %}
-                </span>
-                <span class="stat-item__label">Active Owners</span>
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-item__icon">
-                    <i class="fa-solid fa-star" aria-hidden="true"></i>
-                </div>
-                <span class="stat-item__value">
-                    {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}&mdash;{% endif %}
-                </span>
-                <span class="stat-item__label">Average Rating</span>
-            </div>
-
+    <div class="stat-item">
+      <div class="stat-item__icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+      <div>
+        <div class="stat-item__val" data-target="{{ stats.tools_count }}">
+          {% if stats.tools_count %}{{ stats.tools_count }}+{% else %}0{% endif %}
         </div>
+        <div class="stat-item__lbl">Tools Listed</div>
+      </div>
     </div>
+
+    <div class="stat-item">
+      <div class="stat-item__icon"><i class="fa-solid fa-handshake"></i></div>
+      <div>
+        <div class="stat-item__val" data-target="{{ stats.rentals_count }}">
+          {% if stats.rentals_count %}{{ stats.rentals_count }}+{% else %}0{% endif %}
+        </div>
+        <div class="stat-item__lbl">Successful Rentals</div>
+      </div>
+    </div>
+
+    <div class="stat-item">
+      <div class="stat-item__icon"><i class="fa-solid fa-users"></i></div>
+      <div>
+        <div class="stat-item__val" data-target="{{ stats.owners_count }}">
+          {% if stats.owners_count %}{{ stats.owners_count }}+{% else %}0{% endif %}
+        </div>
+        <div class="stat-item__lbl">Active Owners</div>
+      </div>
+    </div>
+
+    <div class="stat-item">
+      <div class="stat-item__icon"><i class="fa-solid fa-star"></i></div>
+      <div>
+        <div class="stat-item__val">
+          {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}—{% endif %}
+        </div>
+        <div class="stat-item__lbl">Average Rating</div>
+      </div>
+    </div>
+
+  </div>
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      4. FEATURED TOOLS
-     ══════════════════════════════════════════════════════════════ -->
+══════════════════════════════════════════════════════════ -->
 <section class="featured-section">
-    <div class="container">
+  <div class="container">
 
-        <div class="featured-header">
-            <div class="featured-header__left">
-                <div class="section-badge section-badge--amber">
-                    <i class="fa-solid fa-fire" aria-hidden="true"></i>
-                    Featured
-                </div>
-                <h2 class="section-title" style="margin-bottom:0">Popular Tools Near You</h2>
-            </div>
-            <a href="{% url 'listings:browse' %}" class="featured-header__right">
-                View All Tools
-                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-            </a>
+    <div class="featured-hd">
+      <div class="featured-hd__left">
+        <div class="sec-badge sec-badge--amber"><i class="fa-solid fa-fire"></i> Popular</div>
+        <h2 class="sec-title" style="margin:0">Top Tools Near You</h2>
+      </div>
+      <a href="{% url 'listings:browse' %}" class="view-all">
+        View All Tools <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="tools-grid">
+      {% for tool in featured_tools %}
+      {% with img=tool.primary_images.0 %}
+      <a href="{% url 'listings:tools:detail' tool.pk %}" class="tool-card">
+
+        <div class="tool-card__media">
+          {% if tool.primary_images %}
+            <img class="tool-card__img" src="{{ img.image.url }}" alt="{{ tool.title }}" loading="lazy">
+          {% else %}
+            <div class="tool-card__ph"><i class="fa-solid fa-image"></i></div>
+          {% endif %}
+          <span class="tool-card__cond tool-card__cond--{{ tool.condition }}">
+            {{ tool.get_condition_display }}
+          </span>
+          <button class="tool-card__fav {% if tool.pk in wishlist_ids %}tool-card__fav--on{% endif %}"
+                  onclick="event.preventDefault();toggleWishlist(this,{{ tool.pk }})"
+                  data-tool-id="{{ tool.pk }}" aria-label="Save">
+            <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
+          </button>
+          <div class="tool-card__price">${{ tool.daily_rate }}<span>/day</span></div>
         </div>
 
-        <div class="tools-grid">
-            {% for tool in featured_tools %}
-
-            {% with primary_img=tool.primary_images.0 %}
-            <a href="{% url 'listings:tools:detail' tool.pk %}" class="tool-card" aria-label="View {{ tool.title }}">
-
-                <!-- Image -->
-                <div class="tool-card__img-wrap">
-                    {% if tool.primary_images %}
-                        <img class="tool-card__img"
-                            src="{{ tool.primary_images.0.image.url }}"
-                            alt="{{ tool.title }}"
-                            loading="lazy">
-                    {% else %}
-                        <div class="tool-card__img-placeholder">
-                            <i class="fa-solid fa-image" aria-hidden="true"></i>
-                        </div>
-                    {% endif %}
-
-                    <span class="tool-card__condition tool-card__condition--{{ tool.condition }}">
-                        {{ tool.get_condition_display }}
-                    </span>
-
-                    <button class="tool-card__wishlist {% if tool.pk in wishlist_ids %}tool-card__wishlist--saved{% endif %}"
-                            aria-label="Save to wishlist"
-                            data-tool-id="{{ tool.pk }}"
-                            onclick="event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
-                        <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
-                    </button>
-
-                    <span class="tool-card__price">${{ tool.daily_rate }}/day</span>
-                </div>
-
-                <!-- Body -->
-                <div class="tool-card__body">
-
-                    <div class="tool-card__meta">
-                        {% if tool.category %}
-                        <span class="tool-card__category">{{ tool.category.name }}</span>
-                        {% endif %}
-                        <span class="tool-card__location">
-                            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                            {{ tool.location }}
-                        </span>
-                    </div>
-
-                    <h3 class="tool-card__title">{{ tool.title }}</h3>
-
-                    <!-- Stars (based on owner rating as proxy) -->
-                    <div class="tool-card__rating">
-                        {% with r=tool.avg_rating_computed|default:0|floatformat:0 %}
-                            <div class="stars" aria-label="Rating: {{ tool.avg_rating_computed|default:'0.0' }} out of 5">
-                                {% for i in "12345" %}
-                                    {% if forloop.counter <= r|add:"0" %}
-                                        <i class="fa-solid fa-star star-filled" aria-hidden="true" style="color: #ffc107;"></i>
-                                    {% else %}
-                                        <i class="fa-regular fa-star star-empty" aria-hidden="true" style="color: #e4e5e9;"></i>
-                                    {% endif %}
-                                    {% endfor %}
-                            </div>
-                                <span class="tool-card__review-count">{{ tool.avg_rating_computed|floatformat:1|default:"0.0" }}</span>
-                        {% endwith %}
-                    </div>
-
-                    <hr class="tool-card__divider">
-
-                    <!-- Owner -->
-                    <div class="tool-card__owner">
-                        {% if tool.owner.profile_image %}
-                            <img class="owner-avatar"
-                                 src="{{ tool.owner.profile_image.url }}"
-                                 alt="{{ tool.owner.name }}">
-                        {% else %}
-                            <div class="owner-avatar--placeholder"
-                                 aria-hidden="true">
-                                {{ tool.owner.name|first|upper }}
-                            </div>
-                        {% endif %}
-                        <span class="owner-name">{{ tool.owner.name }}</span>
-                    </div>
-
-                </div>
-            </a>
-            {% endwith %}
-
-            {% empty %}
-            <div class="tools-empty">
-                <i class="fa-solid fa-toolbox" aria-hidden="true"></i>
-                <p>No tools listed yet &mdash; be the first to list yours!</p>
-            </div>
+        <div class="tool-card__body">
+          <div class="tool-card__meta">
+            {% if tool.category %}<span class="tool-card__cat">{{ tool.category.name }}</span>{% endif %}
+            <span class="tool-card__loc"><i class="fa-solid fa-location-dot"></i> {{ tool.location }}</span>
+          </div>
+          <h3 class="tool-card__title">{{ tool.title }}</h3>
+          <div class="tool-card__rating">
+            {% with r=tool.avg_rating_computed|default:0|floatformat:0 %}
+            {% for i in "12345" %}
+              <i class="fa-{% if forloop.counter <= r|add:'0' %}solid{% else %}regular{% endif %} fa-star"></i>
             {% endfor %}
+            <span>{{ tool.avg_rating_computed|floatformat:1|default:"0.0" }}</span>
+            {% endwith %}
+          </div>
+          <div class="tool-card__foot">
+            {% if tool.owner.profile_image %}
+              <img class="tool-card__avi" src="{{ tool.owner.profile_image.url }}" alt="{{ tool.owner.name }}">
+            {% else %}
+              <div class="tool-card__avi tool-card__avi--init">{{ tool.owner.name|first|upper }}</div>
+            {% endif %}
+            <span class="tool-card__owner">{{ tool.owner.name }}</span>
+            {% if tool.owner.is_verified %}
+              <i class="fa-solid fa-circle-check tool-card__vbadge" title="Verified"></i>
+            {% endif %}
+          </div>
         </div>
 
+      </a>
+      {% endwith %}
+      {% empty %}
+      <div class="tools-empty">
+        <i class="fa-solid fa-toolbox"></i>
+        <p>No tools listed yet — be the first!</p>
+        <a href="{% url 'listings:tools:add_tool' %}" class="btn-outline">List Your Tool</a>
+      </div>
+      {% endfor %}
     </div>
+
+  </div>
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      5. HOW IT WORKS
-     ══════════════════════════════════════════════════════════════ -->
+══════════════════════════════════════════════════════════ -->
 <section class="how-section">
-    <div class="container">
+  <div class="container">
 
-        <div class="section-header">
-            <div class="section-badge section-badge--teal">
-                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                How It Works
-            </div>
-            <h2 class="section-title">Three Simple Steps</h2>
-            <p class="section-subtitle">Rent the tools you need in minutes</p>
-        </div>
-
-        <div class="steps-grid">
-
-            <!-- Step 1 -->
-            <div class="step">
-                <div class="step__icon-wrap">
-                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                </div>
-                <span class="step__num">Step 01</span>
-                <h3 class="step__title">Find Your Tool</h3>
-                <p class="step__desc">
-                    Browse thousands of tools or use <mark>AI smart search</mark> &mdash;
-                    even in Arabic. <mark>Filter</mark> by category, price, and location in seconds.
-                </p>
-                <span class="step__bg-number" aria-hidden="true">01</span>
-            </div>
-
-            <!-- Arrow -->
-            <div class="steps-arrow" aria-hidden="true">
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="step">
-                <div class="step__icon-wrap">
-                    <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-                </div>
-                <span class="step__num">Step 02</span>
-                <h3 class="step__title">Book It Instantly</h3>
-                <p class="step__desc">
-                    Pick your dates, review <mark>pricing</mark> and deposit details,
-                    then send a booking request. Owners respond fast.
-                </p>
-                <span class="step__bg-number" aria-hidden="true">02</span>
-            </div>
-
-            <!-- Arrow -->
-            <div class="steps-arrow" aria-hidden="true">
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="step">
-                <div class="step__icon-wrap">
-                    <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-                </div>
-                <span class="step__num">Step 03</span>
-                <h3 class="step__title">Get the Job Done</h3>
-                <p class="step__desc">
-                    Pick up the tool, complete your project, and return it.
-                    Leave a <mark>review</mark> to help build community trust.
-                </p>
-                <span class="step__bg-number" aria-hidden="true">03</span>
-            </div>
-
-        </div>
+    <div class="sec-hd sec-hd--center">
+      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-circle-info"></i> Process</div>
+      <h2 class="sec-title">How Rentora Works</h2>
+      <p class="sec-sub">Get the tool you need in three simple steps</p>
     </div>
+
+    <div class="steps-row">
+
+      <div class="step-card">
+        <span class="step-card__num">01</span>
+        <div class="step-card__icon step-card__icon--teal">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <h3 class="step-card__title">Find Your Tool</h3>
+        <p class="step-card__desc">
+          Use AI-powered search or browse by category. Search in English or Arabic — our AI understands both.
+        </p>
+      </div>
+
+      <div class="steps-connector" aria-hidden="true">
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+
+      <div class="step-card">
+        <span class="step-card__num">02</span>
+        <div class="step-card__icon step-card__icon--amber">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <h3 class="step-card__title">Book Instantly</h3>
+        <p class="step-card__desc">
+          Pick your dates, review pricing and deposit details, then send a request. Owners respond fast.
+        </p>
+      </div>
+
+      <div class="steps-connector" aria-hidden="true">
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+
+      <div class="step-card">
+        <span class="step-card__num">03</span>
+        <div class="step-card__icon step-card__icon--purple">
+          <i class="fa-solid fa-screwdriver-wrench"></i>
+        </div>
+        <h3 class="step-card__title">Get the Job Done</h3>
+        <p class="step-card__desc">
+          Pick up the tool, complete your project, return it, and leave a review to build community trust.
+        </p>
+      </div>
+
+    </div><!-- /steps-row -->
+  </div>
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      6. CTA
-     ══════════════════════════════════════════════════════════════ -->
+══════════════════════════════════════════════════════════ -->
 <section class="cta-section">
-    <div class="container">
-        <div class="cta-card">
-
-            <div class="cta-card__icon-wrap" aria-hidden="true">
-                <i class="fa-solid fa-store"></i>
-            </div>
-
-            <h2 class="cta-card__title">Have Tools Sitting Idle?</h2>
-            <p class="cta-card__subtitle">
-                List your tools on Rentora and start earning passive income.
-                Our AI pricing advisor helps you set the perfect rate to maximize your earnings.
-            </p>
-
-            <div class="cta-card__actions">
-                <a href="{% url 'listings:tools:add_tool' %}" class="btn-cta-primary">
-                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
-                    List Your Tool Now
-                </a>
-                <a href="{% url 'listings:browse' %}" class="btn-cta-secondary">
-                    Browse Available Tools
-                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                </a>
-            </div>
-
-        </div>
+  <div class="cta-section__blob cta-section__blob--1" aria-hidden="true"></div>
+  <div class="cta-section__blob cta-section__blob--2" aria-hidden="true"></div>
+  <div class="container cta-section__body">
+    <div class="cta-section__icon" aria-hidden="true">
+      <i class="fa-solid fa-store"></i>
     </div>
+    <h2 class="cta-section__title">Have Tools Sitting Idle?</h2>
+    <p class="cta-section__sub">
+      Turn your idle tools into passive income. List on Rentora and let our
+      AI pricing advisor help you set the perfect rate to maximize earnings.
+    </p>
+    <div class="cta-section__actions">
+      <a href="{% url 'listings:tools:add_tool' %}" class="btn-list-tool cta-btn--list">
+        <i class="fa-solid fa-plus" aria-hidden="true"></i> List Your Tool Now
+      </a>
+      <a href="{% url 'listings:browse' %}" class="cta-btn cta-btn--ghost">
+        Browse Tools <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+  </div>
 </section>
 
 {% endblock %}
@@ -394,11 +331,11 @@
 {% block extra_js %}
 <script>
 window.AppConfig = {
-    csrfToken:          '{{ csrf_token }}',
-    toggleWishlistUrl:  '{% url "listings:tools:toggle_wishlist" 0 %}',
-    loginUrl:           '{% url "users:login" %}',
-    smartSearchUrl:     '{% url "listings:smart_search" %}',
-    browseUrl:          '{% url "listings:browse" %}',
+    csrfToken:         '{{ csrf_token }}',
+    toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
+    loginUrl:          '{% url "users:login" %}',
+    smartSearchUrl:    '{% url "listings:smart_search" %}',
+    browseUrl:         '{% url "listings:browse" %}',
 };
 </script>
 <script src="{% static 'listings/js/home.js' %}"></script>

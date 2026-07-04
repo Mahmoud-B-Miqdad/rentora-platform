@@ -423,7 +423,11 @@
                   <span>Awaiting renter confirmation</span>
                 </div>
               {% else %}
-                <span class="badge badge-approved">Approved</span>
+                {% if booking.status == 'confirmed' %}
+                  <span class="badge badge-confirmed">Confirmed</span>
+                {% else %}
+                  <span class="badge badge-approved">Approved</span>
+                {% endif %}
                 {% if today >= booking.start_date %}
                   <form method="POST" action="{% url 'listings:request_return' booking.id %}">
                     {% csrf_token %}
@@ -442,7 +446,7 @@
           {% empty %}
           <div class="empty-state">
             <i class="fa-regular fa-calendar-check"></i>
-            No approved bookings.
+            No confirmed bookings yet.
           </div>
           {% endfor %}
         </div>

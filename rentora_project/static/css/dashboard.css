@@ -859,6 +859,7 @@
 .badge-pending   { background: #fef9c3; color: #854d0e; }
 .badge-payment   { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
 .badge-approved  { background: #dcfce7; color: #15803d; }
+.badge-confirmed { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
 .badge-rejected  { background: var(--red-lt); color: var(--red); }
 .badge-completed { background: var(--blue-lt); color: var(--blue); }
 .badge-overdue   {

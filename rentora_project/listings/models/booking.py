@@ -12,7 +12,8 @@ from django.db import models
 class BookingStatus(models.TextChoices):
     PENDING         = "pending",         "Pending"
     PAYMENT_PENDING = "payment_pending", "Payment Pending"
-    APPROVED        = "approved",        "Approved"
+    APPROVED        = "approved",        "Approved"   # legacy pre-Stripe bookings
+    CONFIRMED       = "confirmed",       "Confirmed"  # payment received via Stripe
     REJECTED        = "rejected",        "Rejected"
     RETURN_PENDING  = "return_pending",  "Return Pending"
     COMPLETED       = "completed",       "Completed"
@@ -58,6 +59,7 @@ class BookingManager(models.Manager):
                 BookingStatus.PENDING,
                 BookingStatus.PAYMENT_PENDING,
                 BookingStatus.APPROVED,
+                BookingStatus.CONFIRMED,
                 BookingStatus.RETURN_PENDING,
             ],
             start_date__lte=end_date,
@@ -171,10 +173,14 @@ class BookingManager(models.Manager):
         )
 
     def active_for_tool(self, tool):
-        """All pending/approved bookings for a specific tool."""
+        """All pending/confirmed bookings for a specific tool."""
         return self.filter(
             tool=tool,
-            status__in=[BookingStatus.PENDING, BookingStatus.APPROVED],
+            status__in=[
+                BookingStatus.PENDING,
+                BookingStatus.APPROVED,
+                BookingStatus.CONFIRMED,
+            ],
         )
 
     def history_for_user(self, user):
@@ -289,5 +295,9 @@ class Booking(models.Model):
 
     @property
     def is_active(self):
-        """True when the booking is in a live (pending or approved) state."""
-        return self.status in {BookingStatus.PENDING, BookingStatus.APPROVED}
+        """True when the booking is in a live (pending, approved, or confirmed) state."""
+        return self.status in {
+            BookingStatus.PENDING,
+            BookingStatus.APPROVED,
+            BookingStatus.CONFIRMED,
+        }

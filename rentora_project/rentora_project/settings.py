@@ -143,8 +143,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'rentora_project' / 'static',
 ]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'rentora_project' / 'media'
 
 LOGIN_URL = 'users:login'
 
@@ -167,6 +167,6 @@ DEFAULT_FROM_EMAIL  = env('DEFAULT_FROM_EMAIL',  default='Rentora <noreply@rento
 
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
 STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default="")
-STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")  # التعديل هنا
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="") 
 
 stripe.api_key = STRIPE_SECRET_KEY
