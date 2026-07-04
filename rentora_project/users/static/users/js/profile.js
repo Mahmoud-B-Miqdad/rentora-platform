@@ -50,3 +50,8 @@ document.querySelectorAll('.review-tab').forEach(function (tab) {
         if (panel) panel.hidden = false;
     });
 });
+
+function toggleReportForm() {
+	const form = document.getElementById('report-form');
+	form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
