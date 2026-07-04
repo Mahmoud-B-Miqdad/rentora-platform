@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Chat — {{ booking.tool.title }} | Rentora{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="chat-page">
+
+  <!-- ── Sidebar ──────────────────────────────────────────── -->
+  <aside class="chat-sidebar">
+
+    <!-- Back link -->
+    <div class="chat-sidebar__back">
+      <a href="/dashboard/?tab={% if user.pk == booking.renter_id %}my-rentals{% else %}booking-requests{% endif %}"
+         class="chat-back-btn">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Dashboard
+      </a>
+    </div>
+
+    <!-- Tool card -->
+    <div class="chat-sidebar__tool">
+      <div class="chat-tool-thumb">
+        {% if booking.tool.primary_images %}
+          <img src="{{ booking.tool.primary_images.0.image.url }}" alt="{{ booking.tool.title }}">
+        {% else %}
+          <i class="fa-solid fa-screwdriver-wrench"></i>
+        {% endif %}
+      </div>
+      <div class="chat-tool-info">
+        <a href="/{{ booking.tool.pk }}/" class="chat-tool-name" title="{{ booking.tool.title }}">{{ booking.tool.title }}</a>
+        <div class="chat-tool-dates">
+          <i class="fa-regular fa-calendar"></i>
+          {{ booking.start_date|date:"M d" }} &rarr; {{ booking.end_date|date:"M d, Y" }}
+        </div>
+        <div class="chat-tool-price">${{ booking.total_price }}</div>
+      </div>
+    </div>
+
+    <!-- Booking details -->
+    <div class="chat-sidebar__details">
+      <div class="chat-details-title">Booking Details</div>
+
+      <div class="chat-detail-row">
+        <span class="chat-detail-label">
+          <i class="fa-solid fa-circle-dot"></i> Status
+        </span>
+        <span class="chat-status-badge chat-status-badge--{{ booking.status }}">
+          {{ booking.get_status_display }}
+        </span>
+      </div>
+
+      <div class="chat-detail-row">
+        <span class="chat-detail-label">
+          <i class="fa-regular fa-clock"></i> Duration
+        </span>
+        <span class="chat-detail-value">{{ booking.rental_days }} day{{ booking.rental_days|pluralize }}</span>
+      </div>
+
+      <div class="chat-detail-row">
+        <span class="chat-detail-label">
+          <i class="fa-solid fa-tag"></i> Daily Rate
+        </span>
+        <span class="chat-detail-value">${{ booking.tool.daily_rate }}</span>
+      </div>
+
+      <div class="chat-detail-row">
+        <span class="chat-detail-label">
+          <i class="fa-solid fa-location-dot"></i> Location
+        </span>
+        <span class="chat-detail-value">{{ booking.tool.location }}</span>
+      </div>
+    </div>
+
+    <!-- Other participant -->
+    <div class="chat-sidebar__participant">
+      <div class="chat-details-title">You're chatting with</div>
+      <a href="{% url 'users:public_profile' other.pk %}" class="chat-participant">
+        <div class="chat-participant__avatar">
+          {% if other.profile_image %}
+            <img src="{{ other.profile_image.url }}" alt="{{ other.name }}">
+          {% else %}
+            {{ other.name|first|upper }}
+          {% endif %}
+        </div>
+        <div class="chat-participant__info">
+          <div class="chat-participant__name">{{ other.name }}</div>
+          <div class="chat-participant__role">
+            {% if user.pk == booking.renter_id %}
+              <i class="fa-solid fa-key"></i> Tool Owner
+            {% else %}
+              <i class="fa-solid fa-user"></i> Renter
+            {% endif %}
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </aside>
+
+  <!-- ── Main chat ─────────────────────────────────────────── -->
+  <div class="chat-main">
+
+    <!-- Header -->
+    <div class="chat-main__header">
+      <div class="chat-main__who">
+        <a href="{% url 'users:public_profile' other.pk %}" class="chat-main__who-link">
+        <div class="chat-main__avatar-wrap{% if other_is_online %} chat-main__avatar-wrap--online{% endif %}">
+          <div class="chat-main__avatar">
+            {% if other.profile_image %}
+              <img src="{{ other.profile_image.url }}" alt="{{ other.name }}">
+            {% else %}
+              {{ other.name|first|upper }}
+            {% endif %}
+          </div>
+        </div>
+        <div>
+          <div class="chat-main__name">{{ other.name }}</div>
+          <div class="chat-main__sub">
+            {% if other_is_online %}
+              <span class="chat-presence chat-presence--online">
+                Active now
+              </span>
+            {% elif other_last_seen %}
+              <span class="chat-presence chat-presence--offline">
+                <i class="fa-regular fa-clock"></i> Last seen {{ other_last_seen|timesince }} ago
+              </span>
+            {% else %}
+              <span class="chat-presence chat-presence--offline">
+                <i class="fa-regular fa-circle"></i> No recent activity
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+
+      {% if not chat_messages %}
+        <div class="chat-empty">
+          <div class="chat-empty__icon"><i class="fa-regular fa-comments"></i></div>
+          <div class="chat-empty__title">No messages yet</div>
+          <div class="chat-empty__sub">
+            Start the conversation with {{ other.name }} to coordinate your rental.
+          </div>
+        </div>
+      {% else %}
+        {% for msg in chat_messages %}
+          <div class="chat-msg {% if msg.sender_id == user.pk %}chat-msg--mine{% else %}chat-msg--theirs{% endif %}"
+               data-id="{{ msg.pk }}"
+               data-ts="{{ msg.created_at.isoformat }}">
+            <div class="chat-msg__avatar {% if msg.sender_id == user.pk %}chat-msg__avatar--mine{% endif %}">
+              {% if msg.sender.profile_image %}
+                <img src="{{ msg.sender.profile_image.url }}" alt="{{ msg.sender.name }}">
+              {% else %}
+                {{ msg.sender.name|first|upper }}
+              {% endif %}
+            </div>
+            <div>
+              <div class="chat-msg__bubble">{{ msg.text }}</div>
+              <div class="chat-msg__footer">
+                <div class="chat-msg__time" data-ts="{{ msg.created_at.isoformat }}"></div>
+                {% if msg.sender_id == user.pk %}
+                <div class="chat-msg__status" data-msg-id="{{ msg.pk }}">
+                  {% if msg.is_read %}
+                    <i class="fa-solid fa-check-double msg-status--seen" title="Seen"></i>
+                  {% else %}
+                    <i class="fa-solid fa-check msg-status--sent" title="Sent"></i>
+                  {% endif %}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <!-- Typing indicator -->
+      <div class="chat-typing" id="chatTyping">
+        <div class="chat-typing__dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span>{{ other.name }} is typing…</span>
+      </div>
+
+    </div>
+
+    <!-- Input -->
+    <div class="chat-input-area">
+      <div class="chat-input-row">
+        <textarea id="chatInput"
+                  class="chat-textarea"
+                  placeholder="Type a message to {{ other.name }}…"
+                  rows="1"
+                  maxlength="2000"></textarea>
+        <button id="chatSend" class="chat-send-btn" disabled title="Send (Enter)">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+      <div class="chat-input-hint">
+        <kbd>Enter</kbd> to send &nbsp;&middot;&nbsp; <kbd>Shift+Enter</kbd> for new line
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.ChatConfig = {
+  bookingId:    {{ booking.pk }},
+  lastMsgId:    {% if chat_messages %}{{ chat_messages.last.pk }}{% else %}0{% endif %},
+  lastSeenId:   {{ last_seen_id }},
+  sendUrl:      "{% url 'listings:chat_send' booking.pk %}",
+  pollUrl:      "{% url 'listings:chat_poll' booking.pk %}",
+  csrfToken:    "{{ csrf_token }}",
+  myId:         {{ user.pk }},
+  myAvatar:     "{{ user.name|first|upper }}",
+  myAvatarUrl:  "{% if user.profile_image %}{{ user.profile_image.url }}{% endif %}",
+  otherName:    "{{ other.name }}",
+  otherAvatar:  "{{ other.name|first|upper }}",
+  otherAvatarUrl:"{% if other.profile_image %}{{ other.profile_image.url }}{% endif %}",
+};
+</script>
+<script src="{% static 'js/chat.js' %}"></script>
+{% endblock %}
