@@ -6,9 +6,6 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'listings/css/tool_detail.css' %}">
-    {% if tool_lat and tool_lon %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
-    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -125,7 +122,7 @@
                     {% endif %}
                     <span class="detail-tag detail-tag--condition">{{ tool.get_condition_display }} Condition</span>
                     {% if tool.is_available %}
-                    <span class="detail-tag detail-tag--available">Available Now</span>
+                    <span class="detail-tag detail-tag--available">Available</span>
                     {% endif %}
                 </div>
 
@@ -163,6 +160,8 @@
                         {{ tool.location }}
                     </span>
                 </div>
+
+                <hr class="detail-sep">
 
                 <!-- Owner card -->
                 <a href="{% url 'users:public_profile' tool.owner.pk %}" class="detail-owner-card">
@@ -203,19 +202,19 @@
                                 <i class="fa-solid fa-handshake" aria-hidden="true"></i>
                                 {{ owner_rentals_count }} rental{{ owner_rentals_count|pluralize }} completed
                             </span>
-                            <span class="detail-owner-badge">
-                                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                                Low Risk
-                            </span>
                         </div>
                     </div>
                 </a>
+
+                <hr class="detail-sep">
 
                 <!-- About This Tool -->
                 <div class="detail-about">
                     <h2 class="detail-section-title">About This Tool</h2>
                     <p class="detail-about__text">{{ tool.description }}</p>
                 </div>
+
+                <hr class="detail-sep">
 
                 <!-- Availability Calendar -->
                 <div class="detail-availability">
@@ -268,8 +267,10 @@
                 </div>
                 {{ booked_ranges|json_script:"booked-ranges-data" }}
 
-                <!-- Pickup Location Map -->
-                {% if tool_lat and tool_lon %}
+                <hr class="detail-sep">
+
+                <!-- Pickup Location Map — loaded lazily via IntersectionObserver -->
+                {% if tool.location %}
                 <div class="detail-map-section">
                     <h2 class="detail-section-title">
                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
@@ -279,13 +280,23 @@
                         <i class="fa-solid fa-map-pin" aria-hidden="true"></i>
                         {{ tool.location }}
                     </p>
-                    <div id="toolMap" class="detail-map-container"></div>
+                    <div id="toolMap" class="detail-map-container detail-map-container--loading"
+                         data-map-url="{% url 'listings:tools:map_coords' tool.pk %}"
+                         data-tool-name="{{ tool.title|escapejs }}"
+                         data-tool-location="{{ tool.location|escapejs }}">
+                        <div class="detail-map-loader">
+                            <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+                            <span>Loading map…</span>
+                        </div>
+                    </div>
                     <p class="detail-map-note">
                         <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
                         Exact pickup spot will be shared after booking confirmation.
                     </p>
                 </div>
                 {% endif %}
+
+                <hr class="detail-sep">
 
                 <!-- Security Deposit -->
                 <div class="detail-deposit-card">
@@ -297,6 +308,8 @@
                         <p class="detail-deposit-card__note">Fully refundable upon safe return of the tool in its original condition.</p>
                     </div>
                 </div>
+
+                <hr class="detail-sep">
 
                 <!-- Reviews -->
                 <div class="detail-reviews">
@@ -334,7 +347,7 @@
                                                 <i class="fa-regular fa-star" aria-hidden="true"></i>
                                             {% endif %}
                                         {% endfor %}
-                                        <span class="review-card__date">{{ review.created_at|date:"Y-m-d" }}</span>
+                                        <span class="review-card__date">{{ review.created_at|date:"M Y" }}</span>
                                     </div>
                                 </div>
                             </a>
@@ -361,11 +374,14 @@
             <div class="detail-right">
                 <div class="booking-panel" id="bookingPanel">
 
-                    <!-- Price -->
+                    <!-- Price header -->
                     <div class="booking-panel__price">
                         <span class="booking-panel__amount">${{ tool.daily_rate }}</span>
                         <span class="booking-panel__unit">/ day</span>
                     </div>
+
+                    <!-- Panel body -->
+                    <div class="booking-panel__body">
 
                     <!-- Booking Form -->
                     {% if is_owner %}
@@ -453,6 +469,7 @@
                         </div>
                     </div>
 
+                    </div><!-- / booking-panel__body -->
                 </div>
             </div>
             <!-- / RIGHT COLUMN -->
@@ -474,61 +491,4 @@ window.AppConfig = {
 };
 </script>
 <script src="{% static 'listings/js/tool_detail.js' %}"></script>
-
-{% if tool_lat and tool_lon %}
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
-<script>
-(function () {
-    var lat  = {{ tool_lat }};
-    var lon  = {{ tool_lon }};
-    var name = "{{ tool.title|escapejs }}";
-    var loc  = "{{ tool.location|escapejs }}";
-
-    var map = L.map('toolMap', {
-        center: [lat, lon],
-        zoom: 14,
-        zoomControl: true,
-        scrollWheelZoom: false,
-        attributionControl: true,
-    });
-
-    /* CartoDB Positron — clean, modern, no API key needed */
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 19,
-    }).addTo(map);
-
-    /* Custom div-icon using brand colors */
-    var pin = L.divIcon({
-        className: '',
-        html: '<div class="tool-map-pin"><i class="fa-solid fa-screwdriver-wrench"></i></div>',
-        iconSize:   [44, 44],
-        iconAnchor: [22, 44],
-        popupAnchor:[0, -46],
-    });
-
-    L.marker([lat, lon], { icon: pin })
-        .addTo(map)
-        .bindPopup(
-            '<div class="tool-map-popup">' +
-            '<strong>' + name + '</strong>' +
-            '<span>' + loc + '</span>' +
-            '</div>',
-            { maxWidth: 200 }
-        )
-        .openPopup();
-
-    /* Approximate area circle (privacy-friendly) */
-    L.circle([lat, lon], {
-        radius: 400,
-        color: '#2563eb',
-        fillColor: '#2563eb',
-        fillOpacity: 0.06,
-        weight: 1.5,
-        dashArray: '6 4',
-    }).addTo(map);
-}());
-</script>
-{% endif %}
 {% endblock %}

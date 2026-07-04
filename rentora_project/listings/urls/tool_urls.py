@@ -1,6 +1,7 @@
 from django.urls import path
 from listings.views.tool_views import (
     tool_detail_view,
+    tool_map_coords_view,
     toggle_wishlist_view,
     add_tool_view,
     my_tools_view,
@@ -15,6 +16,7 @@ urlpatterns = [
     path("my-tools/", my_tools_view, name="my_tools"),
 
     path('<int:pk>/', tool_detail_view, name='detail'),
+    path('<int:pk>/map-coords/', tool_map_coords_view, name='map_coords'),
     path('<int:pk>/wishlist/', toggle_wishlist_view, name='toggle_wishlist'),
     path("<int:tool_id>/edit/", edit_tool_view, name="edit_tool"),
     path("<int:tool_id>/delete/", delete_tool_view, name="delete_tool"),

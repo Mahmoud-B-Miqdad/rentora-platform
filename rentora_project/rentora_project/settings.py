@@ -84,6 +84,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "listings.context_processors.wishlist_count",
                 "listings.context_processors.notification_count",
+                "listings.context_processors.current_user",
             ],
         },
     }

@@ -81,16 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('site-header');
 
     /* ── Scroll-aware header ──────────────────────────────────
-       Adds .scrolled when page is scrolled past 60px.
-       Removes it when back at the top.                         */
+       Adds .scrolled when page is scrolled past 60px.          */
     if (header) {
         const THRESHOLD = 60;
-
         function syncHeaderScroll() {
             header.classList.toggle('scrolled', window.scrollY > THRESHOLD);
         }
-
-        // Initialise on load (handles page refresh mid-scroll)
         syncHeaderScroll();
         window.addEventListener('scroll', syncHeaderScroll, { passive: true });
     }
@@ -104,5 +100,33 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.add('header-nav__link--active');
         }
     });
+
+    /* ── User dropdown ────────────────────────────────────────
+       Toggle .hdr-user--open on click; close on outside click. */
+    const hdrUser    = document.getElementById('hdrUser');
+    const hdrUserBtn = document.getElementById('hdrUserBtn');
+
+    if (hdrUser && hdrUserBtn) {
+        hdrUserBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isOpen = hdrUser.classList.toggle('hdr-user--open');
+            hdrUserBtn.setAttribute('aria-expanded', isOpen);
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!hdrUser.contains(e.target)) {
+                hdrUser.classList.remove('hdr-user--open');
+                hdrUserBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                hdrUser.classList.remove('hdr-user--open');
+                hdrUserBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 
 });
