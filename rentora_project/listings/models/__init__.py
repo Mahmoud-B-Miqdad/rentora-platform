@@ -24,6 +24,7 @@ from listings.models.tool_image import ToolImage
 from listings.models.booking    import Booking, BookingStatus
 from listings.models.review     import Review, ReviewType
 from listings.models.wishlist   import Wishlist
+from .report import Report
 
 __all__ = [
     # ── Core entities ──────────────────────────────────────────────
