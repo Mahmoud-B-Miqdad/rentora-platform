@@ -5,6 +5,7 @@ from django.db.models  import Avg, Count, Prefetch, Q
 from users.models    import User, EmailVerification
 from users.services  import send_verification_email
 from listings.models import Tool, ToolImage, Booking, BookingStatus, Review, ReviewType
+from listings.models.report import Report
 
 from django.http import HttpResponse
 from django.core.mail import send_mail
@@ -157,8 +158,15 @@ def profile_view(request):
         return redirect("users:login")
 
     user      = get_object_or_404(User, pk=user_id)
+    profile_user = user
+
     edit_mode = request.GET.get("edit") == "1"
     errors    = {}
+    context = {
+        'profile_user' : profile_user,
+        'session_user_id' : request.session.get('user_id'),
+        'report_count' : Report.objects.filter(reported=profile_user).count(),
+	}
 
     # ── Handle profile update (POST) ──────────────────────────────────────────
     if request.method == "POST":
