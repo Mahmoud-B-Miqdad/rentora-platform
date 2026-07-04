@@ -3,6 +3,7 @@ import bcrypt
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
 
 
 # ─────────────────────────────────────────────
@@ -129,18 +130,23 @@ class UserManager(BaseUserManager):
         if not password:
             errors["password"] = "Password is required."
 
-        # Only attempt DB lookup when basic field checks pass.
         if not errors:
             user = self.filter(email=email).first()
-            if user is None or not bcrypt.checkpw(
-                password.encode("utf-8"),
-                user.password.encode("utf-8"),
-            ):
-                # Deliberately vague — prevents user enumeration attacks.
+            
+            if user is None:
                 errors["credentials"] = "Invalid email or password."
+            else:
+                is_valid = False
+                try:
+                    is_valid = bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8"))
+                except (ValueError, AttributeError):
+                    is_valid = user.check_password(password)
+
+                if not is_valid:
+                    errors["credentials"] = "Invalid email or password."
 
         return errors
-
+        
     def create_user(self, post_data):
         """
         Hashes the password with bcrypt and persists a new User record.
@@ -186,6 +192,54 @@ class UserManager(BaseUserManager):
         """
         return self.filter(email=email.strip().lower()).first()
 
+    def update_profile(self, user, post_data, files=None):
+        """
+        Validates and applies profile edits for name, phone, location,
+        and optional profile_image upload.
+
+        Returns (user, errors). Callers should check errors before trusting
+        the returned user instance.
+        """
+        errors = {}
+
+        name     = post_data.get("name",     "").strip()
+        phone    = post_data.get("phone",    "").strip()
+        location = post_data.get("location", "").strip()
+
+        if not name:
+            errors["name"] = "Full name is required."
+        elif not self._NAME_REGEX.match(name):
+            errors["name"] = (
+                "Name must be 2–80 characters and may only contain "
+                "letters (Arabic or Latin), spaces, hyphens, and apostrophes."
+            )
+
+        if phone and not self._PHONE_REGEX.match(phone):
+            errors["phone"] = (
+                "Phone number must be 7–20 digits and may include "
+                "spaces, hyphens, or a leading '+'."
+            )
+
+        if not location:
+            errors["location"] = "Location is required."
+        elif len(location) < 2 or len(location) > 100:
+            errors["location"] = "Location must be 2–100 characters."
+
+        if errors:
+            return user, errors
+
+        user.name     = name
+        user.phone    = phone or None
+        user.location = location
+
+        if files:
+            img = files.get("profile_image")
+            if img and img.size > 0:
+                user.profile_image = img
+
+        user.save()
+        return user, {}
+
 
 # ─────────────────────────────────────────────
 #  Model
@@ -225,7 +279,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text="City or district used for proximity-based tool discovery.",
     )
     profile_image = models.ImageField(
-        upload_to="users/profiles/%Y/%m/",
+        upload_to="profiles/",
         null=True,
         blank=True,
         help_text="Optional avatar displayed on profile and review cards.",
@@ -249,6 +303,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text="Grants access to the Django admin site.",
     )
+    last_seen  = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Automatically updated on every page request via LastSeenMiddleware.",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -267,3 +326,31 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         verified = " ✓" if self.is_verified else ""
         return f"{self.name} <{self.email}>{verified}"
+
+
+# ─────────────────────────────────────────────
+#  Email Verification Token
+# ─────────────────────────────────────────────
+
+class EmailVerification(models.Model):
+    """
+    One-time token sent to a user's email address.
+    Deleted automatically after successful verification.
+    """
+    user       = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="email_verification",
+    )
+    token      = models.CharField(max_length=64, unique=True)
+    expires_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self) -> bool:
+        return timezone.now() > self.expires_at
+
+    class Meta:
+        verbose_name = "Email Verification"
+
+    def __str__(self):
+        return f"Verification for {self.user.email}"

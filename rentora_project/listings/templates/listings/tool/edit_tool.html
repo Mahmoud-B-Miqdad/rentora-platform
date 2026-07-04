@@ -1,0 +1,409 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit Tool | Rentora{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'listings/css/add_tool.css' %}">
+<style>
+/* ── Image management ─────────────────── */
+.img-section-hint {
+  color: #64748b;
+  font-size: 13.5px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.img-section-hint strong { color: #374151; }
+
+.img-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.img-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2.5px solid #e2e8f0;
+  background: #f8fafc;
+  aspect-ratio: 1;
+  transition: border-color .2s, opacity .2s;
+}
+.img-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.img-item.is-primary { border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.15); }
+.img-item.marked-delete { opacity: .35; border-color: #ef4444; }
+
+/* Delete X (top-right) */
+.img-delete-wrap {
+  position: absolute;
+  top: 6px; right: 6px;
+}
+.img-delete-cb { display: none; }
+.img-delete-label {
+  width: 24px; height: 24px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+  transition: background .15s;
+  line-height: 1;
+}
+.img-delete-label:hover { background: #ef4444; color: #fff; }
+.img-delete-cb:checked + .img-delete-label { background: #ef4444; color: #fff; }
+
+/* Primary star (bottom bar) */
+.img-bottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+  padding: 18px 8px 7px;
+  display: flex; align-items: center; gap: 5px;
+}
+.img-primary-radio { display: none; }
+.img-primary-label {
+  display: flex; align-items: center; gap: 4px;
+  color: rgba(255,255,255,0.65);
+  font-size: 11px; font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+.img-primary-label .star {
+  font-size: 14px;
+  transition: color .15s;
+}
+.img-primary-radio:checked ~ .img-primary-label {
+  color: #fbbf24;
+}
+.img-primary-radio:checked ~ .img-primary-label .star {
+  color: #fbbf24;
+}
+
+/* New images upload */
+.new-upload-zone {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  margin-top: 8px;
+}
+.new-upload-zone:hover {
+  border-color: #0d9488;
+  background: #f0fdfb;
+}
+.new-upload-zone i {
+  font-size: 30px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  display: block;
+}
+.new-upload-zone p { color: #64748b; font-size: 14px; margin: 0; }
+.new-upload-zone .hint { font-size: 12px; color: #94a3b8; margin-top: 5px; }
+
+.new-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.new-preview-item {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  position: relative;
+}
+.new-preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.new-preview-item .new-badge {
+  position: absolute;
+  top: 5px; left: 5px;
+  background: rgba(13,148,136,0.85);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: .5px;
+}
+
+/* Availability toggle */
+.avail-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+.avail-toggle {
+  appearance: none;
+  width: 44px; height: 24px;
+  background: #d1d5db;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.avail-toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px; left: 3px;
+  transition: transform .2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.avail-toggle:checked { background: #0d9488; }
+.avail-toggle:checked::after { transform: translateX(20px); }
+.avail-text { font-size: 14px; color: #374151; font-weight: 500; }
+.avail-sub  { font-size: 12px; color: #94a3b8; }
+
+/* Action bar */
+.edit-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 24px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  text-decoration: none;
+  transition: background .18s;
+}
+.btn-cancel:hover { background: #e2e8f0; color: #334155; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="add-tool-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h1>Edit Tool</h1>
+    <p>Update your listing details and manage photos</p>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <!-- ── Tool Details ──────────────────────────── -->
+    <div class="tool-card">
+      <h2>Tool Information</h2>
+
+      <div class="form-group">
+        <label for="id_title">Tool Name <span class="req">*</span></label>
+        <input type="text" id="id_title" name="title"
+               value="{{ tool.title }}" maxlength="120" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id_description">Description <span class="req">*</span></label>
+        <textarea id="id_description" name="description"
+                  rows="5" maxlength="2000" required>{{ tool.description }}</textarea>
+        <small><span id="charCount">{{ tool.description|length }}</span>/2000 characters</small>
+      </div>
+
+      <div class="two-col">
+        <div class="form-group">
+          <label for="id_category">Category <span class="req">*</span></label>
+          <div class="select-wrapper">
+            <select id="id_category" name="category_id" required>
+              <option value="">Select a category</option>
+              {% for cat in categories %}
+              <option value="{{ cat.id }}"
+                {% if cat.id == tool.category_id %}selected{% endif %}>
+                {{ cat.name }}
+              </option>
+              {% endfor %}
+            </select>
+            <i class="fa-solid fa-chevron-down select-arrow"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Condition <span class="req">*</span></label>
+          <div class="condition-group">
+            <button type="button" class="cond-btn {% if tool.condition == 'excellent' %}active{% endif %}"
+                    data-value="excellent">Excellent</button>
+            <button type="button" class="cond-btn {% if tool.condition == 'good' %}active{% endif %}"
+                    data-value="good">Good</button>
+            <button type="button" class="cond-btn {% if tool.condition == 'fair' %}active{% endif %}"
+                    data-value="fair">Fair</button>
+          </div>
+          <input type="hidden" name="condition" id="conditionInput" value="{{ tool.condition }}">
+        </div>
+      </div>
+
+      <div class="three-col">
+        <div class="form-group">
+          <label for="id_location">Location <span class="req">*</span></label>
+          <input type="text" id="id_location" name="location"
+                 value="{{ tool.location }}" required>
+        </div>
+        <div class="form-group">
+          <label for="id_rate">Price / Day ($) <span class="req">*</span></label>
+          <input type="number" id="id_rate" name="daily_rate"
+                 value="{{ tool.daily_rate }}" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="id_deposit">Deposit ($)</label>
+          <input type="number" id="id_deposit" name="deposit"
+                 value="{{ tool.deposit|default:'' }}" step="0.01" min="0">
+          <small>Refundable upon safe return</small>
+        </div>
+      </div>
+
+      <!-- Availability toggle -->
+      <div class="form-group">
+        <label>Availability</label>
+        <div class="avail-row">
+          <input type="checkbox" id="availToggle" name="is_available"
+                 class="avail-toggle" {% if tool.is_available %}checked{% endif %}>
+          <div>
+            <div class="avail-text">Available for rent</div>
+            <div class="avail-sub">Uncheck to temporarily hide this listing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Current Images ───────────────────────── -->
+    {% if images %}
+    <div class="tool-card">
+      <h2>Current Images</h2>
+      <p class="img-section-hint">
+        Click <strong>★</strong> to set the primary (cover) photo.
+        Click <strong>✕</strong> to mark an image for deletion — it will be removed when you save.
+      </p>
+      <div class="img-grid">
+        {% for img in images %}
+        <div class="img-item {% if img.is_primary %}is-primary{% endif %}" id="img-item-{{ img.id }}">
+          <img src="{{ img.image.url }}" alt="Photo {{ forloop.counter }}">
+
+          <!-- Delete button -->
+          <div class="img-delete-wrap">
+            <input type="checkbox" class="img-delete-cb"
+                   id="del-{{ img.id }}" name="delete_image" value="{{ img.id }}"
+                   onchange="toggleDelete(this, {{ img.id }})">
+            <label for="del-{{ img.id }}" class="img-delete-label" title="Delete this image">
+              <i class="fa-solid fa-xmark"></i>
+            </label>
+          </div>
+
+          <!-- Primary radio (bottom) -->
+          <div class="img-bottom">
+            <input type="radio" class="img-primary-radio"
+                   id="pri-{{ img.id }}" name="primary_image_id" value="{{ img.id }}"
+                   {% if img.is_primary %}checked{% endif %}
+                   onchange="markPrimary({{ img.id }})">
+            <label for="pri-{{ img.id }}" class="img-primary-label" title="Set as primary photo">
+              <span class="star">★</span> Primary
+            </label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── Add New Images ───────────────────────── -->
+    <div class="tool-card">
+      <h2>Add New Images</h2>
+      <label for="newImagesInput" class="new-upload-zone">
+        <i class="fa-regular fa-images"></i>
+        <p>Click to upload new photos</p>
+        <p class="hint">JPG, PNG, WebP supported — converted to WebP automatically</p>
+      </label>
+      <input type="file" id="newImagesInput" name="new_images"
+             multiple accept="image/*" style="display:none"
+             onchange="showNewPreviews(this)">
+      <div class="new-preview-grid" id="newPreviewGrid"></div>
+    </div>
+
+    <!-- ── Action Bar ────────────────────────────── -->
+    <div class="tool-card edit-actions">
+      <button type="submit" class="submit-btn" style="flex:1; margin:0">
+        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+      </button>
+      <a href="{% url 'listings:tools:detail' tool.pk %}" class="btn-cancel">
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+// Condition buttons
+document.querySelectorAll('.cond-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cond-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('conditionInput').value = btn.dataset.value;
+  });
+});
+
+// Description char counter
+const desc = document.getElementById('id_description');
+const counter = document.getElementById('charCount');
+if (desc && counter) {
+  desc.addEventListener('input', () => { counter.textContent = desc.value.length; });
+}
+
+// Mark image for deletion
+function toggleDelete(cb, id) {
+  const item = document.getElementById('img-item-' + id);
+  item.classList.toggle('marked-delete', cb.checked);
+}
+
+// Set primary image highlight
+function markPrimary(id) {
+  document.querySelectorAll('.img-item').forEach(el => el.classList.remove('is-primary'));
+  document.getElementById('img-item-' + id).classList.add('is-primary');
+}
+
+// Preview newly selected images
+function showNewPreviews(input) {
+  const grid = document.getElementById('newPreviewGrid');
+  grid.innerHTML = '';
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const wrap = document.createElement('div');
+      wrap.className = 'new-preview-item';
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      const badge = document.createElement('span');
+      badge.className = 'new-badge';
+      badge.textContent = 'NEW';
+      wrap.appendChild(img);
+      wrap.appendChild(badge);
+      grid.appendChild(wrap);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+</script>
+{% endblock %}

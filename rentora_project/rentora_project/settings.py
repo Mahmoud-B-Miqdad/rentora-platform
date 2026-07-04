@@ -14,6 +14,8 @@ import os
 import environ
 from pathlib import Path
 import sys
+import stripe
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -26,7 +28,6 @@ env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,7 +39,15 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
+
+# Required when Django runs behind Nginx/reverse-proxy on AWS.
+# Without this, build_absolute_uri() builds links with 127.0.0.1 instead of
+# the real server hostname, breaking email verification and password-reset links.
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 
 
 # Application definition
@@ -65,27 +74,33 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.LastSeenMiddleware',
 ]
 
 ROOT_URLCONF = 'rentora_project.rentora_project.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'rentora_project' / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "rentora_project" / "templates"],
+        "APP_DIRS": True,  
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "listings.context_processors.wishlist_count",
+                "listings.context_processors.notification_count",
+                "listings.context_processors.current_user",
             ],
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = 'rentora_project.rentora_project.wsgi.application'
 
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -133,7 +148,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [
+    BASE_DIR / 'rentora_project' / 'static',
+]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'rentora_project' / 'media'
+
+LOGIN_URL = 'users:login'
+
+# ── AI Integration ───────────────────────────────────────────
+# Google Gemini Flash — free tier (15 RPM / 1M tokens per day).
+# Get your key at: https://aistudio.google.com/app/apikey
+GEMINI_API_KEY = env('GEMINI_API_KEY', default='')
+
+# ── Email ────────────────────────────────────────────────────
+# Development default: prints emails to the console.
+# Switch to smtp.EmailBackend and fill SMTP vars in .env for real sending.
+EMAIL_BACKEND       = env('EMAIL_BACKEND',       default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST          = env('EMAIL_HOST',          default='smtp.gmail.com')
+EMAIL_PORT          = env.int('EMAIL_PORT',      default=587)
+EMAIL_USE_TLS       = env.bool('EMAIL_USE_TLS',  default=True)
+EMAIL_HOST_USER     = env('EMAIL_HOST_USER',     default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL  = env('DEFAULT_FROM_EMAIL',  default='Rentora <noreply@rentora.ps>')
+
+
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default="")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="") 
+
+stripe.api_key = STRIPE_SECRET_KEY

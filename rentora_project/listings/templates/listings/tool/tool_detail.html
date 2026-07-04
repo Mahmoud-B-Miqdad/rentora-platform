@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ tool.title }} — Rentora{% endblock %}
+{% block body_class %}detail-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'listings/css/tool_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% if is_owner and not tool.is_available %}
+<div style="background:#fefce8; border-bottom:2px solid #fde047; padding:12px 0;">
+  <div class="container" style="display:flex; align-items:center; gap:12px;">
+    <i class="fa-solid fa-eye-slash" style="color:#a16207; font-size:16px;"></i>
+    <div>
+      <strong style="color:#92400e; font-size:14px;">This tool is currently hidden from public listings.</strong>
+      <span style="color:#a16207; font-size:13px; margin-left:8px;">Only you can see this page.</span>
+    </div>
+    <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
+       style="margin-left:auto; background:#0f766e; color:#fff; padding:7px 16px; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap;">
+      <i class="fa-solid fa-pen-to-square"></i> Make Available
+    </a>
+  </div>
+</div>
+{% endif %}
+
+<div class="detail-wrapper">
+    <div class="container">
+
+        <!-- ── Breadcrumb ──────────────────────────────────────────── -->
+        <nav class="detail-breadcrumb" aria-label="Breadcrumb">
+            <a href="{% url 'listings:home' %}" class="detail-breadcrumb__link">
+                <i class="fa-solid fa-house" aria-hidden="true"></i> Home
+            </a>
+            <i class="fa-solid fa-chevron-right detail-breadcrumb__sep" aria-hidden="true"></i>
+            {% if tool.category %}
+            <span class="detail-breadcrumb__link">{{ tool.category.name }}</span>
+            <i class="fa-solid fa-chevron-right detail-breadcrumb__sep" aria-hidden="true"></i>
+            {% endif %}
+            <span class="detail-breadcrumb__current">{{ tool.title }}</span>
+        </nav>
+
+        {% if booking_success %}
+        <div class="detail-flash detail-flash--success" id="bookingFlash">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <span>{{ booking_success }}</span>
+        </div>
+        {% endif %}
+
+        <!-- ── Main Grid ───────────────────────────────────────────── -->
+        <div class="detail-grid">
+
+            <!-- ══════════════════════════════════════════════════════
+                 LEFT COLUMN
+                 ══════════════════════════════════════════════════════ -->
+            <div class="detail-left">
+
+                <!-- ── Image Slider ──────────────────────────────── -->
+                <div class="img-slider" id="imgSlider">
+
+                    <!-- Main image frame -->
+                    <div class="img-slider__main">
+
+                        <img id="sliderMainImg"
+                             class="img-slider__primary"
+                             src="{% if primary_image %}{{ primary_image.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}"
+                             alt="{{ tool.title }}">
+
+                        {% if not primary_image %}
+                        <div class="img-slider__placeholder">
+                            <i class="fa-solid fa-image" aria-hidden="true"></i>
+                        </div>
+                        {% endif %}
+
+                        {% if all_images|length > 1 %}
+                        <!-- Arrows -->
+                        <button class="img-slider__arrow img-slider__arrow--prev" id="sliderPrev" aria-label="Previous image">
+                            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                        </button>
+                        <button class="img-slider__arrow img-slider__arrow--next" id="sliderNext" aria-label="Next image">
+                            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+
+                        <!-- Dots indicator -->
+                        <div class="img-slider__dots" id="sliderDots">
+                            {% for img in all_images %}
+                            <button class="img-slider__dot {% if forloop.first %}img-slider__dot--active{% endif %}"
+                                    data-index="{{ forloop.counter0 }}"
+                                    aria-label="Image {{ forloop.counter }}"></button>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <!-- / Main image frame -->
+
+                    <!-- Thumbnail strip -->
+                    {% if all_images|length > 1 %}
+                    <div class="img-slider__thumbs" id="sliderThumbs">
+                        {% for img in all_images %}
+                        <button class="img-slider__thumb {% if forloop.first %}img-slider__thumb--active{% endif %}"
+                                data-index="{{ forloop.counter0 }}"
+                                data-src="{{ img.image.url }}"
+                                aria-label="View image {{ forloop.counter }}"
+                                type="button">
+                            <img src="{{ img.image.url }}"
+                                 alt="{{ tool.title }} photo {{ forloop.counter }}"
+                                 loading="lazy">
+                        </button>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <!-- / Thumbnail strip -->
+
+                </div>
+
+                <!-- Tags row -->
+                <div class="detail-tags">
+                    {% if tool.category %}
+                    <span class="detail-tag detail-tag--teal">{{ tool.category.name }}</span>
+                    {% endif %}
+                    <span class="detail-tag detail-tag--condition">{{ tool.get_condition_display }} Condition</span>
+                    {% if tool.is_available %}
+                    <span class="detail-tag detail-tag--available">Available</span>
+                    {% endif %}
+                </div>
+
+                <!-- Title + rating -->
+                <div class="detail-title-row">
+                    <h1 class="detail-title">{{ tool.title }}</h1>
+                    <button class="detail-wishlist-btn {% if is_wishlisted %}detail-wishlist-btn--saved{% endif %}"
+                            data-tool-id="{{ tool.pk }}"
+                            onclick="toggleWishlist(this, {{ tool.pk }})"
+                            aria-label="{% if is_wishlisted %}Remove from wishlist{% else %}Save to wishlist{% endif %}">
+                        <i class="{% if is_wishlisted %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="detail-rating-row">
+                    {% if avg_rating %}
+                    <div class="detail-stars">
+                        {% with full=avg_rating|floatformat:0 %}
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= full|add:"0" %}
+                                <i class="fa-solid fa-star" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa-regular fa-star" aria-hidden="true"></i>
+                            {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                    </div>
+                    <span class="detail-rating-num">{{ avg_rating }}</span>
+                    <span class="detail-review-count">({{ review_count }} review{{ review_count|pluralize }})</span>
+                    {% else %}
+                    <span class="detail-review-count">No reviews yet</span>
+                    {% endif %}
+                    <span class="detail-location">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                        {{ tool.location }}
+                    </span>
+                </div>
+
+                <hr class="detail-sep">
+
+                <!-- Owner card -->
+                <a href="{% url 'users:public_profile' tool.owner.pk %}" class="detail-owner-card">
+                    <div class="detail-owner-card__avatar-wrap">
+                        {% if tool.owner.profile_image %}
+                            <img src="{{ tool.owner.profile_image.url }}"
+                                 alt="{{ tool.owner.name }}"
+                                 class="detail-owner-card__avatar">
+                        {% else %}
+                            <div class="detail-owner-card__avatar-init">{{ tool.owner.name|first|upper }}</div>
+                        {% endif %}
+                        {% if tool.owner.is_verified %}
+                        <span class="detail-owner-card__verified" title="Verified owner">
+                            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="detail-owner-card__info">
+                        <div class="detail-owner-card__header">
+                            <span class="detail-owner-card__label">Listed by</span>
+                            <span class="detail-owner-card__name">{{ tool.owner.name }}</span>
+                            {% if tool.owner.is_verified %}
+                            <span class="detail-owner-card__verified-badge">
+                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Verified
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="detail-owner-card__stats">
+                            <span class="detail-owner-stat">
+                                <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                {{ owner_rating|default:"—" }} rating
+                            </span>
+                            <span class="detail-owner-stat">
+                                <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+                                {{ owner_tools_count }} tool{{ owner_tools_count|pluralize }} listed
+                            </span>
+                            <span class="detail-owner-stat">
+                                <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                                {{ owner_rentals_count }} rental{{ owner_rentals_count|pluralize }} completed
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <hr class="detail-sep">
+
+                <!-- About This Tool -->
+                <div class="detail-about">
+                    <h2 class="detail-section-title">About This Tool</h2>
+                    <p class="detail-about__text">{{ tool.description }}</p>
+                </div>
+
+                <hr class="detail-sep">
+
+                <!-- Availability Calendar -->
+                <div class="detail-availability">
+                    <h2 class="detail-section-title">
+                        <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                        Availability
+                    </h2>
+                    <div class="avail-cal" id="availCalendar">
+
+                        <!-- Gradient header: month nav + selection bar -->
+                        <div class="avail-cal__top">
+                            <div class="avail-cal__nav-row">
+                                <button type="button" class="avail-cal__nav" id="availPrev" aria-label="Previous month">
+                                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                                </button>
+                                <div class="avail-cal__month-wrap">
+                                    <span class="avail-cal__month" id="availMonthLabel"></span>
+                                    <span class="avail-cal__year"  id="availYearLabel"></span>
+                                </div>
+                                <button type="button" class="avail-cal__nav" id="availNext" aria-label="Next month">
+                                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="avail-cal__selection" id="availSelection">
+                                <i class="fa-regular fa-calendar-check"></i>
+                                <span id="availSelectionText">Select check-in &amp; check-out dates</span>
+                            </div>
+                        </div>
+
+                        <!-- Calendar body: weekdays + day grid + legend -->
+                        <div class="avail-cal__body">
+                            <div class="avail-cal__weekdays">
+                                <span>Su</span><span>Mo</span><span>Tu</span>
+                                <span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                            </div>
+                            <div class="avail-cal__grid" id="availGrid"></div>
+                            <div class="avail-cal__legend">
+                                <span class="avail-cal__legend-item">
+                                    <i class="avail-dot avail-dot--available"></i>Available
+                                </span>
+                                <span class="avail-cal__legend-item avail-cal__legend-item--booked">
+                                    <i class="avail-dot avail-dot--booked"></i>Booked
+                                </span>
+                                <span class="avail-cal__legend-item avail-cal__legend-item--selected">
+                                    <i class="avail-dot avail-dot--selected"></i>Your selection
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ booked_ranges|json_script:"booked-ranges-data" }}
+
+                <hr class="detail-sep">
+
+                <!-- Pickup Location Map — loaded lazily via IntersectionObserver -->
+                {% if tool.location %}
+                <div class="detail-map-section">
+                    <h2 class="detail-section-title">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                        Pickup Location
+                    </h2>
+                    <p class="detail-map-address">
+                        <i class="fa-solid fa-map-pin" aria-hidden="true"></i>
+                        {{ tool.location }}
+                    </p>
+                    <div id="toolMap" class="detail-map-container detail-map-container--loading"
+                         data-map-url="{% url 'listings:tools:map_coords' tool.pk %}"
+                         data-tool-name="{{ tool.title|escapejs }}"
+                         data-tool-location="{{ tool.location|escapejs }}">
+                        <div class="detail-map-loader">
+                            <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+                            <span>Loading map…</span>
+                        </div>
+                    </div>
+                    <p class="detail-map-note">
+                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        Exact pickup spot will be shared after booking confirmation.
+                    </p>
+                </div>
+                {% endif %}
+
+                <hr class="detail-sep">
+
+                <!-- Security Deposit -->
+                <div class="detail-deposit-card">
+                    <div class="detail-deposit-card__icon">
+                        <i class="fa-solid fa-vault" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <p class="detail-deposit-card__title">Security Deposit &mdash; ${{ tool.deposit }}</p>
+                        <p class="detail-deposit-card__note">Fully refundable upon safe return of the tool in its original condition.</p>
+                    </div>
+                </div>
+
+                <hr class="detail-sep">
+
+                <!-- Reviews -->
+                <div class="detail-reviews">
+                    <div class="detail-reviews__header">
+                        <h2 class="detail-section-title">
+                            Reviews
+                            {% if review_count %}
+                            <span class="detail-reviews__count">({{ review_count }})</span>
+                            {% endif %}
+                        </h2>
+                    </div>
+
+                    {% if reviews %}
+                    <p class="detail-reviews__sub">Tool Reviews</p>
+                    <div class="detail-reviews__grid">
+                        {% for review in reviews %}
+                        <div class="review-card">
+                            <a href="{% url 'users:public_profile' review.reviewer.pk %}" class="review-card__header">
+                                <div class="review-card__avatar-wrap">
+                                    {% if review.reviewer.profile_image %}
+                                        <img src="{{ review.reviewer.profile_image.url }}"
+                                             alt="{{ review.reviewer.name }}"
+                                             class="review-card__avatar">
+                                    {% else %}
+                                        <div class="review-card__avatar-init">{{ review.reviewer.name|first|upper }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="review-card__meta">
+                                    <span class="review-card__name">{{ review.reviewer.name }}</span>
+                                    <div class="review-card__stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="fa-solid fa-star" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fa-regular fa-star" aria-hidden="true"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <span class="review-card__date">{{ review.created_at|date:"M Y" }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                            {% if review.comment %}
+                            <p class="review-card__text">{{ review.comment }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="detail-reviews__empty">
+                        <i class="fa-regular fa-star" aria-hidden="true"></i>
+                        <p>No reviews yet. Be the first to rent and review this tool.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+            <!-- / LEFT COLUMN -->
+
+            <!-- ══════════════════════════════════════════════════════
+                 RIGHT COLUMN — Sticky Booking Panel
+                 ══════════════════════════════════════════════════════ -->
+            <div class="detail-right">
+                <div class="booking-panel" id="bookingPanel">
+
+                    <!-- Price header -->
+                    <div class="booking-panel__price">
+                        <span class="booking-panel__amount">${{ tool.daily_rate }}</span>
+                        <span class="booking-panel__unit">/ day</span>
+                    </div>
+
+                    <!-- Panel body -->
+                    <div class="booking-panel__body">
+
+                    <!-- Booking Form -->
+                    {% if is_owner %}
+                    <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
+                       class="btn-book-now" style="justify-content:center; background:#475569; text-decoration:none;">
+                        <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                        Manage This Tool
+                    </a>
+
+                    {% elif not tool.is_available %}
+                    <div style="text-align:center; padding:18px 12px; color:#94a3b8;">
+                        <i class="fa-solid fa-ban" style="font-size:26px; display:block; margin-bottom:8px; color:#d1d5db;"></i>
+                        <span style="font-size:14px; font-weight:500;">Currently unavailable</span>
+                    </div>
+
+                    {% elif request.session.user_id %}
+                    <form class="booking-form"
+                          method="POST"
+                          action="{% url 'listings:create_booking' tool.pk %}">
+                        {% csrf_token %}
+                        <div class="booking-form__field">
+                            <label class="booking-form__label" for="start_date">Start Date</label>
+                            <input class="booking-form__input" type="date" id="start_date"
+                                   name="start_date" required>
+                        </div>
+                        <div class="booking-form__field">
+                            <label class="booking-form__label" for="end_date">End Date</label>
+                            <input class="booking-form__input" type="date" id="end_date"
+                                   name="end_date" required>
+                        </div>
+                        <div class="booking-form__estimate" id="priceEstimate" style="display:none">
+                            <span class="booking-form__estimate-label">Estimated total</span>
+                            <span class="booking-form__estimate-value" id="estimateValue"></span>
+                        </div>
+
+                        {% if booking_error %}
+                        <div class="booking-alert booking-alert--error" id="bookingErrorAlert">
+                            <div class="booking-alert__icon">
+                                <i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i>
+                            </div>
+                            <div class="booking-alert__body">
+                                <p class="booking-alert__title">Booking Unavailable</p>
+                                <p class="booking-alert__msg">{{ booking_error }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <button type="submit" class="btn-book-now">
+                            <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
+                            Book Now
+                        </button>
+                    </form>
+
+                    {% else %}
+                    <a href="{% url 'users:login' %}" class="btn-book-now btn-book-now--login">
+                        <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
+                        Sign In to Book
+                    </a>
+                    {% endif %}
+
+                    <p class="booking-panel__note">
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        You won&rsquo;t be charged yet &mdash; the owner will confirm your request.
+                    </p>
+
+                    <!-- Quick stats -->
+                    <div class="booking-panel__divider"></div>
+                    <div class="booking-panel__stats">
+                        <div class="booking-panel__stat">
+                            <span class="booking-panel__stat-value">${{ tool.deposit }}</span>
+                            <span class="booking-panel__stat-label">Deposit</span>
+                        </div>
+                        {% if avg_rating %}
+                        <div class="booking-panel__stat">
+                            <span class="booking-panel__stat-value">
+                                <i class="fa-solid fa-star" style="color:#f59e0b;font-size:13px" aria-hidden="true"></i>
+                                {{ avg_rating }}
+                            </span>
+                            <span class="booking-panel__stat-label">Avg rating</span>
+                        </div>
+                        {% endif %}
+                        <div class="booking-panel__stat">
+                            <span class="booking-panel__stat-value">{{ review_count }}</span>
+                            <span class="booking-panel__stat-label">Review{{ review_count|pluralize }}</span>
+                        </div>
+                    </div>
+
+                    </div><!-- / booking-panel__body -->
+                </div>
+            </div>
+            <!-- / RIGHT COLUMN -->
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* Dynamic data only — all logic lives in tool_detail.js */
+window.AppConfig = {
+    csrfToken:         '{{ csrf_token }}',
+    toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
+    loginUrl:          '{% url "users:login" %}',
+    dailyRate:         {{ tool.daily_rate }},
+    images: [{% for img in all_images %}"{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+};
+</script>
+<script src="{% static 'listings/js/tool_detail.js' %}"></script>
+{% endblock %}

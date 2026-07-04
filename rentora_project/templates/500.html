@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Server Error — Rentora{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/error_pages.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="error-page">
+    <div class="error-page__icon error-page__icon--warn">
+        <i class="fa-solid fa-server"></i>
+        <span class="error-page__badge error-page__badge--warn"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    </div>
+
+    <p class="error-page__code">500</p>
+    <h1 class="error-page__title">Something Went Wrong</h1>
+    <p class="error-page__text">
+        We're experiencing a temporary issue on our end.
+        Our team has been notified — please try again in a moment.
+    </p>
+
+    <div class="error-page__actions">
+        <a href="/" class="error-page__btn error-page__btn--primary">
+            <i class="fa-solid fa-house"></i> Back to Home
+        </a>
+        <a href="javascript:location.reload()" class="error-page__btn error-page__btn--ghost">
+            <i class="fa-solid fa-arrows-rotate"></i> Try Again
+        </a>
+    </div>
+</section>
+{% endblock %}

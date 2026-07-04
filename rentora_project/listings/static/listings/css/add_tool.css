@@ -1,0 +1,514 @@
+/* ── Font ────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Page Shell ──────────────────────────────────────────────────── */
+.add-tool-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 20px 80px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.page-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.page-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+}
+
+.page-header p {
+    font-size: 16px;
+    color: #64748b;
+}
+
+.page-header .highlight {
+    color: #0f766e;
+    font-weight: 600;
+}
+
+/* ── Messages ────────────────────────────────────────────────────── */
+.form-messages {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-message--error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.form-message--success {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+/* ── Step Tabs ───────────────────────────────────────────────────── */
+.step-tabs {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 14px;
+    padding: 5px;
+    gap: 4px;
+    margin-bottom: 28px;
+}
+
+.step-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.step-tab.active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .10);
+}
+
+.step-tab i {
+    font-size: 15px;
+}
+
+/* ── Card ────────────────────────────────────────────────────────── */
+.tool-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 40px 44px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, .07);
+}
+
+.tool-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 28px;
+}
+
+/* ── Form Groups ─────────────────────────────────────────────────── */
+.form-group {
+    margin-bottom: 26px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.req {
+    color: #f97316;
+    margin-left: 2px;
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.label-row label {
+    margin-bottom: 0;
+}
+
+/* ── Inputs ──────────────────────────────────────────────────────── */
+.tool-card input[type="text"],
+.tool-card input[type="number"],
+.tool-card textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid #e5e9f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0f172a;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    box-sizing: border-box;
+}
+
+.tool-card input[type="text"]::placeholder,
+.tool-card input[type="number"]::placeholder,
+.tool-card textarea::placeholder {
+    color: #b0bec5;
+}
+
+.tool-card input[type="text"]:focus,
+.tool-card input[type="number"]:focus,
+.tool-card textarea:focus {
+    border-color: #0f766e;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(15, 118, 110, .10);
+}
+
+.tool-card textarea {
+    resize: none;
+}
+
+/* ── Select ──────────────────────────────────────────────────────── */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper select {
+    width: 100%;
+    padding: 13px 44px 13px 16px;
+    border: 1.5px solid #e5e9f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0f172a;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+    box-sizing: border-box;
+}
+
+.select-wrapper select:focus {
+    border-color: #0f766e;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(15, 118, 110, .10);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* ── AI Action Buttons ───────────────────────────────────────────── */
+.ai-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 2px;
+    background: none;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity .2s;
+    white-space: nowrap;
+}
+
+.ai-action-btn.teal {
+    color: #0f766e;
+}
+
+.ai-action-btn.amber {
+    color: #d97706;
+}
+
+.ai-action-btn:hover {
+    opacity: .7;
+}
+
+/* ── Condition Buttons ───────────────────────────────────────────── */
+.condition-group {
+    display: flex;
+    gap: 8px;
+}
+
+.cond-btn {
+    flex: 1;
+    padding: 12px 10px;
+    border: 1.5px solid #e5e9f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.cond-btn:hover {
+    border-color: #0f766e;
+    color: #0f766e;
+}
+
+.cond-btn.active {
+    background: #0f766e;
+    border-color: #0f766e;
+    color: #ffffff;
+}
+
+/* ── Grids ───────────────────────────────────────────────────────── */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* ── Next Button ─────────────────────────────────────────────────── */
+.next-btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #0f766e;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.next-btn:hover {
+    background: #0d6359;
+}
+
+/* ── Upload Hint ─────────────────────────────────────────────────── */
+.upload-hint {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+/* ── Drop Zone ───────────────────────────────────────────────────── */
+.drop-zone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+    padding: 52px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    background: #f8fafc;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+    border-color: #0f766e;
+    background: #f0fdfb;
+}
+
+.drop-icon {
+    font-size: 40px;
+    color: #94a3b8;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.drop-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.drop-sub {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.browse-btn {
+    display: inline-block;
+    padding: 10px 28px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color .2s, color .2s;
+}
+
+.browse-btn:hover {
+    border-color: #0f766e;
+    color: #0f766e;
+}
+
+/* ── Hidden Input ────────────────────────────────────────────────── */
+.hidden-input {
+    display: none;
+}
+
+/* ── Image Counter ───────────────────────────────────────────────── */
+.img-counter {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #94a3b8;
+    text-align: center;
+    min-height: 20px;
+}
+
+/* ── Preview Grid ────────────────────────────────────────────────── */
+.preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.preview-item {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #e5e9f0;
+    flex-shrink: 0;
+}
+
+.preview-item.preview-primary {
+    border-color: #0f766e;
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, .55);
+    color: #ffffff;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s;
+    padding: 0;
+}
+
+.preview-remove:hover {
+    background: rgba(220, 38, 38, .85);
+}
+
+.preview-badge {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background: #0f766e;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+/* ── Submit Button ───────────────────────────────────────────────── */
+.submit-btn {
+    width: 100%;
+    margin-top: 32px;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: #0f766e;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.submit-btn:hover {
+    background: #0d6359;
+}
+
+/* ── Tab Panel ───────────────────────────────────────────────────── */
+.tab-panel.hidden {
+    display: none;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .tool-card {
+        padding: 28px 22px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+    }
+
+    .two-col,
+    .three-col {
+        grid-template-columns: 1fr;
+    }
+
+    .step-tab span {
+        display: none;
+    }
+}
