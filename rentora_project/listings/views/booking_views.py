@@ -5,6 +5,7 @@ from django.utils     import timezone
 from listings.models import Tool, Booking, ToolImage, Review
 from users.models    import User
 from django.contrib  import messages
+from listings.models.report import Report
 
 
 def create_booking_view(request, pk):
@@ -218,3 +219,40 @@ def dispute_return(request, booking_id):
         booking.save()
         messages.warning(request, "Return disputed. The owner has been notified to re-confirm.")
     return redirect('/dashboard/?tab=my-rentals')
+
+@login_required_session
+def report_user(request, user_id):
+    reporter = User.objects.get(id=request.session['user_id'])
+    reported = get_object_or_404(User, id=user_id)
+    if reporter == reported:
+        messages.error(request, "You cannot report yourself.")
+        return redirect('user_profile', user_id=user_id)
+    already = Report.objects.filter(
+        reporter=reporter,
+        reported=reported
+	).exists()
+    if already:
+        messages.error(request, "You have already reported this user.")
+        return redirect('user_profile', user_id=user_id)
+    if request.method == 'POST':
+        reason = request.POST.get('reason')
+        details = request.POST.get('details', '')
+        if not reason:
+            messages.error(request, "Please select a reason.")
+            return redirect('user_profile', user_id=user_id)
+        Report.objects.create(
+            reporter=reporter,
+            reported=reported,
+            reason=reason,
+            details=details,
+		)
+        report_count = Report.objects.filter(reported=reported).count()
+        if report_count >= Report.FLAGGED_AT:
+            messages.warning(
+                request,
+                f"This account has been flagged after {report_count} reports."
+			)
+        else:
+            messages.success(request, "report submitted. Our team will review it.")
+        return redirect('user_profile', user_id=user_id)
+    return redirect('user_profile', user_id=user_id)
