@@ -1,33 +1,7 @@
 /* tool_detail.js — Rentora Tool Detail Page */
 
-/* ── Wishlist toggle (global — called via onclick) ──────────────────── */
-window.toggleWishlist = function toggleWishlist(btn, toolId) {
-    var cfg = window.AppConfig || {};
-    var url = cfg.toggleWishlistUrl.replace('/0/', '/' + toolId + '/');
-
-    fetch(url, {
-        method: 'POST',
-        headers: { 'X-CSRFToken': cfg.csrfToken },
-    })
-    .then(function (r) {
-        if (r.status === 401) { window.location.href = cfg.loginUrl; return null; }
-        return r.json();
-    })
-    .then(function (data) {
-        if (!data) return;
-        var icon = btn.querySelector('i');
-        if (data.saved) {
-            icon.className = 'fa-solid fa-heart';
-            btn.classList.add('detail-wishlist-btn--saved');
-            btn.setAttribute('aria-label', 'Remove from wishlist');
-        } else {
-            icon.className = 'fa-regular fa-heart';
-            btn.classList.remove('detail-wishlist-btn--saved');
-            btn.setAttribute('aria-label', 'Save to wishlist');
-        }
-    })
-    .catch(console.error);
-};
+/* tool_detail.js — Rentora Tool Detail Page */
+/* toggleWishlist is defined globally in base.js */
 
 (function () {
     'use strict';

@@ -180,22 +180,26 @@ def tool_detail_view(request, pk):
  
  
 def toggle_wishlist_view(request, pk):
-    """AJAX POST — toggle a tool in/out of the user's wishlist."""
+    """Toggle a tool in/out of the user's wishlist. Always returns JSON."""
     if request.method != 'POST':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
- 
+
     user_id = request.session.get('user_id')
     if not user_id:
         return JsonResponse({'error': 'login_required'}, status=401)
- 
+
     tool = get_object_or_404(Tool, pk=pk)
     user = get_object_or_404(User, pk=user_id)
- 
+
     obj, created = Wishlist.objects.get_or_create(user=user, tool=tool)
     if not created:
         obj.delete()
-        return JsonResponse({'saved': False})
-    return JsonResponse({'saved': True})
+        saved = False
+    else:
+        saved = True
+
+    count = Wishlist.objects.filter(user=user).count()
+    return JsonResponse({'saved': saved, 'count': count})
  
  
 # ==================================================

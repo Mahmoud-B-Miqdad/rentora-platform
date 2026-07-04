@@ -6,19 +6,13 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="dashboard-layout">
 
   <!-- ══════════════════════════════════
        SIDEBAR
   ══════════════════════════════════ -->
   <aside class="sidebar">
-
-    <a href="{% url 'listings:home' %}" class="sidebar-brand">
-      <div class="brand-icon">
-        <i class="fa-solid fa-screwdriver-wrench"></i>
-      </div>
-      <span class="brand-name">Rentora</span>
-    </a>
 
     <nav class="sidebar-nav">
       <button class="nav-link" data-tab="overview">
@@ -36,6 +30,13 @@
       <button class="nav-link" data-tab="my-rentals">
         <i class="fa-regular fa-calendar-check"></i>
         My Rentals
+      </button>
+      <button class="nav-link" data-tab="messages">
+        <i class="fa-regular fa-message"></i>
+        Messages
+        {% if total_unread %}
+          <span class="nav-unread-badge">{{ total_unread }}</span>
+        {% endif %}
       </button>
     </nav>
 
@@ -359,6 +360,9 @@
               </div>
             </div>
             <div class="booking-actions">
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with renter">
+                <i class="fa-regular fa-message"></i>
+              </a>
               <form method="POST" action="{% url 'listings:approve_booking' booking.id %}" style="display:inline">
                 {% csrf_token %}
                 <button type="submit" class="btn-approve" title="Approve">
@@ -408,6 +412,9 @@
               </div>
             </div>
             <div class="booking-actions">
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with renter">
+                <i class="fa-regular fa-message"></i>
+              </a>
               {% if booking.status == 'payment_pending' %}
                 <span class="badge badge-payment">Awaiting Payment</span>
               {% elif booking.status == 'return_pending' %}
@@ -416,20 +423,30 @@
                   <span>Awaiting renter confirmation</span>
                 </div>
               {% else %}
-                <span class="badge badge-approved">Approved</span>
-                <form method="POST" action="{% url 'listings:request_return' booking.id %}">
-                  {% csrf_token %}
-                  <button type="submit" class="btn-complete">
-                    <i class="fa-solid fa-rotate-left"></i> Mark as Returned
-                  </button>
-                </form>
+                {% if booking.status == 'confirmed' %}
+                  <span class="badge badge-confirmed">Confirmed</span>
+                {% else %}
+                  <span class="badge badge-approved">Approved</span>
+                {% endif %}
+                {% if today >= booking.start_date %}
+                  <form method="POST" action="{% url 'listings:request_return' booking.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-complete">
+                      <i class="fa-solid fa-rotate-left"></i> Mark as Returned
+                    </button>
+                  </form>
+                {% else %}
+                  <span class="badge-return-locked" title="Available from {{ booking.start_date }}">
+                    <i class="fa-solid fa-lock"></i> Starts {{ booking.start_date }}
+                  </span>
+                {% endif %}
               {% endif %}
             </div>
           </div>
           {% empty %}
           <div class="empty-state">
             <i class="fa-regular fa-calendar-check"></i>
-            No approved bookings.
+            No confirmed bookings yet.
           </div>
           {% endfor %}
         </div>
@@ -493,13 +510,30 @@
                 </a>
                 <span class="meta-sep">·</span>
                 {{ booking.start_date }} → {{ booking.end_date }}
-                <span class="meta-price">${{ booking.total_price }}</span>
+                {% if booking.overdue_days %}
+                  <del class="price-original">${{ booking.original_total }}</del>
+                  <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
+                  <span class="price-adjustment price-adjustment--overdue">
+                    <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}d overdue
+                  </span>
+                {% elif booking.early_return_days %}
+                  <del class="price-original">${{ booking.original_total }}</del>
+                  <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
+                  <span class="price-adjustment price-adjustment--early">
+                    <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}d early
+                  </span>
+                {% else %}
+                  <span class="meta-price">${{ booking.total_price }}</span>
+                {% endif %}
               </div>
             </div>
             <div class="completed-actions">
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat history">
+                <i class="fa-regular fa-message"></i>
+              </a>
               <span class="badge badge-completed">Completed</span>
               {% if 'for_renter' in booking.reviewed_types %}
-                <span class="badge badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
+                <span class="badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
               {% else %}
                 <button type="button" class="btn-leave-review" data-review-modal="renter-{{ booking.id }}">
                   <i class="fa-regular fa-star"></i> Rate Renter
@@ -622,11 +656,16 @@
                   <span class="meta-price">${{ booking.total_price }}</span>
                 </div>
               </div>
-              {% if booking.status == 'payment_pending' %}
-                <a href="{% url 'listings:payment' booking.id %}" class="btn-pay-now"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
-              {% else %}
-                <span class="badge badge-pending">Pending</span>
-              {% endif %}
+              <div class="booking-actions">
+                <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with owner">
+                  <i class="fa-regular fa-message"></i>
+                </a>
+                {% if booking.status == 'payment_pending' %}
+                  <a href="{% url 'listings:payment' booking.id %}" class="btn-pay-now"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
+                {% else %}
+                  <span class="badge badge-pending">Pending</span>
+                {% endif %}
+              </div>
             </div>
             {% empty %}
             <div class="empty-state"><i class="fa-regular fa-clock"></i>No pending bookings.</div>
@@ -700,6 +739,9 @@
                   <span class="meta-price">${{ booking.total_price }}</span>
                 </div>
               </div>
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with owner">
+                <i class="fa-regular fa-message"></i>
+              </a>
               {% if booking.end_date < today %}
                 <span class="badge badge-overdue"><i class="fa-solid fa-clock"></i> Overdue</span>
               {% else %}
@@ -729,15 +771,32 @@
                     <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
                   </a>
                   <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
-                  <span class="meta-price">${{ booking.total_price }}</span>
+                  {% if booking.status == 'completed' and booking.overdue_days %}
+                    <del class="price-original">${{ booking.original_total }}</del>
+                    <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
+                    <span class="price-adjustment price-adjustment--overdue">
+                      <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}d overdue
+                    </span>
+                  {% elif booking.status == 'completed' and booking.early_return_days %}
+                    <del class="price-original">${{ booking.original_total }}</del>
+                    <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
+                    <span class="price-adjustment price-adjustment--early">
+                      <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}d early return
+                    </span>
+                  {% else %}
+                    <span class="meta-price">${{ booking.total_price }}</span>
+                  {% endif %}
                 </div>
               </div>
               <div class="completed-actions">
+                <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="View conversation">
+                  <i class="fa-regular fa-message"></i>
+                </a>
                 {% if booking.status == 'completed' %}<span class="badge badge-completed">Completed</span>
                 {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
                 {% if booking.status == 'completed' %}
                   {% if 'for_tool' in booking.reviewed_types and 'for_owner' in booking.reviewed_types %}
-                    <span class="badge badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
+                    <span class="badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
                   {% else %}
                     <button type="button" class="btn-leave-review" data-review-modal="rental-{{ booking.id }}">
                       <i class="fa-regular fa-star"></i> Leave a Review
@@ -808,6 +867,110 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- ════════ MESSAGES ════════ -->
+    <div class="tab-panel" id="tab-messages">
+
+      <div class="page-header">
+        <h1 class="page-title">Messages</h1>
+        <p class="page-subtitle">All your rental conversations in one place</p>
+      </div>
+
+      <div class="section-card inbox-card">
+
+        {% if conversations %}
+
+          <!-- Search bar -->
+          <div class="inbox-search-wrap">
+            <i class="fa-solid fa-magnifying-glass inbox-search__icon"></i>
+            <input type="text" id="inboxSearch" class="inbox-search"
+                   placeholder="Search conversations…">
+          </div>
+
+          <div class="inbox-list" id="inboxList">
+            {% for conv in conversations %}
+            <a href="{% url 'listings:chat' conv.booking.pk %}"
+               class="inbox-item {% if conv.unread_count %}inbox-item--unread{% endif %}"
+               data-search="{{ conv.other.name|lower }} {{ conv.booking.tool.title|lower }}">
+
+              <!-- Tool thumbnail -->
+              <div class="inbox-thumb">
+                {% if conv.booking.tool.primary_images %}
+                  <img src="{{ conv.booking.tool.primary_images.0.image.url }}"
+                       alt="{{ conv.booking.tool.title }}">
+                {% else %}
+                  <i class="fa-solid fa-screwdriver-wrench"></i>
+                {% endif %}
+              </div>
+
+              <!-- Other participant avatar -->
+              <div class="inbox-avatar">
+                {% if conv.other.profile_image %}
+                  <img src="{{ conv.other.profile_image.url }}" alt="{{ conv.other.name }}">
+                {% else %}
+                  {{ conv.other.name|first|upper }}
+                {% endif %}
+              </div>
+
+              <!-- Center: name + tool + preview -->
+              <div class="inbox-info">
+                <div class="inbox-header-row">
+                  <span class="inbox-other-name">{{ conv.other.name }}</span>
+                  <span class="inbox-status-pill inbox-status--{{ conv.booking.status }}">
+                    {{ conv.booking.get_status_display }}
+                  </span>
+                </div>
+                <div class="inbox-tool-name">
+                  <i class="fa-solid fa-screwdriver-wrench"></i>
+                  {{ conv.booking.tool.title }}
+                </div>
+                <div class="inbox-preview">
+                  {% if conv.last_msg %}
+                    {% if conv.last_msg.sender_id == user.pk %}
+                      <span class="inbox-preview__you">You:</span>
+                    {% endif %}
+                    {{ conv.last_msg.text|truncatechars:60 }}
+                  {% else %}
+                    <span style="font-style:italic;">No messages yet — start the conversation</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Right: time + unread -->
+              <div class="inbox-meta">
+                <span class="inbox-time">
+                  {% if conv.last_msg %}
+                    {{ conv.last_msg.created_at|timesince }}
+                  {% else %}
+                    {{ conv.booking.created_at|timesince }}
+                  {% endif %}
+                </span>
+                {% if conv.unread_count %}
+                  <span class="inbox-unread-badge">{{ conv.unread_count }}</span>
+                {% endif %}
+              </div>
+
+            </a>
+            {% endfor %}
+          </div>
+
+        {% else %}
+          <div class="inbox-empty">
+            <div class="inbox-empty__icon">
+              <i class="fa-regular fa-message"></i>
+            </div>
+            <div class="inbox-empty__title">No conversations yet</div>
+            <div class="inbox-empty__sub">
+              Your rental conversations will appear here once a booking is approved.
+            </div>
+            <a href="{% url 'listings:browse' %}" class="btn-add" style="margin-top:4px;">
+              <i class="fa-solid fa-magnifying-glass"></i> Browse Tools
+            </a>
+          </div>
+        {% endif %}
+
+      </div>
     </div>
 
   </main>

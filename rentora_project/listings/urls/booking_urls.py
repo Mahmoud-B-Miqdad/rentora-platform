@@ -1,6 +1,14 @@
 from django.urls import path
 
-from listings.views.booking_views import *
+from listings.views.booking_views import (
+    create_booking_view, dashboard,
+    approve_booking, reject_booking,
+    request_return, confirm_return, dispute_return,
+    booking_confirmation_view,
+    payment_view, payment_success_view,
+    stripe_webhook,
+)
+
 urlpatterns = [
     path('tools/<int:pk>/book/',                  create_booking_view,      name='create_booking'),
     path('dashboard/',                            dashboard,                name='dashboard'),
@@ -14,4 +22,6 @@ urlpatterns = [
     path('booking/<int:booking_id>/pay/confirm/', confirm_payment_view,     name='confirm_payment'),
     path('booking/<int:booking_id>/pay/success/', payment_success_view,     name='payment_success'),
 	path('report/<int:user_id>/',                  report_user,              name='report_user'),
+    path('tools/<int:pk>/book/',                  create_booking_view,       name='create_booking'),
+    path('stripe/webhook/',                       stripe_webhook,            name='stripe_webhook'),
 ]

@@ -303,6 +303,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text="Grants access to the Django admin site.",
     )
+    last_seen  = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Automatically updated on every page request via LastSeenMiddleware.",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
