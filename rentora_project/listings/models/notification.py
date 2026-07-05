@@ -10,6 +10,7 @@ class NotificationType(models.TextChoices):
     RETURN_CONFIRMED  = "return_confirmed",  "Return Confirmed"
     RETURN_REMINDER   = "return_reminder",   "Return Reminder"
     NEW_MESSAGE       = "new_message",       "New Message"
+    NEW_REVIEW        = "new_review",        "New Review"
 
 
 # Maps each type to (fa-icon-class, css-color-token)
@@ -22,15 +23,17 @@ _TYPE_META = {
     NotificationType.RETURN_CONFIRMED : ("fa-flag-checkered",   "notif-green"),
     NotificationType.RETURN_REMINDER  : ("fa-clock",            "notif-amber"),
     NotificationType.NEW_MESSAGE      : ("fa-message",          "notif-blue"),
+    NotificationType.NEW_REVIEW       : ("fa-star",             "notif-amber"),
 }
 
 
 class NotificationManager(models.Manager):
 
-    def create_for(self, *, user, notification_type, message, booking=None):
+    def create_for(self, *, user, notification_type, message, booking=None, review=None):
         return self.create(
             user=user,
             booking=booking,
+            review=review,
             notification_type=notification_type,
             message=message,
         )
@@ -38,7 +41,7 @@ class NotificationManager(models.Manager):
     def for_user(self, user, limit=25):
         return (
             self.filter(user=user)
-            .select_related("booking", "booking__tool", "booking__tool__owner")
+            .select_related("booking", "booking__tool", "booking__tool__owner", "review")
             .order_by("-created_at")[:limit]
         )
 
@@ -54,6 +57,13 @@ class Notification(models.Model):
     )
     booking = models.ForeignKey(
         "listings.Booking",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="notifications",
+    )
+    review = models.ForeignKey(
+        "listings.Review",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -128,5 +138,18 @@ class Notification(models.Model):
             except Exception:
                 pass
             return "/dashboard/?tab=my-rentals&subtab=rtab-history"
+
+        # ── NEW_REVIEW → route by review type ────────────────────────────
+        if self.notification_type == T.NEW_REVIEW:
+            try:
+                from listings.models.review import ReviewType
+                rt = self.review.review_type if self.review_id else None
+                if rt == ReviewType.FOR_TOOL:
+                    return f"/{self.booking.tool_id}/"
+                # FOR_OWNER or FOR_RENTER → recipient's own profile
+                return "/users/profile/"
+            except Exception:
+                pass
+            return "/users/profile/"
 
         return "/dashboard/"

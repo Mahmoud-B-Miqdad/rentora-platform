@@ -3,26 +3,85 @@
 
 {% block extra_js %}
 <script>
+window.AppConfig = {
+    csrfToken:         '{{ csrf_token }}',
+    toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
+    loginUrl:          '{% url "users:login" %}',
+};
+
+/* Reset "seen" count so header badge hides on this visit */
 (function () {
     var wrapper = document.querySelector('.wishlist-icon-wrapper[data-count]');
     var count   = wrapper ? (parseInt(wrapper.dataset.count, 10) || 0) : 0;
-
-    // Mark this count as "seen" — badge won't show again until count increases
     localStorage.setItem('wishlistSeenCount', String(count));
-
-    // Immediately hide the badge on this page
     var badge = wrapper ? wrapper.querySelector('.wishlist-counter') : null;
     if (badge) badge.style.display = 'none';
-})();
+}());
+
+/* Remove a tool from wishlist via AJAX */
+function wishlistRemove(btn, toolId) {
+    var cfg = window.AppConfig;
+    var url = cfg.toggleWishlistUrl.replace('/0/', '/' + toolId + '/');
+
+    /* Optimistic UI: disable button while request is in flight */
+    btn.disabled = true;
+
+    fetch(url, {
+        method:  'POST',
+        headers: { 'X-CSRFToken': cfg.csrfToken },
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+        if (data.saved) { btn.disabled = false; return; } /* shouldn't happen */
+
+        /* Animate card out */
+        var card = btn.closest('.tool-card');
+        if (card) {
+            card.style.transition = 'opacity 0.2s, transform 0.2s';
+            card.style.opacity    = '0';
+            card.style.transform  = 'scale(0.95)';
+            setTimeout(function () {
+                card.remove();
+
+                /* Update page-level count badge */
+                var pageBadge = document.querySelector('.wishlist-count-badge');
+                if (pageBadge) {
+                    var n = Math.max(0, parseInt(pageBadge.textContent, 10) - 1);
+                    if (n > 0) pageBadge.textContent = n;
+                    else pageBadge.style.display = 'none';
+                }
+
+                /* If grid is empty, show empty-state */
+                var grid = document.querySelector('.tools-grid');
+                if (grid && !grid.querySelector('.tool-card')) {
+                    window.location.reload();
+                }
+            }, 220);
+        }
+
+        /* Keep header badge hidden and seenCount up-to-date */
+        localStorage.setItem('wishlistSeenCount', String(data.count));
+        var wrapper = document.querySelector('.wishlist-icon-wrapper');
+        if (wrapper) {
+            wrapper.dataset.count = data.count;
+            var hdrBadge = wrapper.querySelector('.wishlist-counter');
+            if (hdrBadge) hdrBadge.style.display = 'none';
+        }
+    })
+    .catch(function (err) {
+        console.error(err);
+        btn.disabled = false;
+    });
+}
 </script>
 {% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'listings/css/wishlist.css' %}">
- 
+
 <div class="wishlist-page-container">
     <main class="wishlist-main">
- 
+
         <header class="wishlist-header">
             <h1 class="wishlist-title">
                 My Wishlist
@@ -32,111 +91,89 @@
             </h1>
             <p class="wishlist-subtitle">Manage and monitor the tools you've saved for your upcoming projects.</p>
         </header>
- 
- 
+
         {% if wishlist_items %}
         <div class="tools-grid">
- 
+
             {% for record in wishlist_items %}
- 
             {% with primary=record.tool.images.all|first %}
- 
+
             <div class="tool-card">
- 
+
                 <div class="tool-card__image-wrapper">
- 
-                    {% if primary %}
-                        <img src="{{ primary.image.url }}"
-                             class="tool-card__image"
-                             alt="{{ record.tool.title }}">
-                    {% else %}
-                        <img src="{% static 'listings/images/default-tool.png' %}"
-                             class="tool-card__image"
-                             alt="Default Tool">
-                    {% endif %}
- 
-                    <!-- Remove from Wishlist Button -->
-                    <form method="POST"
-                          action="{% url 'listings:tools:toggle_wishlist' record.tool.id %}"
-                          class="wishlist-remove-form">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="tool-card__heart-btn tool-card__heart-btn--active"
-                                title="Remove from wishlist">
-                            <i class="fa-solid fa-heart"></i>
-                        </button>
-                    </form>
- 
+
+                    <a href="{% url 'listings:tools:detail' record.tool.id %}"
+                       class="tool-card__image-link" aria-label="{{ record.tool.title }}">
+                        {% if primary %}
+                            <img src="{{ primary.image.url }}"
+                                 class="tool-card__image"
+                                 alt="{{ record.tool.title }}">
+                        {% else %}
+                            <img src="{% static 'listings/images/default-tool.png' %}"
+                                 class="tool-card__image"
+                                 alt="Default Tool">
+                        {% endif %}
+                    </a>
+
+                    <!-- Remove from Wishlist — stopPropagation prevents the image link from firing -->
+                    <button type="button"
+                            class="tool-card__heart-btn tool-card__heart-btn--active"
+                            onclick="event.stopPropagation(); event.preventDefault(); wishlistRemove(this, {{ record.tool.id }})"
+                            title="Remove from wishlist">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+
                 </div>
- 
+
                 <div class="tool-card__content">
- 
-                    <span class="tool-card__category">
-                        {{ record.tool.category.name }}
-                    </span>
- 
-                    <h3 class="tool-card__title">
-                        {{ record.tool.title }}
-                    </h3>
- 
+
+                    <span class="tool-card__category">{{ record.tool.category.name }}</span>
+
+                    <h3 class="tool-card__title">{{ record.tool.title }}</h3>
+
                     <p class="tool-card__location">
                         <i class="fa-solid fa-location-dot"></i>
                         {{ record.tool.location }}
                     </p>
- 
+
                     <div class="tool-card__footer">
- 
                         <div class="tool-card__price-box">
-                            <span class="tool-card__price">
-                                ${{ record.tool.daily_rate }}
-                            </span>
-                            <span class="tool-card__unit">
-                                / day
-                            </span>
+                            <span class="tool-card__price">${{ record.tool.daily_rate }}</span>
+                            <span class="tool-card__unit">/ day</span>
                         </div>
- 
                         <a href="{% url 'listings:tools:detail' record.tool.id %}"
                            class="tool-card__btn">
                             Rent Now
                         </a>
- 
                     </div>
- 
+
                 </div>
- 
+
             </div>
- 
+
             {% endwith %}
- 
             {% endfor %}
- 
+
         </div>
- 
+
         {% else %}
- 
+
         <div class="wishlist-empty-state">
- 
             <div class="wishlist-empty-state__icon-wrapper">
                 <i class="fa-solid fa-heart-circle-check"></i>
             </div>
- 
-            <h2 class="wishlist-empty-state__title">
-                Your wishlist is empty
-            </h2>
- 
+            <h2 class="wishlist-empty-state__title">Your wishlist is empty</h2>
             <p class="wishlist-empty-state__description">
                 Save your favorite tools to access them quickly whenever you need them.
             </p>
- 
             <a href="{% url 'listings:browse' %}" class="wishlist-empty-state__btn">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 Browse Tools
             </a>
- 
         </div>
- 
+
         {% endif %}
     </main>
 </div>
- 
+
 {% endblock %}
