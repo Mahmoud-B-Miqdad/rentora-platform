@@ -1,8 +1,48 @@
 /* browse.js — Rentora Browse Tools Page */
 (function () {
     'use strict';
- 
+
     var cfg = window.AppConfig || {};
+
+    /* ── Mobile filter drawer ───────────────────────────────────────────── */
+    var drawer  = document.getElementById('filterDrawer');
+    var overlay = document.getElementById('filterOverlay');
+    var openBtn = document.getElementById('filterToggleBtn');
+    var closeBtn = document.getElementById('filterClose');
+
+    function openDrawer() {
+        if (!drawer) return;
+        drawer.classList.add('is-open');
+        overlay.classList.add('is-open');
+        openBtn && openBtn.classList.add('is-active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+        if (!drawer) return;
+        drawer.classList.remove('is-open');
+        overlay.classList.remove('is-open');
+        openBtn && openBtn.classList.remove('is-active');
+        document.body.style.overflow = '';
+    }
+
+    openBtn  && openBtn.addEventListener('click', openDrawer);
+    closeBtn && closeBtn.addEventListener('click', closeDrawer);
+    overlay  && overlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeDrawer();
+    });
+
+    /* ── Mobile sort dropdown ───────────────────────────────────────────── */
+    var mobileSort = document.getElementById('mobileSortSelect');
+    if (mobileSort) {
+        mobileSort.addEventListener('change', function () {
+            var form = document.getElementById('filterForm');
+            var data = form ? new FormData(form) : new FormData();
+            data.set('sort', this.value);
+            data.delete('page');
+            window.location.href = (cfg.browseUrl || '/') + '?' + new URLSearchParams(data).toString();
+        });
+    }
  
     /* ── Price range slider ─────────────────────────────────────────────── */
     var range = document.getElementById('priceRange');
@@ -58,58 +98,4 @@
     }
  
 })();
- 
-/* ── Wishlist counter helper (shared) ───────────────────────────────── */
-function updateWishlistCounter(delta) {
-    var counter = document.querySelector('.wishlist-counter');
-    var wrapper = document.querySelector('.wishlist-icon-wrapper');
-    if (!wrapper) return;
- 
-    var current = counter ? parseInt(counter.textContent, 10) : 0;
-    var next    = Math.max(0, current + delta);
- 
-    if (next > 0) {
-        if (counter) {
-            counter.textContent = next;
-        } else {
-            var badge = document.createElement('span');
-            badge.className   = 'wishlist-counter';
-            badge.textContent = next;
-            wrapper.appendChild(badge);
-        }
-    } else {
-        if (counter) counter.remove();
-    }
-}
- 
-/* ── Wishlist toggle (global — called via onclick) ──────────────────── */
-window.toggleWishlist = function toggleWishlist(btn, toolId) {
-    var cfg = window.AppConfig || {};
-    var url = cfg.toggleWishlistUrl.replace('/0/', '/' + toolId + '/');
- 
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': cfg.csrfToken,
-        },
-    })
-    .then(function (r) {
-        if (r.status === 401) { window.location.href = cfg.loginUrl; return null; }
-        return r.json();
-    })
-    .then(function (data) {
-        if (!data) return;
-        var icon = btn.querySelector('i');
-        if (data.saved) {
-            icon.className = 'fa-solid fa-heart';
-            btn.classList.add('bcard__wish--saved');
-            updateWishlistCounter(+1);
-        } else {
-            icon.className = 'fa-regular fa-heart';
-            btn.classList.remove('bcard__wish--saved');
-            updateWishlistCounter(-1);
-        }
-    })
-    .catch(console.error);
-};
+/* toggleWishlist is defined globally in base.js and handles badge updates */

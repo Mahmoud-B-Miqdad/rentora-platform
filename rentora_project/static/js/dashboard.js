@@ -147,17 +147,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 3500);
   });
 
-
-  // ── Inbox Search ─────────────────────────────────────────
-  const inboxSearch = document.getElementById('inboxSearch');
-  if (inboxSearch) {
-    inboxSearch.addEventListener('input', function () {
-      const query = this.value.trim().toLowerCase();
-      document.querySelectorAll('#inboxList .inbox-item').forEach(item => {
-        const haystack = (item.dataset.search || '').toLowerCase();
-        item.classList.toggle('inbox-item--hidden', query.length > 0 && !haystack.includes(query));
-      });
-    });
-  }
-
 });

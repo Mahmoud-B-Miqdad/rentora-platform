@@ -33,9 +33,7 @@
         <a href="{% url 'listings:wishlist' %}" class="hdr-icon-btn" title="Wishlist" aria-label="My Wishlist">
           <div class="wishlist-icon-wrapper" data-count="{{ global_wishlist_count }}">
             <i class="fa-regular fa-heart"></i>
-            {% if global_wishlist_count > 0 %}
-              <span class="wishlist-counter">{{ global_wishlist_count }}</span>
-            {% endif %}
+            <span class="wishlist-counter" style="display:none">{{ global_wishlist_count }}</span>
           </div>
         </a>
 

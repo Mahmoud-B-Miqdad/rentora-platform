@@ -995,27 +995,68 @@
 
 /* ═══ RESPONSIVE ════════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .profile-body {
-    grid-template-columns: 1fr;
-  }
-  .profile-sidebar {
-    position: static;
-    order: -1;
-  }
-  /* On mobile the 2×2 grid stays the same — it already works */
+  .profile-body { grid-template-columns: 1fr; }
+  .profile-sidebar { position: static; order: -1; }
 }
 
 @media (max-width: 640px) {
-  .profile-banner { height: 160px; }
-  .profile-meta-row { margin-top: -44px; gap: 14px; }
+  /* Banner */
+  .profile-banner { height: 140px; }
+
+  /* Meta row — avatar left, meta right, action below both */
+  .profile-meta-row {
+    flex-wrap: wrap;
+    margin-top: -40px;
+    gap: 10px 14px;
+    align-items: flex-start;
+  }
+  .profile-avatar-wrap { flex-shrink: 0; }
   .profile-avatar,
-  .profile-avatar--init { width: 88px; height: 88px; font-size: 1.8rem; }
+  .profile-avatar--init { width: 80px; height: 80px; font-size: 1.7rem; }
+  .profile-meta {
+    flex: 1;
+    min-width: 0;
+    padding-top: 40px;
+  }
   .profile-name { font-size: 1.2rem; }
-  .verify-alert { flex-direction: column; gap: 16px; }
+
+  /* Badges — allow icon to align top when text wraps */
+  .profile-badge { align-items: flex-start; }
+  .profile-badge i { margin-top: 2px; }
+
+  /* Action wrap drops to its own full-width row */
+  .profile-action-wrap {
+    flex-basis: 100%;
+    order: 3;
+    align-self: auto;
+    padding-bottom: 0;
+  }
+  .btn-edit-profile,
+  .btn-save-profile { width: 100%; justify-content: center; }
+
+  /* Verify alert — stack vertically */
+  .verify-alert { flex-direction: column; gap: 12px; }
+  .verify-alert__actions { flex-direction: row; flex-wrap: wrap; width: 100%; }
+  .btn-verify-resend { flex: 1; justify-content: center; }
+
+  /* Info + edit grids */
   .profile-info-grid { grid-template-columns: 1fr; }
   .profile-info-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--pr-border-lt); }
   .profile-info-item:last-child { border-bottom: none; }
   .profile-edit-grid { grid-template-columns: 1fr; }
+
+  /* Tools + reviews */
   .profile-tools-grid { grid-template-columns: repeat(2, 1fr); }
   .profile-reviews-header { flex-direction: column; align-items: flex-start; }
+  .rcard__text { padding-left: 0; margin-top: 8px; }
+}
+
+@media (max-width: 400px) {
+  .profile-meta-row { margin-top: -34px; }
+  .profile-avatar,
+  .profile-avatar--init { width: 70px; height: 70px; font-size: 1.5rem; }
+  .profile-meta { padding-top: 34px; }
+  .profile-tools-grid { grid-template-columns: 1fr; }
+  .stats-widget__grid { grid-template-columns: 1fr 1fr; }
+  .pstat-tile__value { font-size: 1.6rem; }
 }
