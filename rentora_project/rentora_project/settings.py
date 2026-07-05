@@ -41,6 +41,8 @@ DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
+SITE_URL = env.str('SITE_URL', default='http://127.0.0.1:8000')
+
 # Required when Django runs behind Nginx/reverse-proxy on AWS.
 # Without this, build_absolute_uri() builds links with 127.0.0.1 instead of
 # the real server hostname, breaking email verification and password-reset links.
@@ -93,6 +95,7 @@ TEMPLATES = [
                 "listings.context_processors.wishlist_count",
                 "listings.context_processors.notification_count",
                 "listings.context_processors.current_user",
+                "listings.context_processors.site_settings",
             ],
         },
     }

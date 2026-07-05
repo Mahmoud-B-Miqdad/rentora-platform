@@ -4,9 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Rentora{% endblock %}</title>
 
     {% load static %}
+    {% block head_meta %}
+    {# ── SEO & Social sharing ─────────────────────────────────────── #}
+    {% with page_title=self_title|default:"Rentora — Peer-to-Peer Tool Rental" page_desc=self_desc|default:"Rent tools from your neighbors or list your idle equipment. Rentora makes tool sharing simple, trusted, and affordable." %}
+    <title>{% block title %}Rentora — Peer-to-Peer Tool Rental{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ page_desc }}{% endblock %}">
+    <meta name="robots"      content="index, follow">
+    <meta name="theme-color" content="#0f172a">
+
+    {# Open Graph (Facebook / LinkedIn / WhatsApp / iMessage) #}
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="Rentora">
+    <meta property="og:title"       content="{% block og_title %}Rentora — Peer-to-Peer Tool Rental{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ page_desc }}{% endblock %}">
+    <meta property="og:image"       content="{{ SITE_URL }}{% static 'img/og-image.png' %}">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url"         content="{{ SITE_URL }}{{ request.path }}">
+
+    {# Twitter Card #}
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="{% block twitter_title %}Rentora — Peer-to-Peer Tool Rental{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ page_desc }}{% endblock %}">
+    <meta name="twitter:image"       content="{{ SITE_URL }}{% static 'img/og-image.png' %}">
+    {% endwith %}
+    {% endblock head_meta %}
+
+    {# ── Favicons ─────────────────────────────────────────────────── #}
+    <link rel="icon"             type="image/svg+xml"  href="{% static 'img/favicon.svg' %}">
+    <link rel="icon"             type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+    <link rel="icon"             type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180"       href="{% static 'img/apple-touch-icon.png' %}">
+    <link rel="shortcut icon"    type="image/x-icon"   href="{% static 'img/favicon.ico' %}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

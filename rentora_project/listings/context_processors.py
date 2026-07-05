@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from listings.models.wishlist      import Wishlist
 from listings.models.notification  import Notification
 
@@ -34,3 +36,9 @@ def current_user(request):
         return {"current_user": user}
     except User.DoesNotExist:
         return {"current_user": None}
+
+
+def site_settings(request):
+    return {
+        "SITE_URL": getattr(settings, "SITE_URL", ""),
+    }
