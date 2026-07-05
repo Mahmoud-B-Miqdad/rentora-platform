@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib   import messages
 
-from listings.models               import Booking, BookingStatus, Review, ReviewType
+from listings.models               import Booking, BookingStatus, Review, ReviewType, Notification, NotificationType
 from listings.views.booking_views  import login_required_session
 from users.models                  import User
 
@@ -40,15 +40,33 @@ def submit_review_view(request, booking_id):
     created_any = False
 
     for review_type, rating, comment in submissions:
-        if not rating:
+        if not rating or rating == "0":
             continue
         post_data    = {'rating': rating, 'review_type': review_type, 'comment': comment}
         field_errors = Review.objects.register_validator(post_data, user, booking)
         if field_errors:
             errors.append(next(iter(field_errors.values())))
             continue
-        Review.objects.create_review(post_data, user, booking)
+        review = Review.objects.create_review(post_data, user, booking)
         created_any = True
+
+        if review_type == ReviewType.FOR_TOOL:
+            recipient = booking.tool.owner
+            msg = f"{user.name} reviewed your tool \"{booking.tool.title}\"."
+        elif review_type == ReviewType.FOR_OWNER:
+            recipient = booking.tool.owner
+            msg = f"{user.name} left a review about you as an owner."
+        else:
+            recipient = booking.renter
+            msg = f"{user.name} left a review about you as a renter."
+
+        Notification.objects.create_for(
+            user=recipient,
+            notification_type=NotificationType.NEW_REVIEW,
+            message=msg,
+            booking=booking,
+            review=review,
+        )
 
     if errors:
         messages.error(request, errors[0])

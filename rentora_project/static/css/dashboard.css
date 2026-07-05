@@ -785,28 +785,6 @@
 ═══════════════════════════════════════════════════════════ */
 .inbox-card { padding: 0 !important; overflow: hidden; }
 
-.inbox-search-wrap {
-  position: relative;
-  padding: 16px 22px 14px;
-  border-bottom: 1px solid var(--border-lt);
-}
-.inbox-search__icon {
-  position: absolute; left: 36px; top: 50%;
-  transform: translateY(-50%);
-  color: var(--txt-lt); font-size: 13px; pointer-events: none;
-}
-.inbox-search {
-  width: 100%; padding: 9px 14px 9px 36px;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  font-size: 0.84rem; font-family: inherit; color: var(--txt-hd);
-  background: var(--pg); outline: none;
-  transition: border-color .15s, background .15s, box-shadow .15s;
-}
-.inbox-search:focus {
-  border-color: var(--teal); background: #fff;
-  box-shadow: 0 0 0 3px rgba(15,118,110,.1);
-}
-.inbox-search::placeholder { color: var(--txt-lt); }
 
 .inbox-list { display: flex; flex-direction: column; }
 
@@ -925,23 +903,150 @@
   .tool-cards-grid { grid-template-columns: repeat(2,1fr); }
   .overview-grid { grid-template-columns: 1fr; }
 }
+
 @media (max-width: 900px) {
   .dashboard-layout { flex-direction: column; }
   .sidebar {
     width: 100%; height: auto; position: static;
-    flex-direction: row; flex-wrap: wrap;
-    padding: 10px 14px;
+    flex-direction: row; padding: 0;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255,255,255,.12);
   }
-  .sidebar-nav { flex-direction: row; flex-wrap: wrap; flex: 1; gap: 3px; }
+  /* Sidebar nav — icon-only strip, all 5 tabs always visible */
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex: 1;
+    gap: 0;
+    padding: 4px 0;
+  }
   .sidebar-section-label { display: none; }
-  .nav-link { flex: 1; justify-content: center; font-size: 0.77rem; padding: 8px 6px; min-width: 72px; }
-  .nav-link.active::before { display: none; }
+  .nav-link {
+    flex: 1;
+    min-width: 0;
+    justify-content: center;
+    align-items: center;
+    font-size: 0;          /* hide text label, keep icon */
+    padding: 12px 4px;
+    border-radius: 0;
+    position: relative;
+    white-space: nowrap;
+  }
+  .nav-link i {
+    font-size: 17px;
+    width: auto;
+    opacity: .65;
+  }
+  .nav-link:hover i  { opacity: .9; }
+  .nav-link.active   { background: rgba(255,255,255,.15); border-radius: 0; }
+  .nav-link.active i { opacity: 1; }
+  .nav-link.active::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 3px;
+    background: rgba(255,255,255,.9);
+    border-radius: 3px 3px 0 0;
+    top: auto;
+    width: auto;
+  }
+  .nav-unread-badge {
+    position: absolute;
+    top: 6px; right: calc(50% - 20px);
+    min-width: 14px; height: 14px;
+    font-size: 8px; padding: 0 3px;
+    margin-left: 0;
+  }
   .sidebar-footer { display: none; }
   .main-content { padding: 18px 16px 48px; }
 }
+
 @media (max-width: 640px) {
-  .stats-grid { grid-template-columns: repeat(2,1fr); }
-  .tool-cards-grid { grid-template-columns: 1fr; }
-  .booking-actions, .completed-actions { min-width: unset; flex-wrap: wrap; }
   .main-content { padding: 14px 12px 40px; }
+
+  /* Stats */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .stat-card  { padding: 16px 14px 14px; }
+  .stat-icon  { width: 38px; height: 38px; font-size: 15px; margin-bottom: 10px; }
+  .stat-value { font-size: 1.55rem; }
+
+  /* Tools grid */
+  .tool-cards-grid { grid-template-columns: 1fr; }
+
+  /* Overview two-col → one-col */
+  .overview-grid { grid-template-columns: 1fr; }
+
+  /* Page header — stack title & subtitle */
+  .page-header { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 16px; }
+  .page-title  { font-size: 1.25rem; }
+
+  /* ── Booking inner tabs — horizontal scroll so all tabs are reachable ── */
+  .booking-tabs-nav,
+  .booking-tabs-header {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 0;
+  }
+  .booking-tabs-nav::-webkit-scrollbar,
+  .booking-tabs-header::-webkit-scrollbar { display: none; }
+  .booking-tab-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 0.77rem;
+  }
+
+  /* ── Booking rows — wrap actions below info ── */
+  .booking-row {
+    flex-wrap: wrap;
+    padding: 12px 14px;
+    margin: 0 -14px;
+    gap: 6px 8px;
+  }
+  /* info takes full remaining width next to thumb */
+  .booking-info { flex: 1; min-width: 0; }
+
+  /* actions drop to their own full-width row */
+  .booking-actions,
+  .completed-actions {
+    min-width: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-start;
+    /* indent to align with text (thumb 36px + gap 8px + padding 14px) */
+    padding-left: 58px;
+  }
+
+  /* Shrink action buttons a little */
+  .btn-complete,
+  .btn-pay-now { font-size: 0.72rem; padding: 6px 10px; }
+  .btn-leave-review,
+  .badge-reviewed { min-width: 0; font-size: 0.72rem; padding: 6px 10px; }
+  .btn-confirm-return,
+  .btn-dispute-return { font-size: 0.75rem; padding: 7px 12px; }
+  .return-waiting-state { font-size: 0.72rem; padding: 5px 9px; }
+
+  /* Meta wraps freely */
+  .booking-meta { flex-wrap: wrap; gap: 4px; }
+
+  /* Renter chip compact */
+  .renter-chip { font-size: 0.68rem; padding: 2px 7px 2px 3px; }
+  .renter-chip__name { max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Return confirm card */
+  .return-confirm-banner { flex-direction: column; gap: 10px; }
+  .return-confirm-actions { width: 100%; }
+  .btn-confirm-return, .btn-dispute-return { flex: 1; justify-content: center; }
+}
+
+@media (max-width: 420px) {
+  .stats-grid  { gap: 8px; }
+  .stat-value  { font-size: 1.35rem; letter-spacing: -0.5px; }
+  .stat-label  { font-size: 0.7rem; }
+  .stat-icon   { width: 34px; height: 34px; font-size: 14px; }
+  .booking-actions,
+  .completed-actions { padding-left: 0; } /* full-width on very small screens */
 }

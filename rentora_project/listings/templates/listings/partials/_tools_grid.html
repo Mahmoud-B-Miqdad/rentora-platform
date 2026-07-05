@@ -16,7 +16,7 @@
 
         <button class="bcard__wish {% if tool.pk in wishlist_ids %}bcard__wish--saved{% endif %}"
                 type="button" aria-label="Save to wishlist"
-                onclick="event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
+                onclick="event.stopPropagation(); event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
         </button>
 

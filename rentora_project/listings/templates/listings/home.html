@@ -198,7 +198,7 @@
             {{ tool.get_condition_display }}
           </span>
           <button class="tool-card__fav {% if tool.pk in wishlist_ids %}tool-card__fav--on{% endif %}"
-                  onclick="event.preventDefault();toggleWishlist(this,{{ tool.pk }})"
+                  onclick="event.stopPropagation();event.preventDefault();toggleWishlist(this,{{ tool.pk }})"
                   data-tool-id="{{ tool.pk }}" aria-label="Save">
             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
           </button>

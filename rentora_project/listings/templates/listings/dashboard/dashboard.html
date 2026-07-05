@@ -876,13 +876,6 @@
 
         {% if conversations %}
 
-          <!-- Search bar -->
-          <div class="inbox-search-wrap">
-            <i class="fa-solid fa-magnifying-glass inbox-search__icon"></i>
-            <input type="text" id="inboxSearch" class="inbox-search"
-                   placeholder="Search conversations…">
-          </div>
-
           <div class="inbox-list" id="inboxList">
             {% for conv in conversations %}
             <a href="{% url 'listings:chat' conv.booking.pk %}"
