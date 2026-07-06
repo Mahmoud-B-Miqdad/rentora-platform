@@ -7,6 +7,7 @@ from listings.views.booking_views import (
     booking_confirmation_view,
     payment_view, payment_success_view,
     stripe_webhook,
+	report_user
 )
 
 urlpatterns = [
@@ -19,7 +20,6 @@ urlpatterns = [
     path('return/dispute/<int:booking_id>/',      dispute_return,           name='dispute_return'),
     path('booking/<int:booking_id>/confirm/',     booking_confirmation_view,name='booking_confirmation'),
     path('booking/<int:booking_id>/pay/',         payment_view,             name='payment'),
-    path('booking/<int:booking_id>/pay/confirm/', confirm_payment_view,     name='confirm_payment'),
     path('booking/<int:booking_id>/pay/success/', payment_success_view,     name='payment_success'),
 	path('report/<int:user_id>/',                  report_user,              name='report_user'),
     path('tools/<int:pk>/book/',                  create_booking_view,       name='create_booking'),
