@@ -41,7 +41,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      <div class="sidebar-profile">
+      <a href="{% url 'users:profile' %}" class="sidebar-profile sidebar-profile--link">
         <div class="profile-avatar">
           {% if user.profile_image %}
             <img src="{{ user.profile_image.url }}" alt="{{ user.name }}">
@@ -53,12 +53,7 @@
           <div class="profile-name">{{ user.name }}</div>
           <div class="profile-email">{{ user.email }}</div>
         </div>
-      </div>
-      <a href="{% url 'users:profile' %}" class="btn-view-profile">
-        <i class="fa-regular fa-user"></i> View Profile
-      </a>
-      <a href="{% url 'listings:tools:add_tool' %}" class="sidebar-add-btn">
-        <i class="fa-solid fa-plus"></i> List New Tool
+        <i class="fa-solid fa-chevron-right profile-nav-arrow"></i>
       </a>
     </div>
 
@@ -75,7 +70,7 @@
     <div class="tab-panel" id="tab-overview">
 
       <div class="page-header">
-        <h1 class="page-title">Overview</h1>
+        <h1 class="page-title"><span class="page-title-dot"></span>Overview</h1>
         <p class="page-subtitle">Welcome back, {{ user.name }}</p>
       </div>
 
@@ -190,7 +185,7 @@
     <!-- ════════ MY TOOLS ════════ -->
     <div class="tab-panel" id="tab-my-tools">
       <div class="page-header">
-        <h1 class="page-title">My Tools</h1>
+        <h1 class="page-title"><span class="page-title-dot"></span>My Tools</h1>
         <p class="page-subtitle">Welcome back, {{ user.name }}</p>
       </div>
 
@@ -286,7 +281,7 @@
     <div class="tab-panel" id="tab-booking-requests">
 
       <div class="page-header">
-        <h1 class="page-title">Booking Requests</h1>
+        <h1 class="page-title"><span class="page-title-dot"></span>Booking Requests</h1>
         <p class="page-subtitle">Welcome back, {{ user.name }}</p>
       </div>
 
@@ -593,7 +588,7 @@
     <div class="tab-panel" id="tab-my-rentals">
 
       <div class="page-header">
-        <h1 class="page-title">My Rentals</h1>
+        <h1 class="page-title"><span class="page-title-dot"></span>My Rentals</h1>
         <p class="page-subtitle">Welcome back, {{ user.name }}</p>
       </div>
 
@@ -873,7 +868,7 @@
     <div class="tab-panel" id="tab-messages">
 
       <div class="page-header">
-        <h1 class="page-title">Messages</h1>
+        <h1 class="page-title"><span class="page-title-dot"></span>Messages</h1>
         <p class="page-subtitle">All your rental conversations in one place</p>
       </div>
 
@@ -881,39 +876,24 @@
 
         {% if conversations %}
 
-          <!-- Search bar -->
-          <div class="inbox-search-wrap">
-            <i class="fa-solid fa-magnifying-glass inbox-search__icon"></i>
-            <input type="text" id="inboxSearch" class="inbox-search"
-                   placeholder="Search conversations…">
-          </div>
-
           <div class="inbox-list" id="inboxList">
             {% for conv in conversations %}
             <a href="{% url 'listings:chat' conv.booking.pk %}"
                class="inbox-item {% if conv.unread_count %}inbox-item--unread{% endif %}"
                data-search="{{ conv.other.name|lower }} {{ conv.booking.tool.title|lower }}">
 
-              <!-- Tool thumbnail -->
-              <div class="inbox-thumb">
-                {% if conv.booking.tool.primary_images %}
-                  <img src="{{ conv.booking.tool.primary_images.0.image.url }}"
-                       alt="{{ conv.booking.tool.title }}">
-                {% else %}
-                  <i class="fa-solid fa-screwdriver-wrench"></i>
-                {% endif %}
+              <!-- Contact: user avatar -->
+              <div class="inbox-contact">
+                <div class="inbox-user-avatar">
+                  {% if conv.other.profile_image %}
+                    <img src="{{ conv.other.profile_image.url }}" alt="{{ conv.other.name }}">
+                  {% else %}
+                    {{ conv.other.name|first|upper }}
+                  {% endif %}
+                </div>
               </div>
 
-              <!-- Other participant avatar -->
-              <div class="inbox-avatar">
-                {% if conv.other.profile_image %}
-                  <img src="{{ conv.other.profile_image.url }}" alt="{{ conv.other.name }}">
-                {% else %}
-                  {{ conv.other.name|first|upper }}
-                {% endif %}
-              </div>
-
-              <!-- Center: name + tool + preview -->
+              <!-- Text: name · tool · preview -->
               <div class="inbox-info">
                 <div class="inbox-header-row">
                   <span class="inbox-other-name">{{ conv.other.name }}</span>
@@ -921,7 +901,7 @@
                     {{ conv.booking.get_status_display }}
                   </span>
                 </div>
-                <div class="inbox-tool-name">
+                <div class="inbox-tool-chip">
                   <i class="fa-solid fa-screwdriver-wrench"></i>
                   {{ conv.booking.tool.title }}
                 </div>
@@ -930,21 +910,18 @@
                     {% if conv.last_msg.sender_id == user.pk %}
                       <span class="inbox-preview__you">You:</span>
                     {% endif %}
-                    {{ conv.last_msg.text|truncatechars:60 }}
+                    {{ conv.last_msg.text|truncatechars:65 }}
                   {% else %}
-                    <span style="font-style:italic;">No messages yet — start the conversation</span>
+                    <em>No messages yet — say hello</em>
                   {% endif %}
                 </div>
               </div>
 
-              <!-- Right: time + unread -->
+              <!-- Meta: time + unread count -->
               <div class="inbox-meta">
                 <span class="inbox-time">
-                  {% if conv.last_msg %}
-                    {{ conv.last_msg.created_at|timesince }}
-                  {% else %}
-                    {{ conv.booking.created_at|timesince }}
-                  {% endif %}
+                  {% if conv.last_msg %}{{ conv.last_msg.created_at|timesince }}
+                  {% else %}{{ conv.booking.created_at|timesince }}{% endif %}
                 </span>
                 {% if conv.unread_count %}
                   <span class="inbox-unread-badge">{{ conv.unread_count }}</span>

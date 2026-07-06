@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 from django.db.models import Avg, Count, Prefetch, Q
 from django.urls import reverse
 
-from listings.models import Category, Tool, ToolImage, Booking, Review, BookingStatus, Wishlist
+from listings.models import Category, Tool, ToolImage, Booking, Review, BookingStatus, ReviewType, Wishlist
 from users.models    import User
 
 
@@ -46,7 +46,7 @@ def home_view(request):
                 filter=Q(bookings__reviews__review_type='for_tool')
             )
         )
-        .order_by('id')[:6]
+        .order_by('-id')[:6]
     )
 
     # ── Platform stats ────────────────────────────────────────────────────────
@@ -61,6 +61,19 @@ def home_view(request):
     avg_data   = Review.objects.aggregate(avg=Avg('rating'))
     avg_rating = round(float(avg_data['avg']), 1) if avg_data['avg'] else 0.0
 
+    # ── Featured reviews (FOR_TOOL, ≥4 stars, with comment) ─────────────────
+    featured_reviews = (
+        Review.objects
+        .filter(
+            review_type=ReviewType.FOR_TOOL,
+            comment__isnull=False,
+            rating__gte=4,
+        )
+        .exclude(comment='')
+        .select_related('reviewer', 'booking__tool')
+        .order_by('-rating', '-created_at')[:3]
+    )
+
     # ── Wishlist IDs for the logged-in user ───────────────────────────────────
     user_id = request.session.get('user_id')
     wishlist_ids = (
@@ -69,9 +82,10 @@ def home_view(request):
     )
 
     context = {
-        'categories':     categories,
-        'featured_tools': featured_tools,
-        'wishlist_ids':   wishlist_ids,
+        'categories':       categories,
+        'featured_tools':   featured_tools,
+        'featured_reviews': featured_reviews,
+        'wishlist_ids':     wishlist_ids,
         'stats': {
             'tools_count':   tools_count,
             'rentals_count': rentals_count,

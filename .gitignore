@@ -33,7 +33,10 @@ Thumbs.db
 
 # Environments
 .env
+<<<<<<< HEAD
+=======
 
 CLAUDE.md
 
 media/
+>>>>>>> develop

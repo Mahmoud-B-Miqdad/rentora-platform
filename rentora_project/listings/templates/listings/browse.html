@@ -24,15 +24,37 @@
 
     </div>
 
+    <!-- Mobile filter bar (hidden on desktop) -->
+    <div class="browse-mobile-bar">
+        <button type="button" class="filter-toggle-btn" id="filterToggleBtn">
+            <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+            Filters
+        </button>
+        <select name="sort" class="filter-mobile-sort" id="mobileSortSelect">
+            <option value="newest"     {% if filters.sort == 'newest'     %}selected{% endif %}>Newest</option>
+            <option value="top_rated"  {% if filters.sort == 'top_rated'  %}selected{% endif %}>Top Rated</option>
+            <option value="price_asc"  {% if filters.sort == 'price_asc'  %}selected{% endif %}>Price ↑</option>
+            <option value="price_desc" {% if filters.sort == 'price_desc' %}selected{% endif %}>Price ↓</option>
+        </select>
+    </div>
+
+    <!-- Drawer overlay (mobile only) -->
+    <div class="filter-drawer-overlay" id="filterOverlay"></div>
+
     <!-- 2-column layout -->
     <div class="browse-layout">
 
         <!-- ══════════════════════════════════
              SIDEBAR FILTERS
              ══════════════════════════════════ -->
-        <aside>
+        <aside id="filterDrawer">
             <form method="GET" id="filterForm" class="filter-card">
-                <p class="filter-card__heading">Filters</p>
+                <div class="filter-card__heading-row">
+                    <p class="filter-card__heading">Filters</p>
+                    <button type="button" class="filter-drawer-close" id="filterClose" aria-label="Close filters">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
 
                 <!-- Search (real-time) -->
                 <div class="filter-search">
@@ -189,7 +211,7 @@
                         <button class="bcard__wish {% if tool.pk in wishlist_ids %}bcard__wish--saved{% endif %}"
                                 type="button"
                                 aria-label="Save to wishlist"
-                                onclick="event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
+                                onclick="event.stopPropagation(); event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
                             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
                         </button>
 

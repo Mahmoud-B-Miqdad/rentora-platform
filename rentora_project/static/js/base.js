@@ -3,6 +3,50 @@
    Scope: all pages (loaded from base.html)
    ═══════════════════════════════════════════════════════════════ */
 
+/* ── Wishlist toast notification ─────────────────────────────
+   Shows briefly when an item is added. Clicking navigates to wishlist. */
+function _showWishlistToast() {
+    var wlLink = document.querySelector('a[aria-label="My Wishlist"]');
+    var wlUrl  = wlLink ? wlLink.href : '/wishlist/';
+
+    var toast = document.getElementById('wl-toast');
+    if (!toast) {
+        toast = document.createElement('a');
+        toast.id        = 'wl-toast';
+        toast.className = 'wl-toast';
+        toast.href      = wlUrl;
+        toast.innerHTML = '<i class="fa-solid fa-heart wl-toast__icon"></i>' +
+                          '<span class="wl-toast__text">Added to wishlist!' +
+                          '<span class="wl-toast__hint">Tap to view your wishlist</span></span>';
+        document.body.appendChild(toast);
+    }
+    clearTimeout(toast._hideTimer);
+    toast.classList.add('wl-toast--show');
+    toast._hideTimer = setTimeout(function () {
+        toast.classList.remove('wl-toast--show');
+    }, 3500);
+}
+
+/* ── Wishlist badge helper ────────────────────────────────────
+   displayCount = items added since last wishlist page visit.
+   seenCount    = total count stored when user last opened wishlist. */
+function _updateWishlistBadge(totalCount) {
+    var wrapperEl    = document.querySelector('.wishlist-icon-wrapper');
+    var counter      = wrapperEl ? wrapperEl.querySelector('.wishlist-counter') : null;
+    if (!wrapperEl || !counter) return;
+
+    var seenCount    = parseInt(localStorage.getItem('wishlistSeenCount') || '0', 10);
+    var displayCount = Math.max(0, totalCount - seenCount);
+
+    wrapperEl.dataset.count = totalCount;
+    if (displayCount > 0) {
+        counter.textContent = displayCount;
+        counter.style.display = 'flex';
+    } else {
+        counter.style.display = 'none';
+    }
+}
+
 /* ── Wishlist toggle (shared across all pages) ────────────────
    Pages that need per-page overrides (home.js, tool_detail.js)
    can reassign window.toggleWishlist after this file loads.      */
@@ -22,58 +66,33 @@ window.toggleWishlist = function toggleWishlist(btn, toolId) {
     .then(function (data) {
         if (!data) return;
 
-        // Update clicked button icon
+        /* Update clicked button icon and state classes */
         var icon = btn.querySelector('i');
         if (icon) {
             icon.className = data.saved ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
         }
-        btn.classList.toggle('tool-card__wishlist--saved',    !!data.saved);
-        btn.classList.toggle('detail-wishlist-btn--saved',    !!data.saved);
+        btn.classList.toggle('bcard__wish--saved',         !!data.saved);
+        btn.classList.toggle('tool-card__fav--on',         !!data.saved);
+        btn.classList.toggle('detail-wishlist-btn--saved', !!data.saved);
+        btn.classList.toggle('tool-card__wishlist--saved', !!data.saved);
 
-        // Update header counter badge using server-returned count
-        var wrapperEl = document.querySelector('.wishlist-icon-wrapper');
-        var counter   = wrapperEl ? wrapperEl.querySelector('.wishlist-counter') : null;
-        if (wrapperEl) wrapperEl.dataset.count = data.count;
+        /* Update header badge (shows count added since last wishlist visit) */
+        _updateWishlistBadge(data.count);
 
-        if (data.count > 0 && data.saved) {
-            // Item added — show badge (user hasn't "seen" the new count yet)
-            if (counter) {
-                counter.textContent    = data.count;
-                counter.style.display  = 'flex';
-            } else if (wrapperEl) {
-                var newBadge = document.createElement('span');
-                newBadge.className   = 'wishlist-counter';
-                newBadge.textContent = data.count;
-                wrapperEl.appendChild(newBadge);
-            }
-        } else if (!data.saved) {
-            // Item removed — update count; hide badge if now at or below last seen
-            var seenNow = parseInt(localStorage.getItem('wishlistSeenCount') || '0', 10);
-            if (data.count > 0 && data.count > seenNow) {
-                if (counter) counter.textContent = data.count;
-            } else {
-                if (counter) counter.style.display = 'none';
-            }
-        }
+        /* Show toast only when adding (not removing) */
+        if (data.saved) { _showWishlistToast(); }
     })
     .catch(console.error);
 };
 
 /* ── Wishlist badge "seen" logic ──────────────────────────────
-   Badge shows only for items added since the last wishlist visit.
-   Uses localStorage.wishlistSeenCount as the "last seen" baseline. */
+   On every page load, compute displayCount = total - seenCount.
+   Badge stays hidden (display:none from HTML) unless displayCount > 0. */
 document.addEventListener('DOMContentLoaded', function () {
     var wrapper = document.querySelector('.wishlist-icon-wrapper[data-count]');
     if (!wrapper) return;
-
     var currentCount = parseInt(wrapper.dataset.count, 10) || 0;
-    var seenCount    = parseInt(localStorage.getItem('wishlistSeenCount') || '0', 10);
-    var badge        = wrapper.querySelector('.wishlist-counter');
-
-    // Hide badge if user has already seen this count (or higher)
-    if (badge && currentCount <= seenCount) {
-        badge.style.display = 'none';
-    }
+    _updateWishlistBadge(currentCount);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -81,16 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('site-header');
 
     /* ── Scroll-aware header ──────────────────────────────────
-       Adds .scrolled when page is scrolled past 60px.
-       Removes it when back at the top.                         */
+       Adds .scrolled when page is scrolled past 60px.          */
     if (header) {
         const THRESHOLD = 60;
-
         function syncHeaderScroll() {
             header.classList.toggle('scrolled', window.scrollY > THRESHOLD);
         }
-
-        // Initialise on load (handles page refresh mid-scroll)
         syncHeaderScroll();
         window.addEventListener('scroll', syncHeaderScroll, { passive: true });
     }
@@ -104,5 +119,33 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.add('header-nav__link--active');
         }
     });
+
+    /* ── User dropdown ────────────────────────────────────────
+       Toggle .hdr-user--open on click; close on outside click. */
+    const hdrUser    = document.getElementById('hdrUser');
+    const hdrUserBtn = document.getElementById('hdrUserBtn');
+
+    if (hdrUser && hdrUserBtn) {
+        hdrUserBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isOpen = hdrUser.classList.toggle('hdr-user--open');
+            hdrUserBtn.setAttribute('aria-expanded', isOpen);
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!hdrUser.contains(e.target)) {
+                hdrUser.classList.remove('hdr-user--open');
+                hdrUserBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                hdrUser.classList.remove('hdr-user--open');
+                hdrUserBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 
 });

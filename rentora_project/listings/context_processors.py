@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from listings.models.wishlist      import Wishlist
 from listings.models.notification  import Notification
 
@@ -22,3 +24,21 @@ def notification_count(request):
         is_read=False,
     ).count()
     return {"global_unread_notifications": count}
+
+
+def current_user(request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return {"current_user": None}
+    try:
+        from users.models import User
+        user = User.objects.get(pk=user_id)
+        return {"current_user": user}
+    except User.DoesNotExist:
+        return {"current_user": None}
+
+
+def site_settings(request):
+    return {
+        "SITE_URL": getattr(settings, "SITE_URL", ""),
+    }

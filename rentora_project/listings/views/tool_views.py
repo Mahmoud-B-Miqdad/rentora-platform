@@ -134,11 +134,6 @@ def tool_detail_view(request, pk):
     )
  
 
-    # ── Geocode tool location for map ─────────────────────────────────────────
-    coords   = _geocode(tool.location)
-    tool_lat = coords[0] if coords else None
-    tool_lon = coords[1] if coords else None
-
     # ── Pop one-time session flash messages ───────────────────────────────────
     booking_success = request.session.pop('booking_success', None)
     booking_error    = request.session.pop('booking_error', None)
@@ -152,6 +147,7 @@ def tool_detail_view(request, pk):
                 BookingStatus.PENDING,
                 BookingStatus.PAYMENT_PENDING,
                 BookingStatus.APPROVED,
+                BookingStatus.CONFIRMED,
                 BookingStatus.RETURN_PENDING,
             ],
         ).values('start_date', 'end_date')
@@ -171,14 +167,21 @@ def tool_detail_view(request, pk):
         'is_wishlisted':        is_wishlisted,
         'booking_success':      booking_success,
         'booking_error':        booking_error,
-        'tool_lat':             tool_lat,
-        'tool_lon':             tool_lon,
         'is_owner':             is_owner,
         'booked_ranges':        booked_ranges,
     }
     return render(request, 'listings/tool/tool_detail.html', context)
  
  
+def tool_map_coords_view(request, pk):
+    """JSON: geocode a tool's location on demand (lazy map loading)."""
+    tool = get_object_or_404(Tool, pk=pk)
+    coords = _geocode(tool.location)
+    if coords:
+        return JsonResponse({'lat': coords[0], 'lon': coords[1]})
+    return JsonResponse({'lat': None, 'lon': None})
+
+
 def toggle_wishlist_view(request, pk):
     """Toggle a tool in/out of the user's wishlist. Always returns JSON."""
     if request.method != 'POST':
