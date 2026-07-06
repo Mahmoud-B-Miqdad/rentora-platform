@@ -411,20 +411,20 @@ def report_user(request, user_id):
     reported = get_object_or_404(User, id=user_id)
     if reporter == reported:
         messages.error(request, "You cannot report yourself.")
-        return redirect('user_profile', user_id=user_id)
+        return redirect('users:profile')
     already = Report.objects.filter(
         reporter=reporter,
         reported=reported
 	).exists()
     if already:
         messages.error(request, "You have already reported this user.")
-        return redirect('user_profile', user_id=user_id)
+        return redirect('users:profile')
     if request.method == 'POST':
         reason = request.POST.get('reason')
         details = request.POST.get('details', '')
         if not reason:
             messages.error(request, "Please select a reason.")
-            return redirect('user_profile', user_id=user_id)
+            return redirect('users:profile')
         Report.objects.create(
             reporter=reporter,
             reported=reported,
@@ -439,5 +439,5 @@ def report_user(request, user_id):
 			)
         else:
             messages.success(request, "report submitted. Our team will review it.")
-        return redirect('user_profile', user_id=user_id)
-    return redirect('user_profile', user_id=user_id)
+        return redirect('users:profile')
+    return redirect('users:profile')
