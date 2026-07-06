@@ -10,6 +10,7 @@ urlpatterns = [
     path("login/",                         views.login_view,             name="login"),
     path("logout/",                        views.logout_view,            name="logout"),
     path("profile/",                       views.profile_view,           name="profile"),
+	path('profile/<int:user_id>/',		   views.profile_view, 			 name='profile_user'),
     path("verify-email/<str:token>/",      views.verify_email_view,      name="verify_email"),
     path("resend-verification/",           views.resend_verification_view, name="resend_verification"),
     path("profile/<int:pk>/",              views.public_profile_view,    name="public_profile"),
