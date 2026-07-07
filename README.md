@@ -165,7 +165,7 @@ Built for the Palestinian market, where import restrictions make tools significa
 
 ```
 rentora-platform/
-├── manage.py                     # Injects rentora_project/ into sys.path
+├── manage.py                     # Entry point (settings injects the source root)
 └── rentora_project/              # Source root
     ├── rentora_project/          # Core config (settings, urls, wsgi)
     ├── templates/                # Shared base templates & partials

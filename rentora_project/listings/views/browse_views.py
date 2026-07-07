@@ -93,7 +93,7 @@ def home_view(request):
             'avg_rating':    avg_rating,
         },
     }
-    return render(request, 'listings/home.html', context)
+    return render(request, 'listings/pages/home.html', context)
 
 
 # ─────────────────────────────────────────────
@@ -207,7 +207,7 @@ def browse_view(request):
         )
         return JsonResponse({'html': html, 'count': paginator.count})
 
-    return render(request, 'listings/browse.html', context)
+    return render(request, 'listings/pages/browse.html', context)
 
 
 # ─────────────────────────────────────────────
@@ -230,7 +230,7 @@ def about_view(request):
             'avg_rating':    avg_rating,
         }
     }
-    return render(request, 'listings/about.html', context)
+    return render(request, 'listings/pages/about.html', context)
 
 
 # ─────────────────────────────────────────────

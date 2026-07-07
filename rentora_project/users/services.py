@@ -25,7 +25,7 @@ def send_verification_email(request, user) -> None:
 
     verify_url = request.build_absolute_uri(f"/users/verify-email/{token}/")
 
-    html_body = render_to_string("users/email_verify.html", {
+    html_body = render_to_string("users/emails/email_verify.html", {
         "user":       user,
         "verify_url": verify_url,
     })

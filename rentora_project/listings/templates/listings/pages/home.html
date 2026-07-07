@@ -5,7 +5,7 @@
 {% block body_class %}home-page{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'listings/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'listings/css/pages/home.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -407,5 +407,5 @@ window.AppConfig = {
     browseUrl:         '{% url "listings:browse" %}',
 };
 </script>
-<script src="{% static 'listings/js/home.js' %}"></script>
+<script src="{% static 'listings/js/pages/home.js' %}"></script>
 {% endblock %}

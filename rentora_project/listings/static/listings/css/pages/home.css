@@ -43,7 +43,7 @@
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  background: #080f1a url('/static/images/hero-bg.jpg') center / cover no-repeat;
+  background: #080f1a url('../../img/hero-bg.jpg') center / cover no-repeat;
   background-attachment: fixed;
 }
 
