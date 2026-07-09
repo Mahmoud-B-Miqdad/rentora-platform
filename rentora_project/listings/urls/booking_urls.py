@@ -22,6 +22,5 @@ urlpatterns = [
     path('booking/<int:booking_id>/pay/',         payment_view,             name='payment'),
     path('booking/<int:booking_id>/pay/success/', payment_success_view,     name='payment_success'),
 	path('report/<int:user_id>/',                  report_user,              name='report_user'),
-    path('tools/<int:pk>/book/',                  create_booking_view,       name='create_booking'),
     path('stripe/webhook/',                       stripe_webhook,            name='stripe_webhook'),
 ]
