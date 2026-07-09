@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib    import messages
-from django.db.models  import Avg, Count, Prefetch, Q
 
 from users.models    import User, EmailVerification
 from users.services  import send_verification_email
-from listings.models import Tool, ToolImage, Booking, BookingStatus, Review, ReviewType
+from listings.models import Tool, Booking, Review
 from listings.models.report import Report
 
 from django.http import HttpResponse
@@ -228,62 +227,3 @@ def forgot_password_view(request):
         sent = True  
 
     return render(request, "users/password/forgot_password.html", {"sent": sent})
-# ─────────────────────────────────────────────
-#  Public Profile View
-# ─────────────────────────────────────────────
-
-def public_profile_view(request, pk):
-    viewer_id = request.session.get("user_id")
-    if not viewer_id:
-        return redirect("users:login")
-
-    profile_user = get_object_or_404(User, pk=pk)
-
-    primary_img_prefetch = Prefetch(
-        "images",
-        queryset=ToolImage.objects.filter(is_primary=True),
-        to_attr="primary_images",
-    )
-    listed_tools = (
-        Tool.objects
-        .filter(owner=profile_user, is_available=True)
-        .select_related("category")
-        .prefetch_related(primary_img_prefetch)
-        .order_by("-created_at")
-    )
-
-    reviews_received = (
-        Review.objects
-        .filter(
-            Q(review_type=ReviewType.FOR_OWNER,  booking__tool__owner=profile_user) |
-            Q(review_type=ReviewType.FOR_RENTER, booking__renter=profile_user)
-        )
-        .select_related("reviewer")
-        .order_by("-created_at")
-    )
-
-    avg_data   = reviews_received.aggregate(avg=Avg("rating"))
-    avg_rating = round(float(avg_data["avg"]), 1) if avg_data["avg"] else None
-
-    tools_listed = Tool.objects.filter(owner=profile_user).count()
-    rentals_done = Booking.objects.filter(
-        renter=profile_user, status=BookingStatus.COMPLETED
-    ).count()
-
-    context = {
-        "profile_user":     profile_user,
-        "edit_mode":        False,
-        "is_owner":         False,
-        "errors":           {},
-        "listed_tools":     listed_tools,
-        "reviews_received": reviews_received,
-        "reviews_given":    None,
-        "given_count":      0,
-        "stats": {
-            "tools_listed":  tools_listed,
-            "rentals_done":  rentals_done,
-            "avg_rating":    avg_rating,
-            "reviews_count": reviews_received.count(),
-        },
-    }
-    return render(request, "users/profile.html", context)

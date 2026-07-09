@@ -427,9 +427,9 @@ def report_user(request, user_id):
         reason = request.POST.get('reason')
         details = request.POST.get('details', '')
 
-        if not reason:
-            messages.error(request, "Please select a reason.")
-            return redirect('users:report_user', user_id=user_id)
+        if reason not in dict(Report.REASON_CHOICES):
+            messages.error(request, "Please select a valid reason.")
+            return redirect('listings:report_user', user_id=user_id)
 
         Report.objects.create(
             reporter=reporter,
@@ -438,15 +438,7 @@ def report_user(request, user_id):
             details=details,
         )
 
-        report_count = Report.objects.filter(reported=reported).count()
-        if report_count >= Report.FLAGGED_AT:
-            messages.warning(
-                request,
-                f"This account has been flagged after {report_count} reports."
-            )
-        else:
-            messages.success(request, "Report submitted. Our team will review it.")
-
+        messages.success(request, "Report submitted. Our team will review it.")
         return redirect('users:profile_user', user_id=user_id)
 
     # GET request → اعرض صفحة الريبورت

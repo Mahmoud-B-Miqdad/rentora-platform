@@ -61,7 +61,7 @@
           <span class="profile-badge"><i class="fa-solid fa-star"></i>{{ stats.avg_rating }} rating</span>
           {% endif %}
           <span class="profile-badge profile-badge--trust"><i class="fa-solid fa-shield-halved"></i>Low Risk</span>
-		  {% if profile_user_id != profile_user.id %}
+		  {% if session_user_id != profile_user.id %}
 		  <a href="{% url 'listings:report_user' profile_user.id %}" class="btn-report">
 			<i class="fa-solid fa-flag"></i>Report User
 		  </a>
