@@ -1,216 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
-
+ 
 {% block title %}{{ profile_user.name }} — Profile — Rentora{% endblock %}
-
+ 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
 {% endblock %}
-
+ 
 {% block content %}
 <div class="profile-wrapper">
-
+ 
   <!-- ══ BANNER ══════════════════════════════════════════════ -->
   <div class="profile-banner" aria-hidden="true"></div>
-
+ 
   <div class="container">
-
+ 
     <!-- ══ META ROW ════════════════════════════════════════════ -->
     <div class="profile-meta-row">
-
-            {% if edit_mode %}
-            {# In edit mode: avatar is a label that opens the file picker #}
-            <label class="profile-avatar-wrap profile-avatar-wrap--editable"
-                   for="f-img"
-                   title="Click to change photo">
-                {% if profile_user.profile_image %}
-                    <img src="{{ profile_user.profile_image.url }}"
-                         alt="{{ profile_user.name }}"
-                         class="profile-avatar"
-                         id="avatarPreview">
-                {% else %}
-                    <div class="profile-avatar profile-avatar--init" id="avatarInitDiv">
-                        {{ profile_user.name|first|upper }}
-                    </div>
-                {% endif %}
-                <div class="profile-avatar-overlay" aria-hidden="true">
-                    <i class="fa-solid fa-camera"></i>
-                    <span>Change</span>
-                </div>
-                {% if profile_user.is_verified %}
-                <span class="profile-verified-dot" title="Verified account">
-                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                </span>
-                {% endif %}
-            </label>
-            {% else %}
-            {# View mode: plain div #}
-            <div class="profile-avatar-wrap">
-                {% if profile_user.profile_image %}
-                    <img src="{{ profile_user.profile_image.url }}"
-                         alt="{{ profile_user.name }}"
-                         class="profile-avatar">
-                {% else %}
-                    <div class="profile-avatar profile-avatar--init">
-                        {{ profile_user.name|first|upper }}
-                    </div>
-                {% endif %}
-                {% if profile_user.is_verified %}
-                <span class="profile-verified-dot" title="Verified account">
-                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                </span>
-                {% endif %}
-            </div>
-            {% endif %}
-
-            <div class="profile-meta">
-                <h1 class="profile-name">
-                    {{ profile_user.name }}
-                    {% if profile_user.is_verified %}
-                    <span class="profile-verified-label">
-                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Verified
-                    </span>
-                    {% endif %}
-                </h1>
-
-                {% if is_owner and not profile_user.is_verified %}
-                <div class="email-verify-card">
-                    <div class="evc-icon-wrap">
-                        <i class="fa-solid fa-envelope-open-text"></i>
-                    </div>
-                    <div class="evc-content">
-                        <h4 class="evc-title">Verify your email address</h4>
-                        <p class="evc-desc">
-                            We sent a verification link to
-                            <strong>{{ profile_user.email }}</strong>.
-                            Check your inbox and click the link to activate your account.
-                        </p>
-                        <div class="evc-footer">
-                            <form method="POST" action="{% url 'users:resend_verification' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="evc-resend-btn">
-                                    <i class="fa-solid fa-paper-plane"></i>
-                                    Resend verification email
-                                </button>
-                            </form>
-                            <span class="evc-spam-note">
-                                <i class="fa-regular fa-lightbulb"></i>
-                                Can't find it? Check your spam folder.
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-                <div class="profile-badges">
-                    {% if profile_user.location %}
-                    <span class="profile-badge">
-                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                        {{ profile_user.location }}
-                    </span>
-                    {% endif %}
-                    {% if stats.avg_rating %}
-                    <span class="profile-badge">
-                        <i class="fa-solid fa-star" aria-hidden="true"></i>
-                        {{ stats.avg_rating }} rating
-                    </span>
-                    {% endif %}
-                    <span class="profile-badge profile-badge--risk">
-                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                        Low Risk
-                    </span>
-                </div>
-            </div>
-
-            <div class="profile-action-wrap">
-                {% if is_owner and not edit_mode %}
-                <a href="?edit=1" class="btn-edit-profile">
-                    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-                    Edit Profile
-                </a>
-                {% elif is_owner and edit_mode %}
-                <button type="submit" form="editProfileForm" class="btn-save-profile">
-                    <i class="fa-solid fa-check" aria-hidden="true"></i>
-                    Save Changes
-                </button>
-                {% endif %}
-            </div>
-
-        </div>
-
-        <!-- ══════════════════════════════════════════
-             STATS CARDS
-             ══════════════════════════════════════════ -->
-        <div class="profile-stats">
-
-            <div class="pstat">
-                <div class="pstat__icon pstat__icon--tools">
-                    <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-                </div>
-                <span class="pstat__value">{{ stats.tools_listed }}</span>
-                <span class="pstat__label">Tools Listed</span>
-            </div>
-
-            <div class="pstat">
-                <div class="pstat__icon pstat__icon--rentals">
-                    <i class="fa-regular fa-square-check" aria-hidden="true"></i>
-                </div>
-                <span class="pstat__value">{{ stats.rentals_done }}</span>
-                <span class="pstat__label">Rentals Done</span>
-            </div>
-
-            <div class="pstat">
-                <div class="pstat__icon pstat__icon--rating">
-                    <i class="fa-regular fa-star" aria-hidden="true"></i>
-                </div>
-                <span class="pstat__value">{{ stats.avg_rating|default:"&mdash;" }}</span>
-                <span class="pstat__label">Avg Rating</span>
-            </div>
-
-            <div class="pstat">
-                <div class="pstat__icon pstat__icon--reviews">
-                    <i class="fa-regular fa-comment-dots" aria-hidden="true"></i>
-                </div>
-                <span class="pstat__value">{{ stats.reviews_count }}</span>
-                <span class="pstat__label">Reviews</span>
-            </div>
-
-        </div>
-
-        <!-- ══════════════════════════════════════════
-             INFO SECTION  (view mode)
-             ══════════════════════════════════════════ -->
-        {% if not edit_mode %}
-        <div class="profile-info-card">
-            <div class="profile-info-grid">
-
-                <div class="profile-info-item">
-                    <span class="profile-info-label">Full Name</span>
-                    <span class="profile-info-value">{{ profile_user.name }}</span>
-                </div>
-
-                {% if is_owner %}
-                <div class="profile-info-item">
-                    <span class="profile-info-label">Email</span>
-                    <span class="profile-info-value">{{ profile_user.email }}</span>
-                </div>
-
-                <div class="profile-info-item">
-                    <span class="profile-info-label">Phone</span>
-                    <span class="profile-info-value">{{ profile_user.phone|default:"&mdash;" }}</span>
-                </div>
-                {% endif %}
-
-                <div class="profile-info-item">
-                    <span class="profile-info-label">Location</span>
-                    <span class="profile-info-value">{{ profile_user.location }}</span>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ══════════════════════════════════════════
-             EDIT FORM  (edit mode)
-             ══════════════════════════════════════════ -->
+ 
       {% if edit_mode %}
       <label class="profile-avatar-wrap profile-avatar-wrap--editable" for="f-img" title="Click to change photo">
         {% if profile_user.profile_image %}
@@ -238,7 +45,7 @@
         {% endif %}
       </div>
       {% endif %}
-
+ 
       <div class="profile-meta">
         <h1 class="profile-name">
           {{ profile_user.name }}
@@ -254,8 +61,6 @@
           <span class="profile-badge"><i class="fa-solid fa-star"></i>{{ stats.avg_rating }} rating</span>
           {% endif %}
           <span class="profile-badge profile-badge--trust"><i class="fa-solid fa-shield-halved"></i>Low Risk</span>
-        </div>
-      </div>
 
       <div class="profile-action-wrap">
         {% if is_owner and not edit_mode %}
@@ -267,15 +72,64 @@
           <i class="fa-solid fa-check"></i> Save Changes
         </button>
         {% endif %}
-      </div>
+		<!--------------------Report------------------>
+		{% if session_user_id != profile_user.id %}
+		<div class="report_section">
+			<button class="btn-report" onclick="toggleReportForm()">
+				<i class="fa-solid fa-flag"></i>
+				Report User
+			</button>
+				<div id="report-form" class="report-card" style="display: none;">
+					<h5 class="report-title">
+						<i class="fa-solid fa-triangle-exclamation"></i>
+							Report {{ profile_user.name }}
+					</h5>
+					<form method="POST" action="{% url 'listings:report_user' profile_user.id %}">
+						{% csrf_token %}
+						<div class="form-group">
+							<label class="form-label">Reason</label>
+							<select name="reason" class="form-select" required>
+								<option value="">Select a reason</option>
+								<option value="scam">Scam / Fraud</option>
+								<option value="fake">Fake Listing</option>
+								<option value="no_show">No Show</option>
+								<option value="damage">Property Damage</option>
+								<option value="harassment">Hatassment</option>
+								<option value="other">Other</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="form-label">Additional Details (optional)</label>
+							<textarea name="details" class="form-textarea" rows="3" placeholder="Describe what happend..."></textarea>
+						</div>
 
+						<div class="report-actions">
+							<button type="submit" class="btn-submit-report">
+								<i class="fa-solid fa-paper-plane"></i>
+								Submit Report
+							</button>
+							<button type="button" class="btn-cancel" onclick="toggleReportForm()">
+								Cancel
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+        </div>
+      </div>
+ 
+
+      </div>
+ 
     </div>
     <!-- / meta-row -->
-
+ 
     <!-- ══ VERIFICATION ALERT ══════════════════════════════════ -->
     {% if is_owner and not profile_user.is_verified %}
     <div class="verify-alert">
-
+ 
       <div class="verify-alert__envelope">
         <i class="fa-regular fa-envelope"></i>
         <span class="verify-ping"></span>
@@ -299,13 +153,13 @@
       </div>
     </div>
     {% endif %}
-
+ 
     <!-- ══ TWO-COLUMN BODY ══════════════════════════════════════ -->
     <div class="profile-body">
-
+ 
       <!-- ─── LEFT: Main content ─── -->
       <div class="profile-main">
-
+ 
         {% if not edit_mode %}
         <!-- Info Card (view mode) -->
         <div class="profile-info-card">
@@ -334,7 +188,7 @@
             </div>
           </div>
         </div>
-
+ 
         {% else %}
         <!-- Edit Form -->
         <form id="editProfileForm" method="POST" enctype="multipart/form-data" class="profile-edit-card" novalidate>
@@ -343,7 +197,7 @@
             <div class="pcard-header__icon"><i class="fa-solid fa-pen-to-square"></i></div>
             <span class="pcard-header__title">Edit Profile</span>
           </div>
-
+ 
           {% if errors %}
           <div class="profile-errors">
             {% for msg in errors.values %}
@@ -351,9 +205,9 @@
             {% endfor %}
           </div>
           {% endif %}
-
+ 
           <div class="profile-edit-grid">
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label" for="f-name"><i class="fa-regular fa-user"></i>Full Name</label>
               <div class="profile-input-wrap {% if errors.name %}profile-input-wrap--error{% endif %}">
@@ -361,7 +215,7 @@
               </div>
               {% if errors.name %}<span class="profile-field-error">{{ errors.name }}</span>{% endif %}
             </div>
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label"><i class="fa-regular fa-envelope"></i>Email</label>
               <div class="profile-input-wrap profile-input-wrap--disabled">
@@ -369,7 +223,7 @@
               </div>
               <span class="profile-field-hint">Email cannot be changed.</span>
             </div>
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label" for="f-phone"><i class="fa-solid fa-phone"></i>Phone</label>
               <div class="profile-input-wrap {% if errors.phone %}profile-input-wrap--error{% endif %}">
@@ -377,7 +231,7 @@
               </div>
               {% if errors.phone %}<span class="profile-field-error">{{ errors.phone }}</span>{% endif %}
             </div>
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label" for="f-location"><i class="fa-solid fa-location-dot"></i>Location</label>
               <div class="profile-input-wrap {% if errors.location %}profile-input-wrap--error{% endif %}">
@@ -385,11 +239,11 @@
               </div>
               {% if errors.location %}<span class="profile-field-error">{{ errors.location }}</span>{% endif %}
             </div>
-
+ 
           </div>
-
+ 
           <input type="file" id="f-img" name="profile_image" accept="image/*" class="profile-file-input" style="display:none" aria-label="Upload profile photo">
-
+ 
           <div class="profile-edit-actions">
             <button type="submit" class="btn-save-profile">
               <i class="fa-solid fa-check"></i> Save Changes
@@ -398,7 +252,7 @@
           </div>
         </form>
         {% endif %}
-
+ 
         <!-- ── Listed Tools ── -->
         {% if listed_tools %}
         <div class="profile-section">
@@ -431,7 +285,7 @@
           </div>
         </div>
         {% endif %}
-
+ 
         <!-- ── Reviews ── -->
         <div class="profile-section">
           <div class="profile-reviews-header">
@@ -448,7 +302,7 @@
               </button>
             </div>
           </div>
-
+ 
           <div class="review-panel" id="tab-received" role="tabpanel">
             {% if reviews_received %}
             <div class="profile-reviews-grid">
@@ -484,7 +338,7 @@
             </div>
             {% endif %}
           </div>
-
+ 
           <div class="review-panel" id="tab-given" role="tabpanel" hidden>
             {% if reviews_given %}
             <div class="profile-reviews-grid">
@@ -516,67 +370,62 @@
             </div>
             {% endif %}
           </div>
-
+ 
         </div>
-<<<<<<< HEAD
-        <!-- / Reviews -->
-=======
         <!-- / reviews section -->
-
+ 
       </div>
       <!-- / profile-main -->
-
+ 
       <!-- ─── RIGHT: Sidebar ─── -->
       <aside class="profile-sidebar">
-
+ 
         <!-- Stats Widget -->
         <div class="stats-widget">
           <div class="stats-widget__header">
             <div class="stats-widget__icon"><i class="fa-solid fa-chart-simple"></i></div>
             <span>Profile Stats</span>
           </div>
-
+ 
           <div class="stats-widget__grid">
-
+ 
             <div class="pstat-tile pstat-tile--tools">
               <div class="pstat-tile__icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
               <div class="pstat-tile__value">{{ stats.tools_listed }}</div>
               <div class="pstat-tile__label">Tools Listed</div>
             </div>
-
+ 
             <div class="pstat-tile pstat-tile--rentals">
               <div class="pstat-tile__icon"><i class="fa-solid fa-handshake"></i></div>
               <div class="pstat-tile__value">{{ stats.rentals_done }}</div>
               <div class="pstat-tile__label">Rentals Done</div>
             </div>
-
+ 
             <div class="pstat-tile pstat-tile--rating">
               <div class="pstat-tile__icon"><i class="fa-solid fa-star"></i></div>
               <div class="pstat-tile__value">{{ stats.avg_rating|default:"—" }}</div>
               <div class="pstat-tile__label">Avg Rating</div>
             </div>
-
+ 
             <div class="pstat-tile pstat-tile--reviews">
               <div class="pstat-tile__icon"><i class="fa-regular fa-comment-dots"></i></div>
               <div class="pstat-tile__value">{{ stats.reviews_count }}</div>
               <div class="pstat-tile__label">Total Reviews</div>
             </div>
-
+ 
           </div>
         </div>
-
+ 
       </aside>
       <!-- / sidebar -->
-
+ 
     </div>
     <!-- / profile-body -->
-
+ 
   </div>
 </div>
->>>>>>> develop
 {% endblock %}
-
+ 
 {% block extra_js %}
 <script src="{% static 'users/js/profile.js' %}"></script>
 {% endblock %}
-
