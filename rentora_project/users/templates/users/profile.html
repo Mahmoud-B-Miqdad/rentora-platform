@@ -61,7 +61,14 @@
           <span class="profile-badge"><i class="fa-solid fa-star"></i>{{ stats.avg_rating }} rating</span>
           {% endif %}
           <span class="profile-badge profile-badge--trust"><i class="fa-solid fa-shield-halved"></i>Low Risk</span>
-
+		  {% if profile_user_id != profile_user.id %}
+		  <a href="{% url 'listings:report_user' profile_user.id %}" class="btn-report">
+			<i class="fa-solid fa-flag"></i>Report User
+		  </a>
+		  {% endif %}
+		</div>
+	  </div>
+ 
       <div class="profile-action-wrap">
         {% if is_owner and not edit_mode %}
         <a href="?edit=1" class="btn-edit-profile">
@@ -72,55 +79,6 @@
           <i class="fa-solid fa-check"></i> Save Changes
         </button>
         {% endif %}
-		<!--------------------Report------------------>
-		{% if session_user_id != profile_user.id %}
-		<div class="report_section">
-			<button class="btn-report" onclick="toggleReportForm()">
-				<i class="fa-solid fa-flag"></i>
-				Report User
-			</button>
-				<div id="report-form" class="report-card" style="display: none;">
-					<h5 class="report-title">
-						<i class="fa-solid fa-triangle-exclamation"></i>
-							Report {{ profile_user.name }}
-					</h5>
-					<form method="POST" action="{% url 'listings:report_user' profile_user.id %}">
-						{% csrf_token %}
-						<div class="form-group">
-							<label class="form-label">Reason</label>
-							<select name="reason" class="form-select" required>
-								<option value="">Select a reason</option>
-								<option value="scam">Scam / Fraud</option>
-								<option value="fake">Fake Listing</option>
-								<option value="no_show">No Show</option>
-								<option value="damage">Property Damage</option>
-								<option value="harassment">Hatassment</option>
-								<option value="other">Other</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="form-label">Additional Details (optional)</label>
-							<textarea name="details" class="form-textarea" rows="3" placeholder="Describe what happend..."></textarea>
-						</div>
-
-						<div class="report-actions">
-							<button type="submit" class="btn-submit-report">
-								<i class="fa-solid fa-paper-plane"></i>
-								Submit Report
-							</button>
-							<button type="button" class="btn-cancel" onclick="toggleReportForm()">
-								Cancel
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		{% endif %}
-        </div>
-      </div>
- 
-
       </div>
  
     </div>
@@ -429,3 +387,5 @@
 {% block extra_js %}
 <script src="{% static 'users/js/profile.js' %}"></script>
 {% endblock %}
+ 
+ 
