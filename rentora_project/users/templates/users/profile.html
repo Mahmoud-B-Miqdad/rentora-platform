@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
-
+ 
 {% block title %}{{ profile_user.name }} — Profile — Rentora{% endblock %}
-
+ 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
 {% endblock %}
-
+ 
 {% block content %}
 <div class="profile-wrapper">
-
+ 
   <!-- ══ BANNER ══════════════════════════════════════════════ -->
   <div class="profile-banner" aria-hidden="true"></div>
-
+ 
   <div class="container">
-
+ 
     <!-- ══ META ROW ════════════════════════════════════════════ -->
     <div class="profile-meta-row">
-
+ 
       {% if edit_mode %}
       <label class="profile-avatar-wrap profile-avatar-wrap--editable" for="f-img" title="Click to change photo">
         {% if profile_user.profile_image %}
@@ -45,7 +45,7 @@
         {% endif %}
       </div>
       {% endif %}
-
+ 
       <div class="profile-meta">
         <h1 class="profile-name">
           {{ profile_user.name }}
@@ -61,9 +61,14 @@
           <span class="profile-badge"><i class="fa-solid fa-star"></i>{{ stats.avg_rating }} rating</span>
           {% endif %}
           <span class="profile-badge profile-badge--trust"><i class="fa-solid fa-shield-halved"></i>Low Risk</span>
-        </div>
-      </div>
-
+		  {% if profile_user_id != profile_user.id %}
+		  <a href="{% url 'listings:report_user' profile_user.id %}" class="btn-report">
+			<i class="fa-solid fa-flag"></i>Report User
+		  </a>
+		  {% endif %}
+		</div>
+	  </div>
+ 
       <div class="profile-action-wrap">
         {% if is_owner and not edit_mode %}
         <a href="?edit=1" class="btn-edit-profile">
@@ -75,14 +80,14 @@
         </button>
         {% endif %}
       </div>
-
+ 
     </div>
     <!-- / meta-row -->
-
+ 
     <!-- ══ VERIFICATION ALERT ══════════════════════════════════ -->
     {% if is_owner and not profile_user.is_verified %}
     <div class="verify-alert">
-
+ 
       <div class="verify-alert__envelope">
         <i class="fa-regular fa-envelope"></i>
         <span class="verify-ping"></span>
@@ -106,13 +111,13 @@
       </div>
     </div>
     {% endif %}
-
+ 
     <!-- ══ TWO-COLUMN BODY ══════════════════════════════════════ -->
     <div class="profile-body">
-
+ 
       <!-- ─── LEFT: Main content ─── -->
       <div class="profile-main">
-
+ 
         {% if not edit_mode %}
         <!-- Info Card (view mode) -->
         <div class="profile-info-card">
@@ -141,7 +146,7 @@
             </div>
           </div>
         </div>
-
+ 
         {% else %}
         <!-- Edit Form -->
         <form id="editProfileForm" method="POST" enctype="multipart/form-data" class="profile-edit-card" novalidate>
@@ -150,7 +155,7 @@
             <div class="pcard-header__icon"><i class="fa-solid fa-pen-to-square"></i></div>
             <span class="pcard-header__title">Edit Profile</span>
           </div>
-
+ 
           {% if errors %}
           <div class="profile-errors">
             {% for msg in errors.values %}
@@ -158,9 +163,9 @@
             {% endfor %}
           </div>
           {% endif %}
-
+ 
           <div class="profile-edit-grid">
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label" for="f-name"><i class="fa-regular fa-user"></i>Full Name</label>
               <div class="profile-input-wrap {% if errors.name %}profile-input-wrap--error{% endif %}">
@@ -168,7 +173,7 @@
               </div>
               {% if errors.name %}<span class="profile-field-error">{{ errors.name }}</span>{% endif %}
             </div>
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label"><i class="fa-regular fa-envelope"></i>Email</label>
               <div class="profile-input-wrap profile-input-wrap--disabled">
@@ -176,7 +181,7 @@
               </div>
               <span class="profile-field-hint">Email cannot be changed.</span>
             </div>
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label" for="f-phone"><i class="fa-solid fa-phone"></i>Phone</label>
               <div class="profile-input-wrap {% if errors.phone %}profile-input-wrap--error{% endif %}">
@@ -184,7 +189,7 @@
               </div>
               {% if errors.phone %}<span class="profile-field-error">{{ errors.phone }}</span>{% endif %}
             </div>
-
+ 
             <div class="profile-edit-field">
               <label class="profile-info-label" for="f-location"><i class="fa-solid fa-location-dot"></i>Location</label>
               <div class="profile-input-wrap {% if errors.location %}profile-input-wrap--error{% endif %}">
@@ -192,11 +197,11 @@
               </div>
               {% if errors.location %}<span class="profile-field-error">{{ errors.location }}</span>{% endif %}
             </div>
-
+ 
           </div>
-
+ 
           <input type="file" id="f-img" name="profile_image" accept="image/*" class="profile-file-input" style="display:none" aria-label="Upload profile photo">
-
+ 
           <div class="profile-edit-actions">
             <button type="submit" class="btn-save-profile">
               <i class="fa-solid fa-check"></i> Save Changes
@@ -205,7 +210,7 @@
           </div>
         </form>
         {% endif %}
-
+ 
         <!-- ── Listed Tools ── -->
         {% if listed_tools %}
         <div class="profile-section">
@@ -238,7 +243,7 @@
           </div>
         </div>
         {% endif %}
-
+ 
         <!-- ── Reviews ── -->
         <div class="profile-section">
           <div class="profile-reviews-header">
@@ -255,7 +260,7 @@
               </button>
             </div>
           </div>
-
+ 
           <div class="review-panel" id="tab-received" role="tabpanel">
             {% if reviews_received %}
             <div class="profile-reviews-grid">
@@ -291,7 +296,7 @@
             </div>
             {% endif %}
           </div>
-
+ 
           <div class="review-panel" id="tab-given" role="tabpanel" hidden>
             {% if reviews_given %}
             <div class="profile-reviews-grid">
@@ -323,62 +328,64 @@
             </div>
             {% endif %}
           </div>
-
+ 
         </div>
         <!-- / reviews section -->
-
+ 
       </div>
       <!-- / profile-main -->
-
+ 
       <!-- ─── RIGHT: Sidebar ─── -->
       <aside class="profile-sidebar">
-
+ 
         <!-- Stats Widget -->
         <div class="stats-widget">
           <div class="stats-widget__header">
             <div class="stats-widget__icon"><i class="fa-solid fa-chart-simple"></i></div>
             <span>Profile Stats</span>
           </div>
-
+ 
           <div class="stats-widget__grid">
-
+ 
             <div class="pstat-tile pstat-tile--tools">
               <div class="pstat-tile__icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
               <div class="pstat-tile__value">{{ stats.tools_listed }}</div>
               <div class="pstat-tile__label">Tools Listed</div>
             </div>
-
+ 
             <div class="pstat-tile pstat-tile--rentals">
               <div class="pstat-tile__icon"><i class="fa-solid fa-handshake"></i></div>
               <div class="pstat-tile__value">{{ stats.rentals_done }}</div>
               <div class="pstat-tile__label">Rentals Done</div>
             </div>
-
+ 
             <div class="pstat-tile pstat-tile--rating">
               <div class="pstat-tile__icon"><i class="fa-solid fa-star"></i></div>
               <div class="pstat-tile__value">{{ stats.avg_rating|default:"—" }}</div>
               <div class="pstat-tile__label">Avg Rating</div>
             </div>
-
+ 
             <div class="pstat-tile pstat-tile--reviews">
               <div class="pstat-tile__icon"><i class="fa-regular fa-comment-dots"></i></div>
               <div class="pstat-tile__value">{{ stats.reviews_count }}</div>
               <div class="pstat-tile__label">Total Reviews</div>
             </div>
-
+ 
           </div>
         </div>
-
+ 
       </aside>
       <!-- / sidebar -->
-
+ 
     </div>
     <!-- / profile-body -->
-
+ 
   </div>
 </div>
 {% endblock %}
-
+ 
 {% block extra_js %}
 <script src="{% static 'users/js/profile.js' %}"></script>
 {% endblock %}
+ 
+ 

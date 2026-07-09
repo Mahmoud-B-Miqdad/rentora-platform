@@ -5,6 +5,7 @@ from django.db.models  import Avg, Count, Prefetch, Q
 from users.models    import User, EmailVerification
 from users.services  import send_verification_email
 from listings.models import Tool, ToolImage, Booking, BookingStatus, Review, ReviewType
+from listings.models.report import Report
 
 from django.http import HttpResponse
 from django.core.mail import send_mail
@@ -151,85 +152,68 @@ def resend_verification_view(request):
 #  Profile View
 # ─────────────────────────────────────────────
 
-def profile_view(request):
-    user_id = request.session.get("user_id")
-    if not user_id:
+def profile_view(request, user_id=None):
+    logged_in_id = request.session.get("user_id")
+    if not logged_in_id:
         return redirect("users:login")
 
-    user      = get_object_or_404(User, pk=user_id)
-    edit_mode = request.GET.get("edit") == "1"
-    errors    = {}
+    # لو ما في user_id بالـ URL، عرض بروفايل الـ logged in user
+    if user_id is None:
+        user_id = int(logged_in_id)
 
-    # ── Handle profile update (POST) ──────────────────────────────────────────
-    if request.method == "POST":
-        user, errors = User.objects.update_profile(user, request.POST, request.FILES)
+    profile_user = get_object_or_404(User, pk=user_id)
+    is_owner     = int(logged_in_id) == int(user_id)
+    edit_mode    = request.GET.get("edit") == "1" and is_owner
+    errors       = {}
+
+    # Handle profile update (POST) — فقط لو owner
+    if request.method == "POST" and is_owner:
+        user, errors = User.objects.update_profile(
+            profile_user, request.POST, request.FILES
+        )
         if not errors:
             request.session["user_name"] = user.name
             return redirect("users:profile")
         edit_mode = True
 
-    # ── Stats ─────────────────────────────────────────────────────────────────
-    tools_listed = Tool.objects.filter(owner=user).count()
-    rentals_done = Booking.objects.filter(
-        renter=user, status=BookingStatus.COMPLETED
+    # Stats
+    tools_listed  = Tool.objects.filter(owner=profile_user).count()
+    rentals_done  = Booking.objects.filter(
+        renter=profile_user, status='completed'
     ).count()
-
-    reviews_received = (
-        Review.objects
-        .filter(
-            Q(review_type=ReviewType.FOR_OWNER,  booking__tool__owner=user) |
-            Q(review_type=ReviewType.FOR_RENTER, booking__renter=user)
-        )
-        .select_related("reviewer")
-        .order_by("-created_at")
-    )
-
-    reviews_given = (
-        Review.objects
-        .filter(reviewer=user)
-        .select_related(
-            "booking__tool",
-            "booking__tool__owner",
-            "booking__tool__category",
-            "booking__renter",
-        )
-        .order_by("-created_at")
-    )
-
-    avg_data   = reviews_received.aggregate(avg=Avg("rating"))
-    avg_rating = round(float(avg_data["avg"]), 1) if avg_data["avg"] else None
-
-    # ── Listed tools ──────────────────────────────────────────────────────────
-    primary_img_prefetch = Prefetch(
-        "images",
-        queryset=ToolImage.objects.filter(is_primary=True),
-        to_attr="primary_images",
-    )
-    listed_tools = (
-        Tool.objects
-        .filter(owner=user)
-        .select_related("category")
-        .prefetch_related(primary_img_prefetch)
-        .order_by("-created_at")
-    )
+    reviews_received = Review.objects.filter(
+        booking__tool__owner=profile_user
+    ).select_related('reviewer').order_by('-created_at')
+    reviews_given = Review.objects.filter(
+        reviewer=profile_user
+    ).select_related('booking__tool').order_by('-created_at')
+    avg_rating    = profile_user.rating if profile_user.rating else None
+    reviews_count = reviews_received.count()
+    listed_tools  = Tool.objects.filter(
+        owner=profile_user, is_available=True
+    ).select_related('category')
+    report_count  = Report.objects.filter(reported=profile_user).count()
+    given_count   = reviews_given.count()
 
     context = {
-        "profile_user":     user,
-        "edit_mode":        edit_mode,
-        "errors":           errors,
-        "is_owner":         True,
-        "listed_tools":     listed_tools,
-        "reviews_received": reviews_received,
-        "reviews_given":    reviews_given,
-        "given_count":      reviews_given.count(),
-        "stats": {
-            "tools_listed":  tools_listed,
-            "rentals_done":  rentals_done,
-            "avg_rating":    avg_rating,
-            "reviews_count": reviews_received.count(),
+        'profile_user'    : profile_user,
+        'is_owner'        : is_owner,
+        'session_user_id' : int(logged_in_id),
+        'edit_mode'       : edit_mode,
+        'errors'          : errors,
+        'listed_tools'    : listed_tools,
+        'reviews_received': reviews_received,
+        'reviews_given'   : reviews_given,
+        'given_count'     : given_count,
+        'report_count'    : report_count,
+        'stats': {
+            'tools_listed' : tools_listed,
+            'rentals_done' : rentals_done,
+            'avg_rating'   : avg_rating,
+            'reviews_count': reviews_count,
         },
     }
-    return render(request, "users/profile.html", context)
+    return render(request, 'users/profile.html', context)
 
 
     

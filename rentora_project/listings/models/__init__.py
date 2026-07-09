@@ -18,12 +18,13 @@
 #   Review    (depends on Booking, users.User)
 # ─────────────────────────────────────────────────────────────────────────────
 
-from listings.models.category     import Category
-from listings.models.tool         import Tool, ConditionChoices
-from listings.models.tool_image   import ToolImage
-from listings.models.booking      import Booking, BookingStatus
-from listings.models.review       import Review, ReviewType
-from listings.models.wishlist     import Wishlist
+from listings.models.category   import Category
+from listings.models.tool       import Tool, ConditionChoices
+from listings.models.tool_image import ToolImage
+from listings.models.booking    import Booking, BookingStatus
+from listings.models.review     import Review, ReviewType
+from listings.models.wishlist   import Wishlist
+from .report import Report
 from listings.models.notification import Notification, NotificationType
 from listings.models.message      import Conversation, Message
 

@@ -1,0 +1,77 @@
+/* ══════════════════════════════════
+   TABLET — أقل من 1024px
+══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .overview-grid,
+  .rentals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ══════════════════════════════════
+   MOBILE — أقل من 768px
+══════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* الـ layout يصير فوق بعض */
+  .dashboard-layout {
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  /* الـ sidebar يصير عرضه كامل */
+  .sidebar {
+    width: 100%;
+    position: static;
+    border-radius: 12px;
+  }
+
+  /* الـ nav links يصيروا بصف أفقي */
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .nav-link {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.78rem;
+    padding: 7px 8px;
+  }
+
+  /* الـ profile بيتخبى على الموبايل */
+  .sidebar-profile {
+    display: none;
+  }
+
+  /* الـ stats تصير 2 بصف */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .stat-value {
+    font-size: 1.3rem;
+  }
+
+  /* الـ grids تصير column */
+  .overview-grid,
+  .rentals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* الـ booking tabs تتصغر */
+  .booking-tab-btn {
+    padding: 6px 10px;
+    font-size: 0.76rem;
+  }
+
+  .page-title {
+    font-size: 1.2rem;
+  }
+}
