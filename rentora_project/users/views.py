@@ -227,7 +227,7 @@ def forgot_password_view(request):
     if request.method == "POST":
         sent = True  
 
-    return render(request, "users/forgot_password.html", {"sent": sent})
+    return render(request, "users/password/forgot_password.html", {"sent": sent})
 # ─────────────────────────────────────────────
 #  Public Profile View
 # ─────────────────────────────────────────────

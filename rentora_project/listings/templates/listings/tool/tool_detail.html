@@ -5,7 +5,7 @@
 {% block body_class %}detail-page{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'listings/css/tool_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'listings/css/tool/tool_detail.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -490,5 +490,5 @@ window.AppConfig = {
     images: [{% for img in all_images %}"{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],
 };
 </script>
-<script src="{% static 'listings/js/tool_detail.js' %}"></script>
+<script src="{% static 'listings/js/tool/tool_detail.js' %}"></script>
 {% endblock %}

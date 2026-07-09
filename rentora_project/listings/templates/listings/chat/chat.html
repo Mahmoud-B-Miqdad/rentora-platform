@@ -4,7 +4,7 @@
 {% block title %}Chat — {{ booking.tool.title }} | Rentora{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+<link rel="stylesheet" href="{% static 'listings/css/chat/chat.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -230,5 +230,5 @@ window.ChatConfig = {
   otherAvatarUrl:"{% if other.profile_image %}{{ other.profile_image.url }}{% endif %}",
 };
 </script>
-<script src="{% static 'js/chat.js' %}"></script>
+<script src="{% static 'listings/js/chat/chat.js' %}"></script>
 {% endblock %}
