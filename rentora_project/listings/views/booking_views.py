@@ -409,35 +409,51 @@ def dispute_return(request, booking_id):
 def report_user(request, user_id):
     reporter = User.objects.get(id=request.session['user_id'])
     reported = get_object_or_404(User, id=user_id)
+
     if reporter == reported:
         messages.error(request, "You cannot report yourself.")
-        return redirect('users:profile')
+        return redirect('users:profile_user', user_id=user_id)
+
     already = Report.objects.filter(
         reporter=reporter,
         reported=reported
-	).exists()
-    if already:
-        messages.error(request, "You have already reported this user.")
-        return redirect('users:profile')
+    ).exists()
+
     if request.method == 'POST':
+        if already:
+            messages.error(request, "You have already reported this user.")
+            return redirect('users:profile_user', user_id=user_id)
+
         reason = request.POST.get('reason')
         details = request.POST.get('details', '')
+
         if not reason:
             messages.error(request, "Please select a reason.")
-            return redirect('users:profile')
+            return redirect('users:report_user', user_id=user_id)
+
         Report.objects.create(
             reporter=reporter,
             reported=reported,
             reason=reason,
             details=details,
-		)
+        )
+
         report_count = Report.objects.filter(reported=reported).count()
         if report_count >= Report.FLAGGED_AT:
             messages.warning(
                 request,
                 f"This account has been flagged after {report_count} reports."
-			)
+            )
         else:
-            messages.success(request, "report submitted. Our team will review it.")
-        return redirect('users:profile')
-    return redirect('users:profile')
+            messages.success(request, "Report submitted. Our team will review it.")
+
+        return redirect('users:profile_user', user_id=user_id)
+
+    # GET request → اعرض صفحة الريبورت
+    if already:
+        messages.info(request, "You have already reported this user.")
+        return redirect('users:profile_user', user_id=user_id)
+
+    return render(request, 'listings/report/report_user.html', {
+        'profile_user': reported,
+    })
