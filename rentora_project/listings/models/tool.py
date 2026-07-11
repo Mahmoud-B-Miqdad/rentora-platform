@@ -1,6 +1,7 @@
 import re
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 # ─────────────────────────────────────────────
@@ -8,9 +9,9 @@ from django.db import models
 # ─────────────────────────────────────────────
 
 class ConditionChoices(models.TextChoices):
-    EXCELLENT = "excellent", "Excellent"
-    GOOD      = "good",      "Good"
-    FAIR      = "fair",      "Fair"
+    EXCELLENT = "excellent", _("Excellent")
+    GOOD      = "good",      _("Good")
+    FAIR      = "fair",      _("Fair")
 
 
 # ─────────────────────────────────────────────

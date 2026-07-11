@@ -1,6 +1,7 @@
 import re
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 # ─────────────────────────────────────────────
@@ -8,9 +9,9 @@ from django.db import models
 # ─────────────────────────────────────────────
 
 class ReviewType(models.TextChoices):
-    FOR_TOOL   = "for_tool",   "For Tool"
-    FOR_OWNER  = "for_owner",  "For Owner"
-    FOR_RENTER = "for_renter", "For Renter"
+    FOR_TOOL   = "for_tool",   _("For Tool")
+    FOR_OWNER  = "for_owner",  _("For Owner")
+    FOR_RENTER = "for_renter", _("For Renter")
 
 
 # ─────────────────────────────────────────────
