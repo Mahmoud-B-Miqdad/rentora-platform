@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}About Us — Rentora{% endblock %}
+{% block title %}{% trans "About Us" %} — Rentora{% endblock %}
 {% block body_class %}about-page{% endblock %}
 
 {% block extra_css %}
@@ -22,28 +22,25 @@
 
             <div class="about-hero__badge">
                 <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-                Our Story
+                {% trans "Our Story" %}
             </div>
 
             <h1 class="about-hero__title">
-                We're Making Tools <mark>Accessible</mark><br>
-                to <mark>Everyone</mark>
+                {% blocktrans %}We're Making Tools <mark>Accessible</mark><br>to <mark>Everyone</mark>{% endblocktrans %}
             </h1>
 
             <p class="about-hero__sub">
-                Rentora was born from a simple idea — your neighbor probably owns the drill
-                you need for the weekend. We built the platform that connects them,
-                turning idle tools into income and saving renters from unnecessary purchases.
+                {% trans "Rentora was born from a simple idea — your neighbor probably owns the drill you need for the weekend. We built the platform that connects them, turning idle tools into income and saving renters from unnecessary purchases." %}
             </p>
 
             <div class="about-hero__actions">
                 <a href="{% url 'listings:browse' %}" class="btn-about-primary">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                    Browse Tools
+                    {% trans "Browse Tools" %}
                 </a>
                 {% if not request.session.user_id %}
                 <a href="{% url 'users:register' %}" class="btn-about-outline">
-                    Join the Community
+                    {% trans "Join the Community" %}
                     <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                 </a>
                 {% endif %}
@@ -59,28 +56,28 @@
             <span class="hero-float-card__val">
                 {% if stats.tools_count %}{{ stats.tools_count }}+{% else %}0{% endif %}
             </span>
-            <span class="hero-float-card__lbl">Tools Listed</span>
+            <span class="hero-float-card__lbl">{% trans "Tools Listed" %}</span>
         </div>
         <div class="hero-float-card">
             <i class="fa-solid fa-handshake"></i>
             <span class="hero-float-card__val">
                 {% if stats.rentals_count %}{{ stats.rentals_count }}+{% else %}0{% endif %}
             </span>
-            <span class="hero-float-card__lbl">Rentals Done</span>
+            <span class="hero-float-card__lbl">{% trans "Rentals Done" %}</span>
         </div>
         <div class="hero-float-card">
             <i class="fa-solid fa-users"></i>
             <span class="hero-float-card__val">
                 {% if stats.owners_count %}{{ stats.owners_count }}+{% else %}0{% endif %}
             </span>
-            <span class="hero-float-card__lbl">Active Owners</span>
+            <span class="hero-float-card__lbl">{% trans "Active Owners" %}</span>
         </div>
         <div class="hero-float-card">
             <i class="fa-solid fa-star"></i>
             <span class="hero-float-card__val">
                 {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}&mdash;{% endif %}
             </span>
-            <span class="hero-float-card__lbl">Avg Rating</span>
+            <span class="hero-float-card__lbl">{% trans "Avg Rating" %}</span>
         </div>
     </div>
 
@@ -98,41 +95,38 @@
             <div>
                 <span class="mission-badge">
                     <i class="fa-solid fa-bullseye" aria-hidden="true"></i>
-                    Our Mission
+                    {% trans "Our Mission" %}
                 </span>
                 <h2 class="mission-title">
-                    Rent Smarter,<br><span>Live Better</span>
+                    {% blocktrans %}Rent Smarter,<br><span>Live Better</span>{% endblocktrans %}
                 </h2>
                 <p class="mission-body">
-                    Every year, billions of dollars' worth of tools sit unused in garages and storage rooms.
-                    At the same time, people pay full price for tools they'll use once or twice.
-                    Rentora exists to close that gap — creating a circular economy where tools are
-                    shared, not stockpiled.
+                    {% trans "Every year, billions of dollars' worth of tools sit unused in garages and storage rooms. At the same time, people pay full price for tools they'll use once or twice. Rentora exists to close that gap — creating a circular economy where tools are shared, not stockpiled." %}
                 </p>
                 <div class="mission-points">
                     <div class="mission-point">
                         <div class="mission-point__icon">
                             <i class="fa-solid fa-leaf" aria-hidden="true"></i>
                         </div>
-                        <span>Reduce waste by keeping tools in active use within the community.</span>
+                        <span>{% trans "Reduce waste by keeping tools in active use within the community." %}</span>
                     </div>
                     <div class="mission-point">
                         <div class="mission-point__icon">
                             <i class="fa-solid fa-coins" aria-hidden="true"></i>
                         </div>
-                        <span>Help owners earn passive income from tools sitting idle.</span>
+                        <span>{% trans "Help owners earn passive income from tools sitting idle." %}</span>
                     </div>
                     <div class="mission-point">
                         <div class="mission-point__icon">
                             <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
                         </div>
-                        <span>Build trust through verified profiles, ratings, and secure bookings.</span>
+                        <span>{% trans "Build trust through verified profiles, ratings, and secure bookings." %}</span>
                     </div>
                     <div class="mission-point">
                         <div class="mission-point__icon">
                             <i class="fa-solid fa-robot" aria-hidden="true"></i>
                         </div>
-                        <span>Use AI smart pricing to ensure fair rates for everyone.</span>
+                        <span>{% trans "Use AI smart pricing to ensure fair rates for everyone." %}</span>
                     </div>
                 </div>
             </div>
@@ -146,7 +140,7 @@
                     <div class="mv-card__val">
                         {% if stats.tools_count %}{{ stats.tools_count }}+{% else %}0{% endif %}
                     </div>
-                    <div class="mv-card__lbl">Tools Available</div>
+                    <div class="mv-card__lbl">{% trans "Tools Available" %}</div>
                 </div>
                 <div class="mv-card">
                     <div class="mv-card__icon mv-card__icon--blue">
@@ -155,7 +149,7 @@
                     <div class="mv-card__val">
                         {% if stats.rentals_count %}{{ stats.rentals_count }}+{% else %}0{% endif %}
                     </div>
-                    <div class="mv-card__lbl">Rentals Completed</div>
+                    <div class="mv-card__lbl">{% trans "Rentals Completed" %}</div>
                 </div>
                 <div class="mv-card">
                     <div class="mv-card__icon mv-card__icon--amber">
@@ -164,7 +158,7 @@
                     <div class="mv-card__val">
                         {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}&mdash;{% endif %}
                     </div>
-                    <div class="mv-card__lbl">Avg Rating</div>
+                    <div class="mv-card__lbl">{% trans "Avg Rating" %}</div>
                 </div>
                 <div class="mv-card">
                     <div class="mv-card__icon mv-card__icon--green">
@@ -173,7 +167,7 @@
                     <div class="mv-card__val">
                         {% if stats.owners_count %}{{ stats.owners_count }}+{% else %}0{% endif %}
                     </div>
-                    <div class="mv-card__lbl">Active Owners</div>
+                    <div class="mv-card__lbl">{% trans "Active Owners" %}</div>
                 </div>
             </div>
 
@@ -191,11 +185,11 @@
         <div style="text-align:center">
             <span class="about-section-badge about-section-badge--teal">
                 <i class="fa-solid fa-heart" aria-hidden="true"></i>
-                What We Stand For
+                {% trans "What We Stand For" %}
             </span>
-            <h2 class="about-section-title">Our Core <span>Values</span></h2>
+            <h2 class="about-section-title">{% blocktrans %}Our Core <span>Values</span>{% endblocktrans %}</h2>
             <p class="about-section-sub" style="margin:0 auto">
-                Every decision we make comes back to these four principles that define who we are.
+                {% trans "Every decision we make comes back to these four principles that define who we are." %}
             </p>
         </div>
 
@@ -205,10 +199,9 @@
                 <div class="value-card__icon">
                     <i class="fa-solid fa-people-group" aria-hidden="true"></i>
                 </div>
-                <h3 class="value-card__title">Community First</h3>
+                <h3 class="value-card__title">{% trans "Community First" %}</h3>
                 <p class="value-card__body">
-                    We believe in the power of neighbors helping neighbors.
-                    Every rental strengthens local connections and builds trust within communities.
+                    {% trans "We believe in the power of neighbors helping neighbors. Every rental strengthens local connections and builds trust within communities." %}
                 </p>
             </div>
 
@@ -216,10 +209,9 @@
                 <div class="value-card__icon">
                     <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
                 </div>
-                <h3 class="value-card__title">Trust & Safety</h3>
+                <h3 class="value-card__title">{% trans "Trust & Safety" %}</h3>
                 <p class="value-card__body">
-                    Verified profiles, transparent reviews, and secure booking flows
-                    ensure every interaction on Rentora is safe and accountable.
+                    {% trans "Verified profiles, transparent reviews, and secure booking flows ensure every interaction on Rentora is safe and accountable." %}
                 </p>
             </div>
 
@@ -227,10 +219,9 @@
                 <div class="value-card__icon">
                     <i class="fa-solid fa-leaf" aria-hidden="true"></i>
                 </div>
-                <h3 class="value-card__title">Sustainability</h3>
+                <h3 class="value-card__title">{% trans "Sustainability" %}</h3>
                 <p class="value-card__body">
-                    Sharing tools means fewer tools manufactured and less waste.
-                    We're committed to a circular economy that's better for the planet.
+                    {% trans "Sharing tools means fewer tools manufactured and less waste. We're committed to a circular economy that's better for the planet." %}
                 </p>
             </div>
 
@@ -238,10 +229,9 @@
                 <div class="value-card__icon">
                     <i class="fa-solid fa-robot" aria-hidden="true"></i>
                 </div>
-                <h3 class="value-card__title">Smart Innovation</h3>
+                <h3 class="value-card__title">{% trans "Smart Innovation" %}</h3>
                 <p class="value-card__body">
-                    From AI-powered pricing to real-time search, we use technology
-                    to make renting tools as effortless as possible.
+                    {% trans "From AI-powered pricing to real-time search, we use technology to make renting tools as effortless as possible." %}
                 </p>
             </div>
 
@@ -259,11 +249,11 @@
         <div style="text-align:center">
             <span class="about-section-badge about-section-badge--blue">
                 <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
-                How We Got Here
+                {% trans "How We Got Here" %}
             </span>
-            <h2 class="about-section-title">Our <span>Journey</span></h2>
+            <h2 class="about-section-title">{% blocktrans %}Our <span>Journey</span>{% endblocktrans %}</h2>
             <p class="about-section-sub" style="margin:0 auto">
-                From a garage idea to a growing platform — here's how Rentora came to be.
+                {% trans "From a garage idea to a growing platform — here's how Rentora came to be." %}
             </p>
         </div>
 
@@ -277,13 +267,10 @@
                         <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
                     </div>
                     <div class="timeline-content">
-                        <div class="timeline-content__year">The Idea</div>
-                        <h3 class="timeline-content__title">A Weekend Problem Becomes a Business</h3>
+                        <div class="timeline-content__year">{% trans "The Idea" %}</div>
+                        <h3 class="timeline-content__title">{% trans "A Weekend Problem Becomes a Business" %}</h3>
                         <p class="timeline-content__body">
-                            Our founder needed a concrete drill for a weekend project.
-                            After paying $80 to buy one he'd use once, he realized:
-                            his neighbor had the exact same tool sitting unused.
-                            Rentora was born from that frustration.
+                            {% trans "Our founder needed a concrete drill for a weekend project. After paying $80 to buy one he'd use once, he realized: his neighbor had the exact same tool sitting unused. Rentora was born from that frustration." %}
                         </p>
                     </div>
                 </div>
@@ -293,12 +280,10 @@
                         <i class="fa-solid fa-code" aria-hidden="true"></i>
                     </div>
                     <div class="timeline-content">
-                        <div class="timeline-content__year">Building</div>
-                        <h3 class="timeline-content__title">Platform Development Begins</h3>
+                        <div class="timeline-content__year">{% trans "Building" %}</div>
+                        <h3 class="timeline-content__title">{% trans "Platform Development Begins" %}</h3>
                         <p class="timeline-content__body">
-                            A small team started building the core marketplace —
-                            listings, bookings, and a trust system that would make
-                            strangers comfortable sharing their valuable tools.
+                            {% trans "A small team started building the core marketplace — listings, bookings, and a trust system that would make strangers comfortable sharing their valuable tools." %}
                         </p>
                     </div>
                 </div>
@@ -308,12 +293,10 @@
                         <i class="fa-solid fa-rocket" aria-hidden="true"></i>
                     </div>
                     <div class="timeline-content">
-                        <div class="timeline-content__year">Launch</div>
-                        <h3 class="timeline-content__title">First Rentals Go Live</h3>
+                        <div class="timeline-content__year">{% trans "Launch" %}</div>
+                        <h3 class="timeline-content__title">{% trans "First Rentals Go Live" %}</h3>
                         <p class="timeline-content__body">
-                            The first tool was listed. The first booking was made.
-                            Real neighbors, real tools, real money — the model worked.
-                            Word spread fast within the community.
+                            {% trans "The first tool was listed. The first booking was made. Real neighbors, real tools, real money — the model worked. Word spread fast within the community." %}
                         </p>
                     </div>
                 </div>
@@ -323,12 +306,10 @@
                         <i class="fa-solid fa-robot" aria-hidden="true"></i>
                     </div>
                     <div class="timeline-content">
-                        <div class="timeline-content__year">AI Integration</div>
-                        <h3 class="timeline-content__title">Smart Pricing & Arabic Search</h3>
+                        <div class="timeline-content__year">{% trans "AI Integration" %}</div>
+                        <h3 class="timeline-content__title">{% trans "Smart Pricing & Arabic Search" %}</h3>
                         <p class="timeline-content__body">
-                            We integrated GPT-powered AI for smart pricing suggestions
-                            and bilingual search — because renting should be easy
-                            in any language.
+                            {% trans "We integrated AI for smart pricing suggestions and bilingual search — because renting should be easy in any language." %}
                         </p>
                     </div>
                 </div>
@@ -341,33 +322,31 @@
                     <i class="fa-solid fa-store" aria-hidden="true"></i>
                 </div>
                 <h3 class="story-feature__title">
-                    Built for the Community,<br>Powered by Trust
+                    {% trans "Built for the Community," %}<br>{% trans "Powered by Trust" %}
                 </h3>
                 <p class="story-feature__body">
-                    Rentora isn't just a marketplace — it's a community-driven
-                    platform where verified owners and responsible renters create
-                    a cycle of sharing that benefits everyone involved.
+                    {% trans "Rentora isn't just a marketplace — it's a community-driven platform where verified owners and responsible renters create a cycle of sharing that benefits everyone involved." %}
                 </p>
                 <ul class="story-feature__list">
                     <li class="story-feature__item">
                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                        Verified owner badges build instant credibility
+                        {% trans "Verified owner badges build instant credibility" %}
                     </li>
                     <li class="story-feature__item">
                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                        Dual reviews for renters and owners after every booking
+                        {% trans "Dual reviews for renters and owners after every booking" %}
                     </li>
                     <li class="story-feature__item">
                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                        Security deposits protect both parties on every rental
+                        {% trans "Security deposits protect both parties on every rental" %}
                     </li>
                     <li class="story-feature__item">
                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                        AI pricing ensures fair rates for the whole market
+                        {% trans "AI pricing ensures fair rates for the whole market" %}
                     </li>
                     <li class="story-feature__item">
                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-                        Bilingual support — search and rent in Arabic or English
+                        {% trans "Bilingual support — search and rent in Arabic or English" %}
                     </li>
                 </ul>
             </div>
@@ -388,28 +367,28 @@
                 <span class="astat__value">
                     {% if stats.tools_count %}{{ stats.tools_count }}<span>+</span>{% else %}0{% endif %}
                 </span>
-                <span class="astat__label">Tools Available Right Now</span>
+                <span class="astat__label">{% trans "Tools Available Right Now" %}</span>
             </div>
 
             <div class="astat">
                 <span class="astat__value">
                     {% if stats.rentals_count %}{{ stats.rentals_count }}<span>+</span>{% else %}0{% endif %}
                 </span>
-                <span class="astat__label">Successful Rentals</span>
+                <span class="astat__label">{% trans "Successful Rentals" %}</span>
             </div>
 
             <div class="astat">
                 <span class="astat__value">
                     {% if stats.owners_count %}{{ stats.owners_count }}<span>+</span>{% else %}0{% endif %}
                 </span>
-                <span class="astat__label">Verified Tool Owners</span>
+                <span class="astat__label">{% trans "Verified Tool Owners" %}</span>
             </div>
 
             <div class="astat">
                 <span class="astat__value">
                     {% if stats.avg_rating %}{{ stats.avg_rating }}<span>★</span>{% else %}&mdash;{% endif %}
                 </span>
-                <span class="astat__label">Average Platform Rating</span>
+                <span class="astat__label">{% trans "Average Platform Rating" %}</span>
             </div>
 
         </div>
@@ -426,11 +405,11 @@
         <div style="text-align:center">
             <span class="about-section-badge about-section-badge--amber">
                 <i class="fa-solid fa-users" aria-hidden="true"></i>
-                Meet the Team
+                {% trans "Meet the Team" %}
             </span>
-            <h2 class="about-section-title">The People Behind <span>Rentora</span></h2>
+            <h2 class="about-section-title">{% blocktrans %}The People Behind <span>Rentora</span>{% endblocktrans %}</h2>
             <p class="about-section-sub" style="margin:0 auto">
-                A small, passionate team obsessed with making tool sharing effortless.
+                {% trans "A small, passionate team obsessed with making tool sharing effortless." %}
             </p>
         </div>
 
@@ -439,33 +418,27 @@
             <div class="team-card">
                 <div class="team-card__avatar team-card__avatar--teal">M</div>
                 <h3 class="team-card__name">Mahmoud Miqdad</h3>
-                <div class="team-card__role">Founder & Full-Stack Developer</div>
+                <div class="team-card__role">{% trans "Founder & Full-Stack Developer" %}</div>
                 <p class="team-card__bio">
-                    The visionary behind Rentora — built the platform from the ground up,
-                    from database architecture to pixel-perfect UI. Passionate about
-                    peer-to-peer markets and community-driven products.
+                    {% trans "The visionary behind Rentora — built the platform from the ground up, from database architecture to pixel-perfect UI. Passionate about peer-to-peer markets and community-driven products." %}
                 </p>
             </div>
 
             <div class="team-card">
                 <div class="team-card__avatar team-card__avatar--blue">M</div>
                 <h3 class="team-card__name">Mona Al-Akhras</h3>
-                <div class="team-card__role">Co-Founder & Product Strategist</div>
+                <div class="team-card__role">{% trans "Co-Founder & Product Strategist" %}</div>
                 <p class="team-card__bio">
-                    Shapes the product vision and user experience of Rentora.
-                    Ensures every feature we ship solves a real problem for
-                    the community we're building for.
+                    {% trans "Shapes the product vision and user experience of Rentora. Ensures every feature we ship solves a real problem for the community we're building for." %}
                 </p>
             </div>
 
             <div class="team-card">
                 <div class="team-card__avatar team-card__avatar--amber">A</div>
                 <h3 class="team-card__name">Ahmad Al-Shuwaiki</h3>
-                <div class="team-card__role">Co-Founder & Operations Lead</div>
+                <div class="team-card__role">{% trans "Co-Founder & Operations Lead" %}</div>
                 <p class="team-card__bio">
-                    Drives growth and community partnerships at Rentora.
-                    Focused on expanding the platform's reach and making sure
-                    both owners and renters have an outstanding experience.
+                    {% trans "Drives growth and community partnerships at Rentora. Focused on expanding the platform's reach and making sure both owners and renters have an outstanding experience." %}
                 </p>
             </div>
 
@@ -485,26 +458,25 @@
                 <i class="fa-solid fa-handshake" aria-hidden="true"></i>
             </div>
 
-            <h2 class="about-cta__title">Ready to Join the Community?</h2>
+            <h2 class="about-cta__title">{% trans "Ready to Join the Community?" %}</h2>
             <p class="about-cta__sub">
-                Whether you want to rent a tool for the weekend or earn from the ones
-                sitting in your garage — Rentora has a place for you.
+                {% trans "Whether you want to rent a tool for the weekend or earn from the ones sitting in your garage — Rentora has a place for you." %}
             </p>
 
             <div class="about-cta__actions">
                 <a href="{% url 'listings:browse' %}" class="btn-about-primary">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                    Browse Available Tools
+                    {% trans "Browse Available Tools" %}
                 </a>
                 {% if not request.session.user_id %}
                 <a href="{% url 'users:register' %}" class="btn-about-outline">
                     <i class="fa-solid fa-plus" aria-hidden="true"></i>
-                    Create Free Account
+                    {% trans "Create Free Account" %}
                 </a>
                 {% else %}
                 <a href="{% url 'users:profile' %}" class="btn-about-outline">
                     <i class="fa-regular fa-user" aria-hidden="true"></i>
-                    View My Profile
+                    {% trans "View My Profile" %}
                 </a>
                 {% endif %}
             </div>

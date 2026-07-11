@@ -1,4 +1,5 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <header class="site-header" id="site-header">
   <div class="container hdr-inner">
@@ -8,29 +9,52 @@
       <div class="hdr-brand__icon">
         <i class="fa-solid fa-screwdriver-wrench"></i>
       </div>
-      <span class="hdr-brand__name">Rent<span>ora</span></span>
+      {% if LANGUAGE_CODE == 'ar' %}
+        <span class="hdr-brand__name">رينت<span>ورا</span></span>
+      {% else %}
+        <span class="hdr-brand__name">Rent<span>ora</span></span>
+      {% endif %}
     </a>
 
     <!-- ── Desktop Nav ───────────────────────────────────────── -->
     <nav class="hdr-nav" aria-label="Main navigation">
-      <a href="{% url 'listings:home' %}"   class="header-nav__link">Home</a>
-      <a href="{% url 'listings:browse' %}" class="header-nav__link">Browse Tools</a>
-      <a href="{% url 'listings:about' %}"  class="header-nav__link">About</a>
+      <a href="{% url 'listings:home' %}"   class="header-nav__link">{% trans "Home" %}</a>
+      <a href="{% url 'listings:browse' %}" class="header-nav__link">{% trans "Browse Tools" %}</a>
+      <a href="{% url 'listings:about' %}"  class="header-nav__link">{% trans "About" %}</a>
     </nav>
 
     <!-- ── Right Actions ─────────────────────────────────────── -->
     <div class="hdr-actions">
 
+      <!-- Language switcher -->
+      <form action="{% url 'set_language' %}" method="post" class="lang-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        {% if LANGUAGE_CODE == 'ar' %}
+          <input type="hidden" name="language" value="en">
+          <button type="submit" class="lang-btn" title="Switch to English">
+            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+            <span>EN</span>
+          </button>
+        {% else %}
+          <input type="hidden" name="language" value="ar">
+          <button type="submit" class="lang-btn" title="التبديل إلى العربية">
+            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+            <span>عربي</span>
+          </button>
+        {% endif %}
+      </form>
+
       <!-- CTA: List Your Tool -->
       <a href="{% url 'listings:tools:add_tool' %}" class="btn-list-tool">
         <i class="fa-solid fa-plus" aria-hidden="true"></i>
-        <span>List Your Tool</span>
+        <span>{% trans "List Your Tool" %}</span>
       </a>
 
       {% if request.session.user_id %}
 
         <!-- Wishlist -->
-        <a href="{% url 'listings:wishlist' %}" class="hdr-icon-btn" title="Wishlist" aria-label="My Wishlist">
+        <a href="{% url 'listings:wishlist' %}" class="hdr-icon-btn" title="{% trans 'Wishlist' %}" aria-label="{% trans 'My Wishlist' %}">
           <div class="wishlist-icon-wrapper" data-count="{{ global_wishlist_count }}">
             <i class="fa-regular fa-heart"></i>
             <span class="wishlist-counter" style="display:none">{{ global_wishlist_count }}</span>
@@ -41,8 +65,8 @@
         <div class="notif-wrapper">
           <button id="notifBtn"
                   class="hdr-icon-btn notif-btn"
-                  title="Notifications"
-                  aria-label="Notifications"
+                  title="{% trans 'Notifications' %}"
+                  aria-label="{% trans 'Notifications' %}"
                   aria-haspopup="true"
                   aria-expanded="false">
             <i class="fa-regular fa-bell" aria-hidden="true"></i>
@@ -53,22 +77,22 @@
             </span>
           </button>
 
-          <div id="notifDropdown" class="notif-dropdown" role="dialog" aria-label="Notifications">
+          <div id="notifDropdown" class="notif-dropdown" role="dialog" aria-label="{% trans 'Notifications' %}">
             <div class="notif-header">
               <span class="notif-header__title">
                 <i class="fa-regular fa-bell"></i>
-                Notifications
+                {% trans "Notifications" %}
                 <span id="notifUnreadChip"
                       class="unread-chip"
                       style="{% if not global_unread_notifications %}display:none{% endif %}">
                   {{ global_unread_notifications }}
                 </span>
               </span>
-              <button id="notifMarkAll" class="notif-mark-all-btn">Mark all read</button>
+              <button id="notifMarkAll" class="notif-mark-all-btn">{% trans "Mark all read" %}</button>
             </div>
             <div id="notifList" class="notif-list"></div>
             <div class="notif-footer">
-              <a href="{% url 'listings:dashboard' %}">View dashboard</a>
+              <a href="{% url 'listings:dashboard' %}">{% trans "View dashboard" %}</a>
             </div>
           </div>
         </div>
@@ -109,17 +133,17 @@
             <div class="hdr-user__menu-divider"></div>
 
             <a href="{% url 'listings:dashboard' %}" class="hdr-user__menu-item" role="menuitem">
-              <i class="fa-solid fa-border-all"></i> Dashboard
+              <i class="fa-solid fa-border-all"></i> {% trans "Dashboard" %}
             </a>
             <a href="{% url 'users:profile' %}" class="hdr-user__menu-item" role="menuitem">
-              <i class="fa-regular fa-user"></i> My Profile
+              <i class="fa-regular fa-user"></i> {% trans "My Profile" %}
             </a>
 
             <div class="hdr-user__menu-divider"></div>
 
             <a href="{% url 'users:logout' %}"
                class="hdr-user__menu-item hdr-user__menu-item--danger" role="menuitem">
-              <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+              <i class="fa-solid fa-right-from-bracket"></i> {% trans "Sign Out" %}
             </a>
           </div>
         </div>
@@ -127,17 +151,17 @@
       {% else %}
 
         <!-- Guest wishlist icon -->
-        <a href="{% url 'listings:wishlist' %}" class="hdr-icon-btn" title="Wishlist">
+        <a href="{% url 'listings:wishlist' %}" class="hdr-icon-btn" title="{% trans 'Wishlist' %}">
           <i class="fa-regular fa-heart"></i>
         </a>
 
         <!-- Sign In -->
-        <a href="{% url 'users:login' %}" class="hdr-signin-btn">Sign In</a>
+        <a href="{% url 'users:login' %}" class="hdr-signin-btn">{% trans "Sign In" %}</a>
 
       {% endif %}
 
       <!-- Mobile burger -->
-      <button class="hdr-burger" id="mobileMenuBtn" aria-label="Open menu">
+      <button class="hdr-burger" id="mobileMenuBtn" aria-label="{% trans 'Open menu' %}">
         <span></span><span></span><span></span>
       </button>
 
@@ -153,9 +177,13 @@
   <div class="mob-hdr">
     <a href="{% url 'listings:home' %}" class="mob-brand">
       <div class="mob-brand__icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-      <span class="mob-brand__name">Rent<span>ora</span></span>
+      {% if LANGUAGE_CODE == 'ar' %}
+        <span class="mob-brand__name">رينت<span>ورا</span></span>
+      {% else %}
+        <span class="mob-brand__name">Rent<span>ora</span></span>
+      {% endif %}
     </a>
-    <button class="mob-close" id="closeMenu" aria-label="Close menu">
+    <button class="mob-close" id="closeMenu" aria-label="{% trans 'Close menu' %}">
       <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
@@ -177,36 +205,53 @@
   {% endif %}
 
   <nav class="mob-nav">
-    <a href="{% url 'listings:home' %}"    class="mob-nav__link"><i class="fa-solid fa-house"></i> Home</a>
-    <a href="{% url 'listings:browse' %}"  class="mob-nav__link"><i class="fa-solid fa-magnifying-glass"></i> Browse Tools</a>
-    <a href="{% url 'listings:about' %}"   class="mob-nav__link"><i class="fa-solid fa-circle-info"></i> About Us</a>
+    <a href="{% url 'listings:home' %}"    class="mob-nav__link"><i class="fa-solid fa-house"></i> {% trans "Home" %}</a>
+    <a href="{% url 'listings:browse' %}"  class="mob-nav__link"><i class="fa-solid fa-magnifying-glass"></i> {% trans "Browse Tools" %}</a>
+    <a href="{% url 'listings:about' %}"   class="mob-nav__link"><i class="fa-solid fa-circle-info"></i> {% trans "About Us" %}</a>
     {% if request.session.user_id %}
       <a href="{% url 'listings:dashboard' %}" class="mob-nav__link">
-        <i class="fa-solid fa-border-all"></i> Dashboard
+        <i class="fa-solid fa-border-all"></i> {% trans "Dashboard" %}
       </a>
       <a href="{% url 'listings:wishlist' %}" class="mob-nav__link">
-        <i class="fa-regular fa-heart"></i> Wishlist
+        <i class="fa-regular fa-heart"></i> {% trans "Wishlist" %}
         {% if global_wishlist_count > 0 %}
           <span class="mob-nav__badge">{{ global_wishlist_count }}</span>
         {% endif %}
       </a>
       <a href="{% url 'users:profile' %}" class="mob-nav__link">
-        <i class="fa-regular fa-user"></i> My Profile
+        <i class="fa-regular fa-user"></i> {% trans "My Profile" %}
       </a>
     {% endif %}
+
+    <!-- Mobile language switcher -->
+    <form action="{% url 'set_language' %}" method="post" class="lang-form lang-form--mobile">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+      {% if LANGUAGE_CODE == 'ar' %}
+        <input type="hidden" name="language" value="en">
+        <button type="submit" class="lang-btn lang-btn--mobile">
+          <i class="fa-solid fa-globe"></i> English
+        </button>
+      {% else %}
+        <input type="hidden" name="language" value="ar">
+        <button type="submit" class="lang-btn lang-btn--mobile">
+          <i class="fa-solid fa-globe"></i> العربية
+        </button>
+      {% endif %}
+    </form>
   </nav>
 
   <div class="mob-footer">
     <a href="{% url 'listings:tools:add_tool' %}" class="btn-list-tool" style="width:100%;justify-content:center;">
-      <i class="fa-solid fa-plus"></i> List Your Tool
+      <i class="fa-solid fa-plus"></i> {% trans "List Your Tool" %}
     </a>
     {% if request.session.user_id %}
       <a href="{% url 'users:logout' %}" class="mob-signout">
-        <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+        <i class="fa-solid fa-right-from-bracket"></i> {% trans "Sign Out" %}
       </a>
     {% else %}
       <a href="{% url 'users:login' %}" class="mob-signin">
-        <i class="fa-regular fa-user"></i> Sign In
+        <i class="fa-regular fa-user"></i> {% trans "Sign In" %}
       </a>
     {% endif %}
   </div>

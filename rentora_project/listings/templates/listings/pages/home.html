@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Rentora — Rent Tools From People Near You{% endblock %}
+{% block title %}{% trans "Rentora — Rent Tools From People Near You" %}{% endblock %}
 {% block body_class %}home-page{% endblock %}
 
 {% block extra_css %}
@@ -25,42 +25,41 @@
 
       <div class="hero__eyebrow">
         <span class="hero__eyebrow-dot"></span>
-        AI-Powered Peer-to-Peer Tool Rental
+        {% trans "AI-Powered Peer-to-Peer Tool Rental" %}
       </div>
 
       <h1 class="hero__h1">
-        Rent Any Tool<br>
-        <span class="hero__h1-grad">From People Near You</span>
+        {% trans "Rent Any Tool" %}<br>
+        <span class="hero__h1-grad">{% trans "From People Near You" %}</span>
       </h1>
 
       <p class="hero__lead">
-        Need a drill for the weekend? Browse thousands of tools listed by local owners.
-        Smart AI search, transparent pricing, and secure booking — no commitment.
+        {% trans "Need a drill for the weekend? Browse thousands of tools listed by local owners. Smart AI search, transparent pricing, and secure booking — no commitment." %}
       </p>
 
       <form class="hero__search" id="heroSearchForm" novalidate>
         <i class="fa-solid fa-magnifying-glass hero__search-icon" aria-hidden="true"></i>
         <input type="text" id="heroSearchInput" name="q"
                value="{{ request.GET.q }}"
-               placeholder='Try "Concrete Drill" or "بدي شي أحفر فيه الجدار"...'
+               placeholder='{% trans "Try &quot;Concrete Drill&quot; or &quot;بدي شي أحفر فيه الجدار&quot;..." %}'
                autocomplete="off">
         <button type="submit" id="heroSearchBtn">
           <i class="fa-solid fa-robot" aria-hidden="true"></i>
-          <span>AI Search</span>
+          <span>{% trans "AI Search" %}</span>
         </button>
       </form>
 
       <div class="hero__trust">
         <div class="hero__trust-item">
-          <i class="fa-solid fa-shield-halved"></i> Verified Owners
+          <i class="fa-solid fa-shield-halved"></i> {% trans "Verified Owners" %}
         </div>
         <div class="hero__trust-sep" aria-hidden="true"></div>
         <div class="hero__trust-item">
-          <i class="fa-solid fa-robot"></i> AI Pricing
+          <i class="fa-solid fa-robot"></i> {% trans "AI Pricing" %}
         </div>
         <div class="hero__trust-sep" aria-hidden="true"></div>
         <div class="hero__trust-item">
-          <i class="fa-solid fa-lock"></i> Secure Booking
+          <i class="fa-solid fa-lock"></i> {% trans "Secure Booking" %}
         </div>
       </div>
 
@@ -78,14 +77,14 @@
   <div class="container">
 
     <div class="sec-hd">
-      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-grip"></i> Browse</div>
-      <h2 class="sec-title">Explore by Category</h2>
-      <p class="sec-sub">From power tools to garden equipment — find exactly what you need</p>
+      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-grip"></i> {% trans "Browse" %}</div>
+      <h2 class="sec-title">{% trans "Explore by Category" %}</h2>
+      <p class="sec-sub">{% trans "From power tools to garden equipment — find exactly what you need" %}</p>
     </div>
 
     <div class="cat-grid">
       {% for cat in categories %}
-      <a href="{% url 'listings:browse' %}?category={{ cat.pk }}" class="cat-card" title="Browse {{ cat.name }}">
+      <a href="{% url 'listings:browse' %}?category={{ cat.pk }}" class="cat-card" title="{% blocktrans with name=cat.name %}Browse {{ name }}{% endblocktrans %}">
         <div class="cat-card__visual">
           <div class="cat-card__icon">
             {% if cat.icon %}<i class="{{ cat.icon }}" aria-hidden="true"></i>
@@ -94,13 +93,13 @@
         </div>
         <div class="cat-card__body">
           <span class="cat-card__name">{{ cat.name }}</span>
-          <span class="cat-card__cta">Explore <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+          <span class="cat-card__cta">{% trans "Explore" %} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
         </div>
       </a>
       {% empty %}
       <div class="cat-empty">
         <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
-        <p>No categories yet &mdash; check back soon.</p>
+        <p>{% trans "No categories yet — check back soon." %}</p>
       </div>
       {% endfor %}
     </div>
@@ -124,7 +123,7 @@
              data-suffix="+">
           {% if stats.tools_count %}{{ stats.tools_count }}+{% else %}0{% endif %}
         </div>
-        <div class="stat-item__lbl">Tools Listed</div>
+        <div class="stat-item__lbl">{% trans "Tools Listed" %}</div>
       </div>
     </div>
 
@@ -136,7 +135,7 @@
              data-suffix="+">
           {% if stats.rentals_count %}{{ stats.rentals_count }}+{% else %}0{% endif %}
         </div>
-        <div class="stat-item__lbl">Successful Rentals</div>
+        <div class="stat-item__lbl">{% trans "Successful Rentals" %}</div>
       </div>
     </div>
 
@@ -148,7 +147,7 @@
              data-suffix="+">
           {% if stats.owners_count %}{{ stats.owners_count }}+{% else %}0{% endif %}
         </div>
-        <div class="stat-item__lbl">Active Owners</div>
+        <div class="stat-item__lbl">{% trans "Active Owners" %}</div>
       </div>
     </div>
 
@@ -159,7 +158,7 @@
              {% if stats.avg_rating %}data-count="{{ stats.avg_rating }}" data-decimal="1"{% endif %}>
           {% if stats.avg_rating %}{{ stats.avg_rating }}{% else %}—{% endif %}
         </div>
-        <div class="stat-item__lbl">Average Rating</div>
+        <div class="stat-item__lbl">{% trans "Average Rating" %}</div>
       </div>
     </div>
 
@@ -175,11 +174,11 @@
 
     <div class="featured-hd">
       <div class="featured-hd__left">
-        <div class="sec-badge sec-badge--amber"><i class="fa-solid fa-fire"></i> Popular</div>
-        <h2 class="sec-title" style="margin:0">Recently Listed Tools</h2>
+        <div class="sec-badge sec-badge--amber"><i class="fa-solid fa-fire"></i> {% trans "Popular" %}</div>
+        <h2 class="sec-title" style="margin:0">{% trans "Recently Listed Tools" %}</h2>
       </div>
       <a href="{% url 'listings:browse' %}" class="view-all">
-        View All Tools <i class="fa-solid fa-arrow-right"></i>
+        {% trans "View All Tools" %} <i class="fa-solid fa-arrow-right"></i>
       </a>
     </div>
 
@@ -199,10 +198,10 @@
           </span>
           <button class="tool-card__fav {% if tool.pk in wishlist_ids %}tool-card__fav--on{% endif %}"
                   onclick="event.stopPropagation();event.preventDefault();toggleWishlist(this,{{ tool.pk }})"
-                  data-tool-id="{{ tool.pk }}" aria-label="Save">
+                  data-tool-id="{{ tool.pk }}" aria-label="{% trans 'Save' %}">
             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
           </button>
-          <div class="tool-card__price">${{ tool.daily_rate }}<span>/day</span></div>
+          <div class="tool-card__price">${{ tool.daily_rate }}<span>/{% trans "day" %}</span></div>
         </div>
 
         <div class="tool-card__body">
@@ -227,7 +226,7 @@
             {% endif %}
             <span class="tool-card__owner">{{ tool.owner.name }}</span>
             {% if tool.owner.is_verified %}
-              <i class="fa-solid fa-circle-check tool-card__vbadge" title="Verified"></i>
+              <i class="fa-solid fa-circle-check tool-card__vbadge" title="{% trans 'Verified' %}"></i>
             {% endif %}
           </div>
         </div>
@@ -237,8 +236,8 @@
       {% empty %}
       <div class="tools-empty">
         <i class="fa-solid fa-toolbox"></i>
-        <p>No tools listed yet — be the first!</p>
-        <a href="{% url 'listings:tools:add_tool' %}" class="btn-outline">List Your Tool</a>
+        <p>{% trans "No tools listed yet — be the first!" %}</p>
+        <a href="{% url 'listings:tools:add_tool' %}" class="btn-outline">{% trans "List Your Tool" %}</a>
       </div>
       {% endfor %}
     </div>
@@ -254,9 +253,9 @@
   <div class="container">
 
     <div class="sec-hd sec-hd--center">
-      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-circle-info"></i> Process</div>
-      <h2 class="sec-title">How Rentora Works</h2>
-      <p class="sec-sub">Get the tool you need in three simple steps</p>
+      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-circle-info"></i> {% trans "Process" %}</div>
+      <h2 class="sec-title">{% trans "How Rentora Works" %}</h2>
+      <p class="sec-sub">{% trans "Get the tool you need in three simple steps" %}</p>
     </div>
 
     <div class="steps-row">
@@ -266,9 +265,9 @@
         <div class="step-card__icon step-card__icon--teal">
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
-        <h3 class="step-card__title">Find Your Tool</h3>
+        <h3 class="step-card__title">{% trans "Find Your Tool" %}</h3>
         <p class="step-card__desc">
-          Use AI-powered search or browse by category. Search in English or Arabic — our AI understands both.
+          {% trans "Use AI-powered search or browse by category. Search in English or Arabic — our AI understands both." %}
         </p>
       </div>
 
@@ -281,9 +280,9 @@
         <div class="step-card__icon step-card__icon--amber">
           <i class="fa-solid fa-calendar-check"></i>
         </div>
-        <h3 class="step-card__title">Book Instantly</h3>
+        <h3 class="step-card__title">{% trans "Book Instantly" %}</h3>
         <p class="step-card__desc">
-          Pick your dates, review pricing and deposit details, then send a request. Owners respond fast.
+          {% trans "Pick your dates, review pricing and deposit details, then send a request. Owners respond fast." %}
         </p>
       </div>
 
@@ -296,9 +295,9 @@
         <div class="step-card__icon step-card__icon--purple">
           <i class="fa-solid fa-screwdriver-wrench"></i>
         </div>
-        <h3 class="step-card__title">Get the Job Done</h3>
+        <h3 class="step-card__title">{% trans "Get the Job Done" %}</h3>
         <p class="step-card__desc">
-          Pick up the tool, complete your project, return it, and leave a review to build community trust.
+          {% trans "Pick up the tool, complete your project, return it, and leave a review to build community trust." %}
         </p>
       </div>
 
@@ -315,9 +314,9 @@
   <div class="container">
 
     <div class="sec-hd sec-hd--center">
-      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-quote-left"></i> Reviews</div>
-      <h2 class="sec-title">Trusted by Our Community</h2>
-      <p class="sec-sub">Real people, real rentals — hear what our community says</p>
+      <div class="sec-badge sec-badge--teal"><i class="fa-solid fa-quote-left"></i> {% trans "Reviews" %}</div>
+      <h2 class="sec-title">{% trans "Trusted by Our Community" %}</h2>
+      <p class="sec-sub">{% trans "Real people, real rentals — hear what our community says" %}</p>
     </div>
 
     <div class="reviews-grid">
@@ -346,7 +345,7 @@
           <div>
             <div class="review-card__name">{{ review.reviewer.name }}</div>
             <div class="review-card__role">
-              Tool Renter
+              {% trans "Tool Renter" %}
               {% if review.reviewer.location %} · {{ review.reviewer.location }}{% endif %}
             </div>
           </div>
@@ -379,17 +378,16 @@
     <div class="cta-section__icon" aria-hidden="true">
       <i class="fa-solid fa-store"></i>
     </div>
-    <h2 class="cta-section__title">Have Tools Sitting Idle?</h2>
+    <h2 class="cta-section__title">{% trans "Have Tools Sitting Idle?" %}</h2>
     <p class="cta-section__sub">
-      Turn your idle tools into passive income. List on Rentora and let our
-      AI pricing advisor help you set the perfect rate to maximize earnings.
+      {% trans "Turn your idle tools into passive income. List on Rentora and let our AI pricing advisor help you set the perfect rate to maximize earnings." %}
     </p>
     <div class="cta-section__actions">
       <a href="{% url 'listings:tools:add_tool' %}" class="btn-list-tool cta-btn--list">
-        <i class="fa-solid fa-plus" aria-hidden="true"></i> List Your Tool Now
+        <i class="fa-solid fa-plus" aria-hidden="true"></i> {% trans "List Your Tool Now" %}
       </a>
       <a href="{% url 'listings:browse' %}" class="cta-btn cta-btn--ghost">
-        Browse Tools <i class="fa-solid fa-arrow-right"></i>
+        {% trans "Browse Tools" %} <i class="fa-solid fa-arrow-right"></i>
       </a>
     </div>
   </div>

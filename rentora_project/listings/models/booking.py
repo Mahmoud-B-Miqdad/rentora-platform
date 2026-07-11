@@ -3,6 +3,7 @@ from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 # ─────────────────────────────────────────────
@@ -10,14 +11,14 @@ from django.db import models
 # ─────────────────────────────────────────────
 
 class BookingStatus(models.TextChoices):
-    PENDING         = "pending",         "Pending"
-    PAYMENT_PENDING = "payment_pending", "Payment Pending"
-    APPROVED        = "approved",        "Approved"   # legacy pre-Stripe bookings
-    CONFIRMED       = "confirmed",       "Confirmed"  # payment received via Stripe
-    REJECTED        = "rejected",        "Rejected"
-    RETURN_PENDING  = "return_pending",  "Return Pending"
-    COMPLETED       = "completed",       "Completed"
-    CANCELLED       = "cancelled",       "Cancelled"
+    PENDING         = "pending",         _("Pending")
+    PAYMENT_PENDING = "payment_pending", _("Payment Pending")
+    APPROVED        = "approved",        _("Approved")   # legacy pre-Stripe bookings
+    CONFIRMED       = "confirmed",       _("Confirmed")  # payment received via Stripe
+    REJECTED        = "rejected",        _("Rejected")
+    RETURN_PENDING  = "return_pending",  _("Return Pending")
+    COMPLETED       = "completed",       _("Completed")
+    CANCELLED       = "cancelled",       _("Cancelled")
 
 
 # ─────────────────────────────────────────────

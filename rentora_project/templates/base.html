@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {% load static %}
     {% block head_meta %}
     {# ── SEO & Social sharing ─────────────────────────────────────── #}
     {% with page_title=self_title|default:"Rentora — Peer-to-Peer Tool Rental" page_desc=self_desc|default:"Rent tools from your neighbors or list your idle equipment. Rentora makes tool sharing simple, trusted, and affordable." %}
@@ -43,6 +45,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% if LANGUAGE_BIDI %}
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    {% endif %}
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -51,6 +56,9 @@
     <!-- Shared Styles -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+    {% if LANGUAGE_BIDI %}
+    <link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+    {% endif %}
 
     <!-- Page-specific Styles -->
     {% block extra_css %}{% endblock %}
