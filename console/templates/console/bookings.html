@@ -1,0 +1,68 @@
+{% extends "console/base_console.html" %}
+{% block title %}Bookings{% endblock %}
+{% block page_title %}Bookings monitor{% endblock %}
+ 
+{% block content %}
+<section class="con-card">
+  <header class="con-card__head con-card__head--tools">
+    <form method="GET" class="con-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" name="q" value="{{ q }}" placeholder="Search tool, renter, or owner…">
+      {% if status %}<input type="hidden" name="status" value="{{ status }}">{% endif %}
+    </form>
+    <div class="con-filters">
+      {% for value, label in status_tabs %}
+      <a href="?q={{ q }}&status={{ value }}" class="con-filter {% if status == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+  </header>
+ 
+  <div class="con-card__body">
+    {% if page.object_list %}
+    <table class="con-table">
+      <thead><tr><th>#</th><th>Tool</th><th>Renter</th><th>Dates</th><th>Total</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for b in page.object_list %}
+        <tr>
+          <td class="con-td-muted">{{ b.id }}</td>
+          <td><strong>{{ b.tool.title|truncatechars:34 }}</strong>
+              <small class="con-td-muted">by {{ b.tool.owner.name }}</small></td>
+          <td><a href="{% url 'console:user_detail' b.renter.id %}">{{ b.renter.name }}</a></td>
+          <td class="con-td-muted">{{ b.start_date|date:"M d" }} → {{ b.end_date|date:"M d" }}</td>
+          <td>${{ b.total_price }}</td>
+          <td>
+            {% if b.status == 'pending' %}<span class="con-pill con-pill--amber">pending</span>
+            {% elif b.status == 'payment_pending' %}
+              <span class="con-pill con-pill--purple">awaiting payment</span>
+              {% if b.updated_at < stuck_cutoff %}<span class="con-pill con-pill--red" title="Awaiting payment for over an hour">stuck?</span>{% endif %}
+            {% elif b.status == 'confirmed' or b.status == 'approved' %}
+              <span class="con-pill con-pill--green">active</span>
+              {% if b.end_date < today %}<span class="con-pill con-pill--red">overdue</span>{% endif %}
+            {% elif b.status == 'return_pending' %}<span class="con-pill con-pill--amber">return pending</span>
+            {% elif b.status == 'completed' %}<span class="con-pill">completed</span>
+            {% elif b.status == 'rejected' %}<span class="con-pill con-pill--gray">rejected</span>
+            {% else %}<span class="con-pill con-pill--gray">{{ b.status }}</span>{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+ 
+    {% if page.has_other_pages %}
+    <div class="con-pagination">
+      {% if page.has_previous %}
+        <a href="?q={{ q }}&status={{ status }}&page={{ page.previous_page_number }}" class="con-btn con-btn--ghost">&larr; Prev</a>
+      {% endif %}
+      <span class="con-td-muted">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}
+        <a href="?q={{ q }}&status={{ status }}&page={{ page.next_page_number }}" class="con-btn con-btn--ghost">Next &rarr;</a>
+      {% endif %}
+    </div>
+    {% endif %}
+ 
+    {% else %}
+    <p class="con-empty">No bookings match this filter.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

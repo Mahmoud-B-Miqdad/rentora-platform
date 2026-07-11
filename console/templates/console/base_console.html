@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% block title %}Console{% endblock %} · Rentora Staff</title>
+ 
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'console/css/console.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+ 
+<aside class="con-sidebar">
+  <div class="con-brand">
+    <img src="{% static 'img/favicon-48x48.png' %}" alt="" class="con-brand__logo">
+    <div class="con-brand__text">
+      <span class="con-brand__name">Rentora</span>
+      <span class="con-brand__staff">STAFF CONSOLE</span>
+    </div>
+  </div>
+ 
+  <nav class="con-nav">
+    <a href="{% url 'console:overview' %}"   class="con-nav__link {% if active_tab == 'overview' %}active{% endif %}">
+      <i class="fa-solid fa-gauge-high"></i><span>Overview</span>
+    </a>
+    <a href="{% url 'console:reports' %}"    class="con-nav__link {% if active_tab == 'reports' %}active{% endif %}">
+      <i class="fa-solid fa-flag"></i><span>Reports</span>
+      {% if nav_pending_reports %}<em class="con-nav__badge">{{ nav_pending_reports }}</em>{% endif %}
+    </a>
+    <a href="{% url 'console:users' %}"      class="con-nav__link {% if active_tab == 'users' %}active{% endif %}">
+      <i class="fa-solid fa-users"></i><span>Users</span>
+    </a>
+    <a href="{% url 'console:returns' %}"    class="con-nav__link {% if active_tab == 'returns' %}active{% endif %}">
+      <i class="fa-solid fa-rotate-left"></i><span>Returns &amp; Disputes</span>
+      {% if nav_returns_waiting %}<em class="con-nav__badge">{{ nav_returns_waiting }}</em>{% endif %}
+    </a>
+    <a href="{% url 'console:bookings' %}"   class="con-nav__link {% if active_tab == 'bookings' %}active{% endif %}">
+      <i class="fa-solid fa-calendar-days"></i><span>Bookings</span>
+    </a>
+    <a href="{% url 'console:categories' %}" class="con-nav__link {% if active_tab == 'categories' %}active{% endif %}">
+      <i class="fa-solid fa-layer-group"></i><span>Categories</span>
+    </a>
+  </nav>
+ 
+  <div class="con-sidebar__foot">
+    <a href="{% url 'listings:home' %}" class="con-nav__link">
+      <i class="fa-solid fa-arrow-up-right-from-square"></i><span>View site</span>
+    </a>
+  </div>
+</aside>
+ 
+<div class="con-main">
+  <header class="con-topbar">
+    <h1 class="con-topbar__title">{% block page_title %}{% endblock %}</h1>
+    <div class="con-topbar__user">
+      <span class="con-topbar__hello">{{ request.staff_user.name }}</span>
+      <span class="con-chip con-chip--staff"><i class="fa-solid fa-shield-halved"></i> Staff</span>
+    </div>
+  </header>
+ 
+  {% if messages %}
+  <div class="con-flashes">
+    {% for message in messages %}
+    <div class="con-flash con-flash--{{ message.tags }}">
+      <i class="fa-solid {% if message.tags == 'error' %}fa-circle-exclamation{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+      <span>{{ message }}</span>
+      <button onclick="this.parentElement.remove()" aria-label="Dismiss">&times;</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+ 
+  <main class="con-content">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+ 
+<script src="{% static 'console/js/console.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

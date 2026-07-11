@@ -1,0 +1,21 @@
+<div class="con-modal" id="closeModal-{{ b.id }}">
+  <div class="con-modal__overlay" data-modal-close></div>
+  <div class="con-modal__box">
+    <h3><i class="fa-solid fa-gavel"></i> Close rental manually</h3>
+    <p class="con-td-muted">
+      "{{ b.tool.title }}" — {{ b.renter.name }} / {{ b.tool.owner.name }}.
+      The booking will be marked completed as-is and both parties will be notified.
+      Amounts are not changed.
+    </p>
+    <form method="POST" action="{% url 'console:force_complete' b.id %}">
+      {% csrf_token %}
+      <label class="con-label">Resolution note <span class="con-req">*</span></label>
+      <textarea name="reason" class="con-input" rows="3" required
+                placeholder="What was decided, and why?"></textarea>
+      <div class="con-modal__actions">
+        <button type="button" class="con-btn con-btn--ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="con-btn con-btn--danger">Close rental</button>
+      </div>
+    </form>
+  </div>
+</div>

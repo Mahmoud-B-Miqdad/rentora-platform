@@ -1,0 +1,70 @@
+{% extends "console/base_console.html" %}
+{% block title %}Reports{% endblock %}
+{% block page_title %}Reports queue{% endblock %}
+ 
+{% block content %}
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-flag"></i> Pending — grouped by reported account</h2>
+  </header>
+  <div class="con-card__body">
+    {% if queue %}
+    <table class="con-table con-table--hover">
+      <thead><tr><th>Account</th><th>Pending</th><th>Reasons</th><th>Latest report</th><th></th></tr></thead>
+      <tbody>
+        {% for row in queue %}
+        <tr onclick="window.location='{% url 'console:user_detail' row.user.id %}'">
+          <td>
+            <div class="con-user">
+              <span class="con-avatar">{{ row.user.name|first|upper }}</span>
+              <div>
+                <strong>{{ row.user.name }}</strong>
+                <small>{{ row.user.email }}</small>
+              </div>
+              {% if not row.user.is_active %}<span class="con-pill con-pill--red">suspended</span>{% endif %}
+            </div>
+          </td>
+          <td><span class="con-count {% if row.count >= 3 %}con-count--hot{% endif %}">{{ row.count }}</span></td>
+          <td>
+            {% for reason in row.reasons %}
+            <span class="con-pill con-pill--amber">{{ reason }}</span>
+            {% endfor %}
+          </td>
+          <td class="con-td-muted">{{ row.latest|timesince }} ago</td>
+          <td><i class="fa-solid fa-chevron-right con-td-muted"></i></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="con-empty"><i class="fa-solid fa-circle-check"></i> No pending reports — the queue is clear.</p>
+    {% endif %}
+  </div>
+</section>
+ 
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-box-archive"></i> Recently closed</h2></header>
+  <div class="con-card__body">
+    {% if resolved_recent %}
+    <table class="con-table">
+      <thead><tr><th>Reported</th><th>By</th><th>Reason</th><th>Outcome</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for r in resolved_recent %}
+        <tr>
+          <td><a href="{% url 'console:user_detail' r.reported.id %}">{{ r.reported.name }}</a></td>
+          <td>{{ r.reporter.name }}</td>
+          <td>{{ r.get_reason_display }}</td>
+          <td>
+            <span class="con-pill {% if r.status == 'resolved' %}con-pill--red{% else %}con-pill--gray{% endif %}">{{ r.get_status_display }}</span>
+          </td>
+          <td class="con-td-muted">{{ r.created_at|date:"M d, Y" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="con-empty">Nothing closed yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

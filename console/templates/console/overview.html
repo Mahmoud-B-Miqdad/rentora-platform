@@ -1,0 +1,152 @@
+{% extends "console/base_console.html" %}
+{% block title %}Overview{% endblock %}
+{% block page_title %}Overview{% endblock %}
+ 
+{% block content %}
+<div class="con-kpis">
+  <div class="con-kpi">
+    <div class="con-kpi__icon" style="--tint:#2563eb"><i class="fa-solid fa-users"></i></div>
+    <div class="con-kpi__meta">
+      <span class="con-kpi__value">{{ kpis.users_total }}</span>
+      <span class="con-kpi__label">Users <small>(+{{ kpis.users_new_week }} this week)</small></span>
+    </div>
+  </div>
+  <div class="con-kpi">
+    <div class="con-kpi__icon" style="--tint:#10b981"><i class="fa-solid fa-calendar-check"></i></div>
+    <div class="con-kpi__meta">
+      <span class="con-kpi__value">{{ kpis.rentals_active }}</span>
+      <span class="con-kpi__label">Active rentals</span>
+    </div>
+  </div>
+  <div class="con-kpi">
+    <div class="con-kpi__icon" style="--tint:#f59e0b"><i class="fa-solid fa-sack-dollar"></i></div>
+    <div class="con-kpi__meta">
+      <span class="con-kpi__value">${{ kpis.revenue_month }}</span>
+      <span class="con-kpi__label">Volume this month</span>
+    </div>
+  </div>
+  <div class="con-kpi {% if kpis.reports_pending %}con-kpi--alert{% endif %}">
+    <div class="con-kpi__icon" style="--tint:#ef4444"><i class="fa-solid fa-flag"></i></div>
+    <div class="con-kpi__meta">
+      <span class="con-kpi__value">{{ kpis.reports_pending }}</span>
+      <span class="con-kpi__label">Pending reports</span>
+    </div>
+  </div>
+  <div class="con-kpi {% if kpis.overdue %}con-kpi--alert{% endif %}">
+    <div class="con-kpi__icon" style="--tint:#8b5cf6"><i class="fa-solid fa-clock"></i></div>
+    <div class="con-kpi__meta">
+      <span class="con-kpi__value">{{ kpis.overdue }}</span>
+      <span class="con-kpi__label">Overdue rentals</span>
+    </div>
+  </div>
+  <div class="con-kpi">
+    <div class="con-kpi__icon" style="--tint:#06b6d4"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+    <div class="con-kpi__meta">
+      <span class="con-kpi__value">{{ kpis.tools_total }}</span>
+      <span class="con-kpi__label">Tools listed</span>
+    </div>
+  </div>
+</div>
+ 
+<div class="con-grid-2">
+  <section class="con-card">
+    <header class="con-card__head">
+      <h2><i class="fa-solid fa-chart-line"></i> Bookings — last 30 days</h2>
+    </header>
+    <div class="con-card__body">
+      <canvas id="bookingsChart" height="220"></canvas>
+    </div>
+  </section>
+ 
+  <section class="con-card">
+    <header class="con-card__head">
+      <h2><i class="fa-solid fa-bell"></i> Needs attention</h2>
+    </header>
+    <div class="con-card__body con-attn">
+      {% for r in attention.reports %}
+      <a class="con-attn__row" href="{% url 'console:user_detail' r.reported.id %}">
+        <span class="con-pill con-pill--red">report</span>
+        <span class="con-attn__text"><strong>{{ r.reported.name }}</strong> — {{ r.get_reason_display }}</span>
+        <span class="con-attn__time">{{ r.created_at|timesince }} ago</span>
+      </a>
+      {% endfor %}
+      {% for b in attention.returns %}
+      <a class="con-attn__row" href="{% url 'console:returns' %}">
+        <span class="con-pill con-pill--amber">return</span>
+        <span class="con-attn__text"><strong>{{ b.tool.title }}</strong> — awaiting {{ b.renter.name }}</span>
+        <span class="con-attn__time">{{ b.return_requested_at|timesince }} ago</span>
+      </a>
+      {% endfor %}
+      {% for b in attention.overdue %}
+      <a class="con-attn__row" href="{% url 'console:returns' %}">
+        <span class="con-pill con-pill--purple">overdue</span>
+        <span class="con-attn__text"><strong>{{ b.tool.title }}</strong> — due {{ b.end_date }}</span>
+        <span class="con-attn__time">{{ b.renter.name }}</span>
+      </a>
+      {% endfor %}
+      {% if not attention.reports and not attention.returns and not attention.overdue %}
+      <p class="con-empty"><i class="fa-solid fa-circle-check"></i> All clear — nothing needs attention.</p>
+      {% endif %}
+    </div>
+  </section>
+</div>
+ 
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-clock-rotate-left"></i> Recent staff actions</h2>
+  </header>
+  <div class="con-card__body">
+    {% if recent_actions %}
+    <table class="con-table">
+      <thead><tr><th>Staff</th><th>Action</th><th>Target</th><th>Reason</th><th>When</th></tr></thead>
+      <tbody>
+        {% for a in recent_actions %}
+        <tr>
+          <td>{{ a.staff.name|default:"—" }}</td>
+          <td><span class="con-pill">{{ a.get_action_display }}</span></td>
+          <td>{{ a.target_user.name|default:"—" }}</td>
+          <td class="con-td-muted">{{ a.reason|truncatechars:60|default:"—" }}</td>
+          <td class="con-td-muted">{{ a.created_at|timesince }} ago</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="con-empty">No staff actions recorded yet.</p>
+    {% endif %}
+  </div>
+</section>
+ 
+{{ chart_json|json_script:"chart-data" }}
+{% endblock %}
+ 
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  const data = JSON.parse(JSON.parse(document.getElementById('chart-data').textContent));
+  new Chart(document.getElementById('bookingsChart'), {
+    type: 'line',
+    data: {
+      labels: data.labels,
+      datasets: [{
+        data: data.values,
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, .08)',
+        fill: true,
+        tension: .35,
+        pointRadius: 0,
+        pointHitRadius: 12,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#eef2f7' } },
+        x: { ticks: { maxTicksLimit: 8 }, grid: { display: false } }
+      },
+      maintainAspectRatio: false,
+    }
+  });
+</script>
+{% endblock %}

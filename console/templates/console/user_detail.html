@@ -1,0 +1,162 @@
+{% extends "console/base_console.html" %}
+{% block title %}{{ target.name }}{% endblock %}
+{% block page_title %}
+  <a href="{% url 'console:users' %}" class="con-back"><i class="fa-solid fa-arrow-left"></i></a>
+  Moderate account
+{% endblock %}
+ 
+{% block content %}
+<div class="con-grid-moderate">
+ 
+  {# ── Left: identity & context ─────────────────────────── #}
+  <div>
+    <section class="con-card">
+      <div class="con-card__body con-identity">
+        <span class="con-avatar con-avatar--xl">{{ target.name|first|upper }}</span>
+        <h2 class="con-identity__name">{{ target.name }}</h2>
+        <p class="con-identity__mail">{{ target.email }}</p>
+        <div class="con-identity__pills">
+          {% if target.is_active %}
+            <span class="con-pill con-pill--green">active</span>
+          {% else %}
+            <span class="con-pill con-pill--red">suspended</span>
+          {% endif %}
+          {% if target.is_staff %}<span class="con-pill con-pill--staff">staff</span>{% endif %}
+          {% if target.is_verified %}<span class="con-pill">verified</span>{% endif %}
+          {% if target.rating %}<span class="con-pill con-pill--amber">★ {{ target.rating }}</span>{% endif %}
+        </div>
+        <p class="con-td-muted">Joined {{ target.created_at|date:"M d, Y" }} · {{ target.location|default:"—" }}</p>
+        <a class="con-btn con-btn--ghost" href="{% url 'users:profile_user' target.id %}" target="_blank">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> View public profile
+        </a>
+      </div>
+    </section>
+ 
+    <section class="con-card">
+      <header class="con-card__head"><h2>Activity</h2></header>
+      <div class="con-card__body con-mini-stats">
+        <div><strong>{{ stats.tools }}</strong><span>tools</span></div>
+        <div><strong>{{ stats.rentals_as_renter }}</strong><span>rented</span></div>
+        <div><strong>{{ stats.rentals_as_owner }}</strong><span>rented out</span></div>
+        <div><strong>{{ stats.completed }}</strong><span>completed</span></div>
+        <div><strong>{{ stats.reports_made }}</strong><span>reports made</span></div>
+      </div>
+    </section>
+ 
+    {% if tools %}
+    <section class="con-card">
+      <header class="con-card__head"><h2>Tools</h2></header>
+      <div class="con-card__body">
+        {% for t in tools %}
+        <div class="con-line">
+          <span>{{ t.title }}</span>
+          <span class="con-pill {% if t.is_available %}con-pill--green{% else %}con-pill--gray{% endif %}">
+            {% if t.is_available %}live{% else %}hidden{% endif %}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </div>
+ 
+  {# ── Right: reports & decisions ───────────────────────── #}
+  <div>
+    <section class="con-card">
+      <header class="con-card__head">
+        <h2><i class="fa-solid fa-flag"></i> Reports against this account
+          {% if pending_count %}<span class="con-count con-count--hot">{{ pending_count }}</span>{% endif %}
+        </h2>
+      </header>
+      <div class="con-card__body">
+        {% for r in reports %}
+        <article class="con-report {% if r.status != 'pending' %}con-report--closed{% endif %}">
+          <header>
+            <span class="con-pill con-pill--amber">{{ r.get_reason_display }}</span>
+            <span class="con-pill {% if r.status == 'pending' %}con-pill--red{% elif r.status == 'resolved' %}con-pill--purple{% else %}con-pill--gray{% endif %}">{{ r.get_status_display }}</span>
+            <span class="con-td-muted">by {{ r.reporter.name }} · {{ r.created_at|date:"M d, Y" }}</span>
+          </header>
+          {% if r.details %}<p>{{ r.details }}</p>{% endif %}
+        </article>
+        {% empty %}
+        <p class="con-empty"><i class="fa-solid fa-circle-check"></i> No reports against this account.</p>
+        {% endfor %}
+      </div>
+    </section>
+ 
+    <section class="con-card con-card--actions">
+      <header class="con-card__head"><h2><i class="fa-solid fa-gavel"></i> Decisions</h2></header>
+      <div class="con-card__body con-actions">
+ 
+        {% if pending_count %}
+        <form method="POST" action="{% url 'console:user_action' target.id %}"
+              data-confirm="Dismiss all pending reports against {{ target.name }}?">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="dismiss_reports">
+          <input type="hidden" name="reason" value="Reviewed — no violation found">
+          <button class="con-btn con-btn--ghost" type="submit">
+            <i class="fa-solid fa-ban"></i> Dismiss reports
+          </button>
+        </form>
+        {% endif %}
+ 
+        {% if target.is_active and not target.is_staff %}
+        <button class="con-btn con-btn--danger" data-modal-open="suspendModal">
+          <i class="fa-solid fa-user-slash"></i> Suspend account
+        </button>
+        {% elif not target.is_active %}
+        <form method="POST" action="{% url 'console:user_action' target.id %}"
+              data-confirm="Reinstate {{ target.name }}? They will be able to log in again.">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="reinstate">
+          <input type="hidden" name="reason" value="Suspension lifted after review">
+          <button class="con-btn con-btn--success" type="submit">
+            <i class="fa-solid fa-user-check"></i> Reinstate account
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </section>
+ 
+    {% if history %}
+    <section class="con-card">
+      <header class="con-card__head"><h2>Moderation history</h2></header>
+      <div class="con-card__body">
+        {% for a in history %}
+        <div class="con-line">
+          <span><strong>{{ a.get_action_display }}</strong> by {{ a.staff.name|default:"—" }}
+            {% if a.reason %}<small class="con-td-muted"> — {{ a.reason|truncatechars:70 }}</small>{% endif %}
+          </span>
+          <span class="con-td-muted">{{ a.created_at|date:"M d, H:i" }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </div>
+</div>
+ 
+{# ── Suspend modal ──────────────────────────────────────── #}
+<div class="con-modal" id="suspendModal">
+  <div class="con-modal__overlay" data-modal-close></div>
+  <div class="con-modal__box">
+    <h3><i class="fa-solid fa-user-slash"></i> Suspend {{ target.name }}</h3>
+    <p class="con-td-muted">
+      They will be blocked from logging in, their tools will be hidden,
+      and all pending reports will be marked resolved.
+    </p>
+    <form method="POST" action="{% url 'console:user_action' target.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="suspend">
+      <label class="con-label">Reason <span class="con-req">*</span></label>
+      <textarea name="reason" class="con-input" rows="3" required
+                placeholder="Why is this account being suspended?"></textarea>
+      <div class="con-modal__actions">
+        <button type="button" class="con-btn con-btn--ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="con-btn con-btn--danger">Suspend account</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+ 
