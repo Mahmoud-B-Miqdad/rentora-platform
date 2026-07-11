@@ -97,10 +97,19 @@
         var dataEl       = document.getElementById('booked-ranges-data');
         var bookedRanges = dataEl ? JSON.parse(dataEl.textContent) : [];
 
-        var monthNames = ['January','February','March','April','May','June',
+        /* Translated strings injected by the template (AppConfig.i18n);
+           English fallbacks keep the widget working standalone. */
+        var i18n = (window.AppConfig && window.AppConfig.i18n) || {};
+        var monthNames = i18n.months ||
+                         ['January','February','March','April','May','June',
                           'July','August','September','October','November','December'];
-        var monthShort = ['Jan','Feb','Mar','Apr','May','Jun',
+        var monthShort = i18n.months ||
+                         ['Jan','Feb','Mar','Apr','May','Jun',
                           'Jul','Aug','Sep','Oct','Nov','Dec'];
+        var txtSelectDates  = i18n.selectDates  || 'Select check-in & check-out dates';
+        var txtPickCheckout = i18n.pickCheckout || 'Pick check-out date';
+        var txtDay  = i18n.day  || 'day';
+        var txtDays = i18n.days || 'days';
 
         function parseISO(str) {
             var p = str.split('-');
@@ -142,13 +151,13 @@
                 var days = Math.round((selEnd - selStart) / 86400000);
                 selectionText.textContent =
                     fmtDisplay(selStart) + '  →  ' + fmtDisplay(selEnd) +
-                    '   ·   ' + days + ' day' + (days !== 1 ? 's' : '');
+                    '   ·   ' + days + ' ' + (days !== 1 ? txtDays : txtDay);
                 selectionEl.classList.add('avail-cal__selection--active');
             } else if (selStart) {
-                selectionText.textContent = fmtDisplay(selStart) + '  →  Pick check-out date';
+                selectionText.textContent = fmtDisplay(selStart) + '  →  ' + txtPickCheckout;
                 selectionEl.classList.remove('avail-cal__selection--active');
             } else {
-                selectionText.textContent = 'Select check-in & check-out dates';
+                selectionText.textContent = txtSelectDates;
                 selectionEl.classList.remove('avail-cal__selection--active');
             }
         }

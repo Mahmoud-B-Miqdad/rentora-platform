@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'listings/css/dashboard/dashboard.css' %}">
@@ -17,23 +17,23 @@
     <nav class="sidebar-nav">
       <button class="nav-link" data-tab="overview">
         <i class="fa-solid fa-chart-pie"></i>
-        Overview
+        {% trans "Overview" %}
       </button>
       <button class="nav-link" data-tab="my-tools">
         <i class="fa-solid fa-wrench"></i>
-        My Tools
+        {% trans "My Tools" %}
       </button>
       <button class="nav-link" data-tab="booking-requests">
         <i class="fa-regular fa-envelope"></i>
-        Booking Requests
+        {% trans "Booking Requests" %}
       </button>
       <button class="nav-link" data-tab="my-rentals">
         <i class="fa-regular fa-calendar-check"></i>
-        My Rentals
+        {% trans "My Rentals" %}
       </button>
       <button class="nav-link" data-tab="messages">
         <i class="fa-regular fa-message"></i>
-        Messages
+        {% trans "Messages" %}
         {% if total_unread %}
           <span class="nav-unread-badge">{{ total_unread }}</span>
         {% endif %}
@@ -70,30 +70,30 @@
     <div class="tab-panel" id="tab-overview">
 
       <div class="page-header">
-        <h1 class="page-title"><span class="page-title-dot"></span>Overview</h1>
-        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+        <h1 class="page-title"><span class="page-title-dot"></span>{% trans "Overview" %}</h1>
+        <p class="page-subtitle">{% blocktrans with name=user.name %}Welcome back, {{ name }}{% endblocktrans %}</p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
           <div class="stat-value">{{ my_tools_count }}</div>
-          <div class="stat-label">My Tools</div>
+          <div class="stat-label">{% trans "My Tools" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
           <div class="stat-value">{{ active_rentals }}</div>
-          <div class="stat-label">Active Rentals</div>
+          <div class="stat-label">{% trans "Active Rentals" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
           <div class="stat-value">${{ total_earnings }}</div>
-          <div class="stat-label">Total Earnings</div>
+          <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="stat-value">Low</div>
-          <div class="stat-label">Risk Score</div>
+          <div class="stat-value">{% trans "Low" %}</div>
+          <div class="stat-label">{% trans "Risk Score" %}</div>
         </div>
       </div>
 
@@ -102,9 +102,9 @@
         <!-- Recent Tools -->
         <div class="section-card">
           <div class="section-header">
-            <span class="section-title">Recent Tools</span>
+            <span class="section-title">{% trans "Recent Tools" %}</span>
             <a href="{% url 'listings:tools:add_tool' %}" class="btn-add">
-              <i class="fa-solid fa-plus"></i> Add New
+              <i class="fa-solid fa-plus"></i> {% trans "Add New" %}
             </a>
           </div>
           {% if recent_tools %}
@@ -120,17 +120,17 @@
               <div class="tool-info">
                 <div class="tool-name">{{ tool.title }}</div>
                 <div class="tool-meta">
-                  <span>${{ tool.daily_rate }}/day</span>
+                  <span>${{ tool.daily_rate }}/{% trans "day" %}</span>
                   <span>· {{ tool.category.name }}</span>
                 </div>
               </div>
-              <span class="badge badge-live">Live</span>
+              <span class="badge badge-live">{% trans "Live" %}</span>
             </div>
             {% endfor %}
           {% else %}
             <div class="empty-state">
               <i class="fa-solid fa-box-open"></i>
-              No tools listed yet.
+              {% trans "No tools listed yet." %}
             </div>
           {% endif %}
         </div>
@@ -138,7 +138,7 @@
         <!-- Pending Requests Preview -->
         <div class="section-card">
           <div class="section-header">
-            <span class="section-title">Pending Requests</span>
+            <span class="section-title">{% trans "Pending Requests" %}</span>
           </div>
           {% if pending_requests %}
             {% for booking in pending_requests|slice:":4" %}
@@ -157,13 +157,13 @@
               <div class="booking-actions">
                 <form method="POST" action="{% url 'listings:approve_booking' booking.id %}" style="display:inline">
                   {% csrf_token %}
-                  <button type="submit" class="btn-approve" title="Approve">
+                  <button type="submit" class="btn-approve" title="{% trans 'Approve' %}">
                     <i class="fa-solid fa-check"></i>
                   </button>
                 </form>
                 <form method="POST" action="{% url 'listings:reject_booking' booking.id %}" style="display:inline">
                   {% csrf_token %}
-                  <button type="submit" class="btn-reject" title="Reject">
+                  <button type="submit" class="btn-reject" title="{% trans 'Reject' %}">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </form>
@@ -173,7 +173,7 @@
           {% else %}
             <div class="empty-state">
               <i class="fa-regular fa-envelope-open"></i>
-              No pending requests.
+              {% trans "No pending requests." %}
             </div>
           {% endif %}
         </div>
@@ -185,38 +185,38 @@
     <!-- ════════ MY TOOLS ════════ -->
     <div class="tab-panel" id="tab-my-tools">
       <div class="page-header">
-        <h1 class="page-title"><span class="page-title-dot"></span>My Tools</h1>
-        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+        <h1 class="page-title"><span class="page-title-dot"></span>{% trans "My Tools" %}</h1>
+        <p class="page-subtitle">{% blocktrans with name=user.name %}Welcome back, {{ name }}{% endblocktrans %}</p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
           <div class="stat-value">{{ my_tools_count }}</div>
-          <div class="stat-label">My Tools</div>
+          <div class="stat-label">{% trans "My Tools" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
           <div class="stat-value">{{ active_rentals }}</div>
-          <div class="stat-label">Active Rentals</div>
+          <div class="stat-label">{% trans "Active Rentals" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
           <div class="stat-value">${{ total_earnings }}</div>
-          <div class="stat-label">Total Earnings</div>
+          <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="stat-value">Low</div>
-          <div class="stat-label">Risk Score</div>
+          <div class="stat-value">{% trans "Low" %}</div>
+          <div class="stat-label">{% trans "Risk Score" %}</div>
         </div>
       </div>
 
       <div class="section-card tools-section-card">
         <div class="section-header">
-          <span class="section-title">My Tool Listings ({{ my_tools_count }})</span>
+          <span class="section-title">{% trans "My Tool Listings" %} ({{ my_tools_count }})</span>
           <a href="{% url 'listings:tools:add_tool' %}" class="btn-add">
-            <i class="fa-solid fa-plus"></i> Add Tool
+            <i class="fa-solid fa-plus"></i> {% trans "Add Tool" %}
           </a>
         </div>
         {% if all_tools %}
@@ -233,33 +233,33 @@
               {% endif %}
               <span class="tool-card-status-badge {% if tool.is_available %}badge-live{% else %}badge-inactive{% endif %}">
                 {% if tool.is_available %}
-                  <i class="fa-solid fa-circle" style="font-size:7px;"></i> Available
+                  <i class="fa-solid fa-circle" style="font-size:7px;"></i> {% trans "Available" %}
                 {% else %}
-                  <i class="fa-solid fa-circle" style="font-size:7px;"></i> Inactive
+                  <i class="fa-solid fa-circle" style="font-size:7px;"></i> {% trans "Inactive" %}
                 {% endif %}
               </span>
             </a>
             <div class="tool-card-body">
               <div class="tool-card-name">{{ tool.title }}</div>
               <div class="tool-card-meta">
-                <span class="tool-card-price">${{ tool.daily_rate }}<span>/day</span></span>
+                <span class="tool-card-price">${{ tool.daily_rate }}<span>/{% trans "day" %}</span></span>
                 <span class="tool-card-cat">{{ tool.category.name }}</span>
               </div>
             </div>
             <div class="tool-card-footer">
               <a href="{% url 'listings:tools:detail' tool.pk %}"
-                 class="btn-action btn-view" title="View listing">
+                 class="btn-action btn-view" title="{% trans 'View listing' %}">
                 <i class="fa-regular fa-eye"></i>
               </a>
               <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
-                 class="btn-action btn-edit" title="Edit tool">
+                 class="btn-action btn-edit" title="{% trans 'Edit tool' %}">
                 <i class="fa-regular fa-pen-to-square"></i>
               </a>
               <form method="POST" action="{% url 'listings:tools:delete_tool' tool.pk %}"
-                    onsubmit="return confirm('Delete &quot;{{ tool.title }}&quot;?')"
-                    style="margin-left:auto;">
+                    onsubmit="return confirm('{% trans 'Delete' %} &quot;{{ tool.title|escapejs }}&quot;?')"
+                    style="margin-inline-start:auto;">
                 {% csrf_token %}
-                <button type="submit" class="btn-action btn-delete" title="Delete">
+                <button type="submit" class="btn-action btn-delete" title="{% trans 'Delete' %}">
                   <i class="fa-regular fa-trash-can"></i>
                 </button>
               </form>
@@ -270,7 +270,7 @@
         {% else %}
           <div class="empty-state">
             <i class="fa-solid fa-screwdriver-wrench"></i>
-            No tools listed yet.
+            {% trans "No tools listed yet." %}
           </div>
         {% endif %}
       </div>
@@ -281,50 +281,50 @@
     <div class="tab-panel" id="tab-booking-requests">
 
       <div class="page-header">
-        <h1 class="page-title"><span class="page-title-dot"></span>Booking Requests</h1>
-        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+        <h1 class="page-title"><span class="page-title-dot"></span>{% trans "Booking Requests" %}</h1>
+        <p class="page-subtitle">{% blocktrans with name=user.name %}Welcome back, {{ name }}{% endblocktrans %}</p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
           <div class="stat-value">{{ my_tools_count }}</div>
-          <div class="stat-label">My Tools</div>
+          <div class="stat-label">{% trans "My Tools" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
           <div class="stat-value">{{ active_rentals }}</div>
-          <div class="stat-label">Active Rentals</div>
+          <div class="stat-label">{% trans "Active Rentals" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
           <div class="stat-value">${{ total_earnings }}</div>
-          <div class="stat-label">Total Earnings</div>
+          <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="stat-value">Low</div>
-          <div class="stat-label">Risk Score</div>
+          <div class="stat-value">{% trans "Low" %}</div>
+          <div class="stat-label">{% trans "Risk Score" %}</div>
         </div>
       </div>
 
       <div class="section-card">
         <div class="section-header">
-          <span class="section-title">Booking Requests</span>
+          <span class="section-title">{% trans "Booking Requests" %}</span>
         </div>
 
         <div class="booking-tabs-nav">
           <button class="booking-tab-btn" data-target="btab-pending">
-            Pending ({{ pending_requests|length }})
+            {% trans "Pending" %} ({{ pending_requests|length }})
           </button>
           <button class="booking-tab-btn" data-target="btab-approved">
-            Approved ({{ approved_requests|length }})
+            {% trans "Approved" %} ({{ approved_requests|length }})
           </button>
           <button class="booking-tab-btn" data-target="btab-rejected">
-            Rejected ({{ rejected_requests|length }})
+            {% trans "Rejected" %} ({{ rejected_requests|length }})
           </button>
           <button class="booking-tab-btn" data-target="btab-completed">
-            Completed ({{ completed_requests|length }})
+            {% trans "Completed" %} ({{ completed_requests|length }})
           </button>
         </div>
 
@@ -355,18 +355,18 @@
               </div>
             </div>
             <div class="booking-actions">
-              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with renter">
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="{% trans 'Chat with renter' %}">
                 <i class="fa-regular fa-message"></i>
               </a>
               <form method="POST" action="{% url 'listings:approve_booking' booking.id %}" style="display:inline">
                 {% csrf_token %}
-                <button type="submit" class="btn-approve" title="Approve">
+                <button type="submit" class="btn-approve" title="{% trans 'Approve' %}">
                   <i class="fa-solid fa-check"></i>
                 </button>
               </form>
               <form method="POST" action="{% url 'listings:reject_booking' booking.id %}" style="display:inline">
                 {% csrf_token %}
-                <button type="submit" class="btn-reject" title="Reject">
+                <button type="submit" class="btn-reject" title="{% trans 'Reject' %}">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </form>
@@ -375,7 +375,7 @@
           {% empty %}
           <div class="empty-state">
             <i class="fa-regular fa-envelope-open"></i>
-            No pending requests.
+            {% trans "No pending requests." %}
           </div>
           {% endfor %}
         </div>
@@ -407,32 +407,32 @@
               </div>
             </div>
             <div class="booking-actions">
-              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with renter">
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="{% trans 'Chat with renter' %}">
                 <i class="fa-regular fa-message"></i>
               </a>
               {% if booking.status == 'payment_pending' %}
-                <span class="badge badge-payment">Awaiting Payment</span>
+                <span class="badge badge-payment">{% trans "Awaiting Payment" %}</span>
               {% elif booking.status == 'return_pending' %}
                 <div class="return-waiting-state">
                   <i class="fa-solid fa-clock-rotate-left"></i>
-                  <span>Awaiting renter confirmation</span>
+                  <span>{% trans "Awaiting renter confirmation" %}</span>
                 </div>
               {% else %}
                 {% if booking.status == 'confirmed' %}
-                  <span class="badge badge-confirmed">Confirmed</span>
+                  <span class="badge badge-confirmed">{% trans "Confirmed" %}</span>
                 {% else %}
-                  <span class="badge badge-approved">Approved</span>
+                  <span class="badge badge-approved">{% trans "Approved" %}</span>
                 {% endif %}
                 {% if today >= booking.start_date %}
                   <form method="POST" action="{% url 'listings:request_return' booking.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn-complete">
-                      <i class="fa-solid fa-rotate-left"></i> Mark as Returned
+                      <i class="fa-solid fa-rotate-left"></i> {% trans "Mark as Returned" %}
                     </button>
                   </form>
                 {% else %}
-                  <span class="badge-return-locked" title="Available from {{ booking.start_date }}">
-                    <i class="fa-solid fa-lock"></i> Starts {{ booking.start_date }}
+                  <span class="badge-return-locked" title="{% blocktrans with date=booking.start_date %}Available from {{ date }}{% endblocktrans %}">
+                    <i class="fa-solid fa-lock"></i> {% trans "Starts" %} {{ booking.start_date }}
                   </span>
                 {% endif %}
               {% endif %}
@@ -441,7 +441,7 @@
           {% empty %}
           <div class="empty-state">
             <i class="fa-regular fa-calendar-check"></i>
-            No confirmed bookings yet.
+            {% trans "No confirmed bookings yet." %}
           </div>
           {% endfor %}
         </div>
@@ -472,12 +472,12 @@
                 <span class="meta-price">${{ booking.total_price }}</span>
               </div>
             </div>
-            <span class="badge badge-rejected">Rejected</span>
+            <span class="badge badge-rejected">{% trans "Rejected" %}</span>
           </div>
           {% empty %}
           <div class="empty-state">
             <i class="fa-solid fa-ban"></i>
-            No rejected bookings.
+            {% trans "No rejected bookings." %}
           </div>
           {% endfor %}
         </div>
@@ -509,13 +509,13 @@
                   <del class="price-original">${{ booking.original_total }}</del>
                   <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
                   <span class="price-adjustment price-adjustment--overdue">
-                    <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}d overdue
+                    <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}{% trans "d overdue" %}
                   </span>
                 {% elif booking.early_return_days %}
                   <del class="price-original">${{ booking.original_total }}</del>
                   <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
                   <span class="price-adjustment price-adjustment--early">
-                    <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}d early
+                    <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}{% trans "d early" %}
                   </span>
                 {% else %}
                   <span class="meta-price">${{ booking.total_price }}</span>
@@ -523,15 +523,15 @@
               </div>
             </div>
             <div class="completed-actions">
-              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat history">
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="{% trans 'Chat history' %}">
                 <i class="fa-regular fa-message"></i>
               </a>
-              <span class="badge badge-completed">Completed</span>
+              <span class="badge badge-completed">{% trans "Completed" %}</span>
               {% if 'for_renter' in booking.reviewed_types %}
-                <span class="badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
+                <span class="badge-reviewed"><i class="fa-solid fa-check"></i> {% trans "Reviewed" %}</span>
               {% else %}
                 <button type="button" class="btn-leave-review" data-review-modal="renter-{{ booking.id }}">
-                  <i class="fa-regular fa-star"></i> Rate Renter
+                  <i class="fa-regular fa-star"></i> {% trans "Rate Renter" %}
                 </button>
               {% endif %}
             </div>
@@ -541,8 +541,8 @@
           <div class="review-modal-overlay" id="review-modal-renter-{{ booking.id }}">
             <div class="review-modal">
               <div class="review-modal__header">
-                <h3><i class="fa-solid fa-star"></i> Rate {{ booking.renter.name }}</h3>
-                <button type="button" class="review-modal__close" data-modal-close aria-label="Close">
+                <h3><i class="fa-solid fa-star"></i> {% trans "Rate" %} {{ booking.renter.name }}</h3>
+                <button type="button" class="review-modal__close" data-modal-close aria-label="{% trans 'Close' %}">
                   <i class="fa-solid fa-xmark"></i>
                 </button>
               </div>
@@ -558,16 +558,16 @@
                   </div>
                 </div>
                 <div class="review-field">
-                  <label>How was your experience renting to {{ booking.renter.name }}?</label>
+                  <label>{% blocktrans with name=booking.renter.name %}How was your experience renting to {{ name }}?{% endblocktrans %}</label>
                   <div class="star-rating" data-input="renter_rating">
                     <input type="hidden" name="renter_rating" value="0">
                     {% for i in "12345" %}<i class="fa-regular fa-star" data-value="{{ forloop.counter }}"></i>{% endfor %}
                   </div>
-                  <textarea name="renter_comment" maxlength="1000" placeholder="Share your experience with this renter (optional)"></textarea>
+                  <textarea name="renter_comment" maxlength="1000" placeholder="{% trans 'Share your experience with this renter (optional)' %}"></textarea>
                 </div>
                 <div class="review-modal__actions">
-                  <button type="button" class="btn-cancel-review" data-modal-close>Cancel</button>
-                  <button type="submit" class="btn-submit-review"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+                  <button type="button" class="btn-cancel-review" data-modal-close>{% trans "Cancel" %}</button>
+                  <button type="submit" class="btn-submit-review"><i class="fa-solid fa-paper-plane"></i> {% trans "Submit Review" %}</button>
                 </div>
               </form>
             </div>
@@ -575,7 +575,7 @@
           {% empty %}
           <div class="empty-state">
             <i class="fa-solid fa-box-archive"></i>
-            No completed bookings.
+            {% trans "No completed bookings." %}
           </div>
           {% endfor %}
         </div>
@@ -588,30 +588,30 @@
     <div class="tab-panel" id="tab-my-rentals">
 
       <div class="page-header">
-        <h1 class="page-title"><span class="page-title-dot"></span>My Rentals</h1>
-        <p class="page-subtitle">Welcome back, {{ user.name }}</p>
+        <h1 class="page-title"><span class="page-title-dot"></span>{% trans "My Rentals" %}</h1>
+        <p class="page-subtitle">{% blocktrans with name=user.name %}Welcome back, {{ name }}{% endblocktrans %}</p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
           <div class="stat-value">{{ my_tools_count }}</div>
-          <div class="stat-label">My Tools</div>
+          <div class="stat-label">{% trans "My Tools" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon blue"><i class="fa-regular fa-calendar-check"></i></div>
           <div class="stat-value">{{ active_rentals }}</div>
-          <div class="stat-label">Active Rentals</div>
+          <div class="stat-label">{% trans "Active Rentals" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
           <div class="stat-value">${{ total_earnings }}</div>
-          <div class="stat-label">Total Earnings</div>
+          <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon green"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="stat-value">Low</div>
-          <div class="stat-label">Risk Score</div>
+          <div class="stat-value">{% trans "Low" %}</div>
+          <div class="stat-label">{% trans "Risk Score" %}</div>
         </div>
       </div>
 
@@ -620,13 +620,13 @@
 
         <div class="booking-tabs-header" style="padding: 0 20px">
           <button class="booking-tab-btn active" data-target="rtab-awaiting">
-            Awaiting ({{ pending_my_rentals|length }})
+            {% trans "Awaiting" %} ({{ pending_my_rentals|length }})
           </button>
           <button class="booking-tab-btn" data-target="rtab-active">
-            Active ({{ current_rentals|length }})
+            {% trans "Active" %} ({{ current_rentals|length }})
           </button>
           <button class="booking-tab-btn" data-target="rtab-history">
-            History ({{ booking_history|length }})
+            {% trans "History" %} ({{ booking_history|length }})
           </button>
         </div>
 
@@ -652,18 +652,18 @@
                 </div>
               </div>
               <div class="booking-actions">
-                <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with owner">
+                <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="{% trans 'Chat with owner' %}">
                   <i class="fa-regular fa-message"></i>
                 </a>
                 {% if booking.status == 'payment_pending' %}
-                  <a href="{% url 'listings:payment' booking.id %}" class="btn-pay-now"><i class="fa-solid fa-credit-card"></i> Pay Now</a>
+                  <a href="{% url 'listings:payment' booking.id %}" class="btn-pay-now"><i class="fa-solid fa-credit-card"></i> {% trans "Pay Now" %}</a>
                 {% else %}
-                  <span class="badge badge-pending">Pending</span>
+                  <span class="badge badge-pending">{% trans "Pending" %}</span>
                 {% endif %}
               </div>
             </div>
             {% empty %}
-            <div class="empty-state"><i class="fa-regular fa-clock"></i>No pending bookings.</div>
+            <div class="empty-state"><i class="fa-regular fa-clock"></i>{% trans "No pending bookings." %}</div>
             {% endfor %}
           </div>
 
@@ -695,21 +695,21 @@
                 <div class="return-confirm-msg">
                   <i class="fa-solid fa-bell"></i>
                   <div>
-                    <strong>Owner confirmed receipt of the tool</strong>
-                    <p>Please confirm the return to complete this rental. If you have not returned the tool yet, click Dispute.</p>
+                    <strong>{% trans "Owner confirmed receipt of the tool" %}</strong>
+                    <p>{% trans "Please confirm the return to complete this rental. If you have not returned the tool yet, click Dispute." %}</p>
                   </div>
                 </div>
                 <div class="return-confirm-actions">
                   <form method="POST" action="{% url 'listings:confirm_return' booking.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn-confirm-return">
-                      <i class="fa-solid fa-circle-check"></i> Confirm Return
+                      <i class="fa-solid fa-circle-check"></i> {% trans "Confirm Return" %}
                     </button>
                   </form>
                   <form method="POST" action="{% url 'listings:dispute_return' booking.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn-dispute-return">
-                      <i class="fa-solid fa-triangle-exclamation"></i> Dispute
+                      <i class="fa-solid fa-triangle-exclamation"></i> {% trans "Dispute" %}
                     </button>
                   </form>
                 </div>
@@ -734,19 +734,19 @@
                   <span class="meta-price">${{ booking.total_price }}</span>
                 </div>
               </div>
-              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="Chat with owner">
+              <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="{% trans 'Chat with owner' %}">
                 <i class="fa-regular fa-message"></i>
               </a>
               {% if booking.end_date < today %}
-                <span class="badge badge-overdue"><i class="fa-solid fa-clock"></i> Overdue</span>
+                <span class="badge badge-overdue"><i class="fa-solid fa-clock"></i> {% trans "Overdue" %}</span>
               {% else %}
-                <span class="badge badge-approved">Active</span>
+                <span class="badge badge-approved">{% trans "Active" %}</span>
               {% endif %}
             </div>
             {% endif %}
 
             {% empty %}
-            <div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i>No active rentals.</div>
+            <div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i>{% trans "No active rentals." %}</div>
             {% endfor %}
           </div>
 
@@ -770,13 +770,13 @@
                     <del class="price-original">${{ booking.original_total }}</del>
                     <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
                     <span class="price-adjustment price-adjustment--overdue">
-                      <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}d overdue
+                      <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}{% trans "d overdue" %}
                     </span>
                   {% elif booking.status == 'completed' and booking.early_return_days %}
                     <del class="price-original">${{ booking.original_total }}</del>
                     <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
                     <span class="price-adjustment price-adjustment--early">
-                      <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}d early return
+                      <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}{% trans "d early return" %}
                     </span>
                   {% else %}
                     <span class="meta-price">${{ booking.total_price }}</span>
@@ -784,17 +784,17 @@
                 </div>
               </div>
               <div class="completed-actions">
-                <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="View conversation">
+                <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="{% trans 'View conversation' %}">
                   <i class="fa-regular fa-message"></i>
                 </a>
-                {% if booking.status == 'completed' %}<span class="badge badge-completed">Completed</span>
-                {% else %}<span class="badge badge-rejected">Rejected</span>{% endif %}
+                {% if booking.status == 'completed' %}<span class="badge badge-completed">{% trans "Completed" %}</span>
+                {% else %}<span class="badge badge-rejected">{% trans "Rejected" %}</span>{% endif %}
                 {% if booking.status == 'completed' %}
                   {% if 'for_tool' in booking.reviewed_types and 'for_owner' in booking.reviewed_types %}
-                    <span class="badge-reviewed"><i class="fa-solid fa-check"></i> Reviewed</span>
+                    <span class="badge-reviewed"><i class="fa-solid fa-check"></i> {% trans "Reviewed" %}</span>
                   {% else %}
                     <button type="button" class="btn-leave-review" data-review-modal="rental-{{ booking.id }}">
-                      <i class="fa-regular fa-star"></i> Leave a Review
+                      <i class="fa-regular fa-star"></i> {% trans "Leave a Review" %}
                     </button>
                   {% endif %}
                 {% endif %}
@@ -806,8 +806,8 @@
             <div class="review-modal-overlay" id="review-modal-rental-{{ booking.id }}">
               <div class="review-modal">
                 <div class="review-modal__header">
-                  <h3><i class="fa-solid fa-star"></i> Rate Your Rental</h3>
-                  <button type="button" class="review-modal__close" data-modal-close aria-label="Close">
+                  <h3><i class="fa-solid fa-star"></i> {% trans "Rate Your Rental" %}</h3>
+                  <button type="button" class="review-modal__close" data-modal-close aria-label="{% trans 'Close' %}">
                     <i class="fa-solid fa-xmark"></i>
                   </button>
                 </div>
@@ -825,29 +825,29 @@
 
                   {% if 'for_tool' not in booking.reviewed_types %}
                   <div class="review-field">
-                    <label>How was the tool?</label>
+                    <label>{% trans "How was the tool?" %}</label>
                     <div class="star-rating" data-input="tool_rating">
                       <input type="hidden" name="tool_rating" value="0">
                       {% for i in "12345" %}<i class="fa-regular fa-star" data-value="{{ forloop.counter }}"></i>{% endfor %}
                     </div>
-                    <textarea name="tool_comment" maxlength="1000" placeholder="Share your experience with this tool (optional)"></textarea>
+                    <textarea name="tool_comment" maxlength="1000" placeholder="{% trans 'Share your experience with this tool (optional)' %}"></textarea>
                   </div>
                   {% endif %}
 
                   {% if 'for_owner' not in booking.reviewed_types %}
                   <div class="review-field">
-                    <label>How was {{ booking.tool.owner.name }} as the owner?</label>
+                    <label>{% blocktrans with name=booking.tool.owner.name %}How was {{ name }} as the owner?{% endblocktrans %}</label>
                     <div class="star-rating" data-input="owner_rating">
                       <input type="hidden" name="owner_rating" value="0">
                       {% for i in "12345" %}<i class="fa-regular fa-star" data-value="{{ forloop.counter }}"></i>{% endfor %}
                     </div>
-                    <textarea name="owner_comment" maxlength="1000" placeholder="Share your experience with the owner (optional)"></textarea>
+                    <textarea name="owner_comment" maxlength="1000" placeholder="{% trans 'Share your experience with the owner (optional)' %}"></textarea>
                   </div>
                   {% endif %}
 
                   <div class="review-modal__actions">
-                    <button type="button" class="btn-cancel-review" data-modal-close>Cancel</button>
-                    <button type="submit" class="btn-submit-review"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+                    <button type="button" class="btn-cancel-review" data-modal-close>{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn-submit-review"><i class="fa-solid fa-paper-plane"></i> {% trans "Submit Review" %}</button>
                   </div>
                 </form>
               </div>
@@ -855,7 +855,7 @@
             {% endif %}
 
             {% empty %}
-            <div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i>No rental history yet.</div>
+            <div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i>{% trans "No rental history yet." %}</div>
             {% endfor %}
           </div>
 
@@ -868,8 +868,8 @@
     <div class="tab-panel" id="tab-messages">
 
       <div class="page-header">
-        <h1 class="page-title"><span class="page-title-dot"></span>Messages</h1>
-        <p class="page-subtitle">All your rental conversations in one place</p>
+        <h1 class="page-title"><span class="page-title-dot"></span>{% trans "Messages" %}</h1>
+        <p class="page-subtitle">{% trans "All your rental conversations in one place" %}</p>
       </div>
 
       <div class="section-card inbox-card">
@@ -908,11 +908,11 @@
                 <div class="inbox-preview">
                   {% if conv.last_msg %}
                     {% if conv.last_msg.sender_id == user.pk %}
-                      <span class="inbox-preview__you">You:</span>
+                      <span class="inbox-preview__you">{% trans "You:" %}</span>
                     {% endif %}
                     {{ conv.last_msg.text|truncatechars:65 }}
                   {% else %}
-                    <em>No messages yet — say hello</em>
+                    <em>{% trans "No messages yet — say hello" %}</em>
                   {% endif %}
                 </div>
               </div>
@@ -937,12 +937,12 @@
             <div class="inbox-empty__icon">
               <i class="fa-regular fa-message"></i>
             </div>
-            <div class="inbox-empty__title">No conversations yet</div>
+            <div class="inbox-empty__title">{% trans "No conversations yet" %}</div>
             <div class="inbox-empty__sub">
-              Your rental conversations will appear here once a booking is approved.
+              {% trans "Your rental conversations will appear here once a booking is approved." %}
             </div>
             <a href="{% url 'listings:browse' %}" class="btn-add" style="margin-top:4px;">
-              <i class="fa-solid fa-magnifying-glass"></i> Browse Tools
+              <i class="fa-solid fa-magnifying-glass"></i> {% trans "Browse Tools" %}
             </a>
           </div>
         {% endif %}

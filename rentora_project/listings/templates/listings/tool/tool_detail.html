@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block title %}{{ tool.title }} — Rentora{% endblock %}
 {% block body_class %}detail-page{% endblock %}
@@ -15,12 +15,12 @@
   <div class="container" style="display:flex; align-items:center; gap:12px;">
     <i class="fa-solid fa-eye-slash" style="color:#a16207; font-size:16px;"></i>
     <div>
-      <strong style="color:#92400e; font-size:14px;">This tool is currently hidden from public listings.</strong>
-      <span style="color:#a16207; font-size:13px; margin-left:8px;">Only you can see this page.</span>
+      <strong style="color:#92400e; font-size:14px;">{% trans "This tool is currently hidden from public listings." %}</strong>
+      <span style="color:#a16207; font-size:13px; margin-inline-start:8px;">{% trans "Only you can see this page." %}</span>
     </div>
     <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
-       style="margin-left:auto; background:#0f766e; color:#fff; padding:7px 16px; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap;">
-      <i class="fa-solid fa-pen-to-square"></i> Make Available
+       style="margin-inline-start:auto; background:#0f766e; color:#fff; padding:7px 16px; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; white-space:nowrap;">
+      <i class="fa-solid fa-pen-to-square"></i> {% trans "Make Available" %}
     </a>
   </div>
 </div>
@@ -32,7 +32,7 @@
         <!-- ── Breadcrumb ──────────────────────────────────────────── -->
         <nav class="detail-breadcrumb" aria-label="Breadcrumb">
             <a href="{% url 'listings:home' %}" class="detail-breadcrumb__link">
-                <i class="fa-solid fa-house" aria-hidden="true"></i> Home
+                <i class="fa-solid fa-house" aria-hidden="true"></i> {% trans "Home" %}
             </a>
             <i class="fa-solid fa-chevron-right detail-breadcrumb__sep" aria-hidden="true"></i>
             {% if tool.category %}
@@ -76,10 +76,10 @@
 
                         {% if all_images|length > 1 %}
                         <!-- Arrows -->
-                        <button class="img-slider__arrow img-slider__arrow--prev" id="sliderPrev" aria-label="Previous image">
+                        <button class="img-slider__arrow img-slider__arrow--prev" id="sliderPrev" aria-label="{% trans 'Previous image' %}">
                             <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                         </button>
-                        <button class="img-slider__arrow img-slider__arrow--next" id="sliderNext" aria-label="Next image">
+                        <button class="img-slider__arrow img-slider__arrow--next" id="sliderNext" aria-label="{% trans 'Next image' %}">
                             <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                         </button>
 
@@ -88,7 +88,7 @@
                             {% for img in all_images %}
                             <button class="img-slider__dot {% if forloop.first %}img-slider__dot--active{% endif %}"
                                     data-index="{{ forloop.counter0 }}"
-                                    aria-label="Image {{ forloop.counter }}"></button>
+                                    aria-label="{% trans 'Image' %} {{ forloop.counter }}"></button>
                             {% endfor %}
                         </div>
                         {% endif %}
@@ -102,10 +102,10 @@
                         <button class="img-slider__thumb {% if forloop.first %}img-slider__thumb--active{% endif %}"
                                 data-index="{{ forloop.counter0 }}"
                                 data-src="{{ img.image.url }}"
-                                aria-label="View image {{ forloop.counter }}"
+                                aria-label="{% trans 'View image' %} {{ forloop.counter }}"
                                 type="button">
                             <img src="{{ img.image.url }}"
-                                 alt="{{ tool.title }} photo {{ forloop.counter }}"
+                                 alt="{{ tool.title }} {% trans 'photo' %} {{ forloop.counter }}"
                                  loading="lazy">
                         </button>
                         {% endfor %}
@@ -120,9 +120,9 @@
                     {% if tool.category %}
                     <span class="detail-tag detail-tag--teal">{{ tool.category.name }}</span>
                     {% endif %}
-                    <span class="detail-tag detail-tag--condition">{{ tool.get_condition_display }} Condition</span>
+                    <span class="detail-tag detail-tag--condition">{% blocktrans with condition=tool.get_condition_display %}{{ condition }} Condition{% endblocktrans %}</span>
                     {% if tool.is_available %}
-                    <span class="detail-tag detail-tag--available">Available</span>
+                    <span class="detail-tag detail-tag--available">{% trans "Available" %}</span>
                     {% endif %}
                 </div>
 
@@ -132,7 +132,7 @@
                     <button class="detail-wishlist-btn {% if is_wishlisted %}detail-wishlist-btn--saved{% endif %}"
                             data-tool-id="{{ tool.pk }}"
                             onclick="toggleWishlist(this, {{ tool.pk }})"
-                            aria-label="{% if is_wishlisted %}Remove from wishlist{% else %}Save to wishlist{% endif %}">
+                            aria-label="{% if is_wishlisted %}{% trans 'Remove from wishlist' %}{% else %}{% trans 'Save to wishlist' %}{% endif %}">
                         <i class="{% if is_wishlisted %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -151,9 +151,9 @@
                         {% endwith %}
                     </div>
                     <span class="detail-rating-num">{{ avg_rating }}</span>
-                    <span class="detail-review-count">({{ review_count }} review{{ review_count|pluralize }})</span>
+                    <span class="detail-review-count">({% blocktrans count counter=review_count %}{{ counter }} review{% plural %}{{ counter }} reviews{% endblocktrans %})</span>
                     {% else %}
-                    <span class="detail-review-count">No reviews yet</span>
+                    <span class="detail-review-count">{% trans "No reviews yet" %}</span>
                     {% endif %}
                     <span class="detail-location">
                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
@@ -174,33 +174,33 @@
                             <div class="detail-owner-card__avatar-init">{{ tool.owner.name|first|upper }}</div>
                         {% endif %}
                         {% if tool.owner.is_verified %}
-                        <span class="detail-owner-card__verified" title="Verified owner">
+                        <span class="detail-owner-card__verified" title="{% trans 'Verified owner' %}">
                             <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
                         </span>
                         {% endif %}
                     </div>
                     <div class="detail-owner-card__info">
                         <div class="detail-owner-card__header">
-                            <span class="detail-owner-card__label">Listed by</span>
+                            <span class="detail-owner-card__label">{% trans "Listed by" %}</span>
                             <span class="detail-owner-card__name">{{ tool.owner.name }}</span>
                             {% if tool.owner.is_verified %}
                             <span class="detail-owner-card__verified-badge">
-                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Verified
+                                <i class="fa-solid fa-circle-check" aria-hidden="true"></i> {% trans "Verified" %}
                             </span>
                             {% endif %}
                         </div>
                         <div class="detail-owner-card__stats">
                             <span class="detail-owner-stat">
                                 <i class="fa-solid fa-star" aria-hidden="true"></i>
-                                {{ owner_rating|default:"—" }} rating
+                                {{ owner_rating|default:"—" }} {% trans "rating" %}
                             </span>
                             <span class="detail-owner-stat">
                                 <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
-                                {{ owner_tools_count }} tool{{ owner_tools_count|pluralize }} listed
+                                {% blocktrans count counter=owner_tools_count %}{{ counter }} tool listed{% plural %}{{ counter }} tools listed{% endblocktrans %}
                             </span>
                             <span class="detail-owner-stat">
                                 <i class="fa-solid fa-handshake" aria-hidden="true"></i>
-                                {{ owner_rentals_count }} rental{{ owner_rentals_count|pluralize }} completed
+                                {% blocktrans count counter=owner_rentals_count %}{{ counter }} rental completed{% plural %}{{ counter }} rentals completed{% endblocktrans %}
                             </span>
                         </div>
                     </div>
@@ -210,7 +210,7 @@
 
                 <!-- About This Tool -->
                 <div class="detail-about">
-                    <h2 class="detail-section-title">About This Tool</h2>
+                    <h2 class="detail-section-title">{% trans "About This Tool" %}</h2>
                     <p class="detail-about__text">{{ tool.description }}</p>
                 </div>
 
@@ -220,46 +220,46 @@
                 <div class="detail-availability">
                     <h2 class="detail-section-title">
                         <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-                        Availability
+                        {% trans "Availability" %}
                     </h2>
                     <div class="avail-cal" id="availCalendar">
 
                         <!-- Gradient header: month nav + selection bar -->
                         <div class="avail-cal__top">
                             <div class="avail-cal__nav-row">
-                                <button type="button" class="avail-cal__nav" id="availPrev" aria-label="Previous month">
+                                <button type="button" class="avail-cal__nav" id="availPrev" aria-label="{% trans 'Previous month' %}">
                                     <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                                 </button>
                                 <div class="avail-cal__month-wrap">
                                     <span class="avail-cal__month" id="availMonthLabel"></span>
                                     <span class="avail-cal__year"  id="availYearLabel"></span>
                                 </div>
-                                <button type="button" class="avail-cal__nav" id="availNext" aria-label="Next month">
+                                <button type="button" class="avail-cal__nav" id="availNext" aria-label="{% trans 'Next month' %}">
                                     <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div class="avail-cal__selection" id="availSelection">
                                 <i class="fa-regular fa-calendar-check"></i>
-                                <span id="availSelectionText">Select check-in &amp; check-out dates</span>
+                                <span id="availSelectionText">{% trans "Select check-in & check-out dates" %}</span>
                             </div>
                         </div>
 
                         <!-- Calendar body: weekdays + day grid + legend -->
                         <div class="avail-cal__body">
                             <div class="avail-cal__weekdays">
-                                <span>Su</span><span>Mo</span><span>Tu</span>
-                                <span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                                <span>{% trans "Su" %}</span><span>{% trans "Mo" %}</span><span>{% trans "Tu" %}</span>
+                                <span>{% trans "We" %}</span><span>{% trans "Th" %}</span><span>{% trans "Fr" %}</span><span>{% trans "Sa" %}</span>
                             </div>
                             <div class="avail-cal__grid" id="availGrid"></div>
                             <div class="avail-cal__legend">
                                 <span class="avail-cal__legend-item">
-                                    <i class="avail-dot avail-dot--available"></i>Available
+                                    <i class="avail-dot avail-dot--available"></i>{% trans "Available" %}
                                 </span>
                                 <span class="avail-cal__legend-item avail-cal__legend-item--booked">
-                                    <i class="avail-dot avail-dot--booked"></i>Booked
+                                    <i class="avail-dot avail-dot--booked"></i>{% trans "Booked" %}
                                 </span>
                                 <span class="avail-cal__legend-item avail-cal__legend-item--selected">
-                                    <i class="avail-dot avail-dot--selected"></i>Your selection
+                                    <i class="avail-dot avail-dot--selected"></i>{% trans "Your selection" %}
                                 </span>
                             </div>
                         </div>
@@ -274,7 +274,7 @@
                 <div class="detail-map-section">
                     <h2 class="detail-section-title">
                         <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                        Pickup Location
+                        {% trans "Pickup Location" %}
                     </h2>
                     <p class="detail-map-address">
                         <i class="fa-solid fa-map-pin" aria-hidden="true"></i>
@@ -286,12 +286,12 @@
                          data-tool-location="{{ tool.location|escapejs }}">
                         <div class="detail-map-loader">
                             <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
-                            <span>Loading map…</span>
+                            <span>{% trans "Loading map…" %}</span>
                         </div>
                     </div>
                     <p class="detail-map-note">
                         <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                        Exact pickup spot will be shared after booking confirmation.
+                        {% trans "Exact pickup spot will be shared after booking confirmation." %}
                     </p>
                 </div>
                 {% endif %}
@@ -304,8 +304,8 @@
                         <i class="fa-solid fa-vault" aria-hidden="true"></i>
                     </div>
                     <div>
-                        <p class="detail-deposit-card__title">Security Deposit &mdash; ${{ tool.deposit }}</p>
-                        <p class="detail-deposit-card__note">Fully refundable upon safe return of the tool in its original condition.</p>
+                        <p class="detail-deposit-card__title">{% trans "Security Deposit" %} &mdash; ${{ tool.deposit }}</p>
+                        <p class="detail-deposit-card__note">{% trans "Fully refundable upon safe return of the tool in its original condition." %}</p>
                     </div>
                 </div>
 
@@ -315,7 +315,7 @@
                 <div class="detail-reviews">
                     <div class="detail-reviews__header">
                         <h2 class="detail-section-title">
-                            Reviews
+                            {% trans "Reviews" %}
                             {% if review_count %}
                             <span class="detail-reviews__count">({{ review_count }})</span>
                             {% endif %}
@@ -323,7 +323,7 @@
                     </div>
 
                     {% if reviews %}
-                    <p class="detail-reviews__sub">Tool Reviews</p>
+                    <p class="detail-reviews__sub">{% trans "Tool Reviews" %}</p>
                     <div class="detail-reviews__grid">
                         {% for review in reviews %}
                         <div class="review-card">
@@ -360,7 +360,7 @@
                     {% else %}
                     <div class="detail-reviews__empty">
                         <i class="fa-regular fa-star" aria-hidden="true"></i>
-                        <p>No reviews yet. Be the first to rent and review this tool.</p>
+                        <p>{% trans "No reviews yet. Be the first to rent and review this tool." %}</p>
                     </div>
                     {% endif %}
                 </div>
@@ -377,7 +377,7 @@
                     <!-- Price header -->
                     <div class="booking-panel__price">
                         <span class="booking-panel__amount">${{ tool.daily_rate }}</span>
-                        <span class="booking-panel__unit">/ day</span>
+                        <span class="booking-panel__unit">/ {% trans "day" %}</span>
                     </div>
 
                     <!-- Panel body -->
@@ -388,13 +388,13 @@
                     <a href="{% url 'listings:tools:edit_tool' tool.pk %}"
                        class="btn-book-now" style="justify-content:center; background:#475569; text-decoration:none;">
                         <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
-                        Manage This Tool
+                        {% trans "Manage This Tool" %}
                     </a>
 
                     {% elif not tool.is_available %}
                     <div style="text-align:center; padding:18px 12px; color:#94a3b8;">
                         <i class="fa-solid fa-ban" style="font-size:26px; display:block; margin-bottom:8px; color:#d1d5db;"></i>
-                        <span style="font-size:14px; font-weight:500;">Currently unavailable</span>
+                        <span style="font-size:14px; font-weight:500;">{% trans "Currently unavailable" %}</span>
                     </div>
 
                     {% elif request.session.user_id %}
@@ -403,17 +403,17 @@
                           action="{% url 'listings:create_booking' tool.pk %}">
                         {% csrf_token %}
                         <div class="booking-form__field">
-                            <label class="booking-form__label" for="start_date">Start Date</label>
+                            <label class="booking-form__label" for="start_date">{% trans "Start Date" %}</label>
                             <input class="booking-form__input" type="date" id="start_date"
                                    name="start_date" required>
                         </div>
                         <div class="booking-form__field">
-                            <label class="booking-form__label" for="end_date">End Date</label>
+                            <label class="booking-form__label" for="end_date">{% trans "End Date" %}</label>
                             <input class="booking-form__input" type="date" id="end_date"
                                    name="end_date" required>
                         </div>
                         <div class="booking-form__estimate" id="priceEstimate" style="display:none">
-                            <span class="booking-form__estimate-label">Estimated total</span>
+                            <span class="booking-form__estimate-label">{% trans "Estimated total" %}</span>
                             <span class="booking-form__estimate-value" id="estimateValue"></span>
                         </div>
 
@@ -423,7 +423,7 @@
                                 <i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i>
                             </div>
                             <div class="booking-alert__body">
-                                <p class="booking-alert__title">Booking Unavailable</p>
+                                <p class="booking-alert__title">{% trans "Booking Unavailable" %}</p>
                                 <p class="booking-alert__msg">{{ booking_error }}</p>
                             </div>
                         </div>
@@ -431,20 +431,20 @@
 
                         <button type="submit" class="btn-book-now">
                             <i class="fa-solid fa-calendar-check" aria-hidden="true"></i>
-                            Book Now
+                            {% trans "Book Now" %}
                         </button>
                     </form>
 
                     {% else %}
                     <a href="{% url 'users:login' %}" class="btn-book-now btn-book-now--login">
                         <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
-                        Sign In to Book
+                        {% trans "Sign In to Book" %}
                     </a>
                     {% endif %}
 
                     <p class="booking-panel__note">
                         <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-                        You won&rsquo;t be charged yet &mdash; the owner will confirm your request.
+                        {% trans "You won't be charged yet — the owner will confirm your request." %}
                     </p>
 
                     <!-- Quick stats -->
@@ -452,7 +452,7 @@
                     <div class="booking-panel__stats">
                         <div class="booking-panel__stat">
                             <span class="booking-panel__stat-value">${{ tool.deposit }}</span>
-                            <span class="booking-panel__stat-label">Deposit</span>
+                            <span class="booking-panel__stat-label">{% trans "Deposit" %}</span>
                         </div>
                         {% if avg_rating %}
                         <div class="booking-panel__stat">
@@ -460,12 +460,12 @@
                                 <i class="fa-solid fa-star" style="color:#f59e0b;font-size:13px" aria-hidden="true"></i>
                                 {{ avg_rating }}
                             </span>
-                            <span class="booking-panel__stat-label">Avg rating</span>
+                            <span class="booking-panel__stat-label">{% trans "Avg rating" %}</span>
                         </div>
                         {% endif %}
                         <div class="booking-panel__stat">
                             <span class="booking-panel__stat-value">{{ review_count }}</span>
-                            <span class="booking-panel__stat-label">Review{{ review_count|pluralize }}</span>
+                            <span class="booking-panel__stat-label">{% blocktrans count counter=review_count %}Review{% plural %}Reviews{% endblocktrans %}</span>
                         </div>
                     </div>
 
@@ -488,6 +488,16 @@ window.AppConfig = {
     loginUrl:          '{% url "users:login" %}',
     dailyRate:         {{ tool.daily_rate }},
     images: [{% for img in all_images %}"{{ img.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+    {% translate "Select check-in & check-out dates" as t_select %}
+    {% translate "Pick check-out date" as t_checkout %}
+    i18n: {
+        months: ['{% translate "January" as m1 %}{{ m1|escapejs }}','{% translate "February" as m2 %}{{ m2|escapejs }}','{% translate "March" as m3 %}{{ m3|escapejs }}','{% translate "April" as m4 %}{{ m4|escapejs }}','{% translate "May" as m5 %}{{ m5|escapejs }}','{% translate "June" as m6 %}{{ m6|escapejs }}',
+                 '{% translate "July" as m7 %}{{ m7|escapejs }}','{% translate "August" as m8 %}{{ m8|escapejs }}','{% translate "September" as m9 %}{{ m9|escapejs }}','{% translate "October" as m10 %}{{ m10|escapejs }}','{% translate "November" as m11 %}{{ m11|escapejs }}','{% translate "December" as m12 %}{{ m12|escapejs }}'],
+        selectDates:  '{{ t_select|escapejs }}',
+        pickCheckout: '{{ t_checkout|escapejs }}',
+        day:          '{% translate "day" as t_day %}{{ t_day|escapejs }}',
+        days:         '{% translate "days" as t_days %}{{ t_days|escapejs }}',
+    },
 };
 </script>
 <script src="{% static 'listings/js/tool/tool_detail.js' %}"></script>

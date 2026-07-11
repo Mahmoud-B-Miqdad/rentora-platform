@@ -1,3 +1,5 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <footer class="site-footer" aria-label="Site footer">
     <div class="container">
 
@@ -9,12 +11,14 @@
                     <div class="footer-brand__icon" aria-hidden="true">
                         <i class="fa-solid fa-screwdriver-wrench"></i>
                     </div>
-                    <span class="footer-brand__name">Rent<span>ora</span></span>
+                    {% if LANGUAGE_CODE == 'ar' %}
+                      <span class="footer-brand__name">رينت<span>ورا</span></span>
+                    {% else %}
+                      <span class="footer-brand__name">Rent<span>ora</span></span>
+                    {% endif %}
                 </a>
                 <p class="footer-brand__desc">
-                    The peer-to-peer tool rental marketplace. Rent what you need,
-                    list what you have, powered by AI to make every transaction
-                    smart and fair.
+                    {% trans "The peer-to-peer tool rental marketplace. Rent what you need, list what you have, powered by AI to make every transaction smart and fair." %}
                 </p>
                 <div class="footer-socials">
                     <a href="#" class="footer-social-btn" aria-label="Follow on X">
@@ -31,46 +35,46 @@
 
             <!-- Platform Column -->
             <div>
-                <h3 class="footer-col__heading">Platform</h3>
+                <h3 class="footer-col__heading">{% trans "Platform" %}</h3>
                 <ul class="footer-col__links">
-                    <li><a href="#">Browse Tools</a></li>
-                    <li><a href="#">How It Works</a></li>
-                    <li><a href="#">List Your Tool</a></li>
-                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">{% trans "Browse Tools" %}</a></li>
+                    <li><a href="#">{% trans "How It Works" %}</a></li>
+                    <li><a href="#">{% trans "List Your Tool" %}</a></li>
+                    <li><a href="#">{% trans "Dashboard" %}</a></li>
                 </ul>
             </div>
 
             <!-- Categories Column -->
             <div>
-                <h3 class="footer-col__heading">Categories</h3>
+                <h3 class="footer-col__heading">{% trans "Categories" %}</h3>
                 <ul class="footer-col__links">
-                    <li><a href="#">Construction</a></li>
-                    <li><a href="#">Electrical</a></li>
-                    <li><a href="#">Photography</a></li>
-                    <li><a href="#">Gardening</a></li>
-                    <li><a href="#">Events</a></li>
+                    <li><a href="#">{% trans "Construction" %}</a></li>
+                    <li><a href="#">{% trans "Electrical" %}</a></li>
+                    <li><a href="#">{% trans "Photography" %}</a></li>
+                    <li><a href="#">{% trans "Gardening" %}</a></li>
+                    <li><a href="#">{% trans "Events" %}</a></li>
                 </ul>
             </div>
 
             <!-- Company Column -->
             <div>
-                <h3 class="footer-col__heading">Company</h3>
+                <h3 class="footer-col__heading">{% trans "Company" %}</h3>
                 <ul class="footer-col__links">
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">{% trans "About Us" %}</a></li>
+                    <li><a href="#">{% trans "Contact" %}</a></li>
+                    <li><a href="#">{% trans "Privacy Policy" %}</a></li>
+                    <li><a href="#">{% trans "Terms of Service" %}</a></li>
                 </ul>
             </div>
 
             <!-- Account Column -->
             <div>
-                <h3 class="footer-col__heading">Account</h3>
+                <h3 class="footer-col__heading">{% trans "Account" %}</h3>
                 <ul class="footer-col__links">
-                    <li><a href="{% url 'users:login' %}">Login</a></li>
-                    <li><a href="{% url 'users:register' %}">Register</a></li>
-                    <li><a href="#">Profile</a></li>
-                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="{% url 'users:login' %}">{% trans "Login" %}</a></li>
+                    <li><a href="{% url 'users:register' %}">{% trans "Register" %}</a></li>
+                    <li><a href="#">{% trans "Profile" %}</a></li>
+                    <li><a href="#">{% trans "Dashboard" %}</a></li>
                 </ul>
             </div>
 
@@ -78,8 +82,8 @@
 
         <!-- Bottom Bar -->
         <div class="footer-bottom">
-            <span>&copy; 2026 Rentora. All rights reserved.</span>
-            <span>Built for the maker community</span>
+            <span>&copy; 2026 {% trans "Rentora. All rights reserved." %}</span>
+            <span>{% trans "Built for the maker community" %}</span>
         </div>
 
     </div>

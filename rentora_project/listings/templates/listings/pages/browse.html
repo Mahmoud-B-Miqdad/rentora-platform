@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Browse Tools — Rentora{% endblock %}
+{% block title %}{% trans "Browse Tools" %} — Rentora{% endblock %}
 {% block body_class %}browse-page{% endblock %}
 
 {% block extra_css %}
@@ -14,11 +14,11 @@
 
     <!-- Page heading -->
     <div class="browse-heading">
-        <h1 class="browse-heading__title">Browse Tools</h1>
+        <h1 class="browse-heading__title">{% trans "Browse Tools" %}</h1>
         <p class="browse-heading__sub">
-            <span>{{ total_count }}</span> tool{{ total_count|pluralize }} found
+            <span>{{ total_count }}</span> {% blocktrans count total_count as count %}tool{% plural %}tools{% endblocktrans %} {% trans "found" %}
             {% if page_obj.paginator.num_pages > 1 %}
-            &mdash; showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            &mdash; {% blocktrans with page=page_obj.number total=page_obj.paginator.num_pages %}showing page {{ page }} of {{ total }}{% endblocktrans %}
             {% endif %}
         </p>
 
@@ -28,13 +28,13 @@
     <div class="browse-mobile-bar">
         <button type="button" class="filter-toggle-btn" id="filterToggleBtn">
             <i class="fa-solid fa-sliders" aria-hidden="true"></i>
-            Filters
+            {% trans "Filters" %}
         </button>
         <select name="sort" class="filter-mobile-sort" id="mobileSortSelect">
-            <option value="newest"     {% if filters.sort == 'newest'     %}selected{% endif %}>Newest</option>
-            <option value="top_rated"  {% if filters.sort == 'top_rated'  %}selected{% endif %}>Top Rated</option>
-            <option value="price_asc"  {% if filters.sort == 'price_asc'  %}selected{% endif %}>Price ↑</option>
-            <option value="price_desc" {% if filters.sort == 'price_desc' %}selected{% endif %}>Price ↓</option>
+            <option value="newest"     {% if filters.sort == 'newest'     %}selected{% endif %}>{% trans "Newest" %}</option>
+            <option value="top_rated"  {% if filters.sort == 'top_rated'  %}selected{% endif %}>{% trans "Top Rated" %}</option>
+            <option value="price_asc"  {% if filters.sort == 'price_asc'  %}selected{% endif %}>{% trans "Price" %} ↑</option>
+            <option value="price_desc" {% if filters.sort == 'price_desc' %}selected{% endif %}>{% trans "Price" %} ↓</option>
         </select>
     </div>
 
@@ -50,8 +50,8 @@
         <aside id="filterDrawer">
             <form method="GET" id="filterForm" class="filter-card">
                 <div class="filter-card__heading-row">
-                    <p class="filter-card__heading">Filters</p>
-                    <button type="button" class="filter-drawer-close" id="filterClose" aria-label="Close filters">
+                    <p class="filter-card__heading">{% trans "Filters" %}</p>
+                    <button type="button" class="filter-drawer-close" id="filterClose" aria-label="{% trans 'Close filters' %}">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -63,7 +63,7 @@
                            id="liveSearch"
                            name="q"
                            class="filter-search__input"
-                           placeholder="Search tools..."
+                           placeholder="{% trans 'Search tools...' %}"
                            value="{{ filters.q }}"
                            autocomplete="off">
                     <span class="filter-search__spinner" id="searchSpinner" aria-hidden="true"></span>
@@ -71,7 +71,7 @@
 
                 <!-- Category -->
                 <div class="filter-group">
-                    <span class="filter-group__label">Category</span>
+                    <span class="filter-group__label">{% trans "Category" %}</span>
                     <div class="filter-cat-list">
 
                         <button type="submit" name="category" value=""
@@ -79,7 +79,7 @@
                             <span class="filter-cat-item__icon">
                                 <i class="fa-solid fa-border-all" aria-hidden="true"></i>
                             </span>
-                            <span class="filter-cat-item__name">All Categories</span>
+                            <span class="filter-cat-item__name">{% trans "All Categories" %}</span>
                             {% if not filters.category %}
                             <i class="fa-solid fa-check filter-cat-item__check" aria-hidden="true"></i>
                             {% endif %}
@@ -109,10 +109,10 @@
 
                 <!-- Price Range -->
                 <div class="filter-group">
-                    <span class="filter-group__label">Price Range</span>
+                    <span class="filter-group__label">{% trans "Price Range" %}</span>
                     <div class="filter-price-row">
                         <span>$0</span>
-                        <strong id="priceLabel">Up to ${{ filters.max_price }}</strong>
+                        <strong id="priceLabel">{% blocktrans with price=filters.max_price %}Up to ${{ price }}{% endblocktrans %}</strong>
                     </div>
                     <input type="range"
                            id="priceRange"
@@ -125,25 +125,25 @@
 
                 <!-- Availability -->
                 <div class="filter-group">
-                    <span class="filter-group__label">Availability</span>
+                    <span class="filter-group__label">{% trans "Availability" %}</span>
                     {% if filters.availability == '1' %}
                     <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&sort={{ filters.sort }}"
                        class="filter-avail-btn filter-avail-btn--active">
-                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Available Only
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> {% trans "Available Only" %}
                     </a>
                     {% else %}
                     <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&availability=1&sort={{ filters.sort }}"
                        class="filter-avail-btn">
-                        Available Only
+                        {% trans "Available Only" %}
                     </a>
                     {% endif %}
                 </div>
 
                 <!-- Location -->
                 <div class="filter-group">
-                    <span class="filter-group__label">Location</span>
+                    <span class="filter-group__label">{% trans "Location" %}</span>
                     <select name="location" class="filter-select" onchange="this.form.submit()">
-                        <option value="">All Locations</option>
+                        <option value="">{% trans "All Locations" %}</option>
                         {% for loc in locations %}
                         <option value="{{ loc }}" {% if filters.location == loc %}selected{% endif %}>{{ loc }}</option>
                         {% endfor %}
@@ -152,12 +152,12 @@
 
                 <!-- Sort By -->
                 <div class="filter-group" style="margin-bottom:0">
-                    <span class="filter-group__label">Sort By</span>
+                    <span class="filter-group__label">{% trans "Sort By" %}</span>
                     <select name="sort" class="filter-select" onchange="this.form.submit()">
-                        <option value="newest"    {% if filters.sort == 'newest'    %}selected{% endif %}>Newest First</option>
-                        <option value="top_rated" {% if filters.sort == 'top_rated' %}selected{% endif %}>Top Rated</option>
-                        <option value="price_asc" {% if filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                        <option value="price_desc"{% if filters.sort == 'price_desc'%}selected{% endif %}>Price: High to Low</option>
+                        <option value="newest"    {% if filters.sort == 'newest'    %}selected{% endif %}>{% trans "Newest First" %}</option>
+                        <option value="top_rated" {% if filters.sort == 'top_rated' %}selected{% endif %}>{% trans "Top Rated" %}</option>
+                        <option value="price_asc" {% if filters.sort == 'price_asc' %}selected{% endif %}>{% trans "Price: Low to High" %}</option>
+                        <option value="price_desc"{% if filters.sort == 'price_desc'%}selected{% endif %}>{% trans "Price: High to Low" %}</option>
                     </select>
                 </div>
 
@@ -166,7 +166,7 @@
 
                 <!-- Reset -->
                 <a href="{% url 'listings:browse' %}" class="filter-reset">
-                    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reset all filters
+                    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {% trans "Reset all filters" %}
                 </a>
 
             </form>
@@ -179,7 +179,7 @@
             <!-- count line updates via JS -->
             <p class="browse-heading__sub" id="liveCount" style="margin-bottom:16px">
                 <span id="liveCountNum">{{ total_count }}</span>
-                tool{{ total_count|pluralize }} found
+                {% blocktrans count total_count as count %}tool{% plural %}tools{% endblocktrans %} {% trans "found" %}
             </p>
 
             <div class="tools-grid" id="toolsGrid">
@@ -210,14 +210,14 @@
                         <!-- Wishlist button -->
                         <button class="bcard__wish {% if tool.pk in wishlist_ids %}bcard__wish--saved{% endif %}"
                                 type="button"
-                                aria-label="Save to wishlist"
+                                aria-label="{% trans 'Save to wishlist' %}"
                                 onclick="event.stopPropagation(); event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
                             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
                         </button>
 
                         <!-- Price badge -->
                         <div class="bcard__price-badge">
-                            ${{ tool.daily_rate }}<span>/day</span>
+                            ${{ tool.daily_rate }}<span>/{% trans "day" %}</span>
                         </div>
                     </div>
 
@@ -259,7 +259,7 @@
                         <!-- Owner -->
                         <div class="bcard__owner bcard__owner--link"
                              onclick="event.preventDefault();event.stopPropagation();window.location.href='{% url 'users:public_profile' tool.owner.pk %}';"
-                             title="View {{ tool.owner.name }}'s profile">
+                             title="{% blocktrans with name=tool.owner.name %}View {{ name }}'s profile{% endblocktrans %}">
                             {% if tool.owner.profile_image %}
                             <img class="bcard__owner-avatar"
                                  src="{{ tool.owner.profile_image.url }}"
@@ -277,10 +277,10 @@
 
                 <div class="tools-empty">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                    <p>No tools match your filters.</p>
+                    <p>{% trans "No tools match your filters." %}</p>
                     <a href="{% url 'listings:browse' %}">
                         <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
-                        Clear all filters
+                        {% trans "Clear all filters" %}
                     </a>
                 </div>
 
@@ -294,7 +294,7 @@
 
                 {% if page_obj.has_previous %}
                 <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&{% if filters.availability %}availability={{ filters.availability }}&{% endif %}{% if filters.location %}location={{ filters.location }}&{% endif %}sort={{ filters.sort }}&page={{ page_obj.previous_page_number }}"
-                   class="page-btn" aria-label="Previous page">
+                   class="page-btn" aria-label="{% trans 'Previous page' %}">
                     <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
                 </a>
                 {% else %}
@@ -314,7 +314,7 @@
 
                 {% if page_obj.has_next %}
                 <a href="?{% if filters.q %}q={{ filters.q }}&{% endif %}{% if filters.category %}category={{ filters.category }}&{% endif %}max_price={{ filters.max_price }}&{% if filters.availability %}availability={{ filters.availability }}&{% endif %}{% if filters.location %}location={{ filters.location }}&{% endif %}sort={{ filters.sort }}&page={{ page_obj.next_page_number }}"
-                   class="page-btn" aria-label="Next page">
+                   class="page-btn" aria-label="{% trans 'Next page' %}">
                     <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
                 </a>
                 {% else %}
