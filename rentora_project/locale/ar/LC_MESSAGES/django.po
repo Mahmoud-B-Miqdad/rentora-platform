@@ -1,0 +1,1169 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Rentora 1.0\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+# ── Header / Navigation ─────────────────────────────────────────
+msgid "Home"
+msgstr "الرئيسية"
+
+msgid "Browse Tools"
+msgstr "تصفّح الأدوات"
+
+msgid "About"
+msgstr "من نحن"
+
+msgid "About Us"
+msgstr "من نحن"
+
+msgid "List Your Tool"
+msgstr "أضف أداتك"
+
+msgid "Wishlist"
+msgstr "المفضلة"
+
+msgid "My Wishlist"
+msgstr "قائمتي المفضلة"
+
+msgid "Notifications"
+msgstr "الإشعارات"
+
+msgid "Mark all read"
+msgstr "تحديد الكل كمقروء"
+
+msgid "View dashboard"
+msgstr "عرض لوحة التحكم"
+
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+msgid "My Profile"
+msgstr "ملفي الشخصي"
+
+msgid "Sign Out"
+msgstr "تسجيل الخروج"
+
+msgid "Sign In"
+msgstr "تسجيل الدخول"
+
+msgid "Open menu"
+msgstr "فتح القائمة"
+
+msgid "Close menu"
+msgstr "إغلاق القائمة"
+
+# ── Footer ──────────────────────────────────────────────────────
+msgid "The peer-to-peer tool rental marketplace. Rent what you need, list what you have, powered by AI to make every transaction smart and fair."
+msgstr "منصّة تأجير الأدوات بين الأفراد. استأجر ما تحتاجه، وأضف ما تملكه، بدعم من الذكاء الاصطناعي لجعل كل معاملة ذكية وعادلة."
+
+msgid "Platform"
+msgstr "المنصّة"
+
+msgid "How It Works"
+msgstr "كيف تعمل"
+
+msgid "Categories"
+msgstr "التصنيفات"
+
+msgid "Construction"
+msgstr "البناء"
+
+msgid "Electrical"
+msgstr "الكهرباء"
+
+msgid "Photography"
+msgstr "التصوير"
+
+msgid "Gardening"
+msgstr "البستنة"
+
+msgid "Events"
+msgstr "المناسبات"
+
+msgid "Company"
+msgstr "الشركة"
+
+msgid "Contact"
+msgstr "تواصل معنا"
+
+msgid "Privacy Policy"
+msgstr "سياسة الخصوصية"
+
+msgid "Terms of Service"
+msgstr "شروط الاستخدام"
+
+msgid "Account"
+msgstr "الحساب"
+
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+msgid "Register"
+msgstr "إنشاء حساب"
+
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+msgid "Rentora. All rights reserved."
+msgstr "رينتورا. جميع الحقوق محفوظة."
+
+msgid "Built for the maker community"
+msgstr "صُنعت لمجتمع الصنّاع"
+
+# ── Home page ───────────────────────────────────────────────────
+msgid "Rentora — Rent Tools From People Near You"
+msgstr "رينتورا — استأجر الأدوات من أشخاص بالقرب منك"
+
+msgid "AI-Powered Peer-to-Peer Tool Rental"
+msgstr "تأجير أدوات بين الأفراد مدعوم بالذكاء الاصطناعي"
+
+msgid "Rent Any Tool"
+msgstr "استأجر أي أداة"
+
+msgid "From People Near You"
+msgstr "من أشخاص بالقرب منك"
+
+msgid "Need a drill for the weekend? Browse thousands of tools listed by local owners. Smart AI search, transparent pricing, and secure booking — no commitment."
+msgstr "تحتاج مثقاباً لعطلة نهاية الأسبوع؟ تصفّح آلاف الأدوات المعروضة من مالكين محليين. بحث ذكي بالذكاء الاصطناعي، أسعار شفافة، وحجز آمن — دون أي التزام."
+
+msgid "Try \"Concrete Drill\" or \"بدي شي أحفر فيه الجدار\"..."
+msgstr "جرّب \"مثقاب خرسانة\" أو \"بدي شي أحفر فيه الجدار\"..."
+
+msgid "AI Search"
+msgstr "بحث ذكي"
+
+msgid "Verified Owners"
+msgstr "مالكون موثّقون"
+
+msgid "AI Pricing"
+msgstr "تسعير ذكي"
+
+msgid "Secure Booking"
+msgstr "حجز آمن"
+
+msgid "Browse"
+msgstr "تصفّح"
+
+msgid "Explore by Category"
+msgstr "استكشف حسب التصنيف"
+
+msgid "From power tools to garden equipment — find exactly what you need"
+msgstr "من العدد الكهربائية إلى معدات الحدائق — جد ما تحتاجه بالضبط"
+
+#, python-format
+msgid "Browse %(name)s"
+msgstr "تصفّح %(name)s"
+
+msgid "Explore"
+msgstr "استكشف"
+
+msgid "No categories yet — check back soon."
+msgstr "لا توجد تصنيفات بعد — عُد قريباً."
+
+msgid "Tools Listed"
+msgstr "أداة معروضة"
+
+msgid "Successful Rentals"
+msgstr "عملية تأجير ناجحة"
+
+msgid "Active Owners"
+msgstr "مالك نشط"
+
+msgid "Average Rating"
+msgstr "متوسط التقييم"
+
+msgid "Popular"
+msgstr "الأكثر رواجاً"
+
+msgid "Recently Listed Tools"
+msgstr "أحدث الأدوات المعروضة"
+
+msgid "View All Tools"
+msgstr "عرض كل الأدوات"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "day"
+msgstr "يوم"
+
+msgid "Verified"
+msgstr "موثّق"
+
+msgid "No tools listed yet — be the first!"
+msgstr "لا توجد أدوات معروضة بعد — كن الأول!"
+
+msgid "Process"
+msgstr "الخطوات"
+
+msgid "How Rentora Works"
+msgstr "كيف تعمل رينتورا"
+
+msgid "Get the tool you need in three simple steps"
+msgstr "احصل على الأداة التي تحتاجها في ثلاث خطوات بسيطة"
+
+msgid "Find Your Tool"
+msgstr "ابحث عن أداتك"
+
+msgid "Use AI-powered search or browse by category. Search in English or Arabic — our AI understands both."
+msgstr "استخدم البحث الذكي أو تصفّح حسب التصنيف. ابحث بالعربية أو الإنجليزية — ذكاؤنا الاصطناعي يفهم اللغتين."
+
+msgid "Book Instantly"
+msgstr "احجز فوراً"
+
+msgid "Pick your dates, review pricing and deposit details, then send a request. Owners respond fast."
+msgstr "اختر التواريخ، راجع تفاصيل السعر والتأمين، ثم أرسل الطلب. المالكون يردّون بسرعة."
+
+msgid "Get the Job Done"
+msgstr "أنجز مهمّتك"
+
+msgid "Pick up the tool, complete your project, return it, and leave a review to build community trust."
+msgstr "استلم الأداة، أنجز مشروعك، أعدها، واترك تقييماً لتعزيز الثقة في المجتمع."
+
+msgid "Reviews"
+msgstr "التقييمات"
+
+msgid "Trusted by Our Community"
+msgstr "موثوقون من مجتمعنا"
+
+msgid "Real people, real rentals — hear what our community says"
+msgstr "أشخاص حقيقيون وتجارب حقيقية — اسمع ما يقوله مجتمعنا"
+
+msgid "Tool Renter"
+msgstr "مستأجر أداة"
+
+msgid "Have Tools Sitting Idle?"
+msgstr "لديك أدوات غير مستخدمة؟"
+
+msgid "Turn your idle tools into passive income. List on Rentora and let our AI pricing advisor help you set the perfect rate to maximize earnings."
+msgstr "حوّل أدواتك غير المستخدمة إلى دخل إضافي. اعرضها على رينتورا ودَع مستشار التسعير الذكي يساعدك على تحديد السعر الأمثل لزيادة أرباحك."
+
+msgid "List Your Tool Now"
+msgstr "أضف أداتك الآن"
+
+# ── Auth page ───────────────────────────────────────────────────
+msgid "Create Account"
+msgstr "إنشاء حساب"
+
+msgid "Peer-to-peer Tool Rental"
+msgstr "تأجير أدوات بين الأفراد"
+
+msgid "Rent smarter,"
+msgstr "استأجر بذكاء،"
+
+msgid "not harder."
+msgstr "لا بعناء."
+
+msgid "Join thousands of people renting and listing tools across their community — no ownership required."
+msgstr "انضم إلى آلاف الأشخاص الذين يستأجرون ويعرضون الأدوات في مجتمعهم — دون الحاجة إلى امتلاكها."
+
+msgid "Verified tool owners & renters"
+msgstr "مالكون ومستأجرون موثّقون"
+
+msgid "Secure deposits & payments"
+msgstr "تأمينات ومدفوعات آمنة"
+
+msgid "Flexible booking & instant approval"
+msgstr "حجز مرن وموافقة فورية"
+
+msgid "Welcome Back"
+msgstr "مرحباً بعودتك"
+
+msgid "Log in to manage your tools and bookings"
+msgstr "سجّل دخولك لإدارة أدواتك وحجوزاتك"
+
+msgid "Email Address"
+msgstr "البريد الإلكتروني"
+
+msgid "Password"
+msgstr "كلمة المرور"
+
+msgid "Forgot password?"
+msgstr "نسيت كلمة المرور؟"
+
+msgid "Enter your password"
+msgstr "أدخل كلمة المرور"
+
+msgid "Toggle password visibility"
+msgstr "إظهار/إخفاء كلمة المرور"
+
+msgid "Log In"
+msgstr "تسجيل الدخول"
+
+msgid "Don't have an account?"
+msgstr "ليس لديك حساب؟"
+
+msgid "Sign Up"
+msgstr "أنشئ حساباً"
+
+msgid "Create Your Account"
+msgstr "أنشئ حسابك"
+
+msgid "Join Rentora and start renting or listing tools today"
+msgstr "انضم إلى رينتورا وابدأ باستئجار الأدوات أو عرضها اليوم"
+
+msgid "Full Name"
+msgstr "الاسم الكامل"
+
+msgid "Your full name"
+msgstr "اسمك الكامل"
+
+msgid "Phone"
+msgstr "رقم الهاتف"
+
+msgid "Location"
+msgstr "الموقع"
+
+msgid "City, State"
+msgstr "المدينة، المنطقة"
+
+msgid "At least 8 characters"
+msgstr "8 أحرف على الأقل"
+
+msgid "Confirm Password"
+msgstr "تأكيد كلمة المرور"
+
+msgid "Re-enter your password"
+msgstr "أعد إدخال كلمة المرور"
+
+msgid "Already have an account?"
+msgstr "لديك حساب بالفعل؟"
+
+# ── Browse page ─────────────────────────────────────────────────
+msgid "found"
+msgstr "موجود"
+
+#, python-format
+msgid "tool"
+msgid_plural "tools"
+msgstr[0] "أداة"
+msgstr[1] "أداة"
+msgstr[2] "أداتين"
+msgstr[3] "أدوات"
+msgstr[4] "أدوات"
+msgstr[5] "أدوات"
+
+#, python-format
+msgid "showing page %(page)s of %(total)s"
+msgstr "عرض الصفحة %(page)s من %(total)s"
+
+msgid "Filters"
+msgstr "الفلاتر"
+
+msgid "Close filters"
+msgstr "إغلاق الفلاتر"
+
+msgid "Search tools..."
+msgstr "ابحث عن الأدوات..."
+
+msgid "Category"
+msgstr "التصنيف"
+
+msgid "All Categories"
+msgstr "جميع التصنيفات"
+
+msgid "Price Range"
+msgstr "نطاق السعر"
+
+#, python-format
+msgid "Up to $%(price)s"
+msgstr "حتى $%(price)s"
+
+msgid "Availability"
+msgstr "التوفر"
+
+msgid "Available Only"
+msgstr "المتوفرة فقط"
+
+msgid "All Locations"
+msgstr "جميع الأماكن"
+
+msgid "Sort By"
+msgstr "الترتيب حسب"
+
+msgid "Newest First"
+msgstr "الأحدث أولاً"
+
+msgid "Top Rated"
+msgstr "الأعلى تقييماً"
+
+msgid "Price: Low to High"
+msgstr "السعر: من الأقل إلى الأعلى"
+
+msgid "Price: High to Low"
+msgstr "السعر: من الأعلى إلى الأقل"
+
+msgid "Reset all filters"
+msgstr "إعادة تعيين جميع الفلاتر"
+
+msgid "Save to wishlist"
+msgstr "حفظ في المفضلة"
+
+msgid "No tools match your filters."
+msgstr "لا توجد أدوات تطابق الفلاتر."
+
+msgid "Clear all filters"
+msgstr "إزالة جميع الفلاتر"
+
+msgid "Previous page"
+msgstr "الصفحة السابقة"
+
+msgid "Next page"
+msgstr "الصفحة التالية"
+
+#, python-format
+msgid "View %(name)s's profile"
+msgstr "عرض ملف %(name)s الشخصي"
+
+# ── About page ──────────────────────────────────────────────
+msgid "Our Story"
+msgstr "قصتنا"
+
+msgid "We're Making Tools <mark>Accessible</mark><br>to <mark>Everyone</mark>"
+msgstr "نحن نجعل الأدوات <mark>متاحة</mark><br><mark>للجميع</mark>"
+
+msgid "Rentora was born from a simple idea — your neighbor probably owns the drill you need for the weekend. We built the platform that connects them, turning idle tools into income and saving renters from unnecessary purchases."
+msgstr "وُلدت رينتورا من فكرة بسيطة — جارك يملك على الأغلب المثقاب الذي تحتاجه لعطلة نهاية الأسبوع. بنينا المنصة التي تربط بينهم، وتحول الأدوات غير المستخدمة إلى دخل وتوفّر على المستأجرين من عمليات شراء غير ضرورية."
+
+msgid "Join the Community"
+msgstr "انضم إلى المجتمع"
+
+msgid "Rentals Done"
+msgstr "عملية تأجير منجزة"
+
+msgid "Our Mission"
+msgstr "مهمتنا"
+
+msgid "Rent Smarter,<br><span>Live Better</span>"
+msgstr "استأجر بذكاء،<br><span>عش أفضل</span>"
+
+msgid "Every year, billions of dollars' worth of tools sit unused in garages and storage rooms. At the same time, people pay full price for tools they'll use once or twice. Rentora exists to close that gap — creating a circular economy where tools are shared, not stockpiled."
+msgstr "كل عام، مليارات الدولارات من قيمة الأدوات تبقى غير مستخدمة في المرائب وغرف التخزين. في الوقت ذاته، يدفع الناس السعر الكامل لأدوات سيستخدمونها مرة أو مرتين. توجد رينتورا لإغلاق هذه الفجوة — بإنشاء اقتصاد دائري حيث تُشاع الأدوات، لا تُخزّن."
+
+msgid "Reduce waste by keeping tools in active use within the community."
+msgstr "قلل الهدر بإبقاء الأدوات قيد الاستخدام الفعلي داخل المجتمع."
+
+msgid "Help owners earn passive income from tools sitting idle."
+msgstr "ساعد المالكين على كسب دخل سلبي من الأدوات غير المستخدمة."
+
+msgid "Build trust through verified profiles, ratings, and secure bookings."
+msgstr "ابنِ الثقة من خلال ملفات موثّقة وتقييمات وحجوزات آمنة."
+
+msgid "Use AI smart pricing to ensure fair rates for everyone."
+msgstr "استخدم التسعير الذكي بالذكاء الاصطناعي لضمان أسعار عادلة للجميع."
+
+msgid "Tools Available"
+msgstr "الأدوات المتاحة"
+
+msgid "Rentals Completed"
+msgstr "عمليات التأجير المنجزة"
+
+msgid "What We Stand For"
+msgstr "ما نؤمن به"
+
+msgid "Our Core <span>Values</span>"
+msgstr "قيمنا <span>الأساسية</span>"
+
+msgid "Every decision we make comes back to these four principles that define who we are."
+msgstr "كل قرار نتخذه يعود إلى هذه الأربع مبادئ التي تعرّف من نحن."
+
+msgid "Community First"
+msgstr "المجتمع أولاً"
+
+msgid "We believe in the power of neighbors helping neighbors. Every rental strengthens local connections and builds trust within communities."
+msgstr "نؤمن بقوة الجيران الذين يساعدون بعضهم. كل تأجير يقوّي الروابط المحلية ويبني الثقة داخل المجتمعات."
+
+msgid "Trust & Safety"
+msgstr "الثقة والأمان"
+
+msgid "Verified profiles, transparent reviews, and secure booking flows ensure every interaction on Rentora is safe and accountable."
+msgstr "الملفات الموثّقة والتقييمات الشفافة وتدفقات الحجز الآمنة تضمن أن كل تفاعل على رينتورا آمن وقابل للمحاسبة."
+
+msgid "Sustainability"
+msgstr "الاستدامة"
+
+msgid "Sharing tools means fewer tools manufactured and less waste. We're committed to a circular economy that's better for the planet."
+msgstr "تقاسم الأدوات يعني عدد أقل من الأدوات المصنعة وأقل نفايات. نحن ملتزمون باقتصاد دائري أفضل للكوكب."
+
+msgid "Smart Innovation"
+msgstr "الابتكار الذكي"
+
+msgid "From AI-powered pricing to real-time search, we use technology to make renting tools as effortless as possible."
+msgstr "من التسعير المدعوم بالذكاء الاصطناعي إلى البحث في الوقت الفعلي، نستخدم التكنولوجيا لجعل استئجار الأدوات سهلة قدر الإمكان."
+
+msgid "How We Got Here"
+msgstr "كيف وصلنا هنا"
+
+msgid "Our <span>Journey</span>"
+msgstr "<span>رحلتنا</span>"
+
+msgid "From a garage idea to a growing platform — here's how Rentora came to be."
+msgstr "من فكرة في مرآب إلى منصة متنامية — إليك كيف وُلدت رينتورا."
+
+msgid "The Idea"
+msgstr "الفكرة"
+
+msgid "A Weekend Problem Becomes a Business"
+msgstr "مشكلة عطلة نهاية الأسبوع تصبح عملاً تجارياً"
+
+msgid "Our founder needed a concrete drill for a weekend project. After paying $80 to buy one he'd use once, he realized: his neighbor had the exact same tool sitting unused. Rentora was born from that frustration."
+msgstr "احتاج مؤسسنا إلى مثقاب خرسانة لمشروع عطلة نهاية الأسبوع. بعد دفع 80 دولار لشراء واحد سيستخدمه مرة واحدة، أدرك أن جاره يملك نفس الأداة بالضبط غير مستخدمة. وُلدت رينتورا من هذا الإحباط."
+
+msgid "Building"
+msgstr "البناء"
+
+msgid "Platform Development Begins"
+msgstr "بدء تطوير المنصة"
+
+msgid "A small team started building the core marketplace — listings, bookings, and a trust system that would make strangers comfortable sharing their valuable tools."
+msgstr "بدأت فريق صغير ببناء السوق الأساسي — قوائم وحجوزات ونظام ثقة يجعل الغرباء مرتاحين لمشاركة أدواتهم الثمينة."
+
+msgid "Launch"
+msgstr "الإطلاق"
+
+msgid "First Rentals Go Live"
+msgstr "أولى عمليات التأجير تبدأ"
+
+msgid "The first tool was listed. The first booking was made. Real neighbors, real tools, real money — the model worked. Word spread fast within the community."
+msgstr "تم عرض الأداة الأولى. تم إجراء أول حجز. جيران حقيقيون وأدوات حقيقية وأموال حقيقية — نجح النموذج. انتشرت الكلمة بسرعة داخل المجتمع."
+
+msgid "AI Integration"
+msgstr "دمج الذكاء الاصطناعي"
+
+msgid "Smart Pricing & Arabic Search"
+msgstr "التسعير الذكي والبحث العربي"
+
+msgid "We integrated AI for smart pricing suggestions and bilingual search — because renting should be easy in any language."
+msgstr "دمجنا الذكاء الاصطناعي لاقتراحات التسعير الذكي والبحث الثنائي اللغة — لأن الاستئجار يجب أن يكون سهلاً بأي لغة."
+
+msgid "Built for the Community,"
+msgstr "بُني للمجتمع،"
+
+msgid "Powered by Trust"
+msgstr "مدعوم بالثقة"
+
+msgid "Rentora isn't just a marketplace — it's a community-driven platform where verified owners and responsible renters create a cycle of sharing that benefits everyone involved."
+msgstr "رينتورا ليست مجرد سوق — إنها منصة مدفوعة بالمجتمع حيث ينشئ المالكون الموثّقون والمستأجرون المسؤولون دورة تقاسم تفيد الجميع."
+
+msgid "Verified owner badges build instant credibility"
+msgstr "شارات المالك الموثّق تبني المصداقية الفورية"
+
+msgid "Dual reviews for renters and owners after every booking"
+msgstr "تقييمات مزدوجة للمستأجرين والمالكين بعد كل حجز"
+
+msgid "Security deposits protect both parties on every rental"
+msgstr "التأمينات تحمي الطرفين على كل تأجير"
+
+msgid "AI pricing ensures fair rates for the whole market"
+msgstr "التسعير الذكي يضمن أسعار عادلة للسوق كله"
+
+msgid "Bilingual support — search and rent in Arabic or English"
+msgstr "دعم ثنائي اللغة — ابحث واستأجر بالعربية أو الإنجليزية"
+
+msgid "Tools Available Right Now"
+msgstr "الأدوات المتاحة الآن"
+
+msgid "Verified Tool Owners"
+msgstr "مالكو الأدوات الموثّقون"
+
+msgid "Average Platform Rating"
+msgstr "متوسط تقييم المنصة"
+
+msgid "Meet the Team"
+msgstr "تعرّف على الفريق"
+
+msgid "The People Behind <span>Rentora</span>"
+msgstr "الأشخاص خلف <span>رينتورا</span>"
+
+msgid "A small, passionate team obsessed with making tool sharing effortless."
+msgstr "فريق صغير شغوف مهتم بجعل تقاسم الأدوات سهلاً."
+
+msgid "Founder & Full-Stack Developer"
+msgstr "المؤسس ومطور Full-Stack"
+
+msgid "The visionary behind Rentora — built the platform from the ground up, from database architecture to pixel-perfect UI. Passionate about peer-to-peer markets and community-driven products."
+msgstr "الرؤية خلف رينتورا — بنى المنصة من الصفر، من معمارية قاعدة البيانات إلى واجهة مستخدم مثالية. شغوف بأسواق النظير إلى النظير والمنتجات المدفوعة بالمجتمع."
+
+msgid "Co-Founder & Product Strategist"
+msgstr "المؤسسة المشاركة ومستراتيجية المنتج"
+
+msgid "Shapes the product vision and user experience of Rentora. Ensures every feature we ship solves a real problem for the community we're building for."
+msgstr "تشكّل رؤية المنتج وتجربة المستخدم في رينتورا. تضمن أن كل ميزة نطلقها تحل مشكلة حقيقية للمجتمع الذي نبني من أجله."
+
+msgid "Co-Founder & Operations Lead"
+msgstr "المؤسس المشارك وقائد العمليات"
+
+msgid "Drives growth and community partnerships at Rentora. Focused on expanding the platform's reach and making sure both owners and renters have an outstanding experience."
+msgstr "يدفع النمو والشراكات المجتمعية في رينتورا. يركز على توسيع نطاق المنصة والتأكد من أن كل من المالكين والمستأجرين لديهم تجربة استثنائية."
+
+msgid "Ready to Join the Community?"
+msgstr "هل أنت مستعد للانضمام إلى المجتمع؟"
+
+msgid "Whether you want to rent a tool for the weekend or earn from the ones sitting in your garage — Rentora has a place for you."
+msgstr "سواء كنت تريد استئجار أداة لعطلة نهاية الأسبوع أو كسب المال من الأدوات في مرآبك — لدى رينتورا مكان لك."
+
+msgid "Browse Available Tools"
+msgstr "تصفّح الأدوات المتاحة"
+
+msgid "Create Free Account"
+msgstr "إنشاء حساب مجاني"
+
+msgid "View My Profile"
+msgstr "عرض ملفي الشخصي"
+
+# ── Model choices (booking status / condition / review type) ────
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+msgid "Payment Pending"
+msgstr "بانتظار الدفع"
+
+msgid "Approved"
+msgstr "مقبول"
+
+msgid "Confirmed"
+msgstr "مؤكّد"
+
+msgid "Rejected"
+msgstr "مرفوض"
+
+msgid "Return Pending"
+msgstr "بانتظار الإرجاع"
+
+msgid "Completed"
+msgstr "مكتمل"
+
+msgid "Cancelled"
+msgstr "ملغى"
+
+msgid "Excellent"
+msgstr "ممتازة"
+
+msgid "Good"
+msgstr "جيدة"
+
+msgid "Fair"
+msgstr "مقبولة"
+
+msgid "For Tool"
+msgstr "عن الأداة"
+
+msgid "For Owner"
+msgstr "عن المالك"
+
+msgid "For Renter"
+msgstr "عن المستأجر"
+
+# ── Tool detail page ────────────────────────────────────────────
+msgid "This tool is currently hidden from public listings."
+msgstr "هذه الأداة مخفية حالياً عن العرض العام."
+
+msgid "Only you can see this page."
+msgstr "أنت فقط من يستطيع رؤية هذه الصفحة."
+
+msgid "Make Available"
+msgstr "جعلها متاحة"
+
+msgid "Previous image"
+msgstr "الصورة السابقة"
+
+msgid "Next image"
+msgstr "الصورة التالية"
+
+msgid "Image"
+msgstr "صورة"
+
+msgid "View image"
+msgstr "عرض الصورة"
+
+msgid "photo"
+msgstr "صورة"
+
+#, python-format
+msgid "%(condition)s Condition"
+msgstr "الحالة: %(condition)s"
+
+msgid "Available"
+msgstr "متاحة"
+
+msgid "Remove from wishlist"
+msgstr "إزالة من المفضلة"
+
+#, python-format
+msgid "%(counter)s review"
+msgid_plural "%(counter)s reviews"
+msgstr[0] "لا تقييمات"
+msgstr[1] "تقييم واحد"
+msgstr[2] "تقييمان"
+msgstr[3] "%(counter)s تقييمات"
+msgstr[4] "%(counter)s تقييماً"
+msgstr[5] "%(counter)s تقييم"
+
+msgid "No reviews yet"
+msgstr "لا توجد تقييمات بعد"
+
+msgid "Verified owner"
+msgstr "مالك موثّق"
+
+msgid "Listed by"
+msgstr "معروضة من"
+
+msgid "rating"
+msgstr "تقييم"
+
+#, python-format
+msgid "%(counter)s tool listed"
+msgid_plural "%(counter)s tools listed"
+msgstr[0] "لا أدوات معروضة"
+msgstr[1] "أداة واحدة معروضة"
+msgstr[2] "أداتان معروضتان"
+msgstr[3] "%(counter)s أدوات معروضة"
+msgstr[4] "%(counter)s أداة معروضة"
+msgstr[5] "%(counter)s أداة معروضة"
+
+#, python-format
+msgid "%(counter)s rental completed"
+msgid_plural "%(counter)s rentals completed"
+msgstr[0] "لا عمليات تأجير"
+msgstr[1] "عملية تأجير واحدة"
+msgstr[2] "عمليتا تأجير"
+msgstr[3] "%(counter)s عمليات تأجير"
+msgstr[4] "%(counter)s عملية تأجير"
+msgstr[5] "%(counter)s عملية تأجير"
+
+msgid "About This Tool"
+msgstr "عن هذه الأداة"
+
+msgid "Previous month"
+msgstr "الشهر السابق"
+
+msgid "Next month"
+msgstr "الشهر التالي"
+
+msgid "Select check-in & check-out dates"
+msgstr "اختر تاريخي الاستلام والإرجاع"
+
+msgid "Pick check-out date"
+msgstr "اختر تاريخ الإرجاع"
+
+msgid "Su"
+msgstr "أحد"
+
+msgid "Mo"
+msgstr "إثن"
+
+msgid "Tu"
+msgstr "ثلا"
+
+msgid "We"
+msgstr "أرب"
+
+msgid "Th"
+msgstr "خمي"
+
+msgid "Fr"
+msgstr "جمع"
+
+msgid "Sa"
+msgstr "سبت"
+
+msgid "Booked"
+msgstr "محجوز"
+
+msgid "Your selection"
+msgstr "اختيارك"
+
+msgid "Pickup Location"
+msgstr "موقع الاستلام"
+
+msgid "Loading map…"
+msgstr "جارٍ تحميل الخريطة…"
+
+msgid "Exact pickup spot will be shared after booking confirmation."
+msgstr "سيُشارك موقع الاستلام الدقيق بعد تأكيد الحجز."
+
+msgid "Security Deposit"
+msgstr "مبلغ التأمين"
+
+msgid "Fully refundable upon safe return of the tool in its original condition."
+msgstr "يُسترد بالكامل عند إعادة الأداة سليمة بحالتها الأصلية."
+
+msgid "Tool Reviews"
+msgstr "تقييمات الأداة"
+
+msgid "No reviews yet. Be the first to rent and review this tool."
+msgstr "لا توجد تقييمات بعد. كن أول من يستأجر هذه الأداة ويقيّمها."
+
+msgid "Manage This Tool"
+msgstr "إدارة هذه الأداة"
+
+msgid "Currently unavailable"
+msgstr "غير متاحة حالياً"
+
+msgid "Start Date"
+msgstr "تاريخ البدء"
+
+msgid "End Date"
+msgstr "تاريخ الانتهاء"
+
+msgid "Estimated total"
+msgstr "الإجمالي التقديري"
+
+msgid "Booking Unavailable"
+msgstr "الحجز غير متاح"
+
+msgid "Book Now"
+msgstr "احجز الآن"
+
+msgid "Sign In to Book"
+msgstr "سجّل الدخول للحجز"
+
+msgid "You won't be charged yet — the owner will confirm your request."
+msgstr "لن يُخصم منك شيء بعد — سيؤكد المالك طلبك أولاً."
+
+msgid "Deposit"
+msgstr "التأمين"
+
+msgid "Avg rating"
+msgstr "متوسط التقييم"
+
+msgid "Review"
+msgid_plural "Reviews"
+msgstr[0] "تقييم"
+msgstr[1] "تقييم"
+msgstr[2] "تقييمان"
+msgstr[3] "تقييمات"
+msgstr[4] "تقييماً"
+msgstr[5] "تقييم"
+
+msgid "January"
+msgstr "يناير"
+
+msgid "February"
+msgstr "فبراير"
+
+msgid "March"
+msgstr "مارس"
+
+msgid "April"
+msgstr "أبريل"
+
+msgid "May"
+msgstr "مايو"
+
+msgid "June"
+msgstr "يونيو"
+
+msgid "July"
+msgstr "يوليو"
+
+msgid "August"
+msgstr "أغسطس"
+
+msgid "September"
+msgstr "سبتمبر"
+
+msgid "October"
+msgstr "أكتوبر"
+
+msgid "November"
+msgstr "نوفمبر"
+
+msgid "December"
+msgstr "ديسمبر"
+
+msgid "days"
+msgstr "أيام"
+
+# ── Dashboard ───────────────────────────────────────────────────
+msgid "Overview"
+msgstr "نظرة عامة"
+
+msgid "My Tools"
+msgstr "أدواتي"
+
+msgid "Booking Requests"
+msgstr "طلبات الحجز"
+
+msgid "My Rentals"
+msgstr "استئجاراتي"
+
+msgid "Messages"
+msgstr "الرسائل"
+
+#, python-format
+msgid "Welcome back, %(name)s"
+msgstr "مرحباً بعودتك، %(name)s"
+
+msgid "Active Rentals"
+msgstr "تأجيرات نشطة"
+
+msgid "Total Earnings"
+msgstr "إجمالي الأرباح"
+
+msgid "Low"
+msgstr "منخفض"
+
+msgid "Risk Score"
+msgstr "درجة المخاطرة"
+
+msgid "Recent Tools"
+msgstr "أحدث الأدوات"
+
+msgid "Add New"
+msgstr "إضافة جديد"
+
+msgid "Live"
+msgstr "منشورة"
+
+msgid "No tools listed yet."
+msgstr "لا توجد أدوات معروضة بعد."
+
+msgid "Pending Requests"
+msgstr "الطلبات المعلّقة"
+
+msgid "Approve"
+msgstr "قبول"
+
+msgid "Reject"
+msgstr "رفض"
+
+msgid "No pending requests."
+msgstr "لا توجد طلبات معلّقة."
+
+msgid "My Tool Listings"
+msgstr "قوائم أدواتي"
+
+msgid "Add Tool"
+msgstr "إضافة أداة"
+
+msgid "Inactive"
+msgstr "غير نشطة"
+
+msgid "View listing"
+msgstr "عرض القائمة"
+
+msgid "Edit tool"
+msgstr "تعديل الأداة"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Chat with renter"
+msgstr "محادثة المستأجر"
+
+msgid "Awaiting Payment"
+msgstr "بانتظار الدفع"
+
+msgid "Awaiting renter confirmation"
+msgstr "بانتظار تأكيد المستأجر"
+
+msgid "Mark as Returned"
+msgstr "تحديد كمُعادة"
+
+#, python-format
+msgid "Available from %(date)s"
+msgstr "متاح ابتداءً من %(date)s"
+
+msgid "Starts"
+msgstr "يبدأ"
+
+msgid "No confirmed bookings yet."
+msgstr "لا توجد حجوزات مؤكّدة بعد."
+
+msgid "No rejected bookings."
+msgstr "لا توجد حجوزات مرفوضة."
+
+msgid "d overdue"
+msgstr " يوم تأخير"
+
+msgid "d early"
+msgstr " يوم مبكراً"
+
+msgid "d early return"
+msgstr " يوم إرجاع مبكر"
+
+msgid "Chat history"
+msgstr "سجل المحادثة"
+
+msgid "Reviewed"
+msgstr "تم التقييم"
+
+msgid "Rate Renter"
+msgstr "قيّم المستأجر"
+
+msgid "Rate"
+msgstr "قيّم"
+
+msgid "Close"
+msgstr "إغلاق"
+
+#, python-format
+msgid "How was your experience renting to %(name)s?"
+msgstr "كيف كانت تجربتك في التأجير لـ %(name)s؟"
+
+msgid "Share your experience with this renter (optional)"
+msgstr "شارك تجربتك مع هذا المستأجر (اختياري)"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Submit Review"
+msgstr "إرسال التقييم"
+
+msgid "No completed bookings."
+msgstr "لا توجد حجوزات مكتملة."
+
+msgid "Awaiting"
+msgstr "بانتظار"
+
+msgid "Active"
+msgstr "نشط"
+
+msgid "History"
+msgstr "السجل"
+
+msgid "Chat with owner"
+msgstr "محادثة المالك"
+
+msgid "Pay Now"
+msgstr "ادفع الآن"
+
+msgid "No pending bookings."
+msgstr "لا توجد حجوزات معلّقة."
+
+msgid "Owner confirmed receipt of the tool"
+msgstr "أكّد المالك استلام الأداة"
+
+msgid "Please confirm the return to complete this rental. If you have not returned the tool yet, click Dispute."
+msgstr "يرجى تأكيد الإرجاع لإكمال هذا التأجير. إذا لم تكن قد أعدت الأداة بعد، اضغط اعتراض."
+
+msgid "Confirm Return"
+msgstr "تأكيد الإرجاع"
+
+msgid "Dispute"
+msgstr "اعتراض"
+
+msgid "Overdue"
+msgstr "متأخر"
+
+msgid "No active rentals."
+msgstr "لا توجد تأجيرات نشطة."
+
+msgid "View conversation"
+msgstr "عرض المحادثة"
+
+msgid "Leave a Review"
+msgstr "اترك تقييماً"
+
+msgid "Rate Your Rental"
+msgstr "قيّم تجربة الاستئجار"
+
+msgid "How was the tool?"
+msgstr "كيف كانت الأداة؟"
+
+msgid "Share your experience with this tool (optional)"
+msgstr "شارك تجربتك مع هذه الأداة (اختياري)"
+
+#, python-format
+msgid "How was %(name)s as the owner?"
+msgstr "كيف كان %(name)s كمالك؟"
+
+msgid "Share your experience with the owner (optional)"
+msgstr "شارك تجربتك مع المالك (اختياري)"
+
+msgid "No rental history yet."
+msgstr "لا يوجد سجل استئجار بعد."
+
+msgid "All your rental conversations in one place"
+msgstr "كل محادثات التأجير في مكان واحد"
+
+msgid "You:"
+msgstr "أنت:"
+
+msgid "No messages yet — say hello"
+msgstr "لا رسائل بعد — ابدأ بالتحية"
+
+msgid "No conversations yet"
+msgstr "لا توجد محادثات بعد"
+
+msgid "Your rental conversations will appear here once a booking is approved."
+msgstr "ستظهر محادثات التأجير هنا بمجرد الموافقة على حجز."
+
+# ── Profile page ────────────────────────────────────────────────
+msgid "Click to change photo"
+msgstr "اضغط لتغيير الصورة"
+
+msgid "Change"
+msgstr "تغيير"
+
+msgid "Low Risk"
+msgstr "مخاطرة منخفضة"
+
+msgid "Report User"
+msgstr "الإبلاغ عن المستخدم"
+
+msgid "Edit Profile"
+msgstr "تعديل الملف الشخصي"
+
+msgid "Save Changes"
+msgstr "حفظ التغييرات"
+
+msgid "Verify your email address"
+msgstr "فعّل بريدك الإلكتروني"
+
+#, python-format
+msgid "We sent a link to <strong>%(email)s</strong> — click it to activate your account."
+msgstr "أرسلنا رابطاً إلى <strong>%(email)s</strong> — اضغط عليه لتفعيل حسابك."
+
+msgid "Resend"
+msgstr "إعادة الإرسال"
+
+msgid "Check spam folder"
+msgstr "تحقق من مجلد الرسائل غير المرغوبة"
+
+msgid "Personal Information"
+msgstr "المعلومات الشخصية"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Email cannot be changed."
+msgstr "لا يمكن تغيير البريد الإلكتروني."
+
+msgid "Upload profile photo"
+msgstr "رفع صورة شخصية"
+
+msgid "Listed Tools"
+msgstr "الأدوات المعروضة"
+
+msgid "Uncategorized"
+msgstr "بدون تصنيف"
+
+msgid "Received"
+msgstr "المستلمة"
+
+msgid "Given"
+msgstr "المُعطاة"
+
+msgid "Owner"
+msgstr "مالك"
+
+msgid "Renter"
+msgstr "مستأجر"
+
+msgid "No reviews received yet."
+msgstr "لم تستلم أي تقييمات بعد."
+
+msgid "No reviews given yet."
+msgstr "لم تُعطِ أي تقييمات بعد."
+
+msgid "Profile Stats"
+msgstr "إحصائيات الملف"
+
+msgid "Total Reviews"
+msgstr "إجمالي التقييمات"

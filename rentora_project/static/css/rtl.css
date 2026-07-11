@@ -1,0 +1,142 @@
+/* ═══════════════════════════════════════════════════════════════
+   Rentora — RTL overrides (Arabic)
+   Loaded only when the active language is right-to-left.
+   Keep rules minimal: modern flex/grid layouts flip automatically
+   with dir="rtl"; we only fix hard-coded left/right values and
+   switch to an Arabic-friendly font stack.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Arabic font stack ─────────────────────────────────────────── */
+html[dir="rtl"] body,
+html[dir="rtl"] button,
+html[dir="rtl"] input,
+html[dir="rtl"] select,
+html[dir="rtl"] textarea {
+  font-family: 'Tajawal', 'Inter', 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Arabic reads better slightly larger with looser line-height */
+html[dir="rtl"] body {
+  line-height: 1.7;
+  letter-spacing: 0;
+}
+
+/* Kill letter-spacing everywhere — it breaks connected Arabic script */
+html[dir="rtl"] * {
+  letter-spacing: 0 !important;
+}
+
+/* Ensure selects don't break with Arabic */
+html[dir="rtl"] select {
+  text-align: right;
+}
+
+/* Filter inputs RTL */
+html[dir="rtl"] .filter-search__input,
+html[dir="rtl"] input[type="text"],
+html[dir="rtl"] input[type="search"] {
+  text-align: right;
+}
+
+/* Range input */
+html[dir="rtl"] input[type="range"] {
+  direction: ltr;
+}
+
+/* ── Generic direction fixes ───────────────────────────────────── */
+html[dir="rtl"] .text-start { text-align: right !important; }
+html[dir="rtl"] .text-end   { text-align: left  !important; }
+
+/* Font Awesome directional icons: mirror arrows */
+html[dir="rtl"] .fa-arrow-right,
+html[dir="rtl"] .fa-chevron-right,
+html[dir="rtl"] .fa-angle-right,
+html[dir="rtl"] .fa-right-from-bracket,
+html[dir="rtl"] .fa-arrow-left,
+html[dir="rtl"] .fa-chevron-left,
+html[dir="rtl"] .fa-angle-left {
+  transform: scaleX(-1);
+}
+
+/* ── Header ────────────────────────────────────────────────────── */
+/* Notification dropdown anchors to the right edge in LTR */
+html[dir="rtl"] .notif-dropdown {
+  right: auto;
+  left: 0;
+}
+
+html[dir="rtl"] .hdr-user__menu {
+  right: auto;
+  left: 0;
+}
+
+/* Mobile drawer slides from the right in LTR → from the left in RTL */
+html[dir="rtl"] .mobile-menu {
+  right: auto;
+  left: 0;
+  transform: translateX(-100%);
+}
+
+html[dir="rtl"] .mobile-menu.active {
+  transform: translateX(0);
+}
+
+/* Badges positioned with left/right offsets */
+html[dir="rtl"] .notif-badge,
+html[dir="rtl"] .wishlist-counter {
+  right: auto;
+  left: -6px;
+}
+
+/* ── Flash messages ────────────────────────────────────────────── */
+html[dir="rtl"] .global-messages {
+  right: auto;
+  left: 20px;
+}
+
+/* ── Forms ─────────────────────────────────────────────────────── */
+/* Inputs with icon padding on the left keep the icon side visual */
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="password"],
+html[dir="rtl"] input[type="text"],
+html[dir="rtl"] input[type="tel"],
+html[dir="rtl"] input[type="number"],
+html[dir="rtl"] textarea {
+  text-align: right;
+}
+
+/* Keep phone numbers / emails readable inside RTL inputs */
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="tel"] {
+  direction: ltr;
+  text-align: right;
+}
+
+/* ── About page ────────────────────────────────────────────────── */
+/* Floating hero stat cards sit on the right in LTR; in RTL the text
+   starts from the right, so move the cards to the left side. */
+html[dir="rtl"] .about-hero__visual {
+  right: auto;
+  left: 60px;
+}
+
+/* Timeline vertical line follows the dots (flex flips, absolute doesn't) */
+html[dir="rtl"] .story-timeline::before {
+  left: auto;
+  right: 20px;
+}
+
+/* Decorative CTA blob */
+html[dir="rtl"] .about-cta__card::before {
+  right: auto;
+  left: -80px;
+}
+
+/* ── Numbers & prices ──────────────────────────────────────────── */
+/* Prices like $12/day stay LTR so the currency symbol reads right */
+html[dir="rtl"] .tool-price,
+html[dir="rtl"] .price,
+html[dir="rtl"] [data-ltr] {
+  direction: ltr;
+  unicode-bidi: embed;
+}
