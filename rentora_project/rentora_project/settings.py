@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'listings',
+    'console',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -96,6 +97,7 @@ TEMPLATES = [
                 "listings.context_processors.notification_count",
                 "listings.context_processors.current_user",
                 "listings.context_processors.site_settings",
+                "console.context_processors.console_counts",
             ],
         },
     }

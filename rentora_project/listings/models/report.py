@@ -22,9 +22,14 @@ class Report(models.Model):
         on_delete=models.CASCADE,
         related_name='reports_received'
     )
-
+    STATUS_CHOICES = [
+        ('pending',   'Pending review'),
+        ('resolved',  'Resolved'),
+        ('dismissed', 'Dismissed'),
+    ]
     reason = models.CharField(max_length=20, choices=REASON_CHOICES)
     details = models.TextField(blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Auto-flag threshold

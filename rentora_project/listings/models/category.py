@@ -35,7 +35,7 @@ class CategoryManager(models.Manager):
             errors["name"] = f"A category named '{name}' already exists."
 
         # ── icon (optional – validate only when provided) ─────────────────────
-        if icon and not re.match(r"^[\w\-\/]+$", icon):
+        if icon and not re.match(r"^[\w\s\-\/]+$", icon):
             errors["icon"] = (
                 "Icon value must be a valid CSS class or relative path "
                 "(letters, digits, hyphens, underscores, and forward slashes only)."

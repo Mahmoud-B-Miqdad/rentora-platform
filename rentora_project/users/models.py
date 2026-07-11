@@ -144,6 +144,12 @@ class UserManager(BaseUserManager):
 
                 if not is_valid:
                     errors["credentials"] = "Invalid email or password."
+                elif not user.is_active:
+                    errors["credentials"] = (
+                        "This account has been suspended. "
+                        "Contact support if you believe this is a mistake."
+                    )
+     
 
         return errors
         
