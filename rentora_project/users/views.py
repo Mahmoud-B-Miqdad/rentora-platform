@@ -3,8 +3,9 @@ from django.contrib    import messages
 
 from users.models    import User, EmailVerification
 from users.services  import send_verification_email
-from listings.models import Tool, Booking, Review
+from listings.models import Tool, Booking, Review, ToolImage
 from listings.models.report import Report
+from django.db.models import Prefetch
 
 from django.http import HttpResponse
 from django.core.mail import send_mail
@@ -190,7 +191,11 @@ def profile_view(request, user_id=None):
     reviews_count = reviews_received.count()
     listed_tools  = Tool.objects.filter(
         owner=profile_user, is_available=True
-    ).select_related('category')
+    ).select_related('category').prefetch_related(
+        Prefetch('images',
+                 queryset=ToolImage.objects.filter(is_primary=True),
+                 to_attr='primary_images')
+    )
     report_count  = Report.objects.filter(reported=profile_user).count()
     given_count   = reviews_given.count()
 
