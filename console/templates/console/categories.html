@@ -1,0 +1,75 @@
+{% extends "console/base_console.html" %}
+{% block title %}Categories{% endblock %}
+{% block page_title %}Categories{% endblock %}
+ 
+{% block content %}
+<div class="con-grid-2">
+  <section class="con-card">
+    <header class="con-card__head"><h2><i class="fa-solid fa-layer-group"></i> All categories</h2></header>
+    <div class="con-card__body">
+      {% if categories %}
+      <table class="con-table">
+        <thead><tr><th>Icon</th><th>Name</th><th>Tools</th><th></th></tr></thead>
+        <tbody>
+          {% for c in categories %}
+          <tr>
+            <td><i class="{{ c.icon }}"></i></td>
+            <td><strong>{{ c.name }}</strong></td>
+            <td class="con-td-muted">{{ c.tools_count }}</td>
+            <td>
+              <button class="con-btn con-btn--ghost con-btn--sm"
+                      onclick="fillEdit('{{ c.id }}', '{{ c.name|escapejs }}', '{{ c.icon|escapejs }}')">
+                <i class="fa-solid fa-pen"></i> Edit
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="con-empty">No categories yet.</p>
+      {% endif %}
+    </div>
+  </section>
+ 
+  <section class="con-card">
+    <header class="con-card__head"><h2 id="catFormTitle"><i class="fa-solid fa-plus"></i> Add category</h2></header>
+    <div class="con-card__body">
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="category_id" id="cat-id" value="">
+        <label class="con-label">Name <span class="con-req">*</span></label>
+        <input type="text" name="name" id="cat-name" class="con-input" placeholder="e.g. Power Tools">
+        {% if errors.name %}<p class="con-error">{{ errors.name }}</p>{% endif %}
+        <label class="con-label">Font Awesome icon class <span class="con-req">*</span></label>
+        <input type="text" name="icon" id="cat-icon" class="con-input" placeholder="e.g. fa-solid fa-bolt">
+        {% if errors.icon %}<p class="con-error">{{ errors.icon }}</p>{% endif %}
+        <div class="con-modal__actions">
+          <button type="button" class="con-btn con-btn--ghost" onclick="resetCatForm()">Reset</button>
+          <button type="submit" class="con-btn con-btn--primary" id="catSubmit">Save category</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+{% endblock %}
+ 
+{% block extra_js %}
+<script>
+  function fillEdit(id, name, icon) {
+    document.getElementById('cat-id').value = id;
+    document.getElementById('cat-name').value = name;
+    document.getElementById('cat-icon').value = icon;
+    document.getElementById('catFormTitle').innerHTML =
+      '<i class="fa-solid fa-pen"></i> Edit category';
+    document.getElementById('cat-name').focus();
+  }
+  function resetCatForm() {
+    document.getElementById('cat-id').value = '';
+    document.getElementById('cat-name').value = '';
+    document.getElementById('cat-icon').value = '';
+    document.getElementById('catFormTitle').innerHTML =
+      '<i class="fa-solid fa-plus"></i> Add category';
+  }
+</script>
+{% endblock %}

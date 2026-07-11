@@ -1,0 +1,72 @@
+{% extends "console/base_console.html" %}
+{% block title %}Returns & Disputes{% endblock %}
+{% block page_title %}Returns &amp; Disputes{% endblock %}
+ 
+{% block content %}
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-hourglass-half"></i> Awaiting renter confirmation</h2>
+  </header>
+  <div class="con-card__body">
+    {% if waiting %}
+    <table class="con-table">
+      <thead><tr><th>Tool</th><th>Owner</th><th>Renter</th><th>Requested</th><th>Amount</th><th></th></tr></thead>
+      <tbody>
+        {% for b in waiting %}
+        <tr>
+          <td><strong>{{ b.tool.title }}</strong></td>
+          <td><a href="{% url 'console:user_detail' b.tool.owner.id %}">{{ b.tool.owner.name }}</a></td>
+          <td><a href="{% url 'console:user_detail' b.renter.id %}">{{ b.renter.name }}</a></td>
+          <td class="con-td-muted">{{ b.return_requested_at|timesince }} ago</td>
+          <td>${{ b.total_price }}</td>
+          <td>
+            <button class="con-btn con-btn--ghost con-btn--sm" data-modal-open="closeModal-{{ b.id }}">
+              <i class="fa-solid fa-gavel"></i> Close manually
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="con-empty"><i class="fa-solid fa-circle-check"></i> No returns waiting for confirmation.</p>
+    {% endif %}
+  </div>
+</section>
+ 
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-triangle-exclamation"></i> Overdue rentals</h2>
+  </header>
+  <div class="con-card__body">
+    {% if overdue %}
+    <table class="con-table">
+      <thead><tr><th>Tool</th><th>Renter</th><th>Due date</th><th>Days late</th><th>Amount</th><th></th></tr></thead>
+      <tbody>
+        {% for b in overdue %}
+        <tr>
+          <td><strong>{{ b.tool.title }}</strong></td>
+          <td><a href="{% url 'console:user_detail' b.renter.id %}">{{ b.renter.name }}</a></td>
+          <td class="con-td-muted">{{ b.end_date }}</td>
+          <td><span class="con-count con-count--hot">{{ b.end_date|timesince }}</span></td>
+          <td>${{ b.total_price }}</td>
+          <td>
+            <button class="con-btn con-btn--ghost con-btn--sm" data-modal-open="closeModal-{{ b.id }}">
+              <i class="fa-solid fa-gavel"></i> Close manually
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="con-empty"><i class="fa-solid fa-circle-check"></i> Nothing overdue. 🎉</p>
+    {% endif %}
+  </div>
+</section>
+ 
+{# ── One close-modal per booking ────────────────────────── #}
+{% for b in waiting %}{% include "console/_close_modal.html" with b=b %}{% endfor %}
+{% for b in overdue %}{% include "console/_close_modal.html" with b=b %}{% endfor %}
+{% endblock %}
+ 

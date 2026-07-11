@@ -4,9 +4,10 @@ from django.conf    import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('users/', include('users.urls',    namespace='users')),
-    path('',       include('listings.urls', namespace='listings')),
+    path('admin/',   admin.site.urls),
+    path('console/', include('console.urls',  namespace='console')),
+    path('users/',   include('users.urls',    namespace='users')),
+    path('',         include('listings.urls', namespace='listings')),
 ]
 
 # Serve uploaded media files in development
