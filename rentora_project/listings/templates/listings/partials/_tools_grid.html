@@ -56,7 +56,8 @@
 {% empty %}
 <div class="tools-empty">
     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-    <p>{% trans "No tools match your search." %}</p>
-    <a href="{% url 'listings:browse' %}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {% trans "Clear filters" %}</a>
+    <p>{% trans "No tools match your filters." %}</p>
+    <span class="tools-empty__sub">{% trans "Try adjusting or clearing your filters to see more tools." %}</span>
+    <a href="{% url 'listings:browse' %}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {% trans "Clear all filters" %}</a>
 </div>
 {% endfor %}
