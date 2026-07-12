@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}List Your Tool | Rentora{% endblock %}
+{% block title %}{% trans "List Your Tool" %} | Rentora{% endblock %}
 
 {% block content %}
 
@@ -11,19 +11,19 @@
 
     <!-- Header -->
     <div class="page-header">
-        <h1>List Your Tool</h1>
-        <p>Fill in the details and let <span class="highlight">Rentora's AI</span> help you create the perfect listing</p>
+        <h1>{% trans "List Your Tool" %}</h1>
+        <p>{% blocktrans %}Fill in the details and let <span class="highlight">Rentora's AI</span> help you create the perfect listing{% endblocktrans %}</p>
     </div>
 
     <!-- Step Tabs -->
     <div class="step-tabs">
         <button type="button" class="step-tab active" data-target="panelDetails">
             <i class="fa-solid fa-circle-info"></i>
-            Tool Details
+            {% trans "Tool Details" %}
         </button>
         <button type="button" class="step-tab" data-target="panelImages">
             <i class="fa-regular fa-image"></i>
-            Upload Images
+            {% trans "Upload Images" %}
         </button>
     </div>
 
@@ -35,16 +35,16 @@
         <div class="tab-panel" id="panelDetails">
             <div class="tool-card">
 
-                <h2>Tool Information</h2>
+                <h2>{% trans "Tool Information" %}</h2>
 
                 <!-- Tool Name -->
                 <div class="form-group">
-                    <label for="id_title">Tool Name <span class="req">*</span></label>
+                    <label for="id_title">{% trans "Tool Name" %} <span class="req">*</span></label>
                     <input
                         type="text"
                         id="id_title"
                         name="title"
-                        placeholder='e.g. "DeWalt Heavy-Duty Jackhammer"'
+                        placeholder='{% trans "e.g. &quot;DeWalt Heavy-Duty Jackhammer&quot;" %}'
                         maxlength="120"
                         value="{{ form_data.title|default:'' }}"
                         required
@@ -54,9 +54,9 @@
                 <!-- Description -->
                 <div class="form-group">
                     <div class="label-row">
-                        <label for="id_description">Description <span class="req">*</span></label>
+                        <label for="id_description">{% trans "Description" %} <span class="req">*</span></label>
                         <button type="button" class="ai-action-btn teal" id="btnAI">
-                            <i class="fa-solid fa-robot"></i> Generate with AI
+                            <i class="fa-solid fa-robot"></i> {% trans "Generate with AI" %}
                         </button>
                     </div>
                     <textarea
@@ -64,10 +64,10 @@
                         name="description"
                         rows="5"
                         maxlength="2000"
-                        placeholder="Describe your tool, its features, and what's included..."
+                        placeholder="{% trans 'Describe your tool, its features, and what is included...' %}"
                         required
                     >{{ form_data.description|default:'' }}</textarea>
-                    <small><span id="charCount">0</span>/2000 characters</small>
+                    <small><span id="charCount">0</span>/2000 {% trans "characters" %}</small>
                 </div>
 
                 <!-- Category + Condition -->
@@ -75,10 +75,10 @@
 
                     <!-- Category -->
                     <div class="form-group">
-                        <label for="id_category">Category <span class="req">*</span></label>
+                        <label for="id_category">{% trans "Category" %} <span class="req">*</span></label>
                         <div class="select-wrapper">
                             <select id="id_category" name="category_id" required>
-                                <option value="">Select a category</option>
+                                <option value="">{% trans "Select a category" %}</option>
                                 {% for category in categories %}
                                 <option
                                     value="{{ category.id }}"
@@ -93,21 +93,21 @@
                     <!-- Condition -->
                     <div class="form-group">
                         <div class="label-row">
-                            <label>Condition <span class="req">*</span></label>
+                            <label>{% trans "Condition" %} <span class="req">*</span></label>
                             <button type="button" class="ai-action-btn amber" id="btnDetect">
-                                <i class="fa-solid fa-magnifying-glass"></i> Detect Condition
+                                <i class="fa-solid fa-magnifying-glass"></i> {% trans "Detect Condition" %}
                             </button>
                         </div>
                         <div class="condition-group">
                             <button type="button"
                                 class="cond-btn {% if form_data.condition == 'excellent' %}active{% endif %}"
-                                data-value="excellent">Excellent</button>
+                                data-value="excellent">{% trans "Excellent" %}</button>
                             <button type="button"
                                 class="cond-btn {% if form_data.condition == 'good' or not form_data %}active{% endif %}"
-                                data-value="good">Good</button>
+                                data-value="good">{% trans "Good" %}</button>
                             <button type="button"
                                 class="cond-btn {% if form_data.condition == 'fair' %}active{% endif %}"
-                                data-value="fair">Fair</button>
+                                data-value="fair">{% trans "Fair" %}</button>
                         </div>
                         <input type="hidden" name="condition" id="conditionInput"
                                value="{{ form_data.condition|default:'good' }}">
@@ -119,12 +119,12 @@
                 <div class="three-col">
 
                     <div class="form-group">
-                        <label for="id_location">Location <span class="req">*</span></label>
+                        <label for="id_location">{% trans "Location" %} <span class="req">*</span></label>
                         <input
                             type="text"
                             id="id_location"
                             name="location"
-                            placeholder='e.g. "Ramallah, Palestine"'
+                            placeholder='{% trans "e.g. &quot;Ramallah, Palestine&quot;" %}'
                             value="{{ form_data.location|default:'' }}"
                             required
                         >
@@ -132,9 +132,9 @@
 
                     <div class="form-group">
                         <div class="label-row">
-                            <label for="id_rate">Price / Day ($) <span class="req">*</span></label>
+                            <label for="id_rate">{% trans "Price / Day ($)" %} <span class="req">*</span></label>
                             <button type="button" class="ai-action-btn amber" id="btnSuggest">
-                                <i class="fa-solid fa-lightbulb"></i> Suggest
+                                <i class="fa-solid fa-lightbulb"></i> {% trans "Suggest" %}
                             </button>
                         </div>
                         <input
@@ -150,24 +150,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="id_deposit">Deposit ($)</label>
+                        <label for="id_deposit">{% trans "Deposit ($)" %}</label>
                         <input
                             type="number"
                             id="id_deposit"
                             name="deposit"
-                            placeholder="Security deposit"
+                            placeholder="{% trans 'Security deposit' %}"
                             step="0.01"
                             min="0"
                             value="{{ form_data.deposit|default:'' }}"
                         >
-                        <small>Refundable upon safe return</small>
+                        <small>{% trans "Refundable upon safe return" %}</small>
                     </div>
 
                 </div>
 
                 <!-- Next -->
                 <button type="button" class="next-btn" id="btnNext">
-                    Continue: Upload Images <i class="fa-solid fa-arrow-right"></i>
+                    {% trans "Continue: Upload Images" %} <i class="fa-solid fa-arrow-right"></i>
                 </button>
 
             </div>
@@ -177,18 +177,17 @@
         <div class="tab-panel hidden" id="panelImages">
             <div class="tool-card">
 
-                <h2>Upload Images</h2>
+                <h2>{% trans "Upload Images" %}</h2>
                 <p class="upload-hint">
-                    Upload clear photos of your tool. The AI Condition Detector will analyse
-                    them to suggest the tool's condition.
+                    {% trans "Upload clear photos of your tool. The AI Condition Detector will analyse them to suggest the tool's condition." %}
                 </p>
 
                 <!-- Drop Zone -->
                 <div class="drop-zone" id="dropZone">
                     <i class="fa-regular fa-image drop-icon"></i>
-                    <p class="drop-title">Drag and drop images here</p>
-                    <p class="drop-sub">or click to browse files</p>
-                    <button type="button" class="browse-btn" id="browseBtn">Upload Images</button>
+                    <p class="drop-title">{% trans "Drag and drop images here" %}</p>
+                    <p class="drop-sub">{% trans "or click to browse files" %}</p>
+                    <button type="button" class="browse-btn" id="browseBtn">{% trans "Upload Images" %}</button>
                 </div>
 
                 <!-- Hidden input -->
@@ -202,7 +201,7 @@
 
                 <!-- Submit -->
                 <button type="submit" class="submit-btn">
-                    <i class="fa-solid fa-check-circle"></i> List Your Tool
+                    <i class="fa-solid fa-check-circle"></i> {% trans "List Your Tool" %}
                 </button>
 
             </div>

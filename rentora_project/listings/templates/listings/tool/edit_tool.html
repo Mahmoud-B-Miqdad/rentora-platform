@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Edit Tool | Rentora{% endblock %}
+{% block title %}{% trans "Edit Tool" %} | Rentora{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'listings/css/tool/add_tool.css' %}">
@@ -201,8 +201,8 @@
 
   <!-- Header -->
   <div class="page-header">
-    <h1>Edit Tool</h1>
-    <p>Update your listing details and manage photos</p>
+    <h1>{% trans "Edit Tool" %}</h1>
+    <p>{% trans "Update your listing details and manage photos" %}</p>
   </div>
 
   <form method="POST" enctype="multipart/form-data" novalidate>
@@ -210,27 +210,27 @@
 
     <!-- ── Tool Details ──────────────────────────── -->
     <div class="tool-card">
-      <h2>Tool Information</h2>
+      <h2>{% trans "Tool Information" %}</h2>
 
       <div class="form-group">
-        <label for="id_title">Tool Name <span class="req">*</span></label>
+        <label for="id_title">{% trans "Tool Name" %} <span class="req">*</span></label>
         <input type="text" id="id_title" name="title"
                value="{{ tool.title }}" maxlength="120" required>
       </div>
 
       <div class="form-group">
-        <label for="id_description">Description <span class="req">*</span></label>
+        <label for="id_description">{% trans "Description" %} <span class="req">*</span></label>
         <textarea id="id_description" name="description"
                   rows="5" maxlength="2000" required>{{ tool.description }}</textarea>
-        <small><span id="charCount">{{ tool.description|length }}</span>/2000 characters</small>
+        <small><span id="charCount">{{ tool.description|length }}</span>/2000 {% trans "characters" %}</small>
       </div>
 
       <div class="two-col">
         <div class="form-group">
-          <label for="id_category">Category <span class="req">*</span></label>
+          <label for="id_category">{% trans "Category" %} <span class="req">*</span></label>
           <div class="select-wrapper">
             <select id="id_category" name="category_id" required>
-              <option value="">Select a category</option>
+              <option value="">{% trans "Select a category" %}</option>
               {% for cat in categories %}
               <option value="{{ cat.id }}"
                 {% if cat.id == tool.category_id %}selected{% endif %}>
@@ -243,14 +243,14 @@
         </div>
 
         <div class="form-group">
-          <label>Condition <span class="req">*</span></label>
+          <label>{% trans "Condition" %} <span class="req">*</span></label>
           <div class="condition-group">
             <button type="button" class="cond-btn {% if tool.condition == 'excellent' %}active{% endif %}"
-                    data-value="excellent">Excellent</button>
+                    data-value="excellent">{% trans "Excellent" %}</button>
             <button type="button" class="cond-btn {% if tool.condition == 'good' %}active{% endif %}"
-                    data-value="good">Good</button>
+                    data-value="good">{% trans "Good" %}</button>
             <button type="button" class="cond-btn {% if tool.condition == 'fair' %}active{% endif %}"
-                    data-value="fair">Fair</button>
+                    data-value="fair">{% trans "Fair" %}</button>
           </div>
           <input type="hidden" name="condition" id="conditionInput" value="{{ tool.condition }}">
         </div>
@@ -258,32 +258,32 @@
 
       <div class="three-col">
         <div class="form-group">
-          <label for="id_location">Location <span class="req">*</span></label>
+          <label for="id_location">{% trans "Location" %} <span class="req">*</span></label>
           <input type="text" id="id_location" name="location"
                  value="{{ tool.location }}" required>
         </div>
         <div class="form-group">
-          <label for="id_rate">Price / Day ($) <span class="req">*</span></label>
+          <label for="id_rate">{% trans "Price / Day ($)" %} <span class="req">*</span></label>
           <input type="number" id="id_rate" name="daily_rate"
                  value="{{ tool.daily_rate }}" step="0.01" min="0" required>
         </div>
         <div class="form-group">
-          <label for="id_deposit">Deposit ($)</label>
+          <label for="id_deposit">{% trans "Deposit ($)" %}</label>
           <input type="number" id="id_deposit" name="deposit"
                  value="{{ tool.deposit|default:'' }}" step="0.01" min="0">
-          <small>Refundable upon safe return</small>
+          <small>{% trans "Refundable upon safe return" %}</small>
         </div>
       </div>
 
       <!-- Availability toggle -->
       <div class="form-group">
-        <label>Availability</label>
+        <label>{% trans "Availability" %}</label>
         <div class="avail-row">
           <input type="checkbox" id="availToggle" name="is_available"
                  class="avail-toggle" {% if tool.is_available %}checked{% endif %}>
           <div>
-            <div class="avail-text">Available for rent</div>
-            <div class="avail-sub">Uncheck to temporarily hide this listing</div>
+            <div class="avail-text">{% trans "Available for rent" %}</div>
+            <div class="avail-sub">{% trans "Uncheck to temporarily hide this listing" %}</div>
           </div>
         </div>
       </div>
@@ -292,10 +292,9 @@
     <!-- ── Current Images ───────────────────────── -->
     {% if images %}
     <div class="tool-card">
-      <h2>Current Images</h2>
+      <h2>{% trans "Current Images" %}</h2>
       <p class="img-section-hint">
-        Click <strong>★</strong> to set the primary (cover) photo.
-        Click <strong>✕</strong> to mark an image for deletion — it will be removed when you save.
+        {% blocktrans %}Click <strong>★</strong> to set the primary (cover) photo. Click <strong>✕</strong> to mark an image for deletion — it will be removed when you save.{% endblocktrans %}
       </p>
       <div class="img-grid">
         {% for img in images %}
@@ -307,7 +306,7 @@
             <input type="checkbox" class="img-delete-cb"
                    id="del-{{ img.id }}" name="delete_image" value="{{ img.id }}"
                    onchange="toggleDelete(this, {{ img.id }})">
-            <label for="del-{{ img.id }}" class="img-delete-label" title="Delete this image">
+            <label for="del-{{ img.id }}" class="img-delete-label" title="{% trans 'Delete this image' %}">
               <i class="fa-solid fa-xmark"></i>
             </label>
           </div>
@@ -318,8 +317,8 @@
                    id="pri-{{ img.id }}" name="primary_image_id" value="{{ img.id }}"
                    {% if img.is_primary %}checked{% endif %}
                    onchange="markPrimary({{ img.id }})">
-            <label for="pri-{{ img.id }}" class="img-primary-label" title="Set as primary photo">
-              <span class="star">★</span> Primary
+            <label for="pri-{{ img.id }}" class="img-primary-label" title="{% trans 'Set as primary photo' %}">
+              <span class="star">★</span> {% trans "Primary" %}
             </label>
           </div>
         </div>
@@ -330,11 +329,11 @@
 
     <!-- ── Add New Images ───────────────────────── -->
     <div class="tool-card">
-      <h2>Add New Images</h2>
+      <h2>{% trans "Add New Images" %}</h2>
       <label for="newImagesInput" class="new-upload-zone">
         <i class="fa-regular fa-images"></i>
-        <p>Click to upload new photos</p>
-        <p class="hint">JPG, PNG, WebP supported — converted to WebP automatically</p>
+        <p>{% trans "Click to upload new photos" %}</p>
+        <p class="hint">{% trans "JPG, PNG, WebP supported — converted to WebP automatically" %}</p>
       </label>
       <input type="file" id="newImagesInput" name="new_images"
              multiple accept="image/*" style="display:none"
@@ -345,10 +344,10 @@
     <!-- ── Action Bar ────────────────────────────── -->
     <div class="tool-card edit-actions">
       <button type="submit" class="submit-btn" style="flex:1; margin:0">
-        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+        <i class="fa-solid fa-floppy-disk"></i> {% trans "Save Changes" %}
       </button>
       <a href="{% url 'listings:tools:detail' tool.pk %}" class="btn-cancel">
-        <i class="fa-solid fa-xmark"></i> Cancel
+        <i class="fa-solid fa-xmark"></i> {% trans "Cancel" %}
       </a>
     </div>
 

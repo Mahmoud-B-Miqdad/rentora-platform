@@ -1167,3 +1167,442 @@ msgstr "إحصائيات الملف"
 
 msgid "Total Reviews"
 msgstr "إجمالي التقييمات"
+
+# ── Wishlist page ───────────────────────────────────────────────
+msgid "Manage and monitor the tools you've saved for your upcoming projects."
+msgstr "أدر وتابع الأدوات التي حفظتها لمشاريعك القادمة."
+
+msgid "Default Tool"
+msgstr "أداة افتراضية"
+
+msgid "Rent Now"
+msgstr "استأجر الآن"
+
+msgid "Your wishlist is empty"
+msgstr "قائمتك المفضلة فارغة"
+
+msgid "Save your favorite tools to access them quickly whenever you need them."
+msgstr "احفظ أدواتك المفضلة للوصول إليها بسرعة وقتما تحتاجها."
+
+# ── Add / Edit tool pages ───────────────────────────────────────
+msgid "Fill in the details and let <span class=\"highlight\">Rentora's AI</span> help you create the perfect listing"
+msgstr "املأ التفاصيل ودَع <span class=\"highlight\">ذكاء رينتورا الاصطناعي</span> يساعدك على إنشاء الإعلان المثالي"
+
+msgid "Tool Details"
+msgstr "تفاصيل الأداة"
+
+msgid "Upload Images"
+msgstr "رفع الصور"
+
+msgid "Tool Information"
+msgstr "معلومات الأداة"
+
+msgid "Tool Name"
+msgstr "اسم الأداة"
+
+msgid "e.g. \"DeWalt Heavy-Duty Jackhammer\""
+msgstr "مثال: \"مثقاب ديوالت للخدمة الشاقة\""
+
+msgid "Description"
+msgstr "الوصف"
+
+msgid "Generate with AI"
+msgstr "توليد بالذكاء الاصطناعي"
+
+msgid "Describe your tool, its features, and what is included..."
+msgstr "صِف أداتك ومميزاتها وما تتضمنه..."
+
+msgid "characters"
+msgstr "حرفاً"
+
+msgid "Select a category"
+msgstr "اختر تصنيفاً"
+
+msgid "Condition"
+msgstr "الحالة"
+
+msgid "Detect Condition"
+msgstr "اكتشاف الحالة"
+
+msgid "e.g. \"Ramallah, Palestine\""
+msgstr "مثال: \"رام الله، فلسطين\""
+
+msgid "Price / Day ($)"
+msgstr "السعر / يوم ($)"
+
+msgid "Suggest"
+msgstr "اقتراح"
+
+msgid "Deposit ($)"
+msgstr "التأمين ($)"
+
+msgid "Security deposit"
+msgstr "مبلغ التأمين"
+
+msgid "Refundable upon safe return"
+msgstr "يُسترد عند الإعادة السليمة"
+
+msgid "Continue: Upload Images"
+msgstr "متابعة: رفع الصور"
+
+msgid "Upload clear photos of your tool. The AI Condition Detector will analyse them to suggest the tool's condition."
+msgstr "ارفع صوراً واضحة لأداتك. سيحللها كاشف الحالة الذكي لاقتراح حالة الأداة."
+
+msgid "Drag and drop images here"
+msgstr "اسحب الصور وأفلتها هنا"
+
+msgid "or click to browse files"
+msgstr "أو اضغط لاستعراض الملفات"
+
+msgid "Edit Tool"
+msgstr "تعديل الأداة"
+
+msgid "Update your listing details and manage photos"
+msgstr "حدّث تفاصيل إعلانك وأدر الصور"
+
+msgid "Available for rent"
+msgstr "متاحة للتأجير"
+
+msgid "Uncheck to temporarily hide this listing"
+msgstr "ألغِ التحديد لإخفاء هذا الإعلان مؤقتاً"
+
+msgid "Current Images"
+msgstr "الصور الحالية"
+
+msgid "Click <strong>★</strong> to set the primary (cover) photo. Click <strong>✕</strong> to mark an image for deletion — it will be removed when you save."
+msgstr "اضغط <strong>★</strong> لتعيين صورة الغلاف الرئيسية. اضغط <strong>✕</strong> لتحديد صورة للحذف — ستُزال عند الحفظ."
+
+msgid "Delete this image"
+msgstr "حذف هذه الصورة"
+
+msgid "Set as primary photo"
+msgstr "تعيين كصورة رئيسية"
+
+msgid "Primary"
+msgstr "رئيسية"
+
+msgid "Add New Images"
+msgstr "إضافة صور جديدة"
+
+msgid "Click to upload new photos"
+msgstr "اضغط لرفع صور جديدة"
+
+msgid "JPG, PNG, WebP supported — converted to WebP automatically"
+msgstr "يدعم JPG وPNG وWebP — تُحوَّل إلى WebP تلقائياً"
+
+# ── Tools grid partial ──────────────────────────────────────────
+msgid "No tools match your search."
+msgstr "لا توجد أدوات تطابق بحثك."
+
+msgid "Clear filters"
+msgstr "إزالة الفلاتر"
+
+# ── Report page ─────────────────────────────────────────────────
+#, python-format
+msgid "Report %(name)s"
+msgstr "الإبلاغ عن %(name)s"
+
+msgid "Reason"
+msgstr "السبب"
+
+msgid "Select a reason"
+msgstr "اختر سبباً"
+
+msgid "Scam / Fraud"
+msgstr "نصب / احتيال"
+
+msgid "Fake Listing"
+msgstr "إعلان وهمي"
+
+msgid "No Show"
+msgstr "عدم حضور"
+
+msgid "Property Damage"
+msgstr "إتلاف ممتلكات"
+
+msgid "Harassment"
+msgstr "تحرّش / إساءة"
+
+msgid "Other"
+msgstr "أخرى"
+
+msgid "Additional Details (optional)"
+msgstr "تفاصيل إضافية (اختياري)"
+
+msgid "Describe what happened"
+msgstr "صِف ما حدث"
+
+msgid "Submit Report"
+msgstr "إرسال البلاغ"
+
+# ── Booking confirmation ────────────────────────────────────────
+msgid "Booking Confirmed"
+msgstr "تم تأكيد الحجز"
+
+msgid "Booking Request Sent!"
+msgstr "تم إرسال طلب الحجز!"
+
+msgid "Your request has been submitted to the tool owner"
+msgstr "تم إرسال طلبك إلى مالك الأداة"
+
+msgid "Awaiting Owner Approval"
+msgstr "بانتظار موافقة المالك"
+
+msgid "Duration"
+msgstr "المدة"
+
+msgid "Total Price"
+msgstr "السعر الإجمالي"
+
+msgid "What happens next?"
+msgstr "ماذا يحدث بعد ذلك؟"
+
+msgid "The owner reviews your request and confirms availability"
+msgstr "يراجع المالك طلبك ويؤكد التوفر"
+
+msgid "You'll see the status update in your <strong>My Rentals</strong> dashboard"
+msgstr "سترى تحديث الحالة في لوحة <strong>استئجاراتي</strong>"
+
+msgid "Once approved, coordinate pickup details directly with the owner"
+msgstr "بعد الموافقة، نسّق تفاصيل الاستلام مباشرة مع المالك"
+
+msgid "View in Dashboard"
+msgstr "عرض في لوحة التحكم"
+
+msgid "Browse More"
+msgstr "تصفّح المزيد"
+
+# ── Payment success ─────────────────────────────────────────────
+msgid "Payment Successful"
+msgstr "تم الدفع بنجاح"
+
+msgid "Payment Successful!"
+msgstr "تم الدفع بنجاح!"
+
+msgid "Your rental is confirmed and ready to go"
+msgstr "تم تأكيد استئجارك وكل شيء جاهز"
+
+msgid "Rented from"
+msgstr "مستأجرة من"
+
+msgid "Amount Paid"
+msgstr "المبلغ المدفوع"
+
+msgid "Held securely · Released to owner after return"
+msgstr "محفوظ بأمان · يُحوَّل للمالك بعد الإرجاع"
+
+msgid "Booking ID"
+msgstr "رقم الحجز"
+
+msgid "Rental period"
+msgstr "فترة الاستئجار"
+
+msgid "Receipt sent to"
+msgstr "أُرسل الإيصال إلى"
+
+msgid "Contact the owner to arrange tool pickup or delivery"
+msgstr "تواصل مع المالك لترتيب استلام الأداة أو توصيلها"
+
+#, python-format
+msgid "Use the tool during your rental period (%(start)s – %(end)s)"
+msgstr "استخدم الأداة خلال فترة الاستئجار (%(start)s – %(end)s)"
+
+msgid "Return the tool to the owner — they'll confirm receipt to complete the rental"
+msgstr "أعد الأداة إلى المالك — سيؤكد الاستلام لإكمال عملية التأجير"
+
+msgid "Go to My Rentals"
+msgstr "اذهب إلى استئجاراتي"
+
+# ── Chat page ───────────────────────────────────────────────────
+msgid "Chat"
+msgstr "المحادثة"
+
+msgid "Back to Dashboard"
+msgstr "العودة إلى لوحة التحكم"
+
+msgid "Booking Details"
+msgstr "تفاصيل الحجز"
+
+msgid "Status"
+msgstr "الحالة"
+
+#, python-format
+msgid "%(counter)s day"
+msgid_plural "%(counter)s days"
+msgstr[0] "أقل من يوم"
+msgstr[1] "يوم واحد"
+msgstr[2] "يومان"
+msgstr[3] "%(counter)s أيام"
+msgstr[4] "%(counter)s يوماً"
+msgstr[5] "%(counter)s يوم"
+
+msgid "Daily Rate"
+msgstr "السعر اليومي"
+
+msgid "You're chatting with"
+msgstr "أنت تتحدث مع"
+
+msgid "Tool Owner"
+msgstr "مالك الأداة"
+
+msgid "Active now"
+msgstr "نشط الآن"
+
+#, python-format
+msgid "Last seen %(time)s ago"
+msgstr "آخر ظهور منذ %(time)s"
+
+msgid "No recent activity"
+msgstr "لا نشاط حديث"
+
+msgid "No messages yet"
+msgstr "لا رسائل بعد"
+
+#, python-format
+msgid "Start the conversation with %(name)s to coordinate your rental."
+msgstr "ابدأ المحادثة مع %(name)s لتنسيق عملية الاستئجار."
+
+msgid "Seen"
+msgstr "تمت المشاهدة"
+
+msgid "Sent"
+msgstr "أُرسلت"
+
+#, python-format
+msgid "%(name)s is typing…"
+msgstr "%(name)s يكتب الآن…"
+
+#, python-format
+msgid "Type a message to %(name)s…"
+msgstr "اكتب رسالة إلى %(name)s…"
+
+msgid "Send (Enter)"
+msgstr "إرسال (Enter)"
+
+msgid "<kbd>Enter</kbd> to send &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> for new line"
+msgstr "<kbd>Enter</kbd> للإرسال &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> لسطر جديد"
+
+# ── Password reset pages ────────────────────────────────────────
+msgid "Forgot Password"
+msgstr "نسيت كلمة المرور"
+
+msgid "Account Security"
+msgstr "أمان الحساب"
+
+msgid "We've got<br>you covered."
+msgstr "نحن هنا<br>لمساعدتك."
+
+msgid "Forgot your password? No problem. We'll send a secure reset link to your inbox in seconds."
+msgstr "نسيت كلمة المرور؟ لا مشكلة. سنرسل رابط إعادة تعيين آمناً إلى بريدك خلال ثوانٍ."
+
+msgid "Secure one-time reset link"
+msgstr "رابط إعادة تعيين آمن لمرة واحدة"
+
+msgid "Expires in 24 hours"
+msgstr "تنتهي صلاحيته خلال 24 ساعة"
+
+msgid "Your data stays protected"
+msgstr "بياناتك تبقى محمية"
+
+msgid "Check Your Inbox"
+msgstr "تفقّد بريدك الوارد"
+
+msgid "If an account exists for that email, a reset link has been sent. Don't forget to check your spam folder."
+msgstr "إذا وُجد حساب بهذا البريد، فقد أُرسل رابط إعادة التعيين. لا تنسَ التحقق من مجلد الرسائل غير المرغوبة."
+
+msgid "Back to Sign In"
+msgstr "العودة لتسجيل الدخول"
+
+msgid "Forgot Password?"
+msgstr "نسيت كلمة المرور؟"
+
+msgid "Enter your email and we'll send you a reset link"
+msgstr "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين"
+
+msgid "Send Reset Link"
+msgstr "إرسال رابط التعيين"
+
+msgid "Remember your password?"
+msgstr "تذكرت كلمة المرور؟"
+
+msgid "Email Sent"
+msgstr "تم إرسال البريد"
+
+msgid "Check your<br>inbox."
+msgstr "تفقّد<br>بريدك الوارد."
+
+msgid "We've sent a password reset link. It should arrive within a minute — don't forget to check spam."
+msgstr "أرسلنا رابط إعادة تعيين كلمة المرور. سيصل خلال دقيقة — لا تنسَ التحقق من الرسائل غير المرغوبة."
+
+msgid "Reset link sent"
+msgstr "أُرسل رابط إعادة التعيين"
+
+msgid "Check spam if not received"
+msgstr "تحقق من الرسائل غير المرغوبة إن لم يصل"
+
+msgid "Check Your Inbox!"
+msgstr "تفقّد بريدك الوارد!"
+
+#, python-format
+msgid "We've sent a password reset link to your email. Didn't get it? Check your spam folder or <a href=\"%(url)s\" class=\"auth-panel__retry-link\">try again</a>."
+msgstr "أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك. لم يصلك؟ تحقق من الرسائل غير المرغوبة أو <a href=\"%(url)s\" class=\"auth-panel__retry-link\">حاول مجدداً</a>."
+
+msgid "Set New Password"
+msgstr "تعيين كلمة مرور جديدة"
+
+msgid "Almost<br>there."
+msgstr "أوشكت<br>على الانتهاء."
+
+msgid "Choose a strong password to keep your Rentora account safe and secure."
+msgstr "اختر كلمة مرور قوية لإبقاء حسابك في رينتورا آمناً."
+
+msgid "Minimum 8 characters"
+msgstr "8 أحرف على الأقل"
+
+msgid "Mix letters & numbers"
+msgstr "امزج الحروف والأرقام"
+
+msgid "Choose a strong password for your account"
+msgstr "اختر كلمة مرور قوية لحسابك"
+
+msgid "New Password"
+msgstr "كلمة المرور الجديدة"
+
+msgid "Confirm New Password"
+msgstr "تأكيد كلمة المرور الجديدة"
+
+msgid "Re-enter your new password"
+msgstr "أعد إدخال كلمة المرور الجديدة"
+
+msgid "Reset Password"
+msgstr "إعادة تعيين كلمة المرور"
+
+msgid "Password Reset Complete"
+msgstr "اكتملت إعادة تعيين كلمة المرور"
+
+msgid "All Done"
+msgstr "تم كل شيء"
+
+msgid "You're back<br>in action."
+msgstr "عدت<br>من جديد."
+
+msgid "Your password has been updated. Sign in and continue browsing, listing, or booking tools."
+msgstr "تم تحديث كلمة مرورك. سجّل الدخول وواصل التصفّح أو عرض الأدوات أو حجزها."
+
+msgid "Password updated securely"
+msgstr "حُدّثت كلمة المرور بأمان"
+
+msgid "All sessions protected"
+msgstr "جميع الجلسات محمية"
+
+msgid "Ready to get back to renting"
+msgstr "جاهز للعودة إلى الاستئجار"
+
+msgid "Password Reset Complete!"
+msgstr "اكتملت إعادة تعيين كلمة المرور!"
+
+msgid "Your password has been updated successfully. You can now sign in with your new password."
+msgstr "تم تحديث كلمة مرورك بنجاح. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة."
+
+msgid "Go to Sign In"
+msgstr "اذهب لتسجيل الدخول"

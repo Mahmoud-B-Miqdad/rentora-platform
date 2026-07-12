@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block extra_js %}
 <script>
@@ -84,12 +84,12 @@ function wishlistRemove(btn, toolId) {
 
         <header class="wishlist-header">
             <h1 class="wishlist-title">
-                My Wishlist
+                {% trans "My Wishlist" %}
                 {% if global_wishlist_count > 0 %}
                 <span class="wishlist-count-badge">{{ global_wishlist_count }}</span>
                 {% endif %}
             </h1>
-            <p class="wishlist-subtitle">Manage and monitor the tools you've saved for your upcoming projects.</p>
+            <p class="wishlist-subtitle">{% trans "Manage and monitor the tools you've saved for your upcoming projects." %}</p>
         </header>
 
         {% if wishlist_items %}
@@ -111,7 +111,7 @@ function wishlistRemove(btn, toolId) {
                         {% else %}
                             <img src="{% static 'listings/images/default-tool.png' %}"
                                  class="tool-card__image"
-                                 alt="Default Tool">
+                                 alt="{% trans 'Default Tool' %}">
                         {% endif %}
                     </a>
 
@@ -119,7 +119,7 @@ function wishlistRemove(btn, toolId) {
                     <button type="button"
                             class="tool-card__heart-btn tool-card__heart-btn--active"
                             onclick="event.stopPropagation(); event.preventDefault(); wishlistRemove(this, {{ record.tool.id }})"
-                            title="Remove from wishlist">
+                            title="{% trans 'Remove from wishlist' %}">
                         <i class="fa-solid fa-heart"></i>
                     </button>
 
@@ -139,11 +139,11 @@ function wishlistRemove(btn, toolId) {
                     <div class="tool-card__footer">
                         <div class="tool-card__price-box">
                             <span class="tool-card__price">${{ record.tool.daily_rate }}</span>
-                            <span class="tool-card__unit">/ day</span>
+                            <span class="tool-card__unit">/ {% trans "day" %}</span>
                         </div>
                         <a href="{% url 'listings:tools:detail' record.tool.id %}"
                            class="tool-card__btn">
-                            Rent Now
+                            {% trans "Rent Now" %}
                         </a>
                     </div>
 
@@ -162,13 +162,13 @@ function wishlistRemove(btn, toolId) {
             <div class="wishlist-empty-state__icon-wrapper">
                 <i class="fa-solid fa-heart-circle-check"></i>
             </div>
-            <h2 class="wishlist-empty-state__title">Your wishlist is empty</h2>
+            <h2 class="wishlist-empty-state__title">{% trans "Your wishlist is empty" %}</h2>
             <p class="wishlist-empty-state__description">
-                Save your favorite tools to access them quickly whenever you need them.
+                {% trans "Save your favorite tools to access them quickly whenever you need them." %}
             </p>
             <a href="{% url 'listings:browse' %}" class="wishlist-empty-state__btn">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                Browse Tools
+                {% trans "Browse Tools" %}
             </a>
         </div>
 

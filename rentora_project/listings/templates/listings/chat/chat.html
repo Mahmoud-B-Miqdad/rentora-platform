@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Chat — {{ booking.tool.title }} | Rentora{% endblock %}
+{% block title %}{% trans "Chat" %} — {{ booking.tool.title }} | Rentora{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'listings/css/chat/chat.css' %}">
@@ -18,7 +18,7 @@
       <a href="/dashboard/?tab={% if user.pk == booking.renter_id %}my-rentals{% else %}booking-requests{% endif %}"
          class="chat-back-btn">
         <i class="fa-solid fa-arrow-left"></i>
-        Back to Dashboard
+        {% trans "Back to Dashboard" %}
       </a>
     </div>
 
@@ -43,11 +43,11 @@
 
     <!-- Booking details -->
     <div class="chat-sidebar__details">
-      <div class="chat-details-title">Booking Details</div>
+      <div class="chat-details-title">{% trans "Booking Details" %}</div>
 
       <div class="chat-detail-row">
         <span class="chat-detail-label">
-          <i class="fa-solid fa-circle-dot"></i> Status
+          <i class="fa-solid fa-circle-dot"></i> {% trans "Status" %}
         </span>
         <span class="chat-status-badge chat-status-badge--{{ booking.status }}">
           {{ booking.get_status_display }}
@@ -56,21 +56,21 @@
 
       <div class="chat-detail-row">
         <span class="chat-detail-label">
-          <i class="fa-regular fa-clock"></i> Duration
+          <i class="fa-regular fa-clock"></i> {% trans "Duration" %}
         </span>
-        <span class="chat-detail-value">{{ booking.rental_days }} day{{ booking.rental_days|pluralize }}</span>
+        <span class="chat-detail-value">{% blocktrans count counter=booking.rental_days %}{{ counter }} day{% plural %}{{ counter }} days{% endblocktrans %}</span>
       </div>
 
       <div class="chat-detail-row">
         <span class="chat-detail-label">
-          <i class="fa-solid fa-tag"></i> Daily Rate
+          <i class="fa-solid fa-tag"></i> {% trans "Daily Rate" %}
         </span>
         <span class="chat-detail-value">${{ booking.tool.daily_rate }}</span>
       </div>
 
       <div class="chat-detail-row">
         <span class="chat-detail-label">
-          <i class="fa-solid fa-location-dot"></i> Location
+          <i class="fa-solid fa-location-dot"></i> {% trans "Location" %}
         </span>
         <span class="chat-detail-value">{{ booking.tool.location }}</span>
       </div>
@@ -78,7 +78,7 @@
 
     <!-- Other participant -->
     <div class="chat-sidebar__participant">
-      <div class="chat-details-title">You're chatting with</div>
+      <div class="chat-details-title">{% trans "You're chatting with" %}</div>
       <a href="{% url 'users:public_profile' other.pk %}" class="chat-participant">
         <div class="chat-participant__avatar">
           {% if other.profile_image %}
@@ -91,9 +91,9 @@
           <div class="chat-participant__name">{{ other.name }}</div>
           <div class="chat-participant__role">
             {% if user.pk == booking.renter_id %}
-              <i class="fa-solid fa-key"></i> Tool Owner
+              <i class="fa-solid fa-key"></i> {% trans "Tool Owner" %}
             {% else %}
-              <i class="fa-solid fa-user"></i> Renter
+              <i class="fa-solid fa-user"></i> {% trans "Renter" %}
             {% endif %}
           </div>
         </div>
@@ -123,15 +123,15 @@
           <div class="chat-main__sub">
             {% if other_is_online %}
               <span class="chat-presence chat-presence--online">
-                Active now
+                {% trans "Active now" %}
               </span>
             {% elif other_last_seen %}
               <span class="chat-presence chat-presence--offline">
-                <i class="fa-regular fa-clock"></i> Last seen {{ other_last_seen|timesince }} ago
+                <i class="fa-regular fa-clock"></i> {% blocktrans with time=other_last_seen|timesince %}Last seen {{ time }} ago{% endblocktrans %}
               </span>
             {% else %}
               <span class="chat-presence chat-presence--offline">
-                <i class="fa-regular fa-circle"></i> No recent activity
+                <i class="fa-regular fa-circle"></i> {% trans "No recent activity" %}
               </span>
             {% endif %}
           </div>
@@ -146,9 +146,9 @@
       {% if not chat_messages %}
         <div class="chat-empty">
           <div class="chat-empty__icon"><i class="fa-regular fa-comments"></i></div>
-          <div class="chat-empty__title">No messages yet</div>
+          <div class="chat-empty__title">{% trans "No messages yet" %}</div>
           <div class="chat-empty__sub">
-            Start the conversation with {{ other.name }} to coordinate your rental.
+            {% blocktrans with name=other.name %}Start the conversation with {{ name }} to coordinate your rental.{% endblocktrans %}
           </div>
         </div>
       {% else %}
@@ -170,9 +170,9 @@
                 {% if msg.sender_id == user.pk %}
                 <div class="chat-msg__status" data-msg-id="{{ msg.pk }}">
                   {% if msg.is_read %}
-                    <i class="fa-solid fa-check-double msg-status--seen" title="Seen"></i>
+                    <i class="fa-solid fa-check-double msg-status--seen" title="{% trans 'Seen' %}"></i>
                   {% else %}
-                    <i class="fa-solid fa-check msg-status--sent" title="Sent"></i>
+                    <i class="fa-solid fa-check msg-status--sent" title="{% trans 'Sent' %}"></i>
                   {% endif %}
                 </div>
                 {% endif %}
@@ -187,7 +187,7 @@
         <div class="chat-typing__dots">
           <span></span><span></span><span></span>
         </div>
-        <span>{{ other.name }} is typing…</span>
+        <span>{% blocktrans with name=other.name %}{{ name }} is typing…{% endblocktrans %}</span>
       </div>
 
     </div>
@@ -197,15 +197,15 @@
       <div class="chat-input-row">
         <textarea id="chatInput"
                   class="chat-textarea"
-                  placeholder="Type a message to {{ other.name }}…"
+                  placeholder="{% blocktrans with name=other.name %}Type a message to {{ name }}…{% endblocktrans %}"
                   rows="1"
                   maxlength="2000"></textarea>
-        <button id="chatSend" class="chat-send-btn" disabled title="Send (Enter)">
+        <button id="chatSend" class="chat-send-btn" disabled title="{% trans 'Send (Enter)' %}">
           <i class="fa-solid fa-paper-plane"></i>
         </button>
       </div>
       <div class="chat-input-hint">
-        <kbd>Enter</kbd> to send &nbsp;&middot;&nbsp; <kbd>Shift+Enter</kbd> for new line
+        {% blocktrans %}<kbd>Enter</kbd> to send &nbsp;&middot;&nbsp; <kbd>Shift+Enter</kbd> for new line{% endblocktrans %}
       </div>
     </div>
 

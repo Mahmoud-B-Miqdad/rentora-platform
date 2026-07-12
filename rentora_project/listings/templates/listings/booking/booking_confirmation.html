@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Booking Confirmed — Rentora{% endblock %}
+{% block title %}{% trans "Booking Confirmed" %} — Rentora{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'listings/css/booking/booking_confirmation.css' %}">
@@ -16,11 +16,11 @@
       <div class="confirm-check-wrap">
         <i class="fa-solid fa-check"></i>
       </div>
-      <h1>Booking Request Sent!</h1>
-      <p>Your request has been submitted to the tool owner</p>
+      <h1>{% trans "Booking Request Sent!" %}</h1>
+      <p>{% trans "Your request has been submitted to the tool owner" %}</p>
       <div class="status-pill">
         <span class="dot"></span>
-        Awaiting Owner Approval
+        {% trans "Awaiting Owner Approval" %}
       </div>
     </div>
 
@@ -40,7 +40,7 @@
         <div>
           <div class="tool-info-name">{{ booking.tool.title }}</div>
           <div class="tool-info-owner">
-            Listed by
+            {% trans "Listed by" %}
             <a href="{% url 'users:public_profile' booking.tool.owner.pk %}">{{ booking.tool.owner.name }}</a>
             · {{ booking.tool.location }}
           </div>
@@ -50,19 +50,19 @@
       <!-- Booking details -->
       <div class="details-grid">
         <div class="detail-item">
-          <div class="detail-label"><i class="fa-regular fa-calendar"></i> Start Date</div>
+          <div class="detail-label"><i class="fa-regular fa-calendar"></i> {% trans "Start Date" %}</div>
           <div class="detail-value">{{ booking.start_date }}</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label"><i class="fa-regular fa-calendar-check"></i> End Date</div>
+          <div class="detail-label"><i class="fa-regular fa-calendar-check"></i> {% trans "End Date" %}</div>
           <div class="detail-value">{{ booking.end_date }}</div>
         </div>
         <div class="detail-item">
-          <div class="detail-label"><i class="fa-regular fa-clock"></i> Duration</div>
+          <div class="detail-label"><i class="fa-regular fa-clock"></i> {% trans "Duration" %}</div>
           <div class="detail-value">{{ booking.end_date|timeuntil:booking.start_date }}</div>
         </div>
         <div class="detail-item highlight">
-          <div class="detail-label"><i class="fa-solid fa-coins"></i> Total Price</div>
+          <div class="detail-label"><i class="fa-solid fa-coins"></i> {% trans "Total Price" %}</div>
           <div class="detail-value">${{ booking.total_price }}</div>
         </div>
       </div>
@@ -70,29 +70,29 @@
       <!-- What's next -->
       <div class="next-steps">
         <div class="next-steps-title">
-          <i class="fa-solid fa-list-check"></i> What happens next?
+          <i class="fa-solid fa-list-check"></i> {% trans "What happens next?" %}
         </div>
         <div class="next-step">
           <span class="step-num">1</span>
-          <span>The owner reviews your request and confirms availability</span>
+          <span>{% trans "The owner reviews your request and confirms availability" %}</span>
         </div>
         <div class="next-step">
           <span class="step-num">2</span>
-          <span>You'll see the status update in your <strong>My Rentals</strong> dashboard</span>
+          <span>{% blocktrans %}You'll see the status update in your <strong>My Rentals</strong> dashboard{% endblocktrans %}</span>
         </div>
         <div class="next-step">
           <span class="step-num">3</span>
-          <span>Once approved, coordinate pickup details directly with the owner</span>
+          <span>{% trans "Once approved, coordinate pickup details directly with the owner" %}</span>
         </div>
       </div>
 
       <!-- Actions -->
       <div class="confirm-actions">
         <a href="{% url 'listings:dashboard' %}?tab=my-rentals" class="btn-primary-confirm">
-          <i class="fa-solid fa-border-all"></i> View in Dashboard
+          <i class="fa-solid fa-border-all"></i> {% trans "View in Dashboard" %}
         </a>
         <a href="{% url 'listings:browse' %}" class="btn-secondary-confirm">
-          <i class="fa-solid fa-magnifying-glass"></i> Browse More
+          <i class="fa-solid fa-magnifying-glass"></i> {% trans "Browse More" %}
         </a>
       </div>
 

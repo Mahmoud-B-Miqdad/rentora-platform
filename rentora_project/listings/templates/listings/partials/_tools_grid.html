@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 {% for tool in page_obj %}
 {% with primary=tool.primary_images.0 %}
 
@@ -15,12 +15,12 @@
         <span class="bcard__condition bcard__condition--{{ tool.condition }}">{{ tool.get_condition_display }}</span>
 
         <button class="bcard__wish {% if tool.pk in wishlist_ids %}bcard__wish--saved{% endif %}"
-                type="button" aria-label="Save to wishlist"
+                type="button" aria-label="{% trans 'Save to wishlist' %}"
                 onclick="event.stopPropagation(); event.preventDefault(); toggleWishlist(this, {{ tool.pk }})">
             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
         </button>
 
-        <div class="bcard__price-badge">${{ tool.daily_rate }}<span>/day</span></div>
+        <div class="bcard__price-badge">${{ tool.daily_rate }}<span>/{% trans "day" %}</span></div>
     </div>
 
     <div class="bcard__body">
@@ -41,7 +41,7 @@
         </div>
         <div class="bcard__owner bcard__owner--link"
              onclick="event.preventDefault();event.stopPropagation();window.location.href='{% url 'users:public_profile' tool.owner.pk %}';"
-             title="View {{ tool.owner.name }}'s profile">
+             title="{% blocktrans with name=tool.owner.name %}View {{ name }}'s profile{% endblocktrans %}">
             {% if tool.owner.profile_image %}
             <img class="bcard__owner-avatar" src="{{ tool.owner.profile_image.url }}" alt="{{ tool.owner.name }}">
             {% else %}
@@ -56,7 +56,7 @@
 {% empty %}
 <div class="tools-empty">
     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-    <p>No tools match your search.</p>
-    <a href="{% url 'listings:browse' %}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Clear filters</a>
+    <p>{% trans "No tools match your search." %}</p>
+    <a href="{% url 'listings:browse' %}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {% trans "Clear filters" %}</a>
 </div>
 {% endfor %}

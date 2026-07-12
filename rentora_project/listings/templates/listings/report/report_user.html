@@ -1,37 +1,37 @@
 
 {% extends "base.html" %}
-{% load static %}{% block extra_css %}
+{% load static i18n %}{% block extra_css %}
 <link rel="stylesheet" href="{% static 'listings/css/report/report.css' %}">
 {% endblock %}
 {% block content %}
 <div class="container report-page">
     <h5 class="report-title">
         <i class="fa-solid fa-triangle-exclamation"></i>
-        Report {{ profile_user.name }}
+        {% blocktrans with name=profile_user.name %}Report {{ name }}{% endblocktrans %}
     </h5>
     <form method="POST" action="{% url 'listings:report_user' profile_user.id %}">
         {% csrf_token %}
         <div class="form-group">
-            <label class="form-label">Reason</label>
+            <label class="form-label">{% trans "Reason" %}</label>
             <select name="reason" class="form-select" required>
-                <option value="">Select a reason</option>
-                <option value="scam">Scam / Fraud</option>
-                <option value="fake">Fake Listing</option>
-                <option value="no_show">No Show</option>
-                <option value="damage">Property Damage</option>
-                <option value="harassment">Harassment</option>
-                <option value="other">Other</option>
+                <option value="">{% trans "Select a reason" %}</option>
+                <option value="scam">{% trans "Scam / Fraud" %}</option>
+                <option value="fake">{% trans "Fake Listing" %}</option>
+                <option value="no_show">{% trans "No Show" %}</option>
+                <option value="damage">{% trans "Property Damage" %}</option>
+                <option value="harassment">{% trans "Harassment" %}</option>
+                <option value="other">{% trans "Other" %}</option>
             </select>
         </div>
         <div class="form-group">
-            <label class="form-label">Additional Details (optional)</label>
-            <textarea name="details" class="form-textarea" rows="3" placeholder="Describe what happened"></textarea>
+            <label class="form-label">{% trans "Additional Details (optional)" %}</label>
+            <textarea name="details" class="form-textarea" rows="3" placeholder="{% trans 'Describe what happened' %}"></textarea>
         </div>
         <div class="report-actions">
             <button type="submit" class="btn-submit-report">
-                <i class="fa-solid fa-paper-plane"></i> Submit Report
+                <i class="fa-solid fa-paper-plane"></i> {% trans "Submit Report" %}
             </button>
-            <a href="{% url 'users:profile_user' profile_user.id %}" class="btn-cancel">Cancel</a>
+            <a href="{% url 'users:profile_user' profile_user.id %}" class="btn-cancel">{% trans "Cancel" %}</a>
         </div>
     </form>
 </div>
