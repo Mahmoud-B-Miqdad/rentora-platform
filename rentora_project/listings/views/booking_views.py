@@ -441,7 +441,6 @@ def report_user(request, user_id):
         messages.success(request, "Report submitted. Our team will review it.")
         return redirect('users:profile_user', user_id=user_id)
 
-    # GET request → اعرض صفحة الريبورت
     if already:
         messages.info(request, "You have already reported this user.")
         return redirect('users:profile_user', user_id=user_id)
