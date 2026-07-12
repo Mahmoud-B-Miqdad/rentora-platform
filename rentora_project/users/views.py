@@ -157,7 +157,6 @@ def profile_view(request, user_id=None):
     if not logged_in_id:
         return redirect("users:login")
 
-    # لو ما في user_id بالـ URL، عرض بروفايل الـ logged in user
     if user_id is None:
         user_id = int(logged_in_id)
 
@@ -166,7 +165,6 @@ def profile_view(request, user_id=None):
     edit_mode    = request.GET.get("edit") == "1" and is_owner
     errors       = {}
 
-    # Handle profile update (POST) — فقط لو owner
     if request.method == "POST" and is_owner:
         user, errors = User.objects.update_profile(
             profile_user, request.POST, request.FILES
