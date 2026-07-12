@@ -5,7 +5,7 @@ from users.models    import User, EmailVerification
 from users.services  import send_verification_email
 from listings.models import Tool, Booking, Review, ToolImage
 from listings.models.report import Report
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q, Avg
 
 from django.http import HttpResponse
 from django.core.mail import send_mail
@@ -179,14 +179,24 @@ def profile_view(request, user_id=None):
     rentals_done  = Booking.objects.filter(
         renter=profile_user, status='completed'
     ).count()
+    # Reviews received = reviews that TARGET this user. The target depends on
+    # the review type: for_tool / for_owner point at the tool's owner, while
+    # for_renter points at the booking's renter. Filtering only by tool owner
+    # dropped every for_renter review the user got as a renter.
     reviews_received = Review.objects.filter(
-        booking__tool__owner=profile_user
+        Q(review_type__in=['for_tool', 'for_owner'],
+          booking__tool__owner=profile_user)
+        | Q(review_type='for_renter', booking__renter=profile_user)
     ).select_related('reviewer').order_by('-created_at')
     reviews_given = Review.objects.filter(
         reviewer=profile_user
     ).select_related('booking__tool').order_by('-created_at')
-    avg_rating    = profile_user.rating if profile_user.rating else None
     reviews_count = reviews_received.count()
+    # Derive the average from the reviews actually received so it always
+    # matches the count shown (the stored profile_user.rating field is not
+    # updated for for_renter reviews, which left it blank for renters).
+    avg_value     = reviews_received.aggregate(avg=Avg('rating'))['avg']
+    avg_rating    = round(avg_value, 1) if avg_value else None
     listed_tools  = Tool.objects.filter(
         owner=profile_user, is_available=True
     ).select_related('category').prefetch_related(
