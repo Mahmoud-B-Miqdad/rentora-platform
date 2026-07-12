@@ -4,11 +4,11 @@
    Depends on: base.css (design tokens)
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Page layout: stretch to fill viewport below header ─────── */
+/* ── Page layout: fill viewport for short forms, grow for tall ── */
 .auth-page {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .auth-page .site-header {
@@ -27,7 +27,6 @@
 .auth-split {
     display: flex;
     width: 100%;
-    height: 100%;
 }
 
 /* ══════════════════════════════════════════════════════════════

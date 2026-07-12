@@ -306,26 +306,61 @@
 /* Empty state */
 .tools-empty {
     grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    padding: 64px 20px;
-    color: var(--clr-muted);
+    padding: 56px 24px 60px;
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: 20px;
 }
-.tools-empty i { font-size: 52px; margin-bottom: 14px; display: block; color: var(--clr-border); }
-.tools-empty p { font-size: 15px; margin-bottom: 16px; }
+/* Icon badge — only the direct-child icon, not the button icon */
+.tools-empty > i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 84px;
+    margin-bottom: 22px;
+    font-size: 32px;
+    color: var(--clr-brand);
+    background: color-mix(in srgb, var(--clr-brand) 10%, transparent);
+    border-radius: 50%;
+}
+.tools-empty p {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--clr-text);
+    margin-bottom: 6px;
+}
+.tools-empty .tools-empty__sub {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--clr-muted);
+    margin-bottom: 22px;
+    max-width: 340px;
+}
 .tools-empty a {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 10px 22px;
+    gap: 8px;
+    padding: 11px 24px;
     background: var(--clr-brand);
     color: #fff;
-    border-radius: var(--radius-full);
+    border-radius: 12px;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
-    transition: background 0.2s;
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--clr-brand) 28%, transparent);
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
-.tools-empty a:hover { background: var(--clr-brand-dark); }
+.tools-empty a i { font-size: 14px; }
+.tools-empty a:hover {
+    background: var(--clr-brand-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--clr-brand) 36%, transparent);
+}
 
 /* ── Tool Card ─────────────────────────────── */
 .bcard {
