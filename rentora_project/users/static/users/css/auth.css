@@ -5,9 +5,20 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── Page layout: stretch to fill viewport below header ─────── */
+.auth-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.auth-page .site-header {
+    flex-shrink: 0;
+}
+
 .auth-page .site-main {
     padding: 0;
-    min-height: calc(100vh - 64px);
+    margin-top: 0;
+    flex: 1;
     display: flex;
     align-items: stretch;
 }
@@ -16,7 +27,7 @@
 .auth-split {
     display: flex;
     width: 100%;
-    min-height: 100%;
+    height: 100%;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -29,7 +40,11 @@
     overflow: hidden;
     display: flex;
     align-items: center;
-    padding: 64px 56px;
+    /* Inline-start padding aligns the text with the header logo (container edge).
+       Logical props keep it correct in both LTR and RTL. */
+    padding-block: 64px;
+    padding-inline-start: max(56px, calc((100vw - var(--container-w)) / 2 + 24px));
+    padding-inline-end: 56px;
 }
 
 .auth-brand__inner {
@@ -123,8 +138,12 @@
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 48px 28px;
+    justify-content: flex-end;
+    /* Inline-end padding aligns the card's edge with the header Sign In button
+       (container edge). Logical props keep it correct in both LTR and RTL. */
+    padding-block: 48px;
+    padding-inline-end: max(28px, calc((100vw - var(--container-w)) / 2 + 24px));
+    padding-inline-start: 28px;
     background: #f1f5f9;
 }
 
@@ -463,7 +482,7 @@
     border-radius: 8px;
     font-size: 13.5px;
     margin-bottom: 6px;
-    border-left: 3px solid #dc2626;
+    border-inline-start: 3px solid #dc2626;
 }
 
 /* ── Responsive ────────────────────────────────────────────── */
@@ -473,7 +492,6 @@
 }
 
 @media (max-width: 540px) {
-    .auth-page .site-main { min-height: calc(100vh - 56px); }
     .auth-form-side { padding: 24px 12px; align-items: flex-start; padding-top: 32px; }
     .auth-panel { padding: 28px 20px 32px; }
     .auth-flashes { padding: 16px 20px 0; }

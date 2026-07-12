@@ -968,7 +968,9 @@ button { cursor: pointer; font-family: inherit; }
         gap: 8px;
     }
     .hdr-actions {
-        margin-left: auto;
+        /* logical property: in RTL the brand stays at the inline start
+           (right) and the actions are pushed to the opposite side */
+        margin-inline-start: auto;
         gap: 4px;
     }
     .hdr-brand__name { font-size: 18px; }
