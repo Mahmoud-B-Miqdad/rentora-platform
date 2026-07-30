@@ -4,7 +4,7 @@
 {% block title %}{% trans "Chat" %} — {{ booking.tool.title }} | Rentora{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'listings/css/chat/chat.css' %}">
+<link rel="stylesheet" href="{% static 'listings/css/chat/chat.css' %}?v=3">
 {% endblock %}
 
 {% block content %}
@@ -44,6 +44,13 @@
     <!-- Booking details -->
     <div class="chat-sidebar__details">
       <div class="chat-details-title">{% trans "Booking Details" %}</div>
+
+      <div class="chat-detail-row">
+        <span class="chat-detail-label">
+          <i class="fa-solid fa-hashtag"></i> {% trans "Booking Ref" %}
+        </span>
+        <span class="chat-detail-value chat-booking-ref">#{{ booking.pk }}</span>
+      </div>
 
       <div class="chat-detail-row">
         <span class="chat-detail-label">
@@ -164,7 +171,10 @@
               {% endif %}
             </div>
             <div>
-              <div class="chat-msg__bubble">{{ msg.text }}</div>
+              <div class="chat-msg__bubble">
+                {% if msg.image %}<a href="{{ msg.image.url }}" target="_blank" rel="noopener" class="chat-msg__image-link"><img src="{{ msg.image.url }}" alt="{% trans 'Shared photo' %}" class="chat-msg__image" loading="lazy"></a>{% endif %}
+                {% if msg.text %}<span class="chat-msg__text">{{ msg.text }}</span>{% endif %}
+              </div>
               <div class="chat-msg__footer">
                 <div class="chat-msg__time" data-ts="{{ msg.created_at.isoformat }}"></div>
                 {% if msg.sender_id == user.pk %}
@@ -194,7 +204,18 @@
 
     <!-- Input -->
     <div class="chat-input-area">
+      <!-- Selected-image preview (hidden until a file is chosen) -->
+      <div class="chat-attach-preview" id="chatAttachPreview" hidden>
+        <img id="chatAttachThumb" src="" alt="">
+        <button type="button" id="chatAttachRemove" class="chat-attach-remove" title="{% trans 'Remove' %}">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
       <div class="chat-input-row">
+        <input type="file" id="chatImageInput" accept="image/*" hidden>
+        <button id="chatAttachBtn" type="button" class="chat-attach-btn" title="{% trans 'Attach a photo' %}">
+          <i class="fa-solid fa-image"></i>
+        </button>
         <textarea id="chatInput"
                   class="chat-textarea"
                   placeholder="{% blocktrans with name=other.name %}Type a message to {{ name }}…{% endblocktrans %}"
@@ -230,5 +251,5 @@ window.ChatConfig = {
   otherAvatarUrl:"{% if other.profile_image %}{{ other.profile_image.url }}{% endif %}",
 };
 </script>
-<script src="{% static 'listings/js/chat/chat.js' %}"></script>
+<script src="{% static 'listings/js/chat/chat.js' %}?v=2"></script>
 {% endblock %}
