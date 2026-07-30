@@ -10,12 +10,36 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http      import HttpResponse
 import stripe
 
-from listings.models import Tool, Booking, ToolImage, Review
+from listings.models import Tool, Booking, ToolImage, Review, BookingStatus, DepositDispute
+from listings.services.email_service import (
+    send_booking_requested_emails,
+    send_booking_approved_email,
+    send_payment_received_emails,
+    send_return_confirmation_request_email,
+    send_booking_cancelled_email,
+    send_dispute_opened_emails,
+)
 from listings.models.message import Conversation, Message
 from listings.models.notification import Notification, NotificationType
 from users.models    import User
 from django.contrib  import messages
 from listings.models.report import Report
+
+
+def _save_condition_photos(booking, user, phase, files, limit=8):
+    """Persist uploaded handover photos (images only, ≤8 MB). Returns count saved."""
+    from listings.models import RentalConditionPhoto
+    saved = 0
+    for f in files[:limit]:
+        if not getattr(f, "content_type", "").startswith("image/"):
+            continue
+        if f.size > 8 * 1024 * 1024:
+            continue
+        RentalConditionPhoto.objects.create(
+            booking=booking, phase=phase, uploaded_by=user, image=f,
+        )
+        saved += 1
+    return saved
 
 
 def create_booking_view(request, pk):
@@ -48,6 +72,7 @@ def create_booking_view(request, pk):
                 f"({booking.start_date} → {booking.end_date}).",
         booking=booking,
     )
+    send_booking_requested_emails(booking)
 
     return redirect('listings:booking_confirmation', booking_id=booking.id)
 
@@ -98,8 +123,10 @@ def dashboard(request):
         renter=user, status__in=['approved', 'confirmed', 'return_pending']
     ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf).order_by('start_date')
 
+    # 'cancelled' belongs here too — without it a booking the renter cancels
+    # disappears from their dashboard entirely.
     booking_history = Booking.objects.filter(
-        renter=user, status__in=['completed', 'rejected']
+        renter=user, status__in=['completed', 'rejected', 'cancelled']
     ).select_related('tool', 'tool__owner').prefetch_related(tool_img_pf, my_reviews_pf).order_by('-created_at')
     booking_history = list(booking_history)
     for b in booking_history:
@@ -183,9 +210,10 @@ def approve_booking(request, booking_id):
                     f"Complete your payment to confirm the rental.",
             booking=booking,
         )
+        send_booking_approved_email(booking)
 
         messages.success(request, "Booking approved. Renter has been notified to complete payment.")
-    return redirect('/dashboard/?tab=booking-requests')
+    return redirect('/dashboard/?tab=booking-requests&subtab=btab-approved')
 
 
 @login_required_session
@@ -206,7 +234,7 @@ def reject_booking(request, booking_id):
         )
 
         messages.success(request, "Booking rejected.")
-    return redirect('/dashboard/?tab=booking-requests')
+    return redirect('/dashboard/?tab=booking-requests&subtab=btab-rejected')
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -265,6 +293,7 @@ def stripe_webhook(request):
                         message=f"{booking.renter.name} completed payment for \"{booking.tool.title}\".",
                         booking=booking,
                     )
+                    send_payment_received_emails(booking)
             except Booking.DoesNotExist:
                 pass
 
@@ -285,6 +314,7 @@ def payment_success_view(request, booking_id):
             message=f"{booking.renter.name} completed payment for \"{booking.tool.title}\".",
             booking=booking,
         )
+        send_payment_received_emails(booking)
 
     user = User.objects.filter(id=request.session.get('user_id')).first()
 
@@ -307,26 +337,86 @@ def booking_confirmation_view(request, booking_id):
 
 @login_required_session
 def request_return(request, booking_id):
-    """Owner marks the tool as returned — awaits renter confirmation."""
+    """
+    Owner marks the tool as returned — awaits renter confirmation.
+
+    GET  → a confirmation page where the owner can (optionally) attach photos of
+           the tool's condition at return. These are the "after" record for a
+           possible dispute.
+    POST → save any photos, then transition to return_pending.
+    """
     user    = User.objects.get(id=request.session['user_id'])
-    booking = get_object_or_404(Booking, id=booking_id, tool__owner=user)
+    booking = get_object_or_404(
+        Booking.objects.select_related('tool', 'renter'),
+        id=booking_id, tool__owner=user,
+    )
 
-    if booking.status in ('approved', 'confirmed'):
-        booking.status = 'return_pending'
-        booking.actual_return_date  = timezone.now().date()
-        booking.return_requested_at = timezone.now()
-        booking.save()
+    if booking.status not in ('approved', 'confirmed'):
+        messages.error(request, "This rental cannot be marked as returned.")
+        return redirect('/dashboard/?tab=booking-requests&subtab=btab-approved')
 
-        Notification.objects.create_for(
-            user=booking.renter,
-            notification_type=NotificationType.RETURN_REQUESTED,
-            message=f"The owner marked \"{booking.tool.title}\" as returned. "
-                    f"Please confirm or dispute the return in your dashboard.",
-            booking=booking,
-        )
+    if request.method != 'POST':
+        return render(request, 'listings/booking/condition_photos.html', {
+            'booking': booking,
+            'phase': 'return',
+        })
 
-        messages.success(request, "Return request sent. Waiting for renter to confirm.")
-    return redirect('/dashboard/?tab=booking-requests')
+    # Photos are mandatory — the "after" record must exist before the tool can
+    # be marked returned, so both parties always have documented evidence.
+    saved = _save_condition_photos(booking, user, 'return', request.FILES.getlist('photos'))
+    if not saved:
+        return render(request, 'listings/booking/condition_photos.html', {
+            'booking': booking,
+            'phase': 'return',
+            'error': "Please add at least one photo of the tool's condition to mark it as returned.",
+        })
+
+    booking.status = 'return_pending'
+    booking.actual_return_date  = timezone.now().date()
+    booking.return_requested_at = timezone.now()
+    booking.save()
+
+    Notification.objects.create_for(
+        user=booking.renter,
+        notification_type=NotificationType.RETURN_REQUESTED,
+        message=f"The owner marked \"{booking.tool.title}\" as returned. "
+                f"Please confirm or dispute the return in your dashboard.",
+        booking=booking,
+    )
+    send_return_confirmation_request_email(booking)
+
+    messages.success(request, "Return request sent. Waiting for renter to confirm.")
+    return redirect('/dashboard/?tab=booking-requests&subtab=btab-approved')
+
+
+@login_required_session
+def document_pickup(request, booking_id):
+    """
+    Renter documents the tool's condition when they pick it up (the "before"
+    record). Available while the rental is active. Optional but encouraged.
+    """
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(
+        Booking.objects.select_related('tool', 'tool__owner'),
+        id=booking_id, renter=user,
+    )
+
+    if booking.status not in ('approved', 'confirmed', 'return_pending'):
+        messages.error(request, "You can only document condition during an active rental.")
+        return redirect('/dashboard/?tab=my-rentals&subtab=rtab-active')
+
+    if request.method != 'POST':
+        return render(request, 'listings/booking/condition_photos.html', {
+            'booking': booking,
+            'phase': 'pickup',
+        })
+
+    n = _save_condition_photos(booking, user, 'pickup', request.FILES.getlist('photos'))
+    if n:
+        messages.success(request, f"Saved {n} condition photo(s). These protect you if a dispute arises.")
+    else:
+        messages.error(request, "Please choose at least one photo to upload.")
+    return redirect('/dashboard/?tab=my-rentals&subtab=rtab-active')
 
 
 @login_required_session
@@ -334,6 +424,15 @@ def confirm_return(request, booking_id):
     """Renter confirms they have returned the tool → booking completed."""
     user    = User.objects.get(id=request.session['user_id'])
     booking = get_object_or_404(Booking, id=booking_id, renter=user)
+
+    # Pickup documentation is mandatory: a rental can't be closed unless the
+    # renter recorded the tool's condition, so both sides always have evidence.
+    if booking.status == 'return_pending' and not booking.condition_photos.filter(phase='pickup').exists():
+        messages.error(
+            request,
+            "Please document the tool's condition first — this is required to confirm the return."
+        )
+        return redirect('listings:document_pickup', booking_id=booking.id)
 
     if booking.status == 'return_pending':
         actual_return = booking.actual_return_date or timezone.now().date()
@@ -389,21 +488,127 @@ def confirm_return(request, booking_id):
             booking=booking,
         )
 
-    return redirect('/dashboard/?tab=my-rentals')
+    return redirect('/dashboard/?tab=my-rentals&subtab=rtab-history')
 
 
 @login_required_session
 def dispute_return(request, booking_id):
-    """Renter disputes the return — booking goes back to approved for review."""
+    """
+    Renter contests the owner's "Mark as Returned".
+
+    GET  → show the dispute form (reason + optional photo/video evidence).
+    POST → record a DepositDispute for staff review, hold the rental, and
+           notify both sides. Late fees stop while a dispute is open because
+           the booking leaves the return_pending state.
+    """
+    user    = User.objects.get(id=request.session['user_id'])
+    booking = get_object_or_404(
+        Booking.objects.select_related('tool', 'tool__owner'),
+        id=booking_id, renter=user,
+    )
+
+    if booking.status != 'return_pending':
+        messages.error(request, "This rental is not awaiting a return confirmation.")
+        return redirect('/dashboard/?tab=my-rentals&subtab=rtab-active')
+
+    if hasattr(booking, 'deposit_dispute'):
+        messages.info(request, "A dispute is already open for this rental.")
+        return redirect('/dashboard/?tab=my-rentals&subtab=rtab-active')
+
+    if request.method != 'POST':
+        return render(request, 'listings/booking/dispute_form.html', {'booking': booking})
+
+    reason = request.POST.get('reason', '').strip()
+    if len(reason) < 10:
+        return render(request, 'listings/booking/dispute_form.html', {
+            'booking': booking,
+            'error': "Please describe what happened in at least 10 characters.",
+            'reason': reason,
+        })
+
+    # The pot in dispute is the money actually collected from the renter, not
+    # the tool's nominal deposit — no deposit is separately held or captured,
+    # so the rental payment is the only balance staff can redistribute.
+    breakdown = getattr(booking, 'payment_breakdown', None)
+    amount_in_dispute = (
+        breakdown.total_charged_to_renter if breakdown else booking.total_price
+    )
+
+    dispute = DepositDispute.objects.create(
+        booking=booking,
+        deposit_amount=amount_in_dispute,
+        initiated_by='renter',
+        reason=reason,
+        dispute_evidence=request.FILES.get('evidence'),
+        status='open',
+    )
+
+    # Hold the rental: back out of return_pending so no late fees accrue
+    # while staff review the case.
+    booking.status = 'confirmed'
+    booking.return_requested_at = None
+    booking.save(update_fields=['status', 'return_requested_at', 'updated_at'])
+
+    Notification.objects.create_for(
+        user=booking.tool.owner,
+        notification_type=NotificationType.RETURN_REQUESTED,
+        message=f"{user.name} disputed the return of \"{booking.tool.title}\". "
+                f"Rentora staff will review it.",
+        booking=booking,
+    )
+    send_dispute_opened_emails(dispute)
+
+    messages.warning(
+        request,
+        "Dispute submitted. Our staff will review it and email you the decision."
+    )
+    return redirect('/dashboard/?tab=my-rentals&subtab=rtab-active')
+
+@login_required_session
+def cancel_booking(request, booking_id):
+    """
+    Renter cancels their own booking.
+
+    Allowed only while no money has been captured — i.e. the request is still
+    awaiting the owner's decision (pending) or approved but unpaid
+    (payment_pending / approved). Once a booking is `confirmed` the renter has
+    paid, so cancellation has to go through support to handle the refund; we
+    deliberately do not let either side cancel a paid rental unilaterally.
+    """
+    if request.method != 'POST':
+        return redirect('/dashboard/?tab=my-rentals&subtab=rtab-awaiting')
+
     user    = User.objects.get(id=request.session['user_id'])
     booking = get_object_or_404(Booking, id=booking_id, renter=user)
 
-    if booking.status == 'return_pending':
-        booking.status = 'confirmed'
-        booking.return_requested_at = None
-        booking.save()
-        messages.warning(request, "Return disputed. The owner has been notified to re-confirm.")
-    return redirect('/dashboard/?tab=my-rentals')
+    cancellable = {
+        BookingStatus.PENDING,
+        BookingStatus.PAYMENT_PENDING,
+        BookingStatus.APPROVED,
+    }
+    if booking.status not in cancellable:
+        messages.error(
+            request,
+            "This booking can no longer be cancelled. Please contact support."
+        )
+        return redirect('/dashboard/?tab=my-rentals&subtab=rtab-awaiting')
+
+    booking.status = BookingStatus.CANCELLED
+    booking.save(update_fields=['status', 'updated_at'])
+
+    Notification.objects.create_for(
+        user=booking.tool.owner,
+        notification_type=NotificationType.BOOKING_REJECTED,
+        message=f"{user.name} cancelled their booking for \"{booking.tool.title}\" "
+                f"({booking.start_date} → {booking.end_date}). "
+                f"Those dates are free again.",
+        booking=booking,
+    )
+    send_booking_cancelled_email(booking)
+
+    messages.success(request, "Booking cancelled. The owner has been notified.")
+    return redirect('/dashboard/?tab=my-rentals&subtab=rtab-history')
+
 
 @login_required_session
 def report_user(request, user_id):
