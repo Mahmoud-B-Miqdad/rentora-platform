@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Privacy Policy" %} | Rentora{% endblock %}
+
+{% block content %}
+{% include "listings/legal/_legal_head.html" %}
+
+<div class="legal-hero">
+  <div class="legal-hero__inner">
+    <span class="legal-hero__eyebrow"><i class="fa-solid fa-shield-halved"></i> {% trans "Your Privacy" %}</span>
+    <h1 class="legal-hero__title">{% trans "Privacy Policy" %}</h1>
+    <p class="legal-hero__sub">{% trans "How we collect, use, and protect your data — explained in plain language. We never sell your personal information." %}</p>
+    <span class="legal-hero__updated"><i class="fa-regular fa-clock"></i> {% trans "Last updated: July 2024" %}</span>
+  </div>
+</div>
+
+<div class="legal-wrap">
+
+  <!-- Table of Contents -->
+  <aside class="legal-toc">
+    <p class="legal-toc__title">{% trans "On this page" %}</p>
+    <ul class="legal-toc__list">
+      <li><a href="#intro">{% trans "Introduction" %}</a></li>
+      <li><a href="#collect">{% trans "Information We Collect" %}</a></li>
+      <li><a href="#use">{% trans "How We Use It" %}</a></li>
+      <li><a href="#sharing">{% trans "Data Sharing" %}</a></li>
+      <li><a href="#retention">{% trans "Data Retention" %}</a></li>
+      <li><a href="#rights">{% trans "Your Rights" %}</a></li>
+      <li><a href="#security">{% trans "Security & Cookies" %}</a></li>
+      <li><a href="#contact">{% trans "Contact Us" %}</a></li>
+    </ul>
+  </aside>
+
+  <!-- Document -->
+  <div class="legal-doc">
+
+    <section id="intro">
+      <h2><span class="sec-num">1</span> {% trans "Introduction" %}</h2>
+      <p>{% trans "Rentora (\"we,\" \"us,\" or \"our\") operates the Rentora platform. This Privacy Policy explains how we collect, use, disclose, and safeguard your information." %}</p>
+      <p>{% trans "By accessing Rentora, you acknowledge that you have read, understood, and agree to be bound by all provisions of this Privacy Policy." %}</p>
+    </section>
+
+    <section id="collect">
+      <h2><span class="sec-num">2</span> {% trans "Information We Collect" %}</h2>
+
+      <h3>{% trans "A. Information You Provide" %}</h3>
+      <p>{% trans "When you register, list a tool, or book a rental, we collect:" %}</p>
+      <ul>
+        <li><strong>{% trans "Account Information:" %}</strong> {% trans "Full name, email, phone number, and password (hashed with bcrypt)" %}</li>
+        <li><strong>{% trans "Location Data:" %}</strong> {% trans "City, region, and coordinates for tool location mapping" %}</li>
+        <li><strong>{% trans "Payment Information:" %}</strong> {% trans "Processed by Stripe — we do NOT store card details" %}</li>
+        <li><strong>{% trans "Profile Information:" %}</strong> {% trans "Profile picture, bio, verification status, and rating" %}</li>
+        <li><strong>{% trans "Tool & Booking Data:" %}</strong> {% trans "Listings, photos, rental dates, messages, and reviews" %}</li>
+      </ul>
+
+      <h3>{% trans "B. Information Collected Automatically" %}</h3>
+      <ul>
+        <li><strong>{% trans "Usage Data:" %}</strong> {% trans "Pages visited, features used, and search queries" %}</li>
+        <li><strong>{% trans "Device Information:" %}</strong> {% trans "Browser type, operating system, and device model" %}</li>
+        <li><strong>{% trans "Session Cookies:" %}</strong> {% trans "For authentication and keeping you logged in" %}</li>
+      </ul>
+    </section>
+
+    <section id="use">
+      <h2><span class="sec-num">3</span> {% trans "How We Use Your Information" %}</h2>
+      <ul>
+        <li>{% trans "Processing bookings and payments" %}</li>
+        <li>{% trans "Sending confirmation emails and updates" %}</li>
+        <li>{% trans "Verifying user identity and preventing fraud" %}</li>
+        <li>{% trans "Displaying your profile and tool listings publicly" %}</li>
+        <li>{% trans "Moderating disputes and suspending abusive accounts" %}</li>
+        <li>{% trans "Improving Platform features through analytics" %}</li>
+      </ul>
+    </section>
+
+    <section id="sharing">
+      <h2><span class="sec-num">4</span> {% trans "Data Sharing & Third Parties" %}</h2>
+      <p>{% trans "We share your information only with:" %}</p>
+      <ul>
+        <li><strong>Stripe:</strong> {% trans "Payment processing" %}</li>
+        <li><strong>Google Gemini:</strong> {% trans "Anonymized tool descriptions for smart search" %}</li>
+        <li><strong>Nominatim:</strong> {% trans "Location names geocoded for mapping" %}</li>
+        <li><strong>{% trans "Staff:" %}</strong> {% trans "For dispute resolution and account moderation" %}</li>
+      </ul>
+      <div class="legal-callout--info legal-callout">
+        <p><strong>{% trans "We never sell your personal data" %}</strong> {% trans "to third parties or marketers. Ever." %}</p>
+      </div>
+
+      <h3>{% trans "What Other Users Can See" %}</h3>
+      <ul>
+        <li>{% trans "Your name, profile photo, and bio" %}</li>
+        <li>{% trans "Your average rating and review count" %}</li>
+        <li>{% trans "Reviews you have written and tools you have listed" %}</li>
+        <li>{% trans "Your verified status (if applicable)" %}</li>
+      </ul>
+    </section>
+
+    <section id="retention">
+      <h2><span class="sec-num">5</span> {% trans "Data Retention" %}</h2>
+      <ul>
+        <li><strong>{% trans "Active accounts:" %}</strong> {% trans "Until account deletion" %}</li>
+        <li><strong>{% trans "Deleted accounts:" %}</strong> {% trans "Anonymized after 7 years (tax/compliance)" %}</li>
+        <li><strong>{% trans "Payment records:" %}</strong> {% trans "7 years (legal requirement)" %}</li>
+        <li><strong>{% trans "Server logs:" %}</strong> {% trans "30 days, then automatically deleted" %}</li>
+      </ul>
+    </section>
+
+    <section id="rights">
+      <h2><span class="sec-num">6</span> {% trans "Your Privacy Rights" %}</h2>
+      <h3>{% trans "Access & Correct" %}</h3>
+      <p>{% trans "Email privacy@rentora.ps to request a copy of your data — we respond within 30 days. You can update your profile, email, and phone directly in account settings." %}</p>
+      <h3>{% trans "Delete Your Account" %}</h3>
+      <p>{% trans "Go to Settings → Delete Account. Your profile and tools are immediately hidden and messages deleted. Booking and payment records are anonymized after 7 years." %}</p>
+      <h3>{% trans "Opt Out of Marketing" %}</h3>
+      <p>{% trans "Click \"Unsubscribe\" at the bottom of any email, or manage preferences in account settings." %}</p>
+    </section>
+
+    <section id="security">
+      <h2><span class="sec-num">7</span> {% trans "Security & Cookies" %}</h2>
+      <p>{% trans "We protect your data with:" %}</p>
+      <ul>
+        <li>{% trans "HTTPS/TLS encryption for all data in transit" %}</li>
+        <li>{% trans "bcrypt password hashing (salted, one-way)" %}</li>
+        <li>{% trans "A secure database with strict access controls" %}</li>
+      </ul>
+      <p>{% trans "Rentora uses session cookies only to keep you logged in. We do NOT use third-party tracking cookies (Google Analytics, Meta Pixel, etc.). No system is 100% secure — always use a strong password and never share your credentials." %}</p>
+      <p>{% trans "Rentora is not intended for users under 18. We do not knowingly collect data from children." %}</p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="sec-num">8</span> {% trans "Contact Us" %}</h2>
+      <p>{% trans "For privacy questions or data requests, reach our team:" %}</p>
+      <div class="legal-contact-box">
+        <p>{% trans "Email our privacy team at" %}</p>
+        <p class="email">privacy@rentora.ps</p>
+        <p><a href="{% url 'listings:contact' %}">{% trans "Or visit our Contact page" %}</a></p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "FAQ" %} | Rentora{% endblock %}
+
+{% block content %}
+
+<style>
+  .faq-page {
+    max-width: 820px;
+    margin: 60px auto;
+    padding: 0 24px;
+  }
+
+  .faq-page h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #0f172a;
+    text-align: center;
+  }
+
+  .faq-page .page-subtitle {
+    font-size: 16px;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .faq-section {
+    margin-bottom: 40px;
+  }
+
+  .faq-section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .faq-item {
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    transition: all 0.2s;
+  }
+
+  .faq-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .faq-question {
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #0f172a;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .faq-question:hover {
+    background: #f8fafc;
+  }
+
+  .faq-question::after {
+    content: "▼";
+    font-size: 12px;
+    color: #64748b;
+    transition: transform 0.3s;
+  }
+
+  .faq-item.active .faq-question {
+    background: #f1f5f9;
+    color: #2563eb;
+  }
+
+  .faq-item.active .faq-question::after {
+    transform: rotate(-180deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #f8fafc;
+  }
+
+  .faq-item.active .faq-answer {
+    max-height: 500px;
+  }
+
+  .faq-answer-content {
+    padding: 20px;
+    color: #475569;
+    line-height: 1.7;
+  }
+
+  .faq-answer-content p {
+    margin-bottom: 12px;
+  }
+
+  .faq-answer-content ul {
+    margin-left: 20px;
+    margin-bottom: 12px;
+  }
+
+  .faq-answer-content li {
+    margin-bottom: 8px;
+  }
+
+  .faq-answer-content strong {
+    color: #0f172a;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    .faq-page {
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    .faq-page h1 {
+      font-size: 28px;
+    }
+
+    .faq-question {
+      padding: 14px 16px;
+      font-size: 15px;
+    }
+
+    .faq-answer-content {
+      padding: 16px;
+      font-size: 14px;
+    }
+  }
+</style>
+
+<div class="faq-page">
+
+  <h1>{% trans "Frequently Asked Questions" %}</h1>
+  <p class="page-subtitle">{% trans "Find answers to common questions about renting and listing tools." %}</p>
+
+  <!-- Renters Section -->
+  <div class="faq-section">
+    <h2>{% trans "For Renters" %}</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How do I rent a tool?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}1. Sign up for a free Rentora account<br>2. Browse available tools by category or search<br>3. Click on a tool to view details, photos, and reviews<br>4. Select your rental dates and send the request — nothing is charged yet<br>5. You land on a confirmation page and get an email; the owner reviews your request<br>6. Once approved, pay via Stripe from "My Rentals" and the dates are yours{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How much does it cost?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Rental costs depend on the daily rate set by the tool owner. At checkout, you'll see:{% endblocktrans %}</p>
+          <ul>
+            <li><strong>{% trans "Rental Total:" %}</strong> {% trans "rental days × daily rate" %}</li>
+            <li><strong>{% trans "Platform Fee:" %}</strong> {% trans "15% of rental total (supports servers and support)" %}</li>
+            <li><strong>{% trans "Damage Protection (optional):" %}</strong> {% trans "+$10 for accidental damage coverage" %}</li>
+          </ul>
+          <p>{% trans "The total is charged upfront to your card." %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "What is a deposit?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}A deposit is a security amount held by Rentora to protect the tool owner against damage. It's NOT charged in addition to rental cost—it's included in your payment. When you return the tool in agreed condition, the deposit is refunded.{% endblocktrans %}</p>
+          <p>{% blocktrans %}If there's a dispute over tool condition, Rentora staff will review evidence and decide on refund or claim.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How long can I rent a tool?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}No minimum or maximum—you and the owner agree on dates. You can rent for 1 day, 1 week, or longer. Select your preferred start and end dates at checkout.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "What if I return the tool late?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}<strong>Each late day is charged as one extra rental day, at the normal daily rate.</strong> There is no penalty multiplier.{% endblocktrans %}</p>
+          <p>{% blocktrans %}Example: at $10/day, returning 2 days late adds $20 to your total.{% endblocktrans %}</p>
+          <p>{% blocktrans %}<strong>To avoid this:</strong> hand the tool back on time and ask the owner to press "Mark as Returned" while you are both there. You get a notification and an email — <strong>confirm the return from "My Rentals" straight away</strong> and the charges stop at that moment.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "What if the tool is damaged when I receive it?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Message the owner straight away through the in-app chat and take photos of the tool's condition before you use it. Keeping it in the chat means there is a timestamped record both sides can rely on.{% endblocktrans %}</p>
+          <p>{% blocktrans %}If you cannot agree, contact support from the Contact page. And when the owner later marks the tool as returned, you can choose <strong>Dispute</strong> instead of Confirm — that opens a formal case where you attach your reason and photo evidence for staff to review.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "Can I cancel my rental?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Yes. Open <strong>My Rentals</strong> and press <strong>Cancel</strong> on the booking. What happens depends on the stage:{% endblocktrans %}</p>
+          <ul>
+            <li><strong>{% trans "Before you have paid:" %}</strong> {% trans "cancel yourself, instantly and free. Nothing has been charged, so there is nothing to refund, and the dates are released for others." %}</li>
+            <li><strong>{% trans "After you have paid:" %}</strong> {% trans "the Cancel button is disabled so neither side can void a paid rental alone. Contact support and we will handle the refund." %}</li>
+            <li><strong>{% trans "During an active rental:" %}</strong> {% trans "return the tool and complete the return handshake — you are charged only for the days you actually kept it." %}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How do I rate a tool or owner?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Once the return is confirmed the booking moves to <strong>Completed</strong>, and a "Leave Review" button appears on it for both sides. Go to "My Rentals" (or "Booking Requests" if you are the owner) → the completed booking → <strong>Leave Review</strong>. You can rate on:{% endblocktrans %}</p>
+          <ul>
+            <li><strong>{% trans "Tool Quality:" %}</strong> {% trans "Condition, functionality, features" %}</li>
+            <li><strong>{% trans "Owner Communication:" %}</strong> {% trans "Responsiveness and helpfulness" %}</li>
+          </ul>
+          <p>{% trans "Reviews are public and help other renters make informed decisions." %}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Owners Section -->
+  <div class="faq-section">
+    <h2>{% trans "For Tool Owners" %}</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How do I list a tool?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}1. Sign up or log in to your Rentora account<br>2. Go to "Dashboard" → "List Your Tool"<br>3. Fill in tool name, description, category, and condition<br>4. Set your daily rental rate and deposit<br>5. Add your location<br>6. Upload clear photos of your tool<br>7. Click "Publish" to make it live{% endblocktrans %}</p>
+          <p>{% blocktrans %}You do not manage a calendar. A published tool is available every day by default, and Rentora automatically blocks any dates that are already booked so two people can never reserve the same window.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How do I set the daily rate?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}You decide the daily rate. Consider:{% endblocktrans %}</p>
+          <ul>
+            <li>{% trans "Original cost of tool and depreciation" %}</li>
+            <li>{% trans "Condition and features" %}</li>
+            <li>{% trans "Similar tools' rates on Rentora" %}</li>
+            <li>{% trans "What similar tools nearby are going for" %}</li>
+          </ul>
+          <p>{% blocktrans %}We recommend 5-10% of the tool's original price per day. Example: $500 tool → $25-50/day.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How much do I earn?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Your earning = (rental price × days) - 15% platform fee - Stripe payment processing fee.{% endblocktrans %}</p>
+          <p>{% blocktrans %}Example: 3-day rental at $25/day{% endblocktrans %}</p>
+          <ul>
+            <li>{% trans "Renter pays: $75" %}</li>
+            <li>{% trans "Platform fee (15%): $11.25" %}</li>
+            <li>{% trans "You receive: $63.75" %}</li>
+          </ul>
+          <p>{% trans "You can view detailed earnings in your Dashboard." %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How do I handle the return process?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Do the handover and the handshake together, in person — that is what protects both of you:{% endblocktrans %}</p>
+          <ol>
+            <li>{% trans "Meet the renter and inspect the tool with them present" %}</li>
+            <li>{% trans "Go to Dashboard → Booking Requests" %}</li>
+            <li>{% trans "Press \"Mark as Returned\" right there at handover" %}</li>
+            <li>{% trans "The renter instantly gets a notification and an email" %}</li>
+            <li>{% trans "They press \"Confirm Return\" on the spot — and the rental is complete" %}</li>
+          </ol>
+          <p>{% blocktrans %}<strong>Why on the spot:</strong> late fees keep accruing until you mark the tool returned. Doing it at handover means the renter is never charged for time the tool was already back with you, and you are never left waiting on a confirmation.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "What if the tool is damaged upon return?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Inspect the tool with the renter still there, before you mark it returned:{% endblocktrans %}</p>
+          <ol>
+            <li>{% trans "Take photos or video of the damage there and then" %}</li>
+            <li>{% trans "Raise it with the renter in the in-app chat, so there is a timestamped record" %}</li>
+            <li>{% trans "Contact support from the Contact page with your photos and the booking number" %}</li>
+            <li>{% trans "Rentora staff review both sides and decide within 5 business days" %}</li>
+            <li>{% trans "A damage claim can be settled from the deposit held on the booking" %}</li>
+          </ol>
+          <p>{% blocktrans %}If the renter opted for damage protection, insurance covers claims up to the deposit amount.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "Can renters cancel bookings?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Yes — but only while no money has changed hands. A renter can cancel their own request before they pay, which simply frees your dates again and notifies you by email.{% endblocktrans %}</p>
+          <p>{% blocktrans %}<strong>Once a rental is paid, neither side can cancel it alone.</strong> The renter has often paid before collecting the tool, so leaving that decision to one party would be unfair to the other. Paid cancellations go through Rentora support, which handles the refund.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "How do I get paid?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Your earnings from every completed rental are tracked on your Dashboard under <strong>Total Earnings</strong>, and each payment shows the exact split between your payout and the platform fee.{% endblocktrans %}</p>
+          <p>{% blocktrans %}<strong>Self-service bank payouts are not live yet.</strong> Until they are, contact us from the Contact page to arrange your transfer and we will confirm the amount against your completed rentals. We will announce automatic payouts here as soon as they launch.{% endblocktrans %}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- General Section -->
+  <div class="faq-section">
+    <h2>{% trans "General" %}</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "Is Rentora safe?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% blocktrans %}Rentora prioritizes user safety:{% endblocktrans %}</p>
+          <ul>
+            <li>{% trans "All data transmitted via HTTPS encryption" %}</li>
+            <li>{% trans "Passwords stored with bcrypt hashing" %}</li>
+            <li>{% trans "Payments processed securely by Stripe" %}</li>
+            <li>{% trans "User verification and rating system" %}</li>
+            <li>{% trans "Report and dispute mechanisms" %}</li>
+            <li>{% trans "Staff moderates abusive accounts" %}</li>
+          </ul>
+          <p>{% trans "Always meet in public, inspect tools carefully, and document condition with photos." %}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">{% trans "What if I have more questions?" %}</div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <p>{% trans "Visit our" %} <a href="{% url 'listings:contact' %}">{% trans "Contact Page" %}</a> {% trans "to send a message to our support team. We respond within 24 hours." %}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', function() {
+      const faqItem = this.closest('.faq-item');
+      faqItem.classList.toggle('active');
+    });
+  });
+</script>
+
+{% endblock %}

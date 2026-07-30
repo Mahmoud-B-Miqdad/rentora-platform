@@ -98,6 +98,7 @@ TEMPLATES = [
                 "listings.context_processors.notification_count",
                 "listings.context_processors.current_user",
                 "listings.context_processors.site_settings",
+                "listings.context_processors.footer_categories",
                 "console.context_processors.console_counts",
             ],
         },

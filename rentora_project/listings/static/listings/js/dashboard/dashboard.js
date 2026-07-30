@@ -148,3 +148,98 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 });
+/* ── Delete-tool confirmation modal ───────────────────────
+   Replaces the native confirm(). Intercepts the delete form's
+   submit, shows the styled modal, and only submits once the
+   user confirms. form.submit() is used deliberately: the
+   programmatic call does NOT re-fire the submit listener, so
+   there is no loop. */
+(function () {
+  var overlay = document.getElementById('deleteToolModal');
+  if (!overlay) return;
+
+  var nameEl = document.getElementById('delModalToolName');
+  var okBtn  = document.getElementById('delModalConfirm');
+  var pendingForm = null;
+  var lastTrigger = null;
+
+  function closeModal() {
+    overlay.classList.remove('active');
+    pendingForm = null;
+    if (lastTrigger) { lastTrigger.focus(); lastTrigger = null; }
+  }
+
+  document.querySelectorAll('form[data-delete-form]').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      pendingForm = this;
+      lastTrigger = this.querySelector('button[type="submit"]');
+      nameEl.textContent = this.dataset.toolName || '';
+      overlay.classList.add('active');
+      okBtn.focus();
+    });
+  });
+
+  okBtn.addEventListener('click', function () {
+    if (!pendingForm) return;
+    var form = pendingForm;
+    overlay.classList.remove('active');
+    form.submit();
+  });
+
+  overlay.querySelectorAll('[data-del-cancel]').forEach(function (btn) {
+    btn.addEventListener('click', closeModal);
+  });
+
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+  });
+})();
+
+/* ── Cancel-booking confirmation modal ────────────────────
+   Mirrors the delete-tool modal. form.submit() is deliberate:
+   the programmatic call does not re-fire the submit listener. */
+(function () {
+  var overlay = document.getElementById('cancelBookingModal');
+  if (!overlay) return;
+
+  var nameEl = document.getElementById('cancelModalToolName');
+  var okBtn  = document.getElementById('cancelModalConfirm');
+  var pendingForm = null;
+
+  function closeModal() {
+    overlay.classList.remove('active');
+    pendingForm = null;
+  }
+
+  document.querySelectorAll('form[data-cancel-form]').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      pendingForm = this;
+      nameEl.textContent = this.dataset.toolName || '';
+      overlay.classList.add('active');
+      okBtn.focus();
+    });
+  });
+
+  okBtn.addEventListener('click', function () {
+    if (!pendingForm) return;
+    var form = pendingForm;
+    overlay.classList.remove('active');
+    form.submit();
+  });
+
+  overlay.querySelectorAll('[data-cancel-dismiss]').forEach(function (btn) {
+    btn.addEventListener('click', closeModal);
+  });
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+  });
+})();

@@ -1,0 +1,22 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}blue{% endblock %}
+{% block heading %}{% trans "New rental request" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Hi {{ owner_name }},{% endblocktrans %}</p>
+
+  <p>{% blocktrans %}<strong>{{ renter_name }}</strong> has requested to rent your tool. Review the request and approve or decline it from your dashboard.{% endblocktrans %}</p>
+
+  <div class="panel">
+    <div class="row"><span>{% trans "Tool" %}</span><span>{{ tool_title }}</span></div>
+    <div class="row"><span>{% trans "Renter" %}</span><span>{{ renter_name }}</span></div>
+    <div class="row"><span>{% trans "Dates" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
+    <div class="row"><span>{% trans "Total" %}</span><span>${{ booking.total_price }}</span></div>
+  </div>
+
+  <p class="muted">{% trans "The renter only pays after you approve the request — nothing is charged yet." %}</p>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=booking-requests">{% trans "Review request" %}</a>
+{% endblock %}

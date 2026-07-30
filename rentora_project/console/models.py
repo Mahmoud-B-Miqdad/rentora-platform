@@ -11,6 +11,7 @@ class AdminAction(models.Model):
         ("dismiss_reports", "Dismiss reports"),
         ("force_complete",  "Force-complete booking"),
         ("category_change", "Category change"),
+        ("resolve_dispute", "Resolve dispute"),
     ]
  
     staff = models.ForeignKey(

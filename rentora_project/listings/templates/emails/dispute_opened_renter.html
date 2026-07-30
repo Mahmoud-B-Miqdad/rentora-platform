@@ -1,0 +1,27 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}blue{% endblock %}
+{% block heading %}{% trans "We received your dispute" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Thanks — we have logged your dispute for <strong>{{ tool_title }}</strong> and put the rental on hold.{% endblocktrans %}</p>
+
+  <div class="panel">
+    <div class="row"><span>{% trans "Dispute" %}</span><span>#{{ dispute.id }}</span></div>
+    <div class="row"><span>{% trans "Tool" %}</span><span>{{ tool_title }}</span></div>
+    <div class="row"><span>{% trans "Owner" %}</span><span>{{ owner_name }}</span></div>
+    <div class="row"><span>{% trans "Status" %}</span><span>{{ dispute.get_status_display }}</span></div>
+  </div>
+
+  <p><strong>{% trans "What happens next" %}</strong></p>
+  <ul>
+    <li>{% trans "Our staff review your reason and evidence alongside the owner's account." %}</li>
+    <li>{% trans "No late fees accrue while a dispute is open." %}</li>
+    <li>{% trans "You will get the decision by email within 5 business days." %}</li>
+  </ul>
+
+  <p class="muted">{% trans "Keep any photos or messages about the tool's condition — they help us decide fairly." %}</p>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=my-rentals">{% trans "View my rental" %}</a>
+{% endblock %}

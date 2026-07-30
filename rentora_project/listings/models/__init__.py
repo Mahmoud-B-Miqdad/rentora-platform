@@ -27,6 +27,10 @@ from listings.models.wishlist   import Wishlist
 from .report import Report
 from listings.models.notification import Notification, NotificationType
 from listings.models.message      import Conversation, Message
+from listings.models.payment      import PaymentBreakdown
+from listings.models.deposit      import DepositDispute
+from listings.models.contact      import ContactMessage
+from listings.models.condition_photo import RentalConditionPhoto
 
 __all__ = [
     # ── Core entities ──────────────────────────────────────────────
@@ -39,6 +43,10 @@ __all__ = [
     "Notification",
     "Conversation",
     "Message",
+    "PaymentBreakdown",
+    "DepositDispute",
+    "ContactMessage",
+    "RentalConditionPhoto",
 
     # ── Choices enums (re-exported for convenience in views/templates)
     "ConditionChoices",

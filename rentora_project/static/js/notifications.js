@@ -21,8 +21,18 @@
         e.stopPropagation();
         const isOpen = dropdown.classList.toggle('open');
         btn.setAttribute('aria-expanded', isOpen);
-        if (isOpen && !loaded) {
-            fetchNotifications();
+        // Tell any other header dropdown to close when this one opens.
+        if (isOpen) {
+            document.dispatchEvent(new CustomEvent('rentora:dropdown-open', { detail: 'notif' }));
+            if (!loaded) fetchNotifications();
+        }
+    });
+
+    // Close this dropdown when a different one opens.
+    document.addEventListener('rentora:dropdown-open', function (e) {
+        if (e.detail !== 'notif') {
+            dropdown.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
         }
     });
 

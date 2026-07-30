@@ -1,0 +1,20 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}amber{% endblock %}
+{% block heading %}{% trans "Booking cancelled" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Hi {{ owner_name }},{% endblocktrans %}</p>
+
+  <p>{% blocktrans %}<strong>{{ renter_name }}</strong> cancelled their request for <strong>{{ tool_title }}</strong>. No payment was taken, so there is nothing to refund.{% endblocktrans %}</p>
+
+  <div class="panel">
+    <div class="row"><span>{% trans "Tool" %}</span><span>{{ tool_title }}</span></div>
+    <div class="row"><span>{% trans "Dates now free" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
+  </div>
+
+  <p class="muted">{% trans "These dates are open again and your tool can be booked by someone else." %}</p>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=my-tools">{% trans "View my tools" %}</a>
+{% endblock %}

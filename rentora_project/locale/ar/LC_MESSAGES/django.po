@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Rentora 1.0\n"
@@ -57,8 +58,12 @@ msgid "Close menu"
 msgstr "إغلاق القائمة"
 
 # ── Footer ──────────────────────────────────────────────────────
-msgid "The peer-to-peer tool rental marketplace. Rent what you need, list what you have, powered by AI to make every transaction smart and fair."
-msgstr "منصّة تأجير الأدوات بين الأفراد. استأجر ما تحتاجه، وأضف ما تملكه، بدعم من الذكاء الاصطناعي لجعل كل معاملة ذكية وعادلة."
+msgid ""
+"The peer-to-peer tool rental marketplace. Rent what you need, list what you "
+"have, powered by AI to make every transaction smart and fair."
+msgstr ""
+"منصّة تأجير الأدوات بين الأفراد. استأجر ما تحتاجه، وأضف ما تملكه، بدعم من "
+"الذكاء الاصطناعي لجعل كل معاملة ذكية وعادلة."
 
 msgid "Platform"
 msgstr "المنصّة"
@@ -127,8 +132,13 @@ msgstr "استأجر أي أداة"
 msgid "From People Near You"
 msgstr "من أشخاص بالقرب منك"
 
-msgid "Need a drill for the weekend? Browse thousands of tools listed by local owners. Smart AI search, transparent pricing, and secure booking — no commitment."
-msgstr "تحتاج مثقاباً لعطلة نهاية الأسبوع؟ تصفّح آلاف الأدوات المعروضة من مالكين محليين. بحث ذكي بالذكاء الاصطناعي، أسعار شفافة، وحجز آمن — دون أي التزام."
+msgid ""
+"Need a drill for the weekend? Browse thousands of tools listed by local "
+"owners. Smart AI search, transparent pricing, and secure booking — no "
+"commitment."
+msgstr ""
+"تحتاج مثقاباً لعطلة نهاية الأسبوع؟ تصفّح آلاف الأدوات المعروضة من مالكين "
+"محليين. بحث ذكي بالذكاء الاصطناعي، أسعار شفافة، وحجز آمن — دون أي التزام."
 
 msgid "Try \"Concrete Drill\" or \"بدي شي أحفر فيه الجدار\"..."
 msgstr "جرّب \"مثقاب خرسانة\" أو \"بدي شي أحفر فيه الجدار\"..."
@@ -209,20 +219,31 @@ msgstr "احصل على الأداة التي تحتاجها في ثلاث خط�
 msgid "Find Your Tool"
 msgstr "ابحث عن أداتك"
 
-msgid "Use AI-powered search or browse by category. Search in English or Arabic — our AI understands both."
-msgstr "استخدم البحث الذكي أو تصفّح حسب التصنيف. ابحث بالعربية أو الإنجليزية — ذكاؤنا الاصطناعي يفهم اللغتين."
+msgid ""
+"Use AI-powered search or browse by category. Search in English or Arabic — "
+"our AI understands both."
+msgstr ""
+"استخدم البحث الذكي أو تصفّح حسب التصنيف. ابحث بالعربية أو الإنجليزية — "
+"ذكاؤنا الاصطناعي يفهم اللغتين."
 
 msgid "Book Instantly"
 msgstr "احجز فوراً"
 
-msgid "Pick your dates, review pricing and deposit details, then send a request. Owners respond fast."
-msgstr "اختر التواريخ، راجع تفاصيل السعر والتأمين، ثم أرسل الطلب. المالكون يردّون بسرعة."
+msgid ""
+"Pick your dates, review pricing and deposit details, then send a request. "
+"Owners respond fast."
+msgstr ""
+"اختر التواريخ، راجع تفاصيل السعر والتأمين، ثم أرسل الطلب. المالكون يردّون "
+"بسرعة."
 
 msgid "Get the Job Done"
 msgstr "أنجز مهمّتك"
 
-msgid "Pick up the tool, complete your project, return it, and leave a review to build community trust."
-msgstr "استلم الأداة، أنجز مشروعك، أعدها، واترك تقييماً لتعزيز الثقة في المجتمع."
+msgid ""
+"Pick up the tool, complete your project, return it, and leave a review to "
+"build community trust."
+msgstr ""
+"استلم الأداة، أنجز مشروعك، أعدها، واترك تقييماً لتعزيز الثقة في المجتمع."
 
 msgid "Reviews"
 msgstr "التقييمات"
@@ -239,8 +260,12 @@ msgstr "مستأجر أداة"
 msgid "Have Tools Sitting Idle?"
 msgstr "لديك أدوات غير مستخدمة؟"
 
-msgid "Turn your idle tools into passive income. List on Rentora and let our AI pricing advisor help you set the perfect rate to maximize earnings."
-msgstr "حوّل أدواتك غير المستخدمة إلى دخل إضافي. اعرضها على رينتورا ودَع مستشار التسعير الذكي يساعدك على تحديد السعر الأمثل لزيادة أرباحك."
+msgid ""
+"Turn your idle tools into passive income. List on Rentora and let our AI "
+"pricing advisor help you set the perfect rate to maximize earnings."
+msgstr ""
+"حوّل أدواتك غير المستخدمة إلى دخل إضافي. اعرضها على رينتورا ودَع مستشار "
+"التسعير الذكي يساعدك على تحديد السعر الأمثل لزيادة أرباحك."
 
 msgid "List Your Tool Now"
 msgstr "أضف أداتك الآن"
@@ -258,8 +283,12 @@ msgstr "استأجر بذكاء،"
 msgid "not harder."
 msgstr "لا بعناء."
 
-msgid "Join thousands of people renting and listing tools across their community — no ownership required."
-msgstr "انضم إلى آلاف الأشخاص الذين يستأجرون ويعرضون الأدوات في مجتمعهم — دون الحاجة إلى امتلاكها."
+msgid ""
+"Join thousands of people renting and listing tools across their community — "
+"no ownership required."
+msgstr ""
+"انضم إلى آلاف الأشخاص الذين يستأجرون ويعرضون الأدوات في مجتمعهم — دون الحاجة"
+" إلى امتلاكها."
 
 msgid "Verified tool owners & renters"
 msgstr "مالكون ومستأجرون موثّقون"
@@ -426,8 +455,14 @@ msgstr "قصتنا"
 msgid "We're Making Tools <mark>Accessible</mark><br>to <mark>Everyone</mark>"
 msgstr "نحن نجعل الأدوات <mark>متاحة</mark><br><mark>للجميع</mark>"
 
-msgid "Rentora was born from a simple idea — your neighbor probably owns the drill you need for the weekend. We built the platform that connects them, turning idle tools into income and saving renters from unnecessary purchases."
-msgstr "وُلدت رينتورا من فكرة بسيطة — جارك يملك على الأغلب المثقاب الذي تحتاجه لعطلة نهاية الأسبوع. بنينا المنصة التي تربط بينهم، وتحول الأدوات غير المستخدمة إلى دخل وتوفّر على المستأجرين من عمليات شراء غير ضرورية."
+msgid ""
+"Rentora was born from a simple idea — your neighbor probably owns the drill "
+"you need for the weekend. We built the platform that connects them, turning "
+"idle tools into income and saving renters from unnecessary purchases."
+msgstr ""
+"وُلدت رينتورا من فكرة بسيطة — جارك يملك على الأغلب المثقاب الذي تحتاجه لعطلة"
+" نهاية الأسبوع. بنينا المنصة التي تربط بينهم، وتحول الأدوات غير المستخدمة "
+"إلى دخل وتوفّر على المستأجرين من عمليات شراء غير ضرورية."
 
 msgid "Join the Community"
 msgstr "انضم إلى المجتمع"
@@ -441,8 +476,16 @@ msgstr "مهمتنا"
 msgid "Rent Smarter,<br><span>Live Better</span>"
 msgstr "استأجر بذكاء،<br><span>عش أفضل</span>"
 
-msgid "Every year, billions of dollars' worth of tools sit unused in garages and storage rooms. At the same time, people pay full price for tools they'll use once or twice. Rentora exists to close that gap — creating a circular economy where tools are shared, not stockpiled."
-msgstr "كل عام، مليارات الدولارات من قيمة الأدوات تبقى غير مستخدمة في المرائب وغرف التخزين. في الوقت ذاته، يدفع الناس السعر الكامل لأدوات سيستخدمونها مرة أو مرتين. توجد رينتورا لإغلاق هذه الفجوة — بإنشاء اقتصاد دائري حيث تُشاع الأدوات، لا تُخزّن."
+msgid ""
+"Every year, billions of dollars' worth of tools sit unused in garages and "
+"storage rooms. At the same time, people pay full price for tools they'll use"
+" once or twice. Rentora exists to close that gap — creating a circular "
+"economy where tools are shared, not stockpiled."
+msgstr ""
+"كل عام، مليارات الدولارات من قيمة الأدوات تبقى غير مستخدمة في المرائب وغرف "
+"التخزين. في الوقت ذاته، يدفع الناس السعر الكامل لأدوات سيستخدمونها مرة أو "
+"مرتين. توجد رينتورا لإغلاق هذه الفجوة — بإنشاء اقتصاد دائري حيث تُشاع "
+"الأدوات، لا تُخزّن."
 
 msgid "Reduce waste by keeping tools in active use within the community."
 msgstr "قلل الهدر بإبقاء الأدوات قيد الاستخدام الفعلي داخل المجتمع."
@@ -468,32 +511,50 @@ msgstr "ما نؤمن به"
 msgid "Our Core <span>Values</span>"
 msgstr "قيمنا <span>الأساسية</span>"
 
-msgid "Every decision we make comes back to these four principles that define who we are."
+msgid ""
+"Every decision we make comes back to these four principles that define who "
+"we are."
 msgstr "كل قرار نتخذه يعود إلى هذه الأربع مبادئ التي تعرّف من نحن."
 
 msgid "Community First"
 msgstr "المجتمع أولاً"
 
-msgid "We believe in the power of neighbors helping neighbors. Every rental strengthens local connections and builds trust within communities."
-msgstr "نؤمن بقوة الجيران الذين يساعدون بعضهم. كل تأجير يقوّي الروابط المحلية ويبني الثقة داخل المجتمعات."
+msgid ""
+"We believe in the power of neighbors helping neighbors. Every rental "
+"strengthens local connections and builds trust within communities."
+msgstr ""
+"نؤمن بقوة الجيران الذين يساعدون بعضهم. كل تأجير يقوّي الروابط المحلية ويبني "
+"الثقة داخل المجتمعات."
 
 msgid "Trust & Safety"
 msgstr "الثقة والأمان"
 
-msgid "Verified profiles, transparent reviews, and secure booking flows ensure every interaction on Rentora is safe and accountable."
-msgstr "الملفات الموثّقة والتقييمات الشفافة وتدفقات الحجز الآمنة تضمن أن كل تفاعل على رينتورا آمن وقابل للمحاسبة."
+msgid ""
+"Verified profiles, transparent reviews, and secure booking flows ensure "
+"every interaction on Rentora is safe and accountable."
+msgstr ""
+"الملفات الموثّقة والتقييمات الشفافة وتدفقات الحجز الآمنة تضمن أن كل تفاعل "
+"على رينتورا آمن وقابل للمحاسبة."
 
 msgid "Sustainability"
 msgstr "الاستدامة"
 
-msgid "Sharing tools means fewer tools manufactured and less waste. We're committed to a circular economy that's better for the planet."
-msgstr "تقاسم الأدوات يعني عدد أقل من الأدوات المصنعة وأقل نفايات. نحن ملتزمون باقتصاد دائري أفضل للكوكب."
+msgid ""
+"Sharing tools means fewer tools manufactured and less waste. We're committed"
+" to a circular economy that's better for the planet."
+msgstr ""
+"تقاسم الأدوات يعني عدد أقل من الأدوات المصنعة وأقل نفايات. نحن ملتزمون "
+"باقتصاد دائري أفضل للكوكب."
 
 msgid "Smart Innovation"
 msgstr "الابتكار الذكي"
 
-msgid "From AI-powered pricing to real-time search, we use technology to make renting tools as effortless as possible."
-msgstr "من التسعير المدعوم بالذكاء الاصطناعي إلى البحث في الوقت الفعلي، نستخدم التكنولوجيا لجعل استئجار الأدوات سهلة قدر الإمكان."
+msgid ""
+"From AI-powered pricing to real-time search, we use technology to make "
+"renting tools as effortless as possible."
+msgstr ""
+"من التسعير المدعوم بالذكاء الاصطناعي إلى البحث في الوقت الفعلي، نستخدم "
+"التكنولوجيا لجعل استئجار الأدوات سهلة قدر الإمكان."
 
 msgid "How We Got Here"
 msgstr "كيف وصلنا هنا"
@@ -501,7 +562,8 @@ msgstr "كيف وصلنا هنا"
 msgid "Our <span>Journey</span>"
 msgstr "<span>رحلتنا</span>"
 
-msgid "From a garage idea to a growing platform — here's how Rentora came to be."
+msgid ""
+"From a garage idea to a growing platform — here's how Rentora came to be."
 msgstr "من فكرة في مرآب إلى منصة متنامية — إليك كيف وُلدت رينتورا."
 
 msgid "The Idea"
@@ -510,8 +572,14 @@ msgstr "الفكرة"
 msgid "A Weekend Problem Becomes a Business"
 msgstr "مشكلة عطلة نهاية الأسبوع تصبح عملاً تجارياً"
 
-msgid "Our founder needed a concrete drill for a weekend project. After paying $80 to buy one he'd use once, he realized: his neighbor had the exact same tool sitting unused. Rentora was born from that frustration."
-msgstr "احتاج مؤسسنا إلى مثقاب خرسانة لمشروع عطلة نهاية الأسبوع. بعد دفع 80 دولار لشراء واحد سيستخدمه مرة واحدة، أدرك أن جاره يملك نفس الأداة بالضبط غير مستخدمة. وُلدت رينتورا من هذا الإحباط."
+msgid ""
+"Our founder needed a concrete drill for a weekend project. After paying $80 "
+"to buy one he'd use once, he realized: his neighbor had the exact same tool "
+"sitting unused. Rentora was born from that frustration."
+msgstr ""
+"احتاج مؤسسنا إلى مثقاب خرسانة لمشروع عطلة نهاية الأسبوع. بعد دفع 80 دولار "
+"لشراء واحد سيستخدمه مرة واحدة، أدرك أن جاره يملك نفس الأداة بالضبط غير "
+"مستخدمة. وُلدت رينتورا من هذا الإحباط."
 
 msgid "Building"
 msgstr "البناء"
@@ -519,8 +587,13 @@ msgstr "البناء"
 msgid "Platform Development Begins"
 msgstr "بدء تطوير المنصة"
 
-msgid "A small team started building the core marketplace — listings, bookings, and a trust system that would make strangers comfortable sharing their valuable tools."
-msgstr "بدأت فريق صغير ببناء السوق الأساسي — قوائم وحجوزات ونظام ثقة يجعل الغرباء مرتاحين لمشاركة أدواتهم الثمينة."
+msgid ""
+"A small team started building the core marketplace — listings, bookings, and"
+" a trust system that would make strangers comfortable sharing their valuable"
+" tools."
+msgstr ""
+"بدأت فريق صغير ببناء السوق الأساسي — قوائم وحجوزات ونظام ثقة يجعل الغرباء "
+"مرتاحين لمشاركة أدواتهم الثمينة."
 
 msgid "Launch"
 msgstr "الإطلاق"
@@ -528,8 +601,12 @@ msgstr "الإطلاق"
 msgid "First Rentals Go Live"
 msgstr "أولى عمليات التأجير تبدأ"
 
-msgid "The first tool was listed. The first booking was made. Real neighbors, real tools, real money — the model worked. Word spread fast within the community."
-msgstr "تم عرض الأداة الأولى. تم إجراء أول حجز. جيران حقيقيون وأدوات حقيقية وأموال حقيقية — نجح النموذج. انتشرت الكلمة بسرعة داخل المجتمع."
+msgid ""
+"The first tool was listed. The first booking was made. Real neighbors, real "
+"tools, real money — the model worked. Word spread fast within the community."
+msgstr ""
+"تم عرض الأداة الأولى. تم إجراء أول حجز. جيران حقيقيون وأدوات حقيقية وأموال "
+"حقيقية — نجح النموذج. انتشرت الكلمة بسرعة داخل المجتمع."
 
 msgid "AI Integration"
 msgstr "دمج الذكاء الاصطناعي"
@@ -537,8 +614,12 @@ msgstr "دمج الذكاء الاصطناعي"
 msgid "Smart Pricing & Arabic Search"
 msgstr "التسعير الذكي والبحث العربي"
 
-msgid "We integrated AI for smart pricing suggestions and bilingual search — because renting should be easy in any language."
-msgstr "دمجنا الذكاء الاصطناعي لاقتراحات التسعير الذكي والبحث الثنائي اللغة — لأن الاستئجار يجب أن يكون سهلاً بأي لغة."
+msgid ""
+"We integrated AI for smart pricing suggestions and bilingual search — "
+"because renting should be easy in any language."
+msgstr ""
+"دمجنا الذكاء الاصطناعي لاقتراحات التسعير الذكي والبحث الثنائي اللغة — لأن "
+"الاستئجار يجب أن يكون سهلاً بأي لغة."
 
 msgid "Built for the Community,"
 msgstr "بُني للمجتمع،"
@@ -546,8 +627,13 @@ msgstr "بُني للمجتمع،"
 msgid "Powered by Trust"
 msgstr "مدعوم بالثقة"
 
-msgid "Rentora isn't just a marketplace — it's a community-driven platform where verified owners and responsible renters create a cycle of sharing that benefits everyone involved."
-msgstr "رينتورا ليست مجرد سوق — إنها منصة مدفوعة بالمجتمع حيث ينشئ المالكون الموثّقون والمستأجرون المسؤولون دورة تقاسم تفيد الجميع."
+msgid ""
+"Rentora isn't just a marketplace — it's a community-driven platform where "
+"verified owners and responsible renters create a cycle of sharing that "
+"benefits everyone involved."
+msgstr ""
+"رينتورا ليست مجرد سوق — إنها منصة مدفوعة بالمجتمع حيث ينشئ المالكون "
+"الموثّقون والمستأجرون المسؤولون دورة تقاسم تفيد الجميع."
 
 msgid "Verified owner badges build instant credibility"
 msgstr "شارات المالك الموثّق تبني المصداقية الفورية"
@@ -585,26 +671,45 @@ msgstr "فريق صغير شغوف مهتم بجعل تقاسم الأدوات �
 msgid "Founder & Full-Stack Developer"
 msgstr "المؤسس ومطور Full-Stack"
 
-msgid "The visionary behind Rentora — built the platform from the ground up, from database architecture to pixel-perfect UI. Passionate about peer-to-peer markets and community-driven products."
-msgstr "الرؤية خلف رينتورا — بنى المنصة من الصفر، من معمارية قاعدة البيانات إلى واجهة مستخدم مثالية. شغوف بأسواق النظير إلى النظير والمنتجات المدفوعة بالمجتمع."
+msgid ""
+"The visionary behind Rentora — built the platform from the ground up, from "
+"database architecture to pixel-perfect UI. Passionate about peer-to-peer "
+"markets and community-driven products."
+msgstr ""
+"الرؤية خلف رينتورا — بنى المنصة من الصفر، من معمارية قاعدة البيانات إلى "
+"واجهة مستخدم مثالية. شغوف بأسواق النظير إلى النظير والمنتجات المدفوعة "
+"بالمجتمع."
 
 msgid "Co-Founder & Product Strategist"
 msgstr "المؤسسة المشاركة ومستراتيجية المنتج"
 
-msgid "Shapes the product vision and user experience of Rentora. Ensures every feature we ship solves a real problem for the community we're building for."
-msgstr "تشكّل رؤية المنتج وتجربة المستخدم في رينتورا. تضمن أن كل ميزة نطلقها تحل مشكلة حقيقية للمجتمع الذي نبني من أجله."
+msgid ""
+"Shapes the product vision and user experience of Rentora. Ensures every "
+"feature we ship solves a real problem for the community we're building for."
+msgstr ""
+"تشكّل رؤية المنتج وتجربة المستخدم في رينتورا. تضمن أن كل ميزة نطلقها تحل "
+"مشكلة حقيقية للمجتمع الذي نبني من أجله."
 
 msgid "Co-Founder & Operations Lead"
 msgstr "المؤسس المشارك وقائد العمليات"
 
-msgid "Drives growth and community partnerships at Rentora. Focused on expanding the platform's reach and making sure both owners and renters have an outstanding experience."
-msgstr "يدفع النمو والشراكات المجتمعية في رينتورا. يركز على توسيع نطاق المنصة والتأكد من أن كل من المالكين والمستأجرين لديهم تجربة استثنائية."
+msgid ""
+"Drives growth and community partnerships at Rentora. Focused on expanding "
+"the platform's reach and making sure both owners and renters have an "
+"outstanding experience."
+msgstr ""
+"يدفع النمو والشراكات المجتمعية في رينتورا. يركز على توسيع نطاق المنصة "
+"والتأكد من أن كل من المالكين والمستأجرين لديهم تجربة استثنائية."
 
 msgid "Ready to Join the Community?"
 msgstr "هل أنت مستعد للانضمام إلى المجتمع؟"
 
-msgid "Whether you want to rent a tool for the weekend or earn from the ones sitting in your garage — Rentora has a place for you."
-msgstr "سواء كنت تريد استئجار أداة لعطلة نهاية الأسبوع أو كسب المال من الأدوات في مرآبك — لدى رينتورا مكان لك."
+msgid ""
+"Whether you want to rent a tool for the weekend or earn from the ones "
+"sitting in your garage — Rentora has a place for you."
+msgstr ""
+"سواء كنت تريد استئجار أداة لعطلة نهاية الأسبوع أو كسب المال من الأدوات في "
+"مرآبك — لدى رينتورا مكان لك."
 
 msgid "Browse Available Tools"
 msgstr "تصفّح الأدوات المتاحة"
@@ -789,7 +894,8 @@ msgstr "سيُشارك موقع الاستلام الدقيق بعد تأكيد 
 msgid "Security Deposit"
 msgstr "مبلغ التأمين"
 
-msgid "Fully refundable upon safe return of the tool in its original condition."
+msgid ""
+"Fully refundable upon safe return of the tool in its original condition."
 msgstr "يُسترد بالكامل عند إعادة الأداة سليمة بحالتها الأصلية."
 
 msgid "Tool Reviews"
@@ -1039,8 +1145,12 @@ msgstr "لا توجد حجوزات معلّقة."
 msgid "Owner confirmed receipt of the tool"
 msgstr "أكّد المالك استلام الأداة"
 
-msgid "Please confirm the return to complete this rental. If you have not returned the tool yet, click Dispute."
-msgstr "يرجى تأكيد الإرجاع لإكمال هذا التأجير. إذا لم تكن قد أعدت الأداة بعد، اضغط اعتراض."
+msgid ""
+"Please confirm the return to complete this rental. If you have not returned "
+"the tool yet, click Dispute."
+msgstr ""
+"يرجى تأكيد الإرجاع لإكمال هذا التأجير. إذا لم تكن قد أعدت الأداة بعد، اضغط "
+"اعتراض."
 
 msgid "Confirm Return"
 msgstr "تأكيد الإرجاع"
@@ -1117,8 +1227,11 @@ msgid "Verify your email address"
 msgstr "فعّل بريدك الإلكتروني"
 
 #, python-format
-msgid "We sent a link to <strong>%(email)s</strong> — click it to activate your account."
-msgstr "أرسلنا رابطاً إلى <strong>%(email)s</strong> — اضغط عليه لتفعيل حسابك."
+msgid ""
+"We sent a link to <strong>%(email)s</strong> — click it to activate your "
+"account."
+msgstr ""
+"أرسلنا رابطاً إلى <strong>%(email)s</strong> — اضغط عليه لتفعيل حسابك."
 
 msgid "Resend"
 msgstr "إعادة الإرسال"
@@ -1181,12 +1294,17 @@ msgstr "استأجر الآن"
 msgid "Your wishlist is empty"
 msgstr "قائمتك المفضلة فارغة"
 
-msgid "Save your favorite tools to access them quickly whenever you need them."
+msgid ""
+"Save your favorite tools to access them quickly whenever you need them."
 msgstr "احفظ أدواتك المفضلة للوصول إليها بسرعة وقتما تحتاجها."
 
 # ── Add / Edit tool pages ───────────────────────────────────────
-msgid "Fill in the details and let <span class=\"highlight\">Rentora's AI</span> help you create the perfect listing"
-msgstr "املأ التفاصيل ودَع <span class=\"highlight\">ذكاء رينتورا الاصطناعي</span> يساعدك على إنشاء الإعلان المثالي"
+msgid ""
+"Fill in the details and let <span class=\"highlight\">Rentora's AI</span> "
+"help you create the perfect listing"
+msgstr ""
+"املأ التفاصيل ودَع <span class=\"highlight\">ذكاء رينتورا الاصطناعي</span> "
+"يساعدك على إنشاء الإعلان المثالي"
 
 msgid "Tool Details"
 msgstr "تفاصيل الأداة"
@@ -1245,8 +1363,11 @@ msgstr "يُسترد عند الإعادة السليمة"
 msgid "Continue: Upload Images"
 msgstr "متابعة: رفع الصور"
 
-msgid "Upload clear photos of your tool. The AI Condition Detector will analyse them to suggest the tool's condition."
-msgstr "ارفع صوراً واضحة لأداتك. سيحللها كاشف الحالة الذكي لاقتراح حالة الأداة."
+msgid ""
+"Upload clear photos of your tool. The AI Condition Detector will analyse "
+"them to suggest the tool's condition."
+msgstr ""
+"ارفع صوراً واضحة لأداتك. سيحللها كاشف الحالة الذكي لاقتراح حالة الأداة."
 
 msgid "Drag and drop images here"
 msgstr "اسحب الصور وأفلتها هنا"
@@ -1269,8 +1390,13 @@ msgstr "ألغِ التحديد لإخفاء هذا الإعلان مؤقتاً"
 msgid "Current Images"
 msgstr "الصور الحالية"
 
-msgid "Click <strong>★</strong> to set the primary (cover) photo. Click <strong>✕</strong> to mark an image for deletion — it will be removed when you save."
-msgstr "اضغط <strong>★</strong> لتعيين صورة الغلاف الرئيسية. اضغط <strong>✕</strong> لتحديد صورة للحذف — ستُزال عند الحفظ."
+msgid ""
+"Click <strong>★</strong> to set the primary (cover) photo. Click "
+"<strong>✕</strong> to mark an image for deletion — it will be removed when "
+"you save."
+msgstr ""
+"اضغط <strong>★</strong> لتعيين صورة الغلاف الرئيسية. اضغط <strong>✕</strong>"
+" لتحديد صورة للحذف — ستُزال عند الحفظ."
 
 msgid "Delete this image"
 msgstr "حذف هذه الصورة"
@@ -1369,7 +1495,8 @@ msgstr "ماذا يحدث بعد ذلك؟"
 msgid "The owner reviews your request and confirms availability"
 msgstr "يراجع المالك طلبك ويؤكد التوفر"
 
-msgid "You'll see the status update in your <strong>My Rentals</strong> dashboard"
+msgid ""
+"You'll see the status update in your <strong>My Rentals</strong> dashboard"
 msgstr "سترى تحديث الحالة في لوحة <strong>استئجاراتي</strong>"
 
 msgid "Once approved, coordinate pickup details directly with the owner"
@@ -1416,7 +1543,9 @@ msgstr "تواصل مع المالك لترتيب استلام الأداة أو
 msgid "Use the tool during your rental period (%(start)s – %(end)s)"
 msgstr "استخدم الأداة خلال فترة الاستئجار (%(start)s – %(end)s)"
 
-msgid "Return the tool to the owner — they'll confirm receipt to complete the rental"
+msgid ""
+"Return the tool to the owner — they'll confirm receipt to complete the "
+"rental"
 msgstr "أعد الأداة إلى المالك — سيؤكد الاستلام لإكمال عملية التأجير"
 
 msgid "Go to My Rentals"
@@ -1488,8 +1617,10 @@ msgstr "اكتب رسالة إلى %(name)s…"
 msgid "Send (Enter)"
 msgstr "إرسال (Enter)"
 
-msgid "<kbd>Enter</kbd> to send &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> for new line"
-msgstr "<kbd>Enter</kbd> للإرسال &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> لسطر جديد"
+msgid ""
+"<kbd>Enter</kbd> to send &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> for new line"
+msgstr ""
+"<kbd>Enter</kbd> للإرسال &nbsp;·&nbsp; <kbd>Shift+Enter</kbd> لسطر جديد"
 
 # ── Password reset pages ────────────────────────────────────────
 msgid "Forgot Password"
@@ -1501,8 +1632,12 @@ msgstr "أمان الحساب"
 msgid "We've got<br>you covered."
 msgstr "نحن هنا<br>لمساعدتك."
 
-msgid "Forgot your password? No problem. We'll send a secure reset link to your inbox in seconds."
-msgstr "نسيت كلمة المرور؟ لا مشكلة. سنرسل رابط إعادة تعيين آمناً إلى بريدك خلال ثوانٍ."
+msgid ""
+"Forgot your password? No problem. We'll send a secure reset link to your "
+"inbox in seconds."
+msgstr ""
+"نسيت كلمة المرور؟ لا مشكلة. سنرسل رابط إعادة تعيين آمناً إلى بريدك خلال "
+"ثوانٍ."
 
 msgid "Secure one-time reset link"
 msgstr "رابط إعادة تعيين آمن لمرة واحدة"
@@ -1516,8 +1651,12 @@ msgstr "بياناتك تبقى محمية"
 msgid "Check Your Inbox"
 msgstr "تفقّد بريدك الوارد"
 
-msgid "If an account exists for that email, a reset link has been sent. Don't forget to check your spam folder."
-msgstr "إذا وُجد حساب بهذا البريد، فقد أُرسل رابط إعادة التعيين. لا تنسَ التحقق من مجلد الرسائل غير المرغوبة."
+msgid ""
+"If an account exists for that email, a reset link has been sent. Don't "
+"forget to check your spam folder."
+msgstr ""
+"إذا وُجد حساب بهذا البريد، فقد أُرسل رابط إعادة التعيين. لا تنسَ التحقق من "
+"مجلد الرسائل غير المرغوبة."
 
 msgid "Back to Sign In"
 msgstr "العودة لتسجيل الدخول"
@@ -1540,8 +1679,12 @@ msgstr "تم إرسال البريد"
 msgid "Check your<br>inbox."
 msgstr "تفقّد<br>بريدك الوارد."
 
-msgid "We've sent a password reset link. It should arrive within a minute — don't forget to check spam."
-msgstr "أرسلنا رابط إعادة تعيين كلمة المرور. سيصل خلال دقيقة — لا تنسَ التحقق من الرسائل غير المرغوبة."
+msgid ""
+"We've sent a password reset link. It should arrive within a minute — don't "
+"forget to check spam."
+msgstr ""
+"أرسلنا رابط إعادة تعيين كلمة المرور. سيصل خلال دقيقة — لا تنسَ التحقق من "
+"الرسائل غير المرغوبة."
 
 msgid "Reset link sent"
 msgstr "أُرسل رابط إعادة التعيين"
@@ -1553,8 +1696,14 @@ msgid "Check Your Inbox!"
 msgstr "تفقّد بريدك الوارد!"
 
 #, python-format
-msgid "We've sent a password reset link to your email. Didn't get it? Check your spam folder or <a href=\"%(url)s\" class=\"auth-panel__retry-link\">try again</a>."
-msgstr "أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك. لم يصلك؟ تحقق من الرسائل غير المرغوبة أو <a href=\"%(url)s\" class=\"auth-panel__retry-link\">حاول مجدداً</a>."
+msgid ""
+"We've sent a password reset link to your email. Didn't get it? Check your "
+"spam folder or <a href=\"%(url)s\" class=\"auth-panel__retry-link\">try "
+"again</a>."
+msgstr ""
+"أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك. لم يصلك؟ تحقق من الرسائل غير "
+"المرغوبة أو <a href=\"%(url)s\" class=\"auth-panel__retry-link\">حاول "
+"مجدداً</a>."
 
 msgid "Set New Password"
 msgstr "تعيين كلمة مرور جديدة"
@@ -1595,8 +1744,11 @@ msgstr "تم كل شيء"
 msgid "You're back<br>in action."
 msgstr "عدت<br>من جديد."
 
-msgid "Your password has been updated. Sign in and continue browsing, listing, or booking tools."
-msgstr "تم تحديث كلمة مرورك. سجّل الدخول وواصل التصفّح أو عرض الأدوات أو حجزها."
+msgid ""
+"Your password has been updated. Sign in and continue browsing, listing, or "
+"booking tools."
+msgstr ""
+"تم تحديث كلمة مرورك. سجّل الدخول وواصل التصفّح أو عرض الأدوات أو حجزها."
 
 msgid "Password updated securely"
 msgstr "حُدّثت كلمة المرور بأمان"
@@ -1610,8 +1762,1545 @@ msgstr "جاهز للعودة إلى الاستئجار"
 msgid "Password Reset Complete!"
 msgstr "اكتملت إعادة تعيين كلمة المرور!"
 
-msgid "Your password has been updated successfully. You can now sign in with your new password."
-msgstr "تم تحديث كلمة مرورك بنجاح. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة."
+msgid ""
+"Your password has been updated successfully. You can now sign in with your "
+"new password."
+msgstr ""
+"تم تحديث كلمة مرورك بنجاح. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة."
 
 msgid "Go to Sign In"
 msgstr "اذهب لتسجيل الدخول"
+
+msgid "Contact Us"
+msgstr "اتصل بنا"
+
+msgid "Get in Touch"
+msgstr "تواصل معنا"
+
+msgid ""
+"Have a question or need help? We're here for you. Respond within 24 hours."
+msgstr "لديك سؤال أو تحتاج مساعدة؟ نحن هنا من أجلك. نردّ خلال 24 ساعة."
+
+msgid "Subject"
+msgstr "الموضوع"
+
+msgid "Select a category..."
+msgstr "اختر فئة..."
+
+msgid "Payment Issue"
+msgstr "مشكلة في الدفع"
+
+msgid "Booking Problem"
+msgstr "مشكلة في الحجز"
+
+msgid "Report/Dispute"
+msgstr "بلاغ / نزاع"
+
+msgid "Feature Request"
+msgstr "طلب ميزة"
+
+msgid "Technical Issue"
+msgstr "مشكلة تقنية"
+
+msgid "Message"
+msgstr "الرسالة"
+
+msgid "Send Message"
+msgstr "إرسال الرسالة"
+
+msgid "Or email us directly at:"
+msgstr "أو راسلنا مباشرة على:"
+
+msgid "FAQ"
+msgstr "الأسئلة الشائعة"
+
+msgid "Frequently Asked Questions"
+msgstr "الأسئلة الشائعة"
+
+msgid "Find answers to common questions about renting and listing tools."
+msgstr "اعثر على إجابات للأسئلة الشائعة حول استئجار الأدوات وإدراجها."
+
+msgid "For Renters"
+msgstr "للمستأجرين"
+
+msgid "How do I rent a tool?"
+msgstr "كيف أستأجر أداة؟"
+
+msgid "How much does it cost?"
+msgstr "كم تبلغ التكلفة؟"
+
+msgid "Rental Total:"
+msgstr "إجمالي الإيجار:"
+
+msgid "rental days × daily rate"
+msgstr "أيام الإيجار × السعر اليومي"
+
+msgid "Platform Fee:"
+msgstr "رسوم المنصة:"
+
+msgid "15% of rental total (supports servers and support)"
+msgstr "15% من إجمالي الإيجار (لدعم الخوادم والدعم الفني)"
+
+msgid "Damage Protection (optional):"
+msgstr "حماية الأضرار (اختياري):"
+
+msgid "+$10 for accidental damage coverage"
+msgstr "+10$ لتغطية الأضرار العرضية"
+
+msgid "The total is charged upfront to your card."
+msgstr "يُخصم المبلغ الإجمالي مقدّماً من بطاقتك."
+
+msgid "What is a deposit?"
+msgstr "ما هو مبلغ التأمين (الوديعة)؟"
+
+msgid "How long can I rent a tool?"
+msgstr "كم مدة استئجار الأداة؟"
+
+msgid "What if I return the tool late?"
+msgstr "ماذا لو أرجعت الأداة متأخراً؟"
+
+msgid "What if the tool is damaged when I receive it?"
+msgstr "ماذا لو كانت الأداة تالفة عند استلامها؟"
+
+msgid "Can I cancel my rental?"
+msgstr "هل يمكنني إلغاء الحجز؟"
+
+msgid "Before owner approval:"
+msgstr "قبل موافقة المالك:"
+
+msgid "Free cancellation, full refund"
+msgstr "إلغاء مجاني، واسترداد كامل"
+
+msgid "After payment received:"
+msgstr "بعد استلام الدفع:"
+
+msgid "Contact owner to request cancellation and refund (no refund guarantee)"
+msgstr "تواصل مع المالك لطلب الإلغاء والاسترداد (الاسترداد غير مضمون)"
+
+msgid "During active rental:"
+msgstr "أثناء الإيجار النشط:"
+
+msgid "No cancellation possible; you're liable for the full rental cost"
+msgstr "لا يمكن الإلغاء؛ أنت مسؤول عن تكلفة الإيجار كاملة"
+
+msgid "How do I rate a tool or owner?"
+msgstr "كيف أقيّم أداة أو مالكاً؟"
+
+msgid "Tool Quality:"
+msgstr "جودة الأداة:"
+
+msgid "Condition, functionality, features"
+msgstr "الحالة والأداء والميزات"
+
+msgid "Owner Communication:"
+msgstr "تواصل المالك:"
+
+msgid "Responsiveness and helpfulness"
+msgstr "سرعة الاستجابة والمساعدة"
+
+msgid "Reviews are public and help other renters make informed decisions."
+msgstr "التقييمات علنية وتساعد المستأجرين الآخرين على اتخاذ قرارات مدروسة."
+
+msgid "For Tool Owners"
+msgstr "لمالكي الأدوات"
+
+msgid "How do I list a tool?"
+msgstr "كيف أدرج أداة؟"
+
+msgid "How do I set the daily rate?"
+msgstr "كيف أحدد السعر اليومي؟"
+
+msgid "Original cost of tool and depreciation"
+msgstr "التكلفة الأصلية للأداة والاستهلاك"
+
+msgid "Condition and features"
+msgstr "الحالة والميزات"
+
+msgid "Similar tools' rates on Rentora"
+msgstr "أسعار الأدوات المماثلة على رينتورا"
+
+msgid "How often you want it rented"
+msgstr "كم مرة تريد تأجيرها"
+
+msgid "How much do I earn?"
+msgstr "كم سأربح؟"
+
+msgid "Renter pays: $75"
+msgstr "يدفع المستأجر: 75$"
+
+msgid "Platform fee (15%): $11.25"
+msgstr "رسوم المنصة (15%): 11.25$"
+
+msgid "You receive: $63.75"
+msgstr "أنت تستلم: 63.75$"
+
+msgid "You can view detailed earnings in your Dashboard."
+msgstr "يمكنك عرض أرباحك التفصيلية في لوحة التحكم."
+
+msgid "How do I handle the return process?"
+msgstr "كيف أتعامل مع عملية الإرجاع؟"
+
+msgid "Inspect the tool within 24 hours of return"
+msgstr "افحص الأداة خلال 24 ساعة من الإرجاع"
+
+msgid "Go to Dashboard → Booking Details"
+msgstr "اذهب إلى لوحة التحكم ← تفاصيل الحجز"
+
+msgid "Click \"Mark as Returned\""
+msgstr "اضغط على \"تحديد كمُعادة\""
+
+msgid "The renter receives an email notification"
+msgstr "يستلم المستأجر إشعاراً بالبريد الإلكتروني"
+
+msgid "Renter must confirm return in their \"My Rentals\" tab"
+msgstr "على المستأجر تأكيد الإرجاع من تبويب \"استئجاراتي\""
+
+msgid "Once confirmed, rental is complete"
+msgstr "بمجرد التأكيد، يكتمل الإيجار"
+
+msgid "What if the tool is damaged upon return?"
+msgstr "ماذا لو كانت الأداة تالفة عند الإرجاع؟"
+
+msgid "Take photos/video of damage"
+msgstr "التقط صوراً/فيديو للضرر"
+
+msgid "Click \"Raise Dispute\" and upload evidence"
+msgstr "اضغط على \"رفع نزاع\" وارفع الأدلة"
+
+msgid "Explain the damage and original condition"
+msgstr "اشرح الضرر والحالة الأصلية"
+
+msgid "Rentora staff reviews and decides within 5 business days"
+msgstr "يراجع فريق رينتورا ويقرر خلال 5 أيام عمل"
+
+msgid "You may receive a claim payout from the deposit"
+msgstr "قد تستلم تعويضاً من مبلغ التأمين"
+
+msgid "Can renters cancel bookings?"
+msgstr "هل يمكن للمستأجرين إلغاء الحجوزات؟"
+
+msgid "How do I get paid?"
+msgstr "كيف أستلم أموالي؟"
+
+msgid "General"
+msgstr "عام"
+
+msgid "Is Rentora safe?"
+msgstr "هل رينتورا آمنة؟"
+
+msgid "All data transmitted via HTTPS encryption"
+msgstr "كل البيانات تُنقل عبر تشفير HTTPS"
+
+msgid "Passwords stored with bcrypt hashing"
+msgstr "كلمات المرور مخزّنة بتشفير bcrypt"
+
+msgid "Payments processed securely by Stripe"
+msgstr "المدفوعات تُعالج بأمان عبر Stripe"
+
+msgid "User verification and rating system"
+msgstr "نظام توثيق المستخدمين والتقييم"
+
+msgid "Report and dispute mechanisms"
+msgstr "آليات الإبلاغ والنزاع"
+
+msgid "Staff moderates abusive accounts"
+msgstr "الفريق يراقب الحسابات المسيئة"
+
+msgid ""
+"Always meet in public, inspect tools carefully, and document condition with "
+"photos."
+msgstr "التقِ دائماً في مكان عام، وافحص الأدوات بعناية، ووثّق حالتها بالصور."
+
+msgid "What if I have more questions?"
+msgstr "ماذا لو كان لديّ أسئلة أخرى؟"
+
+msgid "Visit our"
+msgstr "زُر"
+
+msgid "Contact Page"
+msgstr "صفحة التواصل"
+
+msgid "to send a message to our support team. We respond within 24 hours."
+msgstr "لإرسال رسالة إلى فريق الدعم. نردّ خلال 24 ساعة."
+
+msgid ""
+"1. Sign up for a free Rentora account<br>2. Browse available tools by "
+"category or search<br>3. Click on a tool to view details, photos, and "
+"reviews<br>4. Select your rental dates and click \"Book\"<br>5. Complete "
+"payment via Stripe (credit card or other methods)<br>6. Your booking is "
+"confirmed, and you'll receive an email with rental details"
+msgstr ""
+"1. أنشئ حساباً مجانياً في رينتورا<br>2. تصفّح الأدوات المتاحة حسب الفئة أو "
+"البحث<br>3. اضغط على أداة لعرض التفاصيل والصور والتقييمات<br>4. اختر تواريخ "
+"الإيجار واضغط \"احجز\"<br>5. أكمل الدفع عبر Stripe (بطاقة ائتمان أو طرق "
+"أخرى)<br>6. يتأكد حجزك، وستستلم بريداً إلكترونياً بتفاصيل الإيجار"
+
+msgid ""
+"Rental costs depend on the daily rate set by the tool owner. At checkout, "
+"you'll see:"
+msgstr ""
+"تعتمد تكاليف الإيجار على السعر اليومي الذي يحدده مالك الأداة. عند الدفع "
+"سترى:"
+
+msgid ""
+"A deposit is a security amount held by Rentora to protect the tool owner "
+"against damage. It's NOT charged in addition to rental cost—it's included in"
+" your payment. When you return the tool in agreed condition, the deposit is "
+"refunded."
+msgstr ""
+"مبلغ التأمين هو مبلغ ضمان تحتفظ به رينتورا لحماية مالك الأداة من الأضرار. لا"
+" يُضاف إلى تكلفة الإيجار — بل هو مُضمّن في دفعتك. وعند إرجاع الأداة بالحالة "
+"المتفق عليها، يُسترد التأمين."
+
+msgid ""
+"If there's a dispute over tool condition, Rentora staff will review evidence"
+" and decide on refund or claim."
+msgstr ""
+"إذا نشأ نزاع حول حالة الأداة، سيراجع فريق رينتورا الأدلة ويقرر الاسترداد أو "
+"التعويض."
+
+msgid ""
+"No minimum or maximum—you and the owner agree on dates. You can rent for 1 "
+"day, 1 week, or longer. Select your preferred start and end dates at "
+"checkout."
+msgstr ""
+"لا حد أدنى أو أقصى — أنت والمالك تتفقان على التواريخ. يمكنك الاستئجار ليوم "
+"أو أسبوع أو أكثر. اختر تاريخ البداية والنهاية المفضّل عند الدفع."
+
+msgid "<strong>Overdue charges = 1.5x the daily rate per extra day.</strong>"
+msgstr "<strong>رسوم التأخير = 1.5 ضعف السعر اليومي عن كل يوم إضافي.</strong>"
+
+msgid ""
+"Example: If rental rate is $25/day and you return 2 days late, you pay $75 "
+"extra (2 days × $25 × 1.5)."
+msgstr ""
+"مثال: إذا كان سعر الإيجار 25$ يومياً وأرجعت بعد يومين من التأخير، تدفع 75$ "
+"إضافية (يومان × 25$ × 1.5)."
+
+msgid ""
+"<strong>To avoid this:</strong> Return the tool on time. Once the owner "
+"clicks \"Mark as Returned,\" you'll receive an email. <strong>Confirm the "
+"return in your \"My Rentals\" tab</strong> to prevent overdue charges."
+msgstr ""
+"<strong>لتجنّب ذلك:</strong> أرجع الأداة في الوقت المحدد. بمجرد أن يضغط "
+"المالك على \"تحديد كمُعادة\" ستستلم بريداً إلكترونياً. <strong>أكّد الإرجاع "
+"من تبويب \"استئجاراتي\"</strong> لمنع رسوم التأخير."
+
+msgid ""
+"Contact the owner immediately via the in-app chat. Take photos as evidence. "
+"If you can't agree, click \"Raise Dispute\" in your booking details. Rentora"
+" staff will review photos and messages from both sides and make a decision "
+"within 5 business days."
+msgstr ""
+"تواصل مع المالك فوراً عبر الدردشة داخل التطبيق. التقط صوراً كدليل. إذا لم "
+"تتفقا، اضغط على \"رفع نزاع\" في تفاصيل حجزك. سيراجع فريق رينتورا الصور "
+"والرسائل من الطرفين ويتخذ قراراً خلال 5 أيام عمل."
+
+msgid "Cancellations depend on booking status:"
+msgstr "يعتمد الإلغاء على حالة الحجز:"
+
+msgid ""
+"After your rental is complete, you'll receive an email invitation to review."
+" Go to \"My Rentals\" → completed booking → \"Leave Review.\" You can rate "
+"on:"
+msgstr ""
+"بعد اكتمال إيجارك، ستستلم دعوة بالبريد للتقييم. اذهب إلى \"استئجاراتي\" ← "
+"الحجز المكتمل ← \"أضف تقييماً\". يمكنك التقييم على:"
+
+msgid ""
+"1. Sign up or log in to your Rentora account<br>2. Go to \"Dashboard\" → "
+"\"List Your Tool\"<br>3. Fill in tool name, description, category, and "
+"condition<br>4. Set your daily rental rate and deposit<br>5. Upload clear "
+"photos of your tool<br>6. Set availability and location<br>7. Click "
+"\"Publish\" to make it live"
+msgstr ""
+"1. أنشئ حساباً أو سجّل الدخول إلى رينتورا<br>2. اذهب إلى \"لوحة التحكم\" ← "
+"\"أدرج أداتك\"<br>3. أدخل اسم الأداة والوصف والفئة والحالة<br>4. حدّد سعر "
+"الإيجار اليومي ومبلغ التأمين<br>5. ارفع صوراً واضحة لأداتك<br>6. حدّد "
+"التوفّر والموقع<br>7. اضغط \"نشر\" لتفعيلها"
+
+msgid "You decide the daily rate. Consider:"
+msgstr "أنت من يحدد السعر اليومي. ضع في الاعتبار:"
+
+msgid ""
+"We recommend 5-10% of the tool's original price per day. Example: $500 tool "
+"→ $25-50/day."
+msgstr ""
+"نوصي بنسبة 5-10% من السعر الأصلي للأداة يومياً. مثال: أداة بـ500$ ← 25-50$ "
+"يومياً."
+
+msgid ""
+"Your earning = (rental price × days) - 15% platform fee - Stripe payment "
+"processing fee."
+msgstr ""
+"أرباحك = (سعر الإيجار × الأيام) - 15% رسوم المنصة - رسوم معالجة الدفع عبر "
+"Stripe."
+
+msgid "Example: 3-day rental at $25/day"
+msgstr "مثال: إيجار 3 أيام بسعر 25$ يومياً"
+
+msgid "When the renter returns the tool:"
+msgstr "عندما يُرجع المستأجر الأداة:"
+
+msgid ""
+"<strong>Important:</strong> If you do NOT click \"Mark as Returned,\" the "
+"system will continue charging the renter overdue fees after the end date. "
+"Always complete the return handshake to prevent disputes."
+msgstr ""
+"<strong>مهم:</strong> إذا لم تضغط على \"تحديد كمُعادة\"، سيستمر النظام في "
+"احتساب رسوم التأخير على المستأجر بعد تاريخ الانتهاء. أكمِل دائماً مصافحة "
+"الإرجاع لمنع النزاعات."
+
+msgid "If the renter returns the tool damaged:"
+msgstr "إذا أرجع المستأجر الأداة تالفة:"
+
+msgid ""
+"If the renter opted for damage protection, insurance covers claims up to the"
+" deposit amount."
+msgstr ""
+"إذا اختار المستأجر حماية الأضرار، فإن التأمين يغطي المطالبات حتى مبلغ "
+"التأمين."
+
+msgid ""
+"Yes, renters can cancel before you approve a booking (full refund). After "
+"payment is received, cancellations are at your discretion—you can agree to "
+"refund or keep the payment. We recommend communicating kindly to build your "
+"reputation."
+msgstr ""
+"نعم، يمكن للمستأجرين الإلغاء قبل موافقتك على الحجز (استرداد كامل). بعد "
+"استلام الدفع، يكون الإلغاء وفق تقديرك — يمكنك الموافقة على الاسترداد أو "
+"الاحتفاظ بالدفعة. نوصي بالتواصل بلطف لبناء سمعتك."
+
+msgid ""
+"Payouts are processed automatically. You can request a payout once you have "
+"earnings. Go to Dashboard → Earnings → Request Payout. We'll transfer to "
+"your bank account within 3-5 business days."
+msgstr ""
+"تُعالج المدفوعات تلقائياً. يمكنك طلب صرف أرباحك بمجرد توفّرها. اذهب إلى لوحة"
+" التحكم ← الأرباح ← طلب صرف. سنحوّل إلى حسابك البنكي خلال 3-5 أيام عمل."
+
+msgid "Add your bank details in account settings before your first payout."
+msgstr "أضف بياناتك البنكية في إعدادات الحساب قبل أول عملية صرف."
+
+msgid "Rentora prioritizes user safety:"
+msgstr "تضع رينتورا سلامة المستخدم في المقدمة:"
+
+msgid "My Messages"
+msgstr "رسائلي"
+
+msgid "Your support requests and our replies."
+msgstr "طلبات الدعم الخاصة بك وردودنا عليها."
+
+msgid "New"
+msgstr "جديدة"
+
+msgid "In Progress"
+msgstr "قيد المعالجة"
+
+msgid "Resolved"
+msgstr "تم الحل"
+
+msgid "Closed"
+msgstr "مغلقة"
+
+msgid "You"
+msgstr "أنت"
+
+msgid "Rentora Support"
+msgstr "دعم رينتورا"
+
+msgid "Awaiting a reply — we usually respond within 24 hours."
+msgstr "بانتظار الرد — عادةً نردّ خلال 24 ساعة."
+
+msgid "You haven't sent any messages yet."
+msgstr "لم ترسل أي رسائل بعد."
+
+msgid "Contact Support"
+msgstr "تواصل مع الدعم"
+
+msgid "Your Privacy"
+msgstr "خصوصيتك"
+
+msgid ""
+"How we collect, use, and protect your data — explained in plain language. We"
+" never sell your personal information."
+msgstr ""
+"كيف نجمع بياناتك ونستخدمها ونحميها — مشروحة بلغة بسيطة. نحن لا نبيع معلوماتك"
+" الشخصية أبداً."
+
+msgid "Last updated: July 2024"
+msgstr "آخر تحديث: يوليو 2024"
+
+msgid "On this page"
+msgstr "في هذه الصفحة"
+
+msgid "Introduction"
+msgstr "مقدمة"
+
+msgid "Information We Collect"
+msgstr "المعلومات التي نجمعها"
+
+msgid "How We Use It"
+msgstr "كيف نستخدمها"
+
+msgid "Data Sharing"
+msgstr "مشاركة البيانات"
+
+msgid "Data Retention"
+msgstr "الاحتفاظ بالبيانات"
+
+msgid "Your Rights"
+msgstr "حقوقك"
+
+msgid "Security & Cookies"
+msgstr "الأمان وملفات تعريف الارتباط"
+
+msgid ""
+"Rentora (\"we,\" \"us,\" or \"our\") operates the Rentora platform. This "
+"Privacy Policy explains how we collect, use, disclose, and safeguard your "
+"information."
+msgstr ""
+"تُشغّل رينتورا (\"نحن\" أو \"الشركة\") منصة رينتورا. توضّح سياسة الخصوصية "
+"هذه كيف نجمع معلوماتك ونستخدمها ونكشفها ونحميها."
+
+msgid ""
+"By accessing Rentora, you acknowledge that you have read, understood, and "
+"agree to be bound by all provisions of this Privacy Policy."
+msgstr ""
+"بدخولك إلى رينتورا، فإنك تقر بأنك قرأت وفهمت ووافقت على الالتزام بجميع بنود "
+"سياسة الخصوصية هذه."
+
+msgid "A. Information You Provide"
+msgstr "أ. المعلومات التي تقدّمها"
+
+msgid "When you register, list a tool, or book a rental, we collect:"
+msgstr "عند التسجيل أو إدراج أداة أو حجز إيجار، نجمع:"
+
+msgid "Account Information:"
+msgstr "معلومات الحساب:"
+
+msgid "Full name, email, phone number, and password (hashed with bcrypt)"
+msgstr ""
+"الاسم الكامل والبريد الإلكتروني ورقم الهاتف وكلمة المرور (مشفّرة بـbcrypt)"
+
+msgid "Location Data:"
+msgstr "بيانات الموقع:"
+
+msgid "City, region, and coordinates for tool location mapping"
+msgstr "المدينة والمنطقة والإحداثيات لعرض موقع الأداة على الخريطة"
+
+msgid "Payment Information:"
+msgstr "معلومات الدفع:"
+
+msgid "Processed by Stripe — we do NOT store card details"
+msgstr "تُعالج عبر Stripe — نحن لا نخزّن بيانات البطاقة"
+
+msgid "Profile Information:"
+msgstr "معلومات الملف الشخصي:"
+
+msgid "Profile picture, bio, verification status, and rating"
+msgstr "الصورة الشخصية والنبذة وحالة التوثيق والتقييم"
+
+msgid "Tool & Booking Data:"
+msgstr "بيانات الأدوات والحجوزات:"
+
+msgid "Listings, photos, rental dates, messages, and reviews"
+msgstr "الإعلانات والصور وتواريخ الإيجار والرسائل والتقييمات"
+
+msgid "B. Information Collected Automatically"
+msgstr "ب. المعلومات المجمّعة تلقائياً"
+
+msgid "Usage Data:"
+msgstr "بيانات الاستخدام:"
+
+msgid "Pages visited, features used, and search queries"
+msgstr "الصفحات المُزارة والميزات المستخدمة وعمليات البحث"
+
+msgid "Device Information:"
+msgstr "معلومات الجهاز:"
+
+msgid "Browser type, operating system, and device model"
+msgstr "نوع المتصفح ونظام التشغيل وطراز الجهاز"
+
+msgid "Session Cookies:"
+msgstr "ملفات تعريف ارتباط الجلسة:"
+
+msgid "For authentication and keeping you logged in"
+msgstr "للمصادقة وإبقائك مسجّل الدخول"
+
+msgid "How We Use Your Information"
+msgstr "كيف نستخدم معلوماتك"
+
+msgid "Processing bookings and payments"
+msgstr "معالجة الحجوزات والمدفوعات"
+
+msgid "Sending confirmation emails and updates"
+msgstr "إرسال رسائل التأكيد والتحديثات"
+
+msgid "Verifying user identity and preventing fraud"
+msgstr "التحقق من هوية المستخدم ومنع الاحتيال"
+
+msgid "Displaying your profile and tool listings publicly"
+msgstr "عرض ملفك الشخصي وإعلانات أدواتك علناً"
+
+msgid "Moderating disputes and suspending abusive accounts"
+msgstr "إدارة النزاعات وتعليق الحسابات المسيئة"
+
+msgid "Improving Platform features through analytics"
+msgstr "تحسين ميزات المنصة عبر التحليلات"
+
+msgid "Data Sharing & Third Parties"
+msgstr "مشاركة البيانات والأطراف الثالثة"
+
+msgid "We share your information only with:"
+msgstr "نشارك معلوماتك فقط مع:"
+
+msgid "Payment processing"
+msgstr "معالجة المدفوعات"
+
+msgid "Anonymized tool descriptions for smart search"
+msgstr "أوصاف الأدوات مجهولة الهوية للبحث الذكي"
+
+msgid "Location names geocoded for mapping"
+msgstr "أسماء المواقع المُحوّلة إلى إحداثيات للخرائط"
+
+msgid "Staff:"
+msgstr "الفريق:"
+
+msgid "For dispute resolution and account moderation"
+msgstr "لحل النزاعات وإدارة الحسابات"
+
+msgid "We never sell your personal data"
+msgstr "نحن لا نبيع بياناتك الشخصية أبداً"
+
+msgid "to third parties or marketers. Ever."
+msgstr "لأي أطراف ثالثة أو مسوّقين. إطلاقاً."
+
+msgid "What Other Users Can See"
+msgstr "ما يمكن للمستخدمين الآخرين رؤيته"
+
+msgid "Your name, profile photo, and bio"
+msgstr "اسمك وصورتك الشخصية ونبذتك"
+
+msgid "Your average rating and review count"
+msgstr "متوسط تقييمك وعدد التقييمات"
+
+msgid "Reviews you have written and tools you have listed"
+msgstr "التقييمات التي كتبتها والأدوات التي أدرجتها"
+
+msgid "Your verified status (if applicable)"
+msgstr "حالة توثيقك (إن وُجدت)"
+
+msgid "Active accounts:"
+msgstr "الحسابات النشطة:"
+
+msgid "Until account deletion"
+msgstr "حتى حذف الحساب"
+
+msgid "Deleted accounts:"
+msgstr "الحسابات المحذوفة:"
+
+msgid "Anonymized after 7 years (tax/compliance)"
+msgstr "تُجهَّل الهوية بعد 7 سنوات (للضرائب/الامتثال)"
+
+msgid "Payment records:"
+msgstr "سجلات الدفع:"
+
+msgid "7 years (legal requirement)"
+msgstr "7 سنوات (متطلب قانوني)"
+
+msgid "Server logs:"
+msgstr "سجلات الخادم:"
+
+msgid "30 days, then automatically deleted"
+msgstr "30 يوماً، ثم تُحذف تلقائياً"
+
+msgid "Your Privacy Rights"
+msgstr "حقوق الخصوصية الخاصة بك"
+
+msgid "Access & Correct"
+msgstr "الوصول والتصحيح"
+
+msgid ""
+"Email privacy@rentora.ps to request a copy of your data — we respond within "
+"30 days. You can update your profile, email, and phone directly in account "
+"settings."
+msgstr ""
+"راسل privacy@rentora.ps لطلب نسخة من بياناتك — نردّ خلال 30 يوماً. يمكنك "
+"تحديث ملفك وبريدك وهاتفك مباشرةً من إعدادات الحساب."
+
+msgid "Delete Your Account"
+msgstr "حذف حسابك"
+
+msgid ""
+"Go to Settings → Delete Account. Your profile and tools are immediately "
+"hidden and messages deleted. Booking and payment records are anonymized "
+"after 7 years."
+msgstr ""
+"اذهب إلى الإعدادات ← حذف الحساب. يُخفى ملفك وأدواتك فوراً وتُحذف الرسائل. "
+"تُجهَّل سجلات الحجز والدفع بعد 7 سنوات."
+
+msgid "Opt Out of Marketing"
+msgstr "إلغاء الاشتراك في التسويق"
+
+msgid ""
+"Click \"Unsubscribe\" at the bottom of any email, or manage preferences in "
+"account settings."
+msgstr ""
+"اضغط على \"إلغاء الاشتراك\" أسفل أي بريد إلكتروني، أو أدر التفضيلات من "
+"إعدادات الحساب."
+
+msgid "We protect your data with:"
+msgstr "نحمي بياناتك عبر:"
+
+msgid "HTTPS/TLS encryption for all data in transit"
+msgstr "تشفير HTTPS/TLS لكل البيانات أثناء النقل"
+
+msgid "bcrypt password hashing (salted, one-way)"
+msgstr "تشفير كلمات المرور بـbcrypt (مملّح وأحادي الاتجاه)"
+
+msgid "A secure database with strict access controls"
+msgstr "قاعدة بيانات آمنة مع ضوابط وصول صارمة"
+
+msgid ""
+"Rentora uses session cookies only to keep you logged in. We do NOT use "
+"third-party tracking cookies (Google Analytics, Meta Pixel, etc.). No system"
+" is 100% secure — always use a strong password and never share your "
+"credentials."
+msgstr ""
+"تستخدم رينتورا ملفات تعريف ارتباط الجلسة فقط لإبقائك مسجّل الدخول. نحن لا "
+"نستخدم ملفات تتبّع من أطراف ثالثة (Google Analytics أو Meta Pixel وغيرها). "
+"لا يوجد نظام آمن 100% — استخدم دائماً كلمة مرور قوية ولا تشارك بيانات دخولك "
+"أبداً."
+
+msgid ""
+"Rentora is not intended for users under 18. We do not knowingly collect data"
+" from children."
+msgstr ""
+"رينتورا غير مخصصة للمستخدمين دون 18 عاماً. نحن لا نجمع بيانات الأطفال عن "
+"قصد."
+
+msgid "For privacy questions or data requests, reach our team:"
+msgstr "للأسئلة المتعلقة بالخصوصية أو طلبات البيانات، تواصل مع فريقنا:"
+
+msgid "Email our privacy team at"
+msgstr "راسل فريق الخصوصية على"
+
+msgid "Or visit our Contact page"
+msgstr "أو زُر صفحة التواصل"
+
+msgid "Legal"
+msgstr "قانوني"
+
+msgid ""
+"The rules that keep every rental on Rentora fair, safe, and transparent for "
+"both owners and renters."
+msgstr ""
+"القواعد التي تُبقي كل عملية إيجار على رينتورا عادلة وآمنة وشفافة للمالكين "
+"والمستأجرين."
+
+msgid "Acceptance of Terms"
+msgstr "قبول الشروط"
+
+msgid "User Eligibility"
+msgstr "أهلية المستخدم"
+
+msgid "Owner Responsibilities"
+msgstr "مسؤوليات المالك"
+
+msgid "Renter Responsibilities"
+msgstr "مسؤوليات المستأجر"
+
+msgid "Pricing & Payment"
+msgstr "التسعير والدفع"
+
+msgid "Dispute Resolution"
+msgstr "حل النزاعات"
+
+msgid "Prohibited Activities"
+msgstr "الأنشطة المحظورة"
+
+msgid "Limitation of Liability"
+msgstr "حدود المسؤولية"
+
+msgid ""
+"By accessing and using Rentora (\"the Platform\"), you agree to be bound by "
+"these Terms of Service. If you do not agree with any part of these terms, "
+"you may not use the Platform."
+msgstr ""
+"بدخولك واستخدامك رينتورا (\"المنصة\")، فإنك توافق على الالتزام بشروط الخدمة "
+"هذه. إذا لم توافق على أي جزء منها، فلا يجوز لك استخدام المنصة."
+
+msgid ""
+"You must be at least 18 years old and legally capable of entering into "
+"contracts. Rentora is a peer-to-peer rental marketplace. All users represent"
+" and warrant that they own or are authorized to rent the tools listed."
+msgstr ""
+"يجب أن يكون عمرك 18 عاماً على الأقل وأن تكون مؤهلاً قانونياً لإبرام العقود. "
+"رينتورا سوق تأجير بين الأفراد. يقرّ جميع المستخدمين ويضمنون أنهم يملكون "
+"الأدوات المدرجة أو مخوّلون بتأجيرها."
+
+msgid ""
+"You are responsible for maintaining the confidentiality of your account "
+"credentials and for all activities that occur under your account."
+msgstr ""
+"أنت مسؤول عن الحفاظ على سرية بيانات دخول حسابك وعن جميع الأنشطة التي تجري "
+"تحت حسابك."
+
+msgid "Tool Owner Responsibilities"
+msgstr "مسؤوليات مالك الأداة"
+
+msgid "Listing Accuracy"
+msgstr "دقة الإعلان"
+
+msgid "Tool owners agree to:"
+msgstr "يوافق مالكو الأدوات على:"
+
+msgid ""
+"Provide accurate descriptions of tool condition, features, and limitations"
+msgstr "تقديم أوصاف دقيقة لحالة الأداة وميزاتها وقيودها"
+
+msgid "Upload clear photographs of the tool's actual condition"
+msgstr "رفع صور واضحة للحالة الفعلية للأداة"
+
+msgid "Disclose any known defects or restrictions on use"
+msgstr "الإفصاح عن أي عيوب معروفة أو قيود على الاستخدام"
+
+msgid "Update availability status accurately"
+msgstr "تحديث حالة التوفّر بدقة"
+
+msgid "The Return Process"
+msgstr "عملية الإرجاع"
+
+msgid "When a rental ends, owners must:"
+msgstr "عند انتهاء الإيجار، يجب على المالك:"
+
+msgid "Inspect the returned tool within 24 hours"
+msgstr "فحص الأداة المُعادة خلال 24 ساعة"
+
+msgid "Click \"Mark as Returned\" in their dashboard to notify the renter"
+msgstr "الضغط على \"تحديد كمُعادة\" في لوحة التحكم لإشعار المستأجر"
+
+msgid "Wait for renter confirmation before considering the rental complete"
+msgstr "انتظار تأكيد المستأجر قبل اعتبار الإيجار مكتملاً"
+
+msgid ""
+"Raise a dispute within 48 hours if there is damage (with evidence photos)"
+msgstr "رفع نزاع خلال 48 ساعة في حال وجود ضرر (مع صور الأدلة)"
+
+msgid "Important:"
+msgstr "مهم:"
+
+msgid ""
+"The return is only finalized after the owner clicks \"Mark as Returned\" AND"
+" the renter confirms it. This two-step handshake protects both parties and "
+"stops overdue charges from being applied unfairly."
+msgstr ""
+"لا يكتمل الإرجاع إلا بعد أن يضغط المالك على \"تحديد كمُعادة\" ويؤكّده "
+"المستأجر. هذه المصافحة المكوّنة من خطوتين تحمي الطرفين وتمنع تطبيق رسوم "
+"التأخير بشكل غير عادل."
+
+msgid "Renters agree to:"
+msgstr "يوافق المستأجرون على:"
+
+msgid "Use tools only as intended and within stated limitations"
+msgstr "استخدام الأدوات فقط للغرض المقصود وضمن القيود المذكورة"
+
+msgid "Return tools by the agreed end date and time"
+msgstr "إرجاع الأدوات بحلول تاريخ ووقت الانتهاء المتفق عليه"
+
+msgid "Pay deposit and any applicable fees upfront"
+msgstr "دفع التأمين وأي رسوم مطبّقة مقدماً"
+
+msgid "Accept liability for damage caused by misuse or negligence"
+msgstr "تحمّل المسؤولية عن الأضرار الناتجة عن سوء الاستخدام أو الإهمال"
+
+msgid "Confirm tool return once received (to protect against overdue charges)"
+msgstr "تأكيد إرجاع الأداة عند استلامها (للحماية من رسوم التأخير)"
+
+msgid "To avoid overdue charges:"
+msgstr "لتجنّب رسوم التأخير:"
+
+msgid ""
+"Once the owner marks the tool as returned, you will receive an email. Log "
+"into Rentora and confirm the return in your \"My Rentals\" tab. Until you "
+"confirm, the system may keep counting overdue days."
+msgstr ""
+"بمجرد أن يحدد المالك الأداة كمُعادة، ستستلم بريداً إلكترونياً. سجّل الدخول "
+"إلى رينتورا وأكّد الإرجاع من تبويب \"استئجاراتي\". وحتى تؤكّد، قد يستمر النظام"
+" في احتساب أيام التأخير."
+
+msgid "Renters pay the total amount shown at checkout, which includes:"
+msgstr "يدفع المستأجرون المبلغ الإجمالي المعروض عند الدفع، والذي يشمل:"
+
+msgid "15% of rental total (supports server operations and support)"
+msgstr "15% من إجمالي الإيجار (لدعم تشغيل الخوادم والدعم الفني)"
+
+msgid "+$10 for coverage up to the deposit amount"
+msgstr "+10$ لتغطية حتى مبلغ التأمين"
+
+msgid ""
+"Payments are processed securely via Stripe. Rentora does not store your "
+"payment card information."
+msgstr ""
+"تُعالج المدفوعات بأمان عبر Stripe. لا تخزّن رينتورا معلومات بطاقة الدفع "
+"الخاصة بك."
+
+msgid "Deposit Handling"
+msgstr "التعامل مع التأمين"
+
+msgid ""
+"Deposits are refundable upon return of the tool in the agreed condition. If "
+"a dispute arises over tool condition, Rentora staff will review the evidence"
+" and make a binding decision. Refunds are processed within 7 business days "
+"of resolution."
+msgstr ""
+"يُسترد التأمين عند إرجاع الأداة بالحالة المتفق عليها. إذا نشأ نزاع حول حالة "
+"الأداة، سيراجع فريق رينتورا الأدلة ويتخذ قراراً مُلزماً. تُعالج المبالغ "
+"المستردة خلال 7 أيام عمل من الحل."
+
+msgid "Overdue Charges"
+msgstr "رسوم التأخير"
+
+msgid ""
+"Tools kept beyond the agreed end date incur overdue charges at 1.5x the "
+"daily rate per additional day. To avoid this, confirm the tool return once "
+"the owner marks it as returned."
+msgstr ""
+"الأدوات المحتفظ بها بعد تاريخ الانتهاء المتفق عليه تترتب عليها رسوم تأخير "
+"بمقدار 1.5 ضعف السعر اليومي عن كل يوم إضافي. لتجنّب ذلك، أكّد إرجاع الأداة "
+"بمجرد أن يحددها المالك كمُعادة."
+
+msgid "Disputes are handled through the following process:"
+msgstr "تُعالج النزاعات وفق العملية التالية:"
+
+msgid "A party initiates a dispute within 48 hours of the rental end"
+msgstr "يبدأ أحد الطرفين النزاع خلال 48 ساعة من انتهاء الإيجار"
+
+msgid ""
+"Both parties provide a written explanation and evidence (photos, messages)"
+msgstr "يقدّم كلا الطرفين شرحاً مكتوباً وأدلة (صور، رسائل)"
+
+msgid ""
+"Rentora staff review and make a binding decision within 5 business days"
+msgstr "يراجع فريق رينتورا ويتخذ قراراً مُلزماً خلال 5 أيام عمل"
+
+msgid "The decision is enforced through a refund, claim payout, or dismissal"
+msgstr "يُنفّذ القرار عبر استرداد أو تعويض أو رفض المطالبة"
+
+msgid ""
+"Decisions are final. No refunds are issued for disputes raised after 48 "
+"hours."
+msgstr "القرارات نهائية. لا تُصرف مبالغ مستردة للنزاعات المرفوعة بعد 48 ساعة."
+
+msgid "Users agree NOT to:"
+msgstr "يوافق المستخدمون على عدم:"
+
+msgid "List or rent stolen, counterfeit, or dangerous tools"
+msgstr "إدراج أو تأجير أدوات مسروقة أو مقلّدة أو خطرة"
+
+msgid "Engage in fraud, misrepresentation, or harassment"
+msgstr "الانخراط في الاحتيال أو التضليل أو التحرّش"
+
+msgid "Use the Platform for illegal purposes"
+msgstr "استخدام المنصة لأغراض غير قانونية"
+
+msgid "Attempt to bypass payment or escape dispute resolution"
+msgstr "محاولة تجاوز الدفع أو التهرّب من حل النزاعات"
+
+msgid "Post offensive, explicit, or defamatory content"
+msgstr "نشر محتوى مسيء أو صريح أو تشهيري"
+
+msgid ""
+"Violations result in immediate account suspension and potential legal "
+"action. Accounts that accumulate 3 or more abuse reports, or remain "
+"unverified for 30+ days, may be suspended."
+msgstr ""
+"تؤدي المخالفات إلى تعليق فوري للحساب واحتمال اتخاذ إجراء قانوني. الحسابات "
+"التي تتلقى 3 بلاغات إساءة أو أكثر، أو تبقى غير موثّقة لأكثر من 30 يوماً، قد "
+"يتم تعليقها."
+
+msgid ""
+"Rentora is a marketplace facilitator, NOT a rental company. We do not own, "
+"store, or maintain any tools. Owners bear full liability for tool condition "
+"and safety. Renters use tools at their own risk. Rentora is not responsible "
+"for:"
+msgstr ""
+"رينتورا وسيط سوق، وليست شركة تأجير. نحن لا نملك أو نخزّن أو نصون أي أدوات. "
+"يتحمّل المالكون المسؤولية الكاملة عن حالة الأداة وسلامتها. يستخدم المستأجرون"
+" الأدوات على مسؤوليتهم الخاصة. رينتورا غير مسؤولة عن:"
+
+msgid "Tool defects, malfunctions, or failures"
+msgstr "عيوب الأدوات أو أعطالها أو تعطّلها"
+
+msgid "Injury or property damage caused by tools"
+msgstr "الإصابات أو الأضرار الممتلكات الناتجة عن الأدوات"
+
+msgid "Disputes arising from tool condition"
+msgstr "النزاعات الناشئة عن حالة الأداة"
+
+msgid "Loss or theft of tools"
+msgstr "فقدان الأدوات أو سرقتها"
+
+msgid ""
+"You agree to indemnify and hold Rentora harmless from any claims, damages, "
+"or losses arising from your use of the Platform or your violation of these "
+"Terms. These Terms are governed by the laws of Palestine."
+msgstr ""
+"توافق على تعويض رينتورا وإبراء ذمتها من أي مطالبات أو أضرار أو خسائر ناشئة "
+"عن استخدامك للمنصة أو مخالفتك لهذه الشروط. تخضع هذه الشروط لقوانين فلسطين."
+
+msgid "Questions about these Terms? We're happy to help."
+msgstr "لديك أسئلة حول هذه الشروط؟ يسعدنا مساعدتك."
+
+msgid "Email us at"
+msgstr "راسلنا على"
+
+msgid "Delete this tool?"
+msgstr "حذف هذه الأداة؟"
+
+msgid ""
+"This listing will be permanently removed and can no longer be booked. This "
+"action cannot be undone."
+msgstr ""
+"سيتم حذف هذا الإعلان نهائياً ولن يعود قابلاً للحجز. لا يمكن التراجع عن هذا "
+"الإجراء."
+
+msgid "Delete tool"
+msgstr "حذف الأداة"
+
+msgid "Renter reviewed your tool"
+msgstr "المستأجر قيّم أداتك"
+
+msgid "Renter rated you as the owner"
+msgstr "المستأجر قيّمك كمالك"
+
+msgid "Owner rated you as the renter"
+msgstr "المالك قيّمك كمستأجر"
+
+msgid "You reviewed this tool"
+msgstr "أنت قيّمت هذه الأداة"
+
+msgid "You rated the owner"
+msgstr "أنت قيّمت المالك"
+
+msgid "You rated the renter"
+msgstr "أنت قيّمت المستأجر"
+
+msgid "Reviewed your tool"
+msgstr "قيّم أداتك"
+
+msgid "Rated you as the owner"
+msgstr "قيّمك كمالك"
+
+msgid "Rated you as the renter"
+msgstr "قيّمك كمستأجر"
+
+msgid "Reviewed the tool"
+msgstr "قيّم الأداة"
+
+msgid "Rated %(name)s as the owner"
+msgstr "قيّم %(name)s كمالك"
+
+msgid "Rated %(name)s as the renter"
+msgstr "قيّم %(name)s كمستأجر"
+
+msgid "%(name)s reviewed this tool"
+msgstr "%(name)s قيّم هذه الأداة"
+
+msgid "%(name)s rated the owner"
+msgstr "%(name)s قيّم المالك"
+
+msgid "%(name)s rated the renter"
+msgstr "%(name)s قيّم المستأجر"
+
+msgid "View tool"
+msgstr "عرض الأداة"
+
+msgid "View profile"
+msgstr "عرض الملف الشخصي"
+
+msgid "15%% of rental total (supports servers and support)"
+msgstr "15% من إجمالي الإيجار (لدعم الخوادم والدعم الفني)"
+
+msgid "Platform fee (15%%): $11.25"
+msgstr "رسوم المنصة (15%): 11.25$"
+
+msgid ""
+"Rentora uses session cookies only to keep you logged in. We do NOT use "
+"third-party tracking cookies (Google Analytics, Meta Pixel, etc.). No system"
+" is 100%% secure — always use a strong password and never share your "
+"credentials."
+msgstr ""
+"تستخدم رينتورا ملفات تعريف ارتباط الجلسة فقط لإبقائك مسجّل الدخول. نحن لا "
+"نستخدم ملفات تتبّع من أطراف ثالثة (Google Analytics أو Meta Pixel وغيرها). "
+"لا يوجد نظام آمن 100% — استخدم دائماً كلمة مرور قوية ولا تشارك بيانات دخولك "
+"أبداً."
+
+msgid "15%% of rental total (supports server operations and support)"
+msgstr "15% من إجمالي الإيجار (لدعم تشغيل الخوادم والدعم الفني)"
+
+msgid "Platform Fee (15%):"
+msgstr "رسوم المنصة (15%):"
+
+msgid "Platform Fee (15%%):"
+msgstr "رسوم المنصة (15%%):"
+
+msgid ""
+"We recommend 5-10%% of the tool's original price per day. Example: $500 tool"
+" → $25-50/day."
+msgstr ""
+"نوصي بنسبة 5-10%% من السعر الأصلي للأداة يومياً. مثال: أداة بـ500$ ← 25-50$ "
+"يومياً."
+
+msgid ""
+"Your earning = (rental price × days) - 15%% platform fee - Stripe payment "
+"processing fee."
+msgstr ""
+"أرباحك = (سعر الإيجار × الأيام) − 15%% رسوم المنصة − رسوم معالجة الدفع عبر "
+"Stripe."
+
+msgid ""
+"<strong>Each late day is charged as one extra rental day, at the normal "
+"daily rate.</strong> There is no penalty multiplier."
+msgstr ""
+"<strong>كل يوم تأخير يُحتسب كيوم إيجار إضافي بالسعر اليومي المعتاد.</strong>"
+" لا يوجد مضاعف جزائي."
+
+msgid "Example: at $10/day, returning 2 days late adds $20 to your total."
+msgstr "مثال: بسعر 10$ يومياً، التأخر يومين يضيف 20$ إلى إجماليك."
+
+msgid ""
+"<strong>To avoid this:</strong> hand the tool back on time and ask the owner"
+" to press \"Mark as Returned\" while you are both there. You get a "
+"notification and an email — <strong>confirm the return from \"My Rentals\" "
+"straight away</strong> and the charges stop at that moment."
+msgstr ""
+"<strong>لتجنّب ذلك:</strong> أعِد الأداة في موعدها واطلب من المالك الضغط على"
+" \"تحديد كمُعادة\" وأنتما معاً. سيصلك إشعار وبريد إلكتروني — <strong>أكّد "
+"الإرجاع من \"استئجاراتي\" فوراً</strong> وتتوقف الرسوم عند تلك اللحظة."
+
+msgid ""
+"1. Sign up for a free Rentora account<br>2. Browse available tools by "
+"category or search<br>3. Click on a tool to view details, photos, and "
+"reviews<br>4. Select your rental dates and send the request — nothing is "
+"charged yet<br>5. You land on a confirmation page and get an email; the "
+"owner reviews your request<br>6. Once approved, pay via Stripe from \"My "
+"Rentals\" and the dates are yours"
+msgstr ""
+"1. أنشئ حساباً مجانياً في رينتورا<br>2. تصفّح الأدوات المتاحة حسب الفئة أو "
+"البحث<br>3. اضغط على أداة لعرض التفاصيل والصور والتقييمات<br>4. اختر تواريخ "
+"الإيجار وأرسل الطلب — لا يُخصم أي مبلغ بعد<br>5. تنتقل إلى صفحة تأكيد ويصلك "
+"بريد إلكتروني، ويراجع المالك طلبك<br>6. بعد الموافقة، ادفع عبر Stripe من "
+"\"استئجاراتي\" وتصبح التواريخ لك"
+
+msgid ""
+"Message the owner straight away through the in-app chat and take photos of "
+"the tool's condition before you use it. Keeping it in the chat means there "
+"is a timestamped record both sides can rely on."
+msgstr ""
+"راسل المالك فوراً عبر الدردشة داخل الموقع والتقط صوراً لحالة الأداة قبل "
+"استخدامها. إبقاء الأمر في الدردشة يوفّر سجلاً موثّقاً بالوقت يعتمد عليه "
+"الطرفان."
+
+msgid ""
+"If you cannot agree, contact support from the Contact page. And when the "
+"owner later marks the tool as returned, you can choose "
+"<strong>Dispute</strong> instead of Confirm — that opens a formal case where"
+" you attach your reason and photo evidence for staff to review."
+msgstr ""
+"إذا لم تتفقا، تواصل مع الدعم من صفحة التواصل. وعندما يحدد المالك لاحقاً "
+"الأداة كمُعادة، يمكنك اختيار <strong>اعتراض</strong> بدل التأكيد — وهذا يفتح"
+" قضية رسمية ترفق فيها سببك وأدلتك المصوّرة لمراجعة الفريق."
+
+msgid ""
+"Yes. Open <strong>My Rentals</strong> and press <strong>Cancel</strong> on "
+"the booking. What happens depends on the stage:"
+msgstr ""
+"نعم. افتح <strong>استئجاراتي</strong> واضغط <strong>إلغاء</strong> على الحجز. "
+"وما يحدث يعتمد على المرحلة:"
+
+msgid "Before you have paid:"
+msgstr "قبل الدفع:"
+
+msgid ""
+"cancel yourself, instantly and free. Nothing has been charged, so there is "
+"nothing to refund, and the dates are released for others."
+msgstr ""
+"ألغِ بنفسك فوراً ومجاناً. لم يُخصم أي مبلغ فلا يوجد ما يُسترد، وتتحرر "
+"التواريخ للآخرين."
+
+msgid "After you have paid:"
+msgstr "بعد الدفع:"
+
+msgid ""
+"the Cancel button is disabled so neither side can void a paid rental alone. "
+"Contact support and we will handle the refund."
+msgstr ""
+"يُعطَّل زر الإلغاء فلا يستطيع أي طرف إبطال إيجار مدفوع بمفرده. تواصل مع "
+"الدعم وسنتولّى الاسترداد."
+
+msgid "During an active rental:"
+msgstr "أثناء إيجار نشط:"
+
+msgid ""
+"return the tool and complete the return handshake — you are charged only for"
+" the days you actually kept it."
+msgstr ""
+"أعِد الأداة وأكمِل مصافحة الإرجاع — لا تُحاسَب إلا على الأيام التي احتفظت "
+"بها فعلاً."
+
+msgid ""
+"Yes — but only while no money has changed hands. A renter can cancel their "
+"own request before they pay, which simply frees your dates again and "
+"notifies you by email."
+msgstr ""
+"نعم — لكن فقط ما دام لم يُدفع أي مبلغ. يمكن للمستأجر إلغاء طلبه قبل الدفع، "
+"فتتحرر تواريخك مجدداً ويصلك إشعار بالبريد."
+
+msgid ""
+"<strong>Once a rental is paid, neither side can cancel it alone.</strong> "
+"The renter has often paid before collecting the tool, so leaving that "
+"decision to one party would be unfair to the other. Paid cancellations go "
+"through Rentora support, which handles the refund."
+msgstr ""
+"<strong>بمجرد دفع الإيجار، لا يستطيع أي طرف إلغاءه بمفرده.</strong> غالباً "
+"ما يدفع المستأجر قبل استلام الأداة، فترك القرار لطرف واحد يظلم الآخر. "
+"تُعالَج عمليات الإلغاء المدفوعة عبر دعم رينتورا الذي يتولّى الاسترداد."
+
+msgid ""
+"Once the return is confirmed the booking moves to "
+"<strong>Completed</strong>, and a \"Leave Review\" button appears on it for "
+"both sides. Go to \"My Rentals\" (or \"Booking Requests\" if you are the "
+"owner) → the completed booking → <strong>Leave Review</strong>. You can rate"
+" on:"
+msgstr ""
+"بمجرد تأكيد الإرجاع يتحول الحجز إلى <strong>مكتمل</strong>، ويظهر عليه زر "
+"\"أضف تقييماً\" للطرفين. اذهب إلى \"استئجاراتي\" (أو \"طلبات الحجز\" إن كنت "
+"المالك) ← الحجز المكتمل ← <strong>أضف تقييماً</strong>. يمكنك التقييم على:"
+
+msgid ""
+"1. Sign up or log in to your Rentora account<br>2. Go to \"Dashboard\" → "
+"\"List Your Tool\"<br>3. Fill in tool name, description, category, and "
+"condition<br>4. Set your daily rental rate and deposit<br>5. Add your "
+"location<br>6. Upload clear photos of your tool<br>7. Click \"Publish\" to "
+"make it live"
+msgstr ""
+"1. أنشئ حساباً أو سجّل الدخول إلى رينتورا<br>2. اذهب إلى \"لوحة التحكم\" ← "
+"\"أدرج أداتك\"<br>3. أدخل اسم الأداة والوصف والفئة والحالة<br>4. حدّد سعر "
+"الإيجار اليومي ومبلغ التأمين<br>5. أضف موقعك<br>6. ارفع صوراً واضحة "
+"لأداتك<br>7. اضغط \"نشر\" لتفعيلها"
+
+msgid ""
+"You do not manage a calendar. A published tool is available every day by "
+"default, and Rentora automatically blocks any dates that are already booked "
+"so two people can never reserve the same window."
+msgstr ""
+"لا تحتاج إلى إدارة تقويم. الأداة المنشورة متاحة كل يوم افتراضياً، ويحجب "
+"رينتورا تلقائياً أي تواريخ محجوزة مسبقاً فلا يمكن لشخصين حجز الفترة نفسها."
+
+msgid "What similar tools nearby are going for"
+msgstr "أسعار الأدوات المشابهة القريبة"
+
+msgid ""
+"Do the handover and the handshake together, in person — that is what "
+"protects both of you:"
+msgstr "أنجِز التسليم والمصافحة معاً وجهاً لوجه — فهذا ما يحمي الطرفين:"
+
+msgid "Meet the renter and inspect the tool with them present"
+msgstr "قابل المستأجر وافحص الأداة بحضوره"
+
+msgid "Go to Dashboard → Booking Requests"
+msgstr "اذهب إلى لوحة التحكم ← طلبات الحجز"
+
+msgid "Press \"Mark as Returned\" right there at handover"
+msgstr "اضغط \"تحديد كمُعادة\" هناك عند التسليم مباشرةً"
+
+msgid "The renter instantly gets a notification and an email"
+msgstr "يصل المستأجر إشعار وبريد إلكتروني فوراً"
+
+msgid "They press \"Confirm Return\" on the spot — and the rental is complete"
+msgstr "يضغط \"تأكيد الإرجاع\" في الحال — ويكتمل الإيجار"
+
+msgid ""
+"<strong>Why on the spot:</strong> late fees keep accruing until you mark the"
+" tool returned. Doing it at handover means the renter is never charged for "
+"time the tool was already back with you, and you are never left waiting on a"
+" confirmation."
+msgstr ""
+"<strong>لماذا في الحال:</strong> تستمر رسوم التأخير حتى تحدد الأداة كمُعادة."
+" وإنجازها عند التسليم يعني ألا يُحاسَب المستأجر على وقت كانت الأداة فيه عندك"
+" أصلاً، وألا تبقى أنت منتظراً تأكيداً."
+
+msgid ""
+"Inspect the tool with the renter still there, before you mark it returned"
+msgstr "افحص الأداة والمستأجر ما زال حاضراً، قبل أن تحددها كمُعادة"
+
+msgid "Take photos or video of the damage there and then"
+msgstr "التقط صوراً أو فيديو للضرر في حينه"
+
+msgid ""
+"Raise it with the renter in the in-app chat, so there is a timestamped "
+"record"
+msgstr ""
+"أثِر الأمر مع المستأجر في الدردشة داخل الموقع ليكون هناك سجل موثّق بالوقت"
+
+msgid ""
+"Contact support from the Contact page with your photos and the booking "
+"number"
+msgstr "تواصل مع الدعم من صفحة التواصل مرفقاً صورك ورقم الحجز"
+
+msgid "Rentora staff review both sides and decide within 5 business days"
+msgstr "يراجع فريق رينتورا الطرفين ويقرر خلال 5 أيام عمل"
+
+msgid "A damage claim can be settled from the deposit held on the booking"
+msgstr "يمكن تسوية مطالبة الضرر من مبلغ التأمين المحتفظ به على الحجز"
+
+msgid ""
+"Your earnings from every completed rental are tracked on your Dashboard "
+"under <strong>Total Earnings</strong>, and each payment shows the exact "
+"split between your payout and the platform fee."
+msgstr ""
+"تُتابَع أرباحك من كل إيجار مكتمل في لوحة التحكم تحت <strong>إجمالي "
+"الأرباح</strong>، وتعرض كل دفعة التقسيم الدقيق بين حصتك ورسوم المنصة."
+
+msgid ""
+"<strong>Self-service bank payouts are not live yet.</strong> Until they are,"
+" contact us from the Contact page to arrange your transfer and we will "
+"confirm the amount against your completed rentals. We will announce "
+"automatic payouts here as soon as they launch."
+msgstr ""
+"<strong>صرف الأرباح الذاتي إلى البنك غير متاح بعد.</strong> وإلى حين توفّره،"
+" تواصل معنا من صفحة التواصل لترتيب التحويل وسنؤكّد المبلغ مقابل إيجاراتك "
+"المكتملة. سنعلن هنا عن الصرف التلقائي فور إطلاقه."
+
+msgid "Inspect the tool at handover, with the renter present"
+msgstr "افحص الأداة عند التسليم بحضور المستأجر"
+
+msgid ""
+"Keep the listing accurate, and unpublish a tool that is no longer available "
+"to rent"
+msgstr "أبقِ الإعلان دقيقاً، وألغِ نشر أي أداة لم تعد متاحة للإيجار"
+
+msgid ""
+"A published tool is offered every day by default; Rentora automatically "
+"blocks dates that already have an active booking, so the same tool cannot be"
+" double-booked."
+msgstr ""
+"الأداة المنشورة معروضة كل يوم افتراضياً؛ ويحجب رينتورا تلقائياً التواريخ "
+"التي عليها حجز نشط، فلا يمكن حجز الأداة نفسها مرتين."
+
+msgid ""
+"Report damage to support with photo evidence before marking the tool "
+"returned"
+msgstr "أبلغ الدعم عن الضرر مع أدلة مصوّرة قبل تحديد الأداة كمُعادة"
+
+msgid ""
+"Tools kept beyond the agreed end date are charged one additional rental day,"
+" at the normal daily rate, for each day late — there is no penalty "
+"multiplier. Charges stop the moment the owner marks the tool returned and "
+"the renter confirms, which is why both steps should happen at handover."
+msgstr ""
+"الأدوات المحتفظ بها بعد تاريخ الانتهاء المتفق عليه تُحتسب عليها يوم إيجار "
+"إضافي بالسعر اليومي المعتاد عن كل يوم تأخير — بلا مضاعف جزائي. وتتوقف الرسوم"
+" لحظة تحديد المالك الأداة كمُعادة وتأكيد المستأجر، ولهذا يجب إنجاز الخطوتين "
+"عند التسليم."
+
+msgid "Cancellation"
+msgstr "الإلغاء"
+
+msgid ""
+"A renter may cancel their own booking at any time before payment; nothing "
+"has been charged, so no refund is due and the dates are released. Once a "
+"rental is paid, neither party may cancel it unilaterally — paid "
+"cancellations are handled by Rentora support, which processes any refund."
+msgstr ""
+"يجوز للمستأجر إلغاء حجزه في أي وقت قبل الدفع؛ إذ لم يُخصم أي مبلغ فلا "
+"استرداد مستحقاً وتتحرر التواريخ. وبمجرد دفع الإيجار لا يجوز لأي طرف إلغاؤه "
+"منفرداً — تتولّى خدمة دعم رينتورا عمليات الإلغاء المدفوعة وتعالج أي استرداد."
+
+msgid ""
+"When the owner marks a tool returned, the renter may press Dispute instead "
+"of Confirm, giving a written reason and optional photo or video evidence"
+msgstr ""
+"عندما يحدد المالك الأداة كمُعادة، يجوز للمستأجر الضغط على اعتراض بدل "
+"التأكيد، مع ذكر سبب مكتوب وأدلة مصوّرة اختيارية"
+
+msgid ""
+"The rental is placed on hold — no late fees accrue while a dispute is open"
+msgstr ""
+"يوضع الإيجار قيد التعليق — ولا تُحتسب رسوم تأخير ما دام النزاع مفتوحاً"
+
+msgid ""
+"Owners reporting damage contact support with photo evidence and the booking "
+"number"
+msgstr ""
+"يتواصل المالكون المبلّغون عن ضرر مع الدعم مرفقين أدلة مصوّرة ورقم الحجز"
+
+msgid ""
+"Rentora staff review both sides and make a binding decision within 5 "
+"business days"
+msgstr "يراجع فريق رينتورا الطرفين ويتخذ قراراً مُلزماً خلال 5 أيام عمل"
+
+msgid ""
+"The decision is enforced through a refund, a claim settled from the deposit,"
+" or dismissal"
+msgstr ""
+"يُنفَّذ القرار عبر استرداد، أو تسوية مطالبة من التأمين، أو رفض المطالبة"
+
+msgid ""
+"Decisions are final. Raise a dispute at handover or as soon as the issue "
+"appears — evidence gathered later carries less weight."
+msgstr ""
+"القرارات نهائية. ارفع النزاع عند التسليم أو فور ظهور المشكلة — فالأدلة "
+"المجمّعة لاحقاً أقل وزناً."
+
+msgid ""
+"Ask the owner to press \"Mark as Returned\" while you are handing the tool "
+"back. You immediately get a notification and an email — confirm the return "
+"from \"My Rentals\" there and then. Until you confirm, the system keeps "
+"counting overdue days."
+msgstr ""
+"اطلب من المالك الضغط على \"تحديد كمُعادة\" أثناء إعادتك للأداة. سيصلك فوراً "
+"إشعار وبريد إلكتروني — أكّد الإرجاع من \"استئجاراتي\" في الحال. وحتى تؤكّد، "
+"يستمر النظام في احتساب أيام التأخير."
+
+msgid "Cancel booking"
+msgstr "إلغاء الحجز"
+
+msgid "Cancel this booking?"
+msgstr "إلغاء هذا الحجز؟"
+
+msgid ""
+"Your request will be withdrawn and the dates released. Nothing has been "
+"charged, so there is nothing to refund."
+msgstr "سيُسحب طلبك وتتحرر التواريخ. لم يُخصم أي مبلغ فلا يوجد ما يُسترد."
+
+msgid "Keep booking"
+msgstr "الإبقاء على الحجز"
+
+msgid "Dispute the return"
+msgstr "الاعتراض على الإرجاع"
+
+msgid "Tell us what happened and attach evidence if you have it."
+msgstr "أخبرنا بما حدث وأرفق أدلة إن توفّرت."
+
+msgid ""
+"Opening a dispute puts the rental on hold — no late fees are added while our"
+" staff review it. We aim to decide within 5 business days and will email you"
+" the outcome."
+msgstr ""
+"فتح النزاع يضع الإيجار قيد التعليق — ولا تُضاف رسوم تأخير أثناء مراجعة "
+"فريقنا. نهدف للبتّ خلال 5 أيام عمل وسنرسل لك النتيجة بالبريد."
+
+msgid "What is the problem?"
+msgstr "ما هي المشكلة؟"
+
+msgid ""
+"For example: the tool was not actually handed back yet, or it was already "
+"damaged when I received it."
+msgstr ""
+"مثلاً: لم تُسلَّم الأداة فعلياً بعد، أو كانت تالفة أصلاً عند استلامي لها."
+
+msgid ""
+"Be specific — dates, condition, and what was agreed all help us decide "
+"fairly."
+msgstr ""
+"كن دقيقاً — التواريخ والحالة وما تم الاتفاق عليه، كلها تساعدنا على قرار "
+"عادل."
+
+msgid "Evidence (optional)"
+msgstr "الأدلة (اختياري)"
+
+msgid ""
+"Attach a photo or short video of the tool's condition. Staff see this — "
+"other users do not."
+msgstr ""
+"أرفق صورة أو فيديو قصيراً لحالة الأداة. يراها الفريق فقط ولا يراها "
+"المستخدمون الآخرون."
+
+msgid "Go back"
+msgstr "رجوع"
+
+msgid "Submit dispute"
+msgstr "إرسال الاعتراض"
+
+msgid "AI thinking…"
+msgstr "جارٍ التفكير…"
+
+msgid ""
+"Inspect the tool with the renter still there, before you mark it returned:"
+msgstr "افحص الأداة والمستأجر ما زال حاضراً، قبل أن تحددها كمُعادة:"
+
+msgid "Shared photo"
+msgstr "صورة مُرسَلة"
+
+msgid "Attach a photo"
+msgstr "إرفاق صورة"
+
+msgid "Remove"
+msgstr "إزالة"
+
+msgid "Attachment"
+msgstr "مرفق"
+
+msgid "optional"
+msgstr "اختياري"
+
+msgid ""
+"Attach a photo, screenshot, or PDF as evidence (max 10 MB). Only our support"
+" staff can see it."
+msgstr ""
+"أرفق صورة أو لقطة شاشة أو ملف PDF كدليل (بحد أقصى 10 ميغابايت). لا يراه إلا "
+"فريق الدعم لدينا."
+
+msgid "The attachment must be under 10 MB."
+msgstr "يجب أن يكون حجم المرفق أقل من 10 ميغابايت."
+
+msgid "Booking Ref"
+msgstr "رقم الحجز"
+
+msgid "Document condition"
+msgstr "توثيق الحالة"
+
+msgid "Photograph the tool condition"
+msgstr "صوّر حالة الأداة"
+
+msgid "Document Condition"
+msgstr "توثيق الحالة"
+
+msgid "Photograph the tool's condition to mark it returned."
+msgstr "صوّر حالة الأداة لتحديدها كمُعادة."
+
+msgid "Document the tool's condition"
+msgstr "وثّق حالة الأداة"
+
+msgid "Add photos of the tool as you received it — required."
+msgstr "أضف صوراً للأداة كما استلمتها — إلزامي."
+
+msgid ""
+"These photos become the \"after\" record. If the renter disputes the return,"
+" our staff compare them with the renter's pickup photos to judge any damage "
+"fairly. At least one photo is required to mark the tool returned."
+msgstr ""
+"تصبح هذه الصور سجل \"ما بعد\". إذا اعترض المستأجر على الإرجاع، يقارنها "
+"فريقنا بصور الاستلام لتقييم أي ضرر بإنصاف. يلزم رفع صورة واحدة على الأقل "
+"لتحديد الأداة كمُعادة."
+
+msgid ""
+"These photos become your proof of the tool's condition at pickup. If the "
+"owner later claims damage, our staff compare them with the return photos — "
+"protecting you from unfair charges. At least one photo is required."
+msgstr ""
+"تصبح هذه الصور إثباتك لحالة الأداة عند الاستلام. إذا ادّعى المالك ضرراً "
+"لاحقاً، يقارنها فريقنا بصور الإرجاع — لحمايتك من رسوم غير عادلة. يلزم رفع "
+"صورة واحدة على الأقل."
+
+msgid "Condition photos"
+msgstr "صور الحالة"
+
+msgid "Required — up to 8 photos, images only, max 8 MB each."
+msgstr "إلزامي — حتى 8 صور، صور فقط، بحد أقصى 8 ميغابايت لكل صورة."
+
+msgid "Save photos"
+msgstr "حفظ الصور"

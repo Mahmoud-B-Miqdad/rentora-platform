@@ -1087,3 +1087,180 @@
     font-size: 12px;
 	color: #0f9b8e;
 }
+/* ═══════════════════════════════════════════════════════════
+   REVIEW CARD CONTEXT BAR
+   Replaces the ambiguous "RENTER / OWNER" badge. States in plain
+   language who reviewed what, with a colour-coded accent per type:
+   teal = tool review, blue = owner review, amber = renter review.
+═══════════════════════════════════════════════════════════ */
+.rcard__context {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 11px;
+  margin-bottom: 10px;
+  background: var(--pr-surface);
+  border: 1px solid var(--pr-border-lt);
+  border-inline-start: 3px solid var(--pr-teal);
+  border-radius: 8px;
+}
+
+.rcard__context i { font-size: .78rem; flex-shrink: 0; color: var(--pr-teal); }
+
+.rcard__context-label {
+  font-size: .73rem;
+  font-weight: 600;
+  color: var(--pr-text-sub);
+}
+
+.rcard__context-subject {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--pr-text-h);
+  overflow-wrap: anywhere;
+}
+.rcard__context-subject::before {
+  content: "·";
+  margin-inline-end: 6px;
+  color: var(--pr-text-dim);
+  font-weight: 400;
+}
+
+/* Colour accent per review type */
+.rcard--tool   .rcard__context { border-inline-start-color: var(--pr-teal); }
+.rcard--tool   .rcard__context i { color: var(--pr-teal); }
+
+.rcard--owner  .rcard__context { border-inline-start-color: var(--pr-blue); }
+.rcard--owner  .rcard__context i { color: var(--pr-blue); }
+
+.rcard--renter .rcard__context { border-inline-start-color: var(--pr-amber); }
+.rcard--renter .rcard__context i { color: var(--pr-amber-dk); }
+
+/* Left border tint on the card itself for quick scanning */
+.rcard--tool:hover   { border-color: rgba(15,118,110,.3); }
+.rcard--owner:hover  { border-color: rgba(37,99,235,.3); }
+.rcard--renter:hover { border-color: rgba(245,158,11,.35); }
+
+/* Icon-style avatar used for tool reviews in the Given tab */
+.rcard__avatar--icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pr-teal-bg);
+  color: var(--pr-teal);
+  font-size: .85rem;
+}
+
+@media (max-width: 480px) {
+  .rcard__context { padding: 7px 9px; }
+  .rcard__context-label,
+  .rcard__context-subject { font-size: .71rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REVIEW CARD — clickable layout
+   The whole card is a link (stretched overlay) to the reviewed
+   tool or person; the avatar/name inside stays a separate link
+   to the reviewer, so it must sit above the overlay.
+═══════════════════════════════════════════════════════════ */
+.rcard {
+  position: relative;
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+}
+.rcard:hover {
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .08);
+  transform: translateY(-2px);
+}
+
+/* Invisible full-card link */
+.rcard__stretch {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+.rcard__stretch:focus-visible {
+  outline: 2px solid var(--pr-teal);
+  outline-offset: 2px;
+}
+
+/* Top row: who + rating */
+.rcard__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 11px;
+}
+
+/* Reviewer / subject identity — sits above the stretched link */
+.rcard__who {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  text-decoration: none;
+  border-radius: 8px;
+}
+a.rcard__who:hover .rcard__name { color: var(--pr-teal); }
+a.rcard__who:focus-visible {
+  outline: 2px solid var(--pr-teal);
+  outline-offset: 3px;
+}
+
+.rcard__idcol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.rcard__idcol .rcard__name {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--pr-text-h);
+  transition: color .15s;
+  overflow-wrap: anywhere;
+}
+.rcard__idcol .rcard__date {
+  margin: 0;
+  font-size: .68rem;
+  font-weight: 500;
+  color: var(--pr-text-dim);
+}
+
+.rcard__top .rcard__stars {
+  flex-shrink: 0;
+  gap: 2px;
+  font-size: .72rem;
+}
+
+/* Chevron affordance — pushed to the end of the context bar */
+.rcard__go {
+  margin-inline-start: auto;
+  font-size: .68rem;
+  color: var(--pr-text-dim);
+  transition: transform .18s, color .18s;
+}
+.rcard:hover .rcard__go {
+  color: var(--pr-teal);
+  transform: translateX(3px);
+}
+[dir="rtl"] .rcard__go { transform: scaleX(-1); }
+[dir="rtl"] .rcard:hover .rcard__go { transform: scaleX(-1) translateX(3px); }
+
+/* Comment sits above the overlay so text stays selectable */
+.rcard__text {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0;
+}
+
+@media (max-width: 480px) {
+  .rcard__top { flex-direction: column; gap: 8px; }
+  .rcard__top .rcard__stars { align-self: flex-start; }
+}

@@ -470,3 +470,86 @@ a:hover { text-decoration: underline; }
   .con-topbar { padding: 14px 16px; }
   .con-search { min-width: 0; width: 100%; }
 }
+/* ── Support ticket detail ─────────────────────────────── */
+.con-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 18px 28px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.con-meta-grid > div { min-width: 0; }   /* let cells shrink so long values wrap instead of overlapping */
+.con-meta-grid small { display: block; font-size: 11px; letter-spacing: .4px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.con-meta-grid p { font-size: 14px; color: var(--text); overflow-wrap: anywhere; }
+.con-meta-grid a { overflow-wrap: anywhere; }
+
+.con-message-body small { display: block; font-size: 11px; letter-spacing: .4px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.con-message-body p {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--text);
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  overflow-wrap: anywhere;
+}
+
+/* ── Dispute resolution form ───────────────────────────── */
+.dsp-choices { display: grid; gap: 10px; margin-bottom: 18px; }
+.dsp-choice {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 13px 15px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--card); transition: border-color .13s, background .13s;
+}
+.dsp-choice:hover { border-color: var(--blue); background: #f8fafc; }
+.dsp-choice input { margin-top: 3px; flex-shrink: 0; accent-color: var(--blue); }
+.dsp-choice:has(input:checked) { border-color: var(--blue); background: #eff6ff; }
+.dsp-choice span { display: flex; flex-direction: column; gap: 3px; }
+.dsp-choice strong { font-size: 13.5px; color: var(--text); }
+.dsp-choice small { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.dsp-amounts {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;
+}
+.dsp-amounts label { display: block; font-size: 11px; letter-spacing: .4px;
+  text-transform: uppercase; margin-bottom: 5px; }
+
+/* ── Dispute: read-only conversation transcript ────────── */
+.dsp-chat { display: flex; flex-direction: column; gap: 12px; max-height: 460px; overflow-y: auto; padding-inline-end: 4px; }
+.dsp-chat__msg {
+  max-width: 78%;
+  padding: 10px 13px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.dsp-chat__msg--owner  { align-self: flex-start; border-inline-start: 3px solid var(--muted); }
+.dsp-chat__msg--renter { align-self: flex-end;   border-inline-start: 3px solid var(--amber); }
+.dsp-chat__head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.dsp-chat__head strong { font-size: 13px; color: var(--text); }
+.dsp-chat__time { font-size: 11px; margin-inline-start: auto; }
+.dsp-chat__text { font-size: 13.5px; color: var(--text); line-height: 1.55; margin: 0; }
+.dsp-chat__image {
+  max-width: 200px; max-height: 200px;
+  border-radius: 9px; margin-bottom: 6px; display: block; cursor: zoom-in;
+}
+
+/* ── Dispute: condition photo grid ─────────────────────── */
+.dsp-photos { display: flex; flex-wrap: wrap; gap: 10px; }
+.dsp-photo {
+  width: 150px; height: 150px; object-fit: cover;
+  border-radius: 10px; border: 1px solid var(--border);
+  cursor: zoom-in; transition: transform .12s;
+}
+.dsp-photo:hover { transform: scale(1.03); }
+
+/* ── Dispute: before/after condition comparison ────────── */
+.dsp-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.dsp-compare__col { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: #fafbfc; }
+.dsp-compare__label { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; margin-bottom: 12px; }
+.dsp-compare__label--before { color: #0f766e; }
+.dsp-compare__label--after  { color: #2563eb; }
+@media (max-width: 720px) { .dsp-compare { grid-template-columns: 1fr; } }

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Terms of Service" %} | Rentora{% endblock %}
+
+{% block content %}
+{% include "listings/legal/_legal_head.html" %}
+
+<div class="legal-hero">
+  <div class="legal-hero__inner">
+    <span class="legal-hero__eyebrow"><i class="fa-solid fa-scale-balanced"></i> {% trans "Legal" %}</span>
+    <h1 class="legal-hero__title">{% trans "Terms of Service" %}</h1>
+    <p class="legal-hero__sub">{% trans "The rules that keep every rental on Rentora fair, safe, and transparent for both owners and renters." %}</p>
+    <span class="legal-hero__updated"><i class="fa-regular fa-clock"></i> {% trans "Last updated: July 2024" %}</span>
+  </div>
+</div>
+
+<div class="legal-wrap">
+
+  <!-- Table of Contents -->
+  <aside class="legal-toc">
+    <p class="legal-toc__title">{% trans "On this page" %}</p>
+    <ul class="legal-toc__list">
+      <li><a href="#acceptance">{% trans "Acceptance of Terms" %}</a></li>
+      <li><a href="#eligibility">{% trans "User Eligibility" %}</a></li>
+      <li><a href="#owners">{% trans "Owner Responsibilities" %}</a></li>
+      <li><a href="#renters">{% trans "Renter Responsibilities" %}</a></li>
+      <li><a href="#pricing">{% trans "Pricing & Payment" %}</a></li>
+      <li><a href="#disputes">{% trans "Dispute Resolution" %}</a></li>
+      <li><a href="#prohibited">{% trans "Prohibited Activities" %}</a></li>
+      <li><a href="#liability">{% trans "Limitation of Liability" %}</a></li>
+      <li><a href="#contact">{% trans "Contact Us" %}</a></li>
+    </ul>
+  </aside>
+
+  <!-- Document -->
+  <div class="legal-doc">
+
+    <section id="acceptance">
+      <h2><span class="sec-num">1</span> {% trans "Acceptance of Terms" %}</h2>
+      <p>{% trans "By accessing and using Rentora (\"the Platform\"), you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you may not use the Platform." %}</p>
+    </section>
+
+    <section id="eligibility">
+      <h2><span class="sec-num">2</span> {% trans "User Eligibility" %}</h2>
+      <p>{% trans "You must be at least 18 years old and legally capable of entering into contracts. Rentora is a peer-to-peer rental marketplace. All users represent and warrant that they own or are authorized to rent the tools listed." %}</p>
+      <p>{% trans "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account." %}</p>
+    </section>
+
+    <section id="owners">
+      <h2><span class="sec-num">3</span> {% trans "Tool Owner Responsibilities" %}</h2>
+      <h3>{% trans "Listing Accuracy" %}</h3>
+      <p>{% trans "Tool owners agree to:" %}</p>
+      <ol>
+        <li>{% trans "Provide accurate descriptions of tool condition, features, and limitations" %}</li>
+        <li>{% trans "Upload clear photographs of the tool's actual condition" %}</li>
+        <li>{% trans "Disclose any known defects or restrictions on use" %}</li>
+        <li>{% trans "Keep the listing accurate, and unpublish a tool that is no longer available to rent" %}</li>
+      </ol>
+      <p>{% trans "A published tool is offered every day by default; Rentora automatically blocks dates that already have an active booking, so the same tool cannot be double-booked." %}</p>
+
+      <h3>{% trans "The Return Process" %}</h3>
+      <p>{% trans "When a rental ends, owners must:" %}</p>
+      <ol>
+        <li>{% trans "Inspect the tool at handover, with the renter present" %}</li>
+        <li>{% trans "Click \"Mark as Returned\" in their dashboard to notify the renter" %}</li>
+        <li>{% trans "Wait for renter confirmation before considering the rental complete" %}</li>
+        <li>{% trans "Report damage to support with photo evidence before marking the tool returned" %}</li>
+      </ol>
+      <div class="legal-callout legal-callout--info">
+        <p><strong>{% trans "Important:" %}</strong> {% trans "The return is only finalized after the owner clicks \"Mark as Returned\" AND the renter confirms it. This two-step handshake protects both parties and stops overdue charges from being applied unfairly." %}</p>
+      </div>
+    </section>
+
+    <section id="renters">
+      <h2><span class="sec-num">4</span> {% trans "Renter Responsibilities" %}</h2>
+      <p>{% trans "Renters agree to:" %}</p>
+      <ol>
+        <li>{% trans "Use tools only as intended and within stated limitations" %}</li>
+        <li>{% trans "Return tools by the agreed end date and time" %}</li>
+        <li>{% trans "Pay deposit and any applicable fees upfront" %}</li>
+        <li>{% trans "Accept liability for damage caused by misuse or negligence" %}</li>
+        <li>{% trans "Confirm tool return once received (to protect against overdue charges)" %}</li>
+      </ol>
+      <div class="legal-callout">
+        <p><strong>{% trans "To avoid overdue charges:" %}</strong> {% trans "Ask the owner to press \"Mark as Returned\" while you are handing the tool back. You immediately get a notification and an email — confirm the return from \"My Rentals\" there and then. Until you confirm, the system keeps counting overdue days." %}</p>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <h2><span class="sec-num">5</span> {% trans "Pricing & Payment" %}</h2>
+      <p>{% trans "Renters pay the total amount shown at checkout, which includes:" %}</p>
+      <ul>
+        <li><strong>{% trans "Rental Total:" %}</strong> {% trans "rental days × daily rate" %}</li>
+        <li><strong>{% trans "Platform Fee:" %}</strong> {% trans "15% of rental total (supports server operations and support)" %}</li>
+        <li><strong>{% trans "Damage Protection (optional):" %}</strong> {% trans "+$10 for coverage up to the deposit amount" %}</li>
+      </ul>
+      <p>{% trans "Payments are processed securely via Stripe. Rentora does not store your payment card information." %}</p>
+
+      <h3>{% trans "Deposit Handling" %}</h3>
+      <p>{% trans "Deposits are refundable upon return of the tool in the agreed condition. If a dispute arises over tool condition, Rentora staff will review the evidence and make a binding decision. Refunds are processed within 7 business days of resolution." %}</p>
+
+      <h3>{% trans "Overdue Charges" %}</h3>
+      <p>{% trans "Tools kept beyond the agreed end date are charged one additional rental day, at the normal daily rate, for each day late — there is no penalty multiplier. Charges stop the moment the owner marks the tool returned and the renter confirms, which is why both steps should happen at handover." %}</p>
+
+      <h3>{% trans "Cancellation" %}</h3>
+      <p>{% trans "A renter may cancel their own booking at any time before payment; nothing has been charged, so no refund is due and the dates are released. Once a rental is paid, neither party may cancel it unilaterally — paid cancellations are handled by Rentora support, which processes any refund." %}</p>
+    </section>
+
+    <section id="disputes">
+      <h2><span class="sec-num">6</span> {% trans "Dispute Resolution" %}</h2>
+      <p>{% trans "Disputes are handled through the following process:" %}</p>
+      <ol>
+        <li>{% trans "When the owner marks a tool returned, the renter may press Dispute instead of Confirm, giving a written reason and optional photo or video evidence" %}</li>
+        <li>{% trans "The rental is placed on hold — no late fees accrue while a dispute is open" %}</li>
+        <li>{% trans "Owners reporting damage contact support with photo evidence and the booking number" %}</li>
+        <li>{% trans "Rentora staff review both sides and make a binding decision within 5 business days" %}</li>
+        <li>{% trans "The decision is enforced through a refund, a claim settled from the deposit, or dismissal" %}</li>
+      </ol>
+      <p>{% trans "Decisions are final. Raise a dispute at handover or as soon as the issue appears — evidence gathered later carries less weight." %}</p>
+    </section>
+
+    <section id="prohibited">
+      <h2><span class="sec-num">7</span> {% trans "Prohibited Activities" %}</h2>
+      <p>{% trans "Users agree NOT to:" %}</p>
+      <ul>
+        <li>{% trans "List or rent stolen, counterfeit, or dangerous tools" %}</li>
+        <li>{% trans "Engage in fraud, misrepresentation, or harassment" %}</li>
+        <li>{% trans "Use the Platform for illegal purposes" %}</li>
+        <li>{% trans "Attempt to bypass payment or escape dispute resolution" %}</li>
+        <li>{% trans "Post offensive, explicit, or defamatory content" %}</li>
+      </ul>
+      <p>{% trans "Violations result in immediate account suspension and potential legal action. Accounts that accumulate 3 or more abuse reports, or remain unverified for 30+ days, may be suspended." %}</p>
+    </section>
+
+    <section id="liability">
+      <h2><span class="sec-num">8</span> {% trans "Limitation of Liability" %}</h2>
+      <div class="legal-callout">
+        <p><strong>{% trans "Important:" %}</strong> {% trans "Rentora is a marketplace facilitator, NOT a rental company. We do not own, store, or maintain any tools. Owners bear full liability for tool condition and safety. Renters use tools at their own risk. Rentora is not responsible for:" %}</p>
+        <ul>
+          <li>{% trans "Tool defects, malfunctions, or failures" %}</li>
+          <li>{% trans "Injury or property damage caused by tools" %}</li>
+          <li>{% trans "Disputes arising from tool condition" %}</li>
+          <li>{% trans "Loss or theft of tools" %}</li>
+        </ul>
+      </div>
+      <p>{% trans "You agree to indemnify and hold Rentora harmless from any claims, damages, or losses arising from your use of the Platform or your violation of these Terms. These Terms are governed by the laws of Palestine." %}</p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="sec-num">9</span> {% trans "Contact Us" %}</h2>
+      <p>{% trans "Questions about these Terms? We're happy to help." %}</p>
+      <div class="legal-contact-box">
+        <p>{% trans "Email us at" %}</p>
+        <p class="email">support@rentora.ps</p>
+        <p><a href="{% url 'listings:contact' %}">{% trans "Or visit our Contact page" %}</a></p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -42,3 +42,11 @@ def site_settings(request):
     return {
         "SITE_URL": getattr(settings, "SITE_URL", ""),
     }
+
+
+def footer_categories(request):
+    """Expose a few real categories so the footer can link to filtered browse."""
+    from listings.models.category import Category
+    return {
+        "footer_categories": Category.objects.all().order_by("name")[:5],
+    }

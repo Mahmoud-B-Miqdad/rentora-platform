@@ -36,6 +36,17 @@ function _updateWishlistBadge(totalCount) {
     if (!wrapperEl || !counter) return;
 
     var seenCount    = parseInt(localStorage.getItem('wishlistSeenCount') || '0', 10);
+
+    /* Self-heal a stale baseline. wishlistSeenCount is only ever written on the
+       wishlist page, so un-saving items from browse/home/detail left it sitting
+       ABOVE the real total. displayCount then stayed 0 until the total climbed
+       back past that old value — which is why the badge ignored the first save
+       or two and only lit up on the 2nd/3rd. Clamp it to the real total. */
+    if (seenCount > totalCount) {
+        seenCount = totalCount;
+        localStorage.setItem('wishlistSeenCount', String(seenCount));
+    }
+
     var displayCount = Math.max(0, totalCount - seenCount);
 
     wrapperEl.dataset.count = totalCount;
@@ -130,6 +141,18 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             const isOpen = hdrUser.classList.toggle('hdr-user--open');
             hdrUserBtn.setAttribute('aria-expanded', isOpen);
+            // Tell any other header dropdown to close when this one opens.
+            if (isOpen) {
+                document.dispatchEvent(new CustomEvent('rentora:dropdown-open', { detail: 'user' }));
+            }
+        });
+
+        // Close this dropdown when a different one opens.
+        document.addEventListener('rentora:dropdown-open', function (e) {
+            if (e.detail !== 'user') {
+                hdrUser.classList.remove('hdr-user--open');
+                hdrUserBtn.setAttribute('aria-expanded', 'false');
+            }
         });
 
         document.addEventListener('click', function (e) {
@@ -147,5 +170,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    /* ── Custom upload control ────────────────────────────────
+       Reflect the chosen file name(s) inside any [data-file-drop]. */
+    document.addEventListener('change', function (e) {
+        var input = e.target;
+        if (!input.matches || !input.matches('.file-drop input[type="file"]')) return;
+        var drop  = input.closest('.file-drop');
+        var title = drop ? drop.querySelector('[data-file-drop-title]') : null;
+        var files = input.files;
+        if (title) {
+            if (files && files.length === 1) {
+                title.textContent = files[0].name;
+            } else if (files && files.length > 1) {
+                title.textContent = files.length + ' files selected';
+            }
+        }
+        if (drop) drop.classList.toggle('file-drop--active', !!(files && files.length));
+    });
 
 });

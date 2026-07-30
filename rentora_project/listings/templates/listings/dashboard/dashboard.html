@@ -2,7 +2,7 @@
 {% load static i18n %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'listings/css/dashboard/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'listings/css/dashboard/dashboard.css' %}?v=4">
 {% endblock %}
 
 {% block content %}
@@ -256,7 +256,7 @@
                 <i class="fa-regular fa-pen-to-square"></i>
               </a>
               <form method="POST" action="{% url 'listings:tools:delete_tool' tool.pk %}"
-                    onsubmit="return confirm('{% trans 'Delete' %} &quot;{{ tool.title|escapejs }}&quot;?')"
+                    data-delete-form data-tool-name="{{ tool.title }}"
                     style="margin-inline-start:auto;">
                 {% csrf_token %}
                 <button type="submit" class="btn-action btn-delete" title="{% trans 'Delete' %}">
@@ -424,12 +424,9 @@
                   <span class="badge badge-approved">{% trans "Approved" %}</span>
                 {% endif %}
                 {% if today >= booking.start_date %}
-                  <form method="POST" action="{% url 'listings:request_return' booking.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-complete">
-                      <i class="fa-solid fa-rotate-left"></i> {% trans "Mark as Returned" %}
-                    </button>
-                  </form>
+                  <a href="{% url 'listings:request_return' booking.id %}" class="btn-complete">
+                    <i class="fa-solid fa-rotate-left"></i> {% trans "Mark as Returned" %}
+                  </a>
                 {% else %}
                   <span class="badge-return-locked" title="{% blocktrans with date=booking.start_date %}Available from {{ date }}{% endblocktrans %}">
                     <i class="fa-solid fa-lock"></i> {% trans "Starts" %} {{ booking.start_date }}
@@ -660,6 +657,14 @@
                 {% else %}
                   <span class="badge badge-pending">{% trans "Pending" %}</span>
                 {% endif %}
+                {# Cancellable only while nothing has been paid #}
+                <form method="POST" action="{% url 'listings:cancel_booking' booking.id %}"
+                      data-cancel-form data-tool-name="{{ booking.tool.title }}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-cancel-booking" title="{% trans 'Cancel booking' %}">
+                    <i class="fa-solid fa-xmark"></i> {% trans "Cancel" %}
+                  </button>
+                </form>
               </div>
             </div>
             {% empty %}
@@ -706,8 +711,7 @@
                       <i class="fa-solid fa-circle-check"></i> {% trans "Confirm Return" %}
                     </button>
                   </form>
-                  <form method="POST" action="{% url 'listings:dispute_return' booking.id %}">
-                    {% csrf_token %}
+                  <form method="GET" action="{% url 'listings:dispute_return' booking.id %}">
                     <button type="submit" class="btn-dispute-return">
                       <i class="fa-solid fa-triangle-exclamation"></i> {% trans "Dispute" %}
                     </button>
@@ -734,6 +738,10 @@
                   <span class="meta-price">${{ booking.total_price }}</span>
                 </div>
               </div>
+              <a href="{% url 'listings:document_pickup' booking.id %}" class="btn-document-condition"
+                 title="{% trans 'Photograph the tool condition' %}">
+                <i class="fa-solid fa-camera"></i> {% trans "Document condition" %}
+              </a>
               <a href="{% url 'listings:chat' booking.id %}" class="btn-chat" title="{% trans 'Chat with owner' %}">
                 <i class="fa-regular fa-message"></i>
               </a>
@@ -952,8 +960,56 @@
 
   </main>
 </div>
+
+<!-- Delete-tool confirmation (one modal shared by every tool card) -->
+<div class="del-modal-overlay" id="deleteToolModal" role="dialog" aria-modal="true"
+     aria-labelledby="delModalTitle">
+  <div class="del-modal">
+    <div class="del-modal__icon" aria-hidden="true">
+      <i class="fa-regular fa-trash-can"></i>
+    </div>
+    <h3 class="del-modal__title" id="delModalTitle">{% trans "Delete this tool?" %}</h3>
+    <div class="del-modal__tool" id="delModalToolName"></div>
+    <p class="del-modal__text">
+      {% trans "This listing will be permanently removed and can no longer be booked. This action cannot be undone." %}
+    </p>
+    <div class="del-modal__actions">
+      <button type="button" class="del-btn del-btn--ghost" data-del-cancel>
+        {% trans "Cancel" %}
+      </button>
+      <button type="button" class="del-btn del-btn--danger" id="delModalConfirm">
+        <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+        {% trans "Delete tool" %}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel-booking confirmation -->
+<div class="del-modal-overlay" id="cancelBookingModal" role="dialog" aria-modal="true"
+     aria-labelledby="cancelModalTitle">
+  <div class="del-modal">
+    <div class="del-modal__icon" aria-hidden="true">
+      <i class="fa-regular fa-calendar-xmark"></i>
+    </div>
+    <h3 class="del-modal__title" id="cancelModalTitle">{% trans "Cancel this booking?" %}</h3>
+    <div class="del-modal__tool" id="cancelModalToolName"></div>
+    <p class="del-modal__text">
+      {% trans "Your request will be withdrawn and the dates released. Nothing has been charged, so there is nothing to refund." %}
+    </p>
+    <div class="del-modal__actions">
+      <button type="button" class="del-btn del-btn--ghost" data-cancel-dismiss>
+        {% trans "Keep booking" %}
+      </button>
+      <button type="button" class="del-btn del-btn--danger" id="cancelModalConfirm">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        {% trans "Cancel booking" %}
+      </button>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'listings/js/dashboard/dashboard.js' %}"></script>
+<script src="{% static 'listings/js/dashboard/dashboard.js' %}?v=3"></script>
 {% endblock %}

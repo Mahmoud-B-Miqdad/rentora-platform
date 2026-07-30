@@ -1,0 +1,265 @@
+{% extends "console/base_console.html" %}
+{% block title %}Dispute #{{ dispute.id }}{% endblock %}
+{% block page_title %}Dispute #{{ dispute.id }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'console:returns' %}" class="con-back"><i class="fa-solid fa-arrow-left"></i> Back to Returns &amp; Disputes</a>
+
+<!-- ── Case summary ─────────────────────────────────────── -->
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-scale-balanced"></i> {{ booking.tool.title }}</h2>
+    <span class="con-pill {% if dispute.resolved_at %}con-pill--green{% else %}con-pill--amber{% endif %}">
+      {{ dispute.get_status_display }}
+    </span>
+  </header>
+  <div class="con-card__body">
+    <div class="con-meta-grid">
+      <div><small class="con-td-muted">Renter</small>
+        <p><a href="{% url 'console:user_detail' booking.renter.id %}">{{ booking.renter.name }}</a></p></div>
+      <div><small class="con-td-muted">Owner</small>
+        <p><a href="{% url 'console:user_detail' booking.tool.owner.id %}">{{ booking.tool.owner.name }}</a></p></div>
+      <div><small class="con-td-muted">Rental period</small>
+        <p>{{ booking.start_date }} → {{ booking.end_date }}</p></div>
+      <div><small class="con-td-muted">Rental total</small>
+        <p>${{ booking.total_price }}</p></div>
+      <div><small class="con-td-muted">Amount in dispute (paid by renter)</small>
+        <p><strong>${{ dispute.deposit_amount }}</strong></p></div>
+      <div><small class="con-td-muted">Tool's stated deposit (reference)</small>
+        <p><strong>${{ booking.tool.deposit|default:"0" }}</strong></p></div>
+      <div><small class="con-td-muted">Opened</small>
+        <p>{{ dispute.created_at|date:"M d, Y · H:i" }}</p></div>
+    </div>
+
+    <div class="con-message-body">
+      <small class="con-td-muted">Raised by {{ dispute.get_initiated_by_display }} — their account</small>
+      <p>{{ dispute.reason|linebreaksbr }}</p>
+    </div>
+
+    {% if dispute.dispute_evidence %}
+    <p style="margin-top:14px;">
+      <a class="con-btn con-btn--ghost con-btn--sm" href="{{ dispute.dispute_evidence.url }}" target="_blank" rel="noopener">
+        <i class="fa-solid fa-paperclip"></i> Open submitted evidence
+      </a>
+    </p>
+    {% else %}
+    <p class="con-td-muted" style="margin-top:14px;font-size:12px;">No evidence file was attached.</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ── Condition photos: before (pickup) vs after (return) ── -->
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-camera-retro"></i> Condition photos</h2>
+  </header>
+  <div class="con-card__body">
+    <p class="con-td-muted" style="margin-bottom:16px;font-size:12px;">
+      Real photos taken at each handover. Compare the renter's pickup photos
+      (before) with the owner's return photos (after) to judge any damage.
+    </p>
+
+    <div class="dsp-compare">
+      <div class="dsp-compare__col">
+        <div class="dsp-compare__label dsp-compare__label--before">
+          <i class="fa-solid fa-arrow-down-to-bracket"></i> At pickup — renter ({{ pickup_photos|length }})
+        </div>
+        {% if pickup_photos %}
+        <div class="dsp-photos">
+          {% for p in pickup_photos %}
+          <a href="{{ p.image.url }}" target="_blank" rel="noopener">
+            <img src="{{ p.image.url }}" alt="Pickup photo" class="dsp-photo">
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="con-td-muted" style="font-size:12px;">The renter did not upload pickup photos.</p>
+        {% endif %}
+      </div>
+
+      <div class="dsp-compare__col">
+        <div class="dsp-compare__label dsp-compare__label--after">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i> At return — owner ({{ return_photos|length }})
+        </div>
+        {% if return_photos %}
+        <div class="dsp-photos">
+          {% for p in return_photos %}
+          <a href="{{ p.image.url }}" target="_blank" rel="noopener">
+            <img src="{{ p.image.url }}" alt="Return photo" class="dsp-photo">
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="con-td-muted" style="font-size:12px;">The owner did not upload return photos.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Conversation between the two parties ─────────────── -->
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-comments"></i> Conversation ({{ chat_messages|length }})</h2></header>
+  <div class="con-card__body">
+    {% if chat_messages %}
+    <div class="dsp-chat">
+      {% for m in chat_messages %}
+      <div class="dsp-chat__msg {% if m.sender_id == booking.tool.owner_id %}dsp-chat__msg--owner{% else %}dsp-chat__msg--renter{% endif %}">
+        <div class="dsp-chat__head">
+          <strong>{{ m.sender.name }}</strong>
+          <span class="con-pill {% if m.sender_id == booking.tool.owner_id %}con-pill--gray{% else %}con-pill--amber{% endif %}">
+            {% if m.sender_id == booking.tool.owner_id %}owner{% else %}renter{% endif %}
+          </span>
+          <span class="con-td-muted dsp-chat__time">{{ m.created_at|date:"M d, H:i" }}</span>
+        </div>
+        {% if m.image %}
+        <a href="{{ m.image.url }}" target="_blank" rel="noopener">
+          <img src="{{ m.image.url }}" alt="Shared photo" class="dsp-chat__image">
+        </a>
+        {% endif %}
+        {% if m.text %}<p class="dsp-chat__text">{{ m.text|linebreaksbr }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="con-empty"><i class="fa-solid fa-comment-slash"></i> No messages were exchanged for this booking.</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ── Owner's side ─────────────────────────────────────── -->
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-comment-dots"></i> Owner's statement</h2></header>
+  <div class="con-card__body">
+    {% if dispute.owner_response %}
+      <p>{{ dispute.owner_response|linebreaksbr }}</p>
+    {% else %}
+      <p class="con-td-muted" style="margin-bottom:12px;">
+        Not recorded yet. Contact the owner, then paste their account here so the decision has both sides on file.
+      </p>
+    {% endif %}
+    {% if not dispute.resolved_at %}
+    <form method="POST" action="{% url 'console:dispute_owner_reply' dispute.id %}">
+      {% csrf_token %}
+      <textarea name="owner_response" rows="4" class="con-input"
+                placeholder="What the owner says happened…">{{ dispute.owner_response }}</textarea>
+      <div class="con-actions">
+        <button type="submit" class="con-btn con-btn--ghost"><i class="fa-solid fa-floppy-disk"></i> Save statement</button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ── Decision ─────────────────────────────────────────── -->
+{% if dispute.resolved_at %}
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-gavel"></i> Decision</h2></header>
+  <div class="con-card__body">
+    <div class="con-meta-grid">
+      <div><small class="con-td-muted">Outcome</small><p><strong>{{ dispute.get_staff_decision_display }}</strong></p></div>
+      <div><small class="con-td-muted">Refunded to renter</small><p>${{ dispute.refund_amount }}</p></div>
+      <div><small class="con-td-muted">Paid to owner</small><p>${{ dispute.claim_amount }}</p></div>
+      <div><small class="con-td-muted">Resolved by</small><p>{{ dispute.resolved_by.name|default:"—" }}</p></div>
+      <div><small class="con-td-muted">Resolved at</small><p>{{ dispute.resolved_at|date:"M d, Y · H:i" }}</p></div>
+    </div>
+    <div class="con-message-body">
+      <small class="con-td-muted">Reason given to both parties</small>
+      <p>{{ dispute.staff_notes|linebreaksbr }}</p>
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-gavel"></i> Resolve this dispute</h2></header>
+  <div class="con-card__body">
+    <p class="con-td-muted" style="margin-bottom:16px;font-size:13px;">
+      The rental is on hold and no late fees are accruing. You are splitting the
+      <strong>${{ dispute.deposit_amount }}</strong> the renter paid — the two shares
+      always total exactly that, so whatever you do not refund goes to the owner and
+      becomes their earnings for this rental. Resolving closes the rental and emails
+      your reason to both parties.
+    </p>
+
+    <form method="POST" action="{% url 'console:dispute_resolve' dispute.id %}">
+      {% csrf_token %}
+
+      <div class="dsp-choices">
+        <label class="dsp-choice">
+          <input type="radio" name="decision" value="refund_full" required>
+          <span><strong>Full refund to renter</strong><small>Renter was right — all ${{ dispute.deposit_amount }} back, owner earns $0.</small></span>
+        </label>
+        <label class="dsp-choice">
+          <input type="radio" name="decision" value="owner_claim">
+          <span><strong>Pay owner</strong><small>Damage proven — enter the owner's share below; the remainder is refunded.</small></span>
+        </label>
+        <label class="dsp-choice">
+          <input type="radio" name="decision" value="refund_partial">
+          <span><strong>Partial refund</strong><small>Shared fault — enter the renter's refund below; the remainder goes to the owner.</small></span>
+        </label>
+        <label class="dsp-choice">
+          <input type="radio" name="decision" value="split_50_50">
+          <span><strong>Split 50 / 50</strong><small>Evidence inconclusive — each side gets half of ${{ dispute.deposit_amount }}.</small></span>
+        </label>
+        <label class="dsp-choice">
+          <input type="radio" name="decision" value="dismiss">
+          <span><strong>Dismiss dispute</strong><small>No basis to withhold — the renter is refunded in full.</small></span>
+        </label>
+      </div>
+
+      <div class="dsp-amounts">
+        <div>
+          <label class="con-td-muted" for="refund_amount">Refund to renter ($) — for “Partial refund”</label>
+          <input type="number" step="0.01" min="0" max="{{ dispute.deposit_amount }}"
+                 id="refund_amount" name="refund_amount" class="con-input" placeholder="0.00">
+          <small class="con-td-muted" style="font-size:11.5px;">Owner receives the rest.</small>
+        </div>
+        <div>
+          <label class="con-td-muted" for="claim_amount">Pay owner ($) — for “Pay owner”</label>
+          <input type="number" step="0.01" min="0" max="{{ dispute.deposit_amount }}"
+                 id="claim_amount" name="claim_amount" class="con-input" placeholder="0.00">
+          <small class="con-td-muted" style="font-size:11.5px;">Renter is refunded the rest.</small>
+        </div>
+      </div>
+      <p class="con-td-muted" style="margin-top:10px;font-size:12px;">
+        Maximum on either field is <strong>${{ dispute.deposit_amount }}</strong> — the shares
+        always add up to the amount in dispute.
+      </p>
+
+      <label class="con-td-muted" for="notes" style="display:block;margin-top:16px;">
+        Reason (required — both parties receive this)
+      </label>
+      <textarea id="notes" name="notes" rows="4" class="con-input" required
+                placeholder="Explain what the evidence showed and why you decided this way…"></textarea>
+
+      <div class="con-actions">
+        <button type="submit" class="con-btn con-btn--primary">
+          <i class="fa-solid fa-gavel"></i> Resolve &amp; notify both parties
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endif %}
+
+{% if history %}
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-clock-rotate-left"></i> Staff actions on this booking</h2></header>
+  <div class="con-card__body">
+    <table class="con-table">
+      <thead><tr><th>Action</th><th>Staff</th><th>Reason</th><th>When</th></tr></thead>
+      <tbody>
+        {% for a in history %}
+        <tr>
+          <td>{{ a.get_action_display }}</td>
+          <td>{{ a.staff.name|default:"—" }}</td>
+          <td class="con-td-muted">{{ a.reason|truncatechars:90 }}</td>
+          <td class="con-td-muted">{{ a.created_at|date:"M d, Y" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

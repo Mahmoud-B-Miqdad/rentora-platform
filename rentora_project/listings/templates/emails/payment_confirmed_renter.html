@@ -1,0 +1,25 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}green{% endblock %}
+{% block heading %}{% trans "Payment confirmed" %}{% endblock %}
+
+{% block body %}
+  <p>{% trans "Your payment went through and your rental is now active." %}</p>
+
+  <div class="panel">
+    <div class="row"><span>{% trans "Tool" %}</span><span>{{ booking.tool.title }}</span></div>
+    <div class="row"><span>{% trans "Owner" %}</span><span>{{ booking.tool.owner.name }}</span></div>
+    <div class="row"><span>{% trans "Dates" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
+    <div class="row"><span>{% trans "Total paid" %}</span><span>${{ total_charged }}</span></div>
+  </div>
+
+  <p><strong>{% trans "When you return the tool:" %}</strong></p>
+  <ul>
+    <li>{% trans "Hand it back to the owner in person." %}</li>
+    <li>{% trans "Ask them to press \"Mark as Returned\" while you are both there." %}</li>
+    <li>{% trans "Confirm the return from your dashboard right away — this stops any late fees." %}</li>
+  </ul>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=my-rentals">{% trans "View my rental" %}</a>
+{% endblock %}

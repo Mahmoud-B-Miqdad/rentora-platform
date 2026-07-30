@@ -420,9 +420,12 @@ a.chat-participant:hover .chat-participant__name {
     font-size: 14px;
     line-height: 1.55;
     word-break: break-word;
-    white-space: pre-wrap;
     max-width: 100%;
 }
+/* pre-wrap belongs on the text node, not the bubble — otherwise the template
+   indentation around the text (server render) is preserved as real whitespace,
+   inflating the bubble after a reload. */
+.chat-msg__text { white-space: pre-wrap; }
 
 .chat-msg--mine .chat-msg__bubble {
     background: var(--clr-brand);
@@ -614,3 +617,65 @@ a.chat-participant:hover .chat-participant__name {
 .msg-status--sending { color: #cbd5e1; }
 .msg-status--sent    { color: #94a3b8; }
 .msg-status--seen    { color: var(--clr-brand); }
+
+/* ── Shared photos in the chat ─────────────────────────── */
+.chat-msg__image-link { display: block; margin: 0; line-height: 0; }
+.chat-msg__image {
+  max-width: 240px;
+  max-height: 260px;
+  width: auto;
+  border-radius: 12px;
+  cursor: zoom-in;
+  display: block;
+}
+/* When a bubble has both a photo and text, space them out */
+.chat-msg__bubble .chat-msg__image + .chat-msg__text {
+  display: block;
+  margin-top: 7px;
+}
+
+/* ── Attach button + selected-image preview ────────────── */
+.chat-attach-btn {
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; border-radius: 50%;
+  background: transparent; color: var(--clr-brand);
+  font-size: 17px; cursor: pointer;
+  transition: background .15s;
+}
+.chat-attach-btn:hover { background: var(--clr-brand-light); }
+
+.chat-attach-preview {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+/* The [hidden] attribute must win over the display above until a file is picked. */
+.chat-attach-preview[hidden] { display: none; }
+.chat-attach-preview img {
+  max-height: 120px;
+  max-width: 180px;
+  border-radius: 10px;
+  border: 1px solid var(--clr-border);
+  display: block;
+}
+.chat-attach-remove {
+  position: absolute;
+  top: -8px; inset-inline-end: -8px;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: 50%;
+  background: #dc2626; color: #fff;
+  font-size: 12px; cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+.chat-attach-remove:hover { background: #b91c1c; }
+
+/* Booking reference in the sidebar — monospace so it's easy to quote to support */
+.chat-booking-ref {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: var(--clr-brand-dark);
+}

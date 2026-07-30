@@ -1,0 +1,30 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}teal{% endblock %}
+{% block heading %}{% trans "Dispute resolved" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Our team has reviewed the dispute over <strong>{{ tool_title }}</strong> and reached a decision.{% endblocktrans %}</p>
+
+  <div class="panel">
+    <div class="row"><span>{% trans "Decision" %}</span><span>{{ decision_label }}</span></div>
+    {% if recipient_role == "renter" %}
+      <div class="row"><span>{% trans "Refunded to you" %}</span><span>${{ refund_amount }}</span></div>
+    {% else %}
+      <div class="row"><span>{% trans "Paid to you from the deposit" %}</span><span>${{ claim_amount }}</span></div>
+    {% endif %}
+    <div class="row"><span>{% trans "Rental" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
+  </div>
+
+  {% if notes %}
+  <p><strong>{% trans "Why we decided this" %}</strong></p>
+  <div class="panel">
+    <p style="white-space:pre-line;">{{ notes }}</p>
+  </div>
+  {% endif %}
+
+  <p class="muted">{% trans "This decision is final. Any refund or payout is processed within 7 business days." %}</p>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/">{% trans "Open dashboard" %}</a>
+{% endblock %}

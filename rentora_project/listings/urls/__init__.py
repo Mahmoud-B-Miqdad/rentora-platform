@@ -10,4 +10,5 @@ urlpatterns = [
     path('', include('listings.urls.wishlist_urls')),
     path('', include('listings.urls.notification_urls')),
     path('', include('listings.urls.chat_urls')),
+    path('', include('listings.urls.legal_urls')),
 ]

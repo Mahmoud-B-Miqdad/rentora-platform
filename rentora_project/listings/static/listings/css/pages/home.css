@@ -172,7 +172,10 @@
   align-items: center;
   background: rgba(255,255,255,.95);
   border-radius: 999px;
-  padding: 6px 6px 6px 20px;
+  /* Logical padding so the icon side and button side flip correctly in RTL. */
+  padding-block: 6px;
+  padding-inline-start: 20px;
+  padding-inline-end: 6px;
   box-shadow: 0 24px 64px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.12);
   width: 100%;
   max-width: 580px;
@@ -920,7 +923,7 @@
   .cat-grid   { grid-template-columns: repeat(2, 1fr); }
   .tools-grid { grid-template-columns: 1fr; }
   #heroSearchBtn span { display: none; }
-  .hero__search { padding: 6px 6px 6px 16px; }
+  .hero__search { padding-block: 6px; padding-inline-start: 16px; padding-inline-end: 6px; }
 
   /* Category cards — stack name above CTA when card is narrow */
   .cat-card__visual { padding: 28px 16px 22px; }

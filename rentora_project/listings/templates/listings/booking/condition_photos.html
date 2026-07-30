@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% if phase == 'return' %}{% trans "Mark as Returned" %}{% else %}{% trans "Document Condition" %}{% endif %} | Rentora{% endblock %}
+
+{% block content %}
+<style>
+  .cph-wrap { max-width: 620px; margin: 48px auto 80px; padding: 0 20px; }
+  .cph-card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; box-shadow:0 4px 20px rgba(15,23,42,.06); overflow:hidden; }
+  .cph-head { display:flex; align-items:center; gap:14px; padding:22px 26px; border-bottom:1px solid #eef2f7; }
+  .cph-head__icon { width:46px; height:46px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-radius:12px; font-size:18px; }
+  .cph-head__icon--return { background:#eff6ff; color:#2563eb; }
+  .cph-head__icon--pickup { background:#f0fdfa; color:#0f766e; }
+  .cph-head h1 { font-size:19px; font-weight:700; color:#0f172a; margin:0 0 3px; }
+  .cph-head p { font-size:13.5px; color:#64748b; margin:0; }
+  .cph-body { padding:24px 26px 28px; }
+  .cph-booking { display:flex; align-items:center; gap:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px 14px; margin-bottom:20px; }
+  .cph-booking__name { font-size:14.5px; font-weight:700; color:#0f172a; }
+  .cph-booking__meta { font-size:12.5px; color:#64748b; margin-top:2px; }
+  .cph-note { background:#f0fdfa; border:1px solid #99f6e4; border-inline-start:4px solid #0f766e; border-radius:10px; padding:14px 16px; margin-bottom:22px; }
+  .cph-note p { margin:0; font-size:13.5px; color:#134e4a; line-height:1.6; }
+  .cph-field label { display:block; font-size:13.5px; font-weight:600; color:#0f172a; margin-bottom:7px; }
+  .cph-field input[type="file"] { width:100%; padding:12px 14px; border:1px dashed #cbd5e1; border-radius:10px; background:#f8fafc; font-size:14px; }
+  .cph-field small { display:block; margin-top:6px; font-size:12.5px; color:#64748b; }
+  .cph-preview { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .cph-preview img { width:96px; height:96px; object-fit:cover; border-radius:9px; border:1px solid #e2e8f0; }
+  .cph-actions { display:flex; gap:10px; margin-top:26px; }
+  .cph-btn { flex:1; padding:12px 18px; border-radius:10px; font-size:14.5px; font-weight:600; font-family:inherit; cursor:pointer; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid transparent; transition:background .15s, transform .1s; }
+  .cph-btn--ghost { background:#fff; border-color:#e2e8f0; color:#334155; }
+  .cph-btn--ghost:hover { background:#f8fafc; }
+  .cph-btn--primary { color:#fff; }
+  .cph-btn--return { background:#2563eb; box-shadow:0 4px 14px rgba(37,99,235,.22); }
+  .cph-btn--return:hover { background:#1d4ed8; transform:translateY(-1px); }
+  .cph-btn--pickup { background:#0f766e; box-shadow:0 4px 14px rgba(15,118,110,.22); }
+  .cph-btn--pickup:hover { background:#0b5b54; transform:translateY(-1px); }
+  @media (max-width:520px){ .cph-actions{ flex-direction:column-reverse; } }
+</style>
+
+<div class="cph-wrap">
+  <div class="cph-card">
+    <div class="cph-head">
+      <div class="cph-head__icon cph-head__icon--{{ phase }}">
+        <i class="fa-solid {% if phase == 'return' %}fa-rotate-left{% else %}fa-camera{% endif %}"></i>
+      </div>
+      <div>
+        {% if phase == 'return' %}
+        <h1>{% trans "Mark as Returned" %}</h1>
+        <p>{% trans "Photograph the tool's condition to mark it returned." %}</p>
+        {% else %}
+        <h1>{% trans "Document the tool's condition" %}</h1>
+        <p>{% trans "Add photos of the tool as you received it — required." %}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="cph-body">
+      <div class="cph-booking">
+        <div>
+          <div class="cph-booking__name">{{ booking.tool.title }}</div>
+          <div class="cph-booking__meta">
+            {% if phase == 'return' %}{{ booking.renter.name }}{% else %}{{ booking.tool.owner.name }}{% endif %}
+            · {{ booking.start_date }} → {{ booking.end_date }}
+          </div>
+        </div>
+      </div>
+
+      <div class="cph-note">
+        {% if phase == 'return' %}
+        <p>{% trans "These photos become the \"after\" record. If the renter disputes the return, our staff compare them with the renter's pickup photos to judge any damage fairly. At least one photo is required to mark the tool returned." %}</p>
+        {% else %}
+        <p>{% trans "These photos become your proof of the tool's condition at pickup. If the owner later claims damage, our staff compare them with the return photos — protecting you from unfair charges. At least one photo is required." %}</p>
+        {% endif %}
+      </div>
+
+      {% if error %}
+      <div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:13.5px;">
+        {{ error }}
+      </div>
+      {% endif %}
+
+      <form method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="cph-field">
+          <label>{% trans "Condition photos" %} <span style="color:#dc2626;">*</span></label>
+          <label class="file-drop" for="photos" data-file-drop>
+            <span class="file-drop__icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+            <span class="file-drop__title" data-file-drop-title>{% trans "Click to choose photos" %}</span>
+            <span class="file-drop__sub">{% trans "Required — up to 8 photos, images only, max 8 MB each." %}</span>
+            <input type="file" id="photos" name="photos" accept="image/*" multiple required>
+          </label>
+          <div class="cph-preview" id="cphPreview"></div>
+        </div>
+
+        <div class="cph-actions">
+          {% if phase == 'return' %}
+          <a href="/dashboard/?tab=booking-requests&subtab=btab-approved" class="cph-btn cph-btn--ghost">{% trans "Cancel" %}</a>
+          <button type="submit" class="cph-btn cph-btn--primary cph-btn--return">
+            <i class="fa-solid fa-rotate-left"></i> {% trans "Mark as Returned" %}
+          </button>
+          {% else %}
+          <a href="/dashboard/?tab=my-rentals&subtab=rtab-active" class="cph-btn cph-btn--ghost">{% trans "Cancel" %}</a>
+          <button type="submit" class="cph-btn cph-btn--primary cph-btn--pickup">
+            <i class="fa-solid fa-camera"></i> {% trans "Save photos" %}
+          </button>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var input = document.getElementById('photos');
+    var preview = document.getElementById('cphPreview');
+    if (!input || !preview) return;
+    input.addEventListener('change', function () {
+      preview.innerHTML = '';
+      Array.prototype.slice.call(this.files, 0, 8).forEach(function (f) {
+        if (f.type.indexOf('image/') !== 0) return;
+        var img = document.createElement('img');
+        img.src = URL.createObjectURL(f);
+        preview.appendChild(img);
+      });
+    });
+  })();
+</script>
+{% endblock %}
