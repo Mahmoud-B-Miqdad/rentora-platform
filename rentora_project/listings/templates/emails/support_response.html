@@ -1,0 +1,17 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}teal{% endblock %}
+{% block heading %}{% trans "Reply from Rentora Support" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Hi {{ name }},{% endblocktrans %}</p>
+
+  <p>{% blocktrans %}Regarding ticket #{{ ticket_id }} — <strong>{{ subject }}</strong>:{% endblocktrans %}</p>
+
+  <div class="panel">
+    <p style="white-space:pre-line;">{{ response }}</p>
+  </div>
+
+  <p>{% trans "If this did not fully answer your question, just reply to this email or send another message from the Contact page." %}</p>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}amber{% endblock %}
+{% block heading %}{% trans "Confirm the return" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}<strong>{{ owner_name }}</strong> marked <strong>{{ tool_title }}</strong> as returned.{% endblocktrans %}</p>
+
+  <div class="panel panel--warn">
+    <p><strong>{% trans "Confirm it to close the rental." %}</strong></p>
+    <p>{% trans "Late fees keep counting until the return is confirmed, so do this while you are still with the owner." %}</p>
+  </div>
+
+  <p>{% trans "If the tool was not actually handed back, or you disagree with its recorded condition, choose Dispute instead — you can add a reason and photos, and staff will review it." %}</p>
+
+  <a class="btn" href="{{ confirm_return_url }}">{% trans "Confirm or dispute" %}</a>
+{% endblock %}
