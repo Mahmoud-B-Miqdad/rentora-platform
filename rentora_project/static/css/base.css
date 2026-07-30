@@ -1052,3 +1052,69 @@ button { cursor: pointer; font-family: inherit; }
 @media (max-width: 640px) {
     .hdr-actions > .lang-form { display: none; } /* mobile uses drawer switcher */
 }
+
+/* ══════════════════════════════════════════════════════════════
+   File inputs — modern, consistent "Choose file" button site-wide
+   ══════════════════════════════════════════════════════════════ */
+input[type="file"] {
+    font-family: var(--font);
+    font-size: 13.5px;
+    color: var(--clr-text-2, #475569);
+    cursor: pointer;
+    max-width: 100%;
+}
+input[type="file"]::file-selector-button {
+    margin-inline-end: 14px;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #0f766e 0%, #0284c7 100%);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter .15s, transform .1s, box-shadow .15s;
+    box-shadow: 0 2px 8px rgba(15, 118, 110, .28);
+}
+input[type="file"]::file-selector-button:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 118, 110, .34);
+}
+input[type="file"]::file-selector-button:active { transform: translateY(0); }
+
+/* ── Modern custom upload control (label wraps a hidden file input) ── */
+.file-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 26px 20px;
+    border: 1.6px dashed var(--clr-border);
+    border-radius: 12px;
+    background: var(--clr-input-bg, #f8fafc);
+    cursor: pointer;
+    text-align: center;
+    transition: border-color .15s, background .15s, transform .1s;
+}
+.file-drop:hover {
+    border-color: var(--clr-brand);
+    background: var(--clr-brand-light, #f0fdfa);
+}
+.file-drop--active {
+    border-color: var(--clr-brand);
+    background: var(--clr-brand-light, #f0fdfa);
+}
+.file-drop__icon {
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--clr-brand-light, #f0fdfa);
+    color: var(--clr-brand);
+    font-size: 18px;
+}
+.file-drop__title { font-weight: 600; font-size: 14px; color: var(--clr-text, #0f172a); }
+.file-drop__sub   { font-size: 12px; color: var(--clr-muted, #94a3b8); }
+.file-drop input[type="file"] { display: none; }
