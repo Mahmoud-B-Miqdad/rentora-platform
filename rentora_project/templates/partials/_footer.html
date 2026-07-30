@@ -37,10 +37,10 @@
             <div>
                 <h3 class="footer-col__heading">{% trans "Platform" %}</h3>
                 <ul class="footer-col__links">
-                    <li><a href="#">{% trans "Browse Tools" %}</a></li>
-                    <li><a href="#">{% trans "How It Works" %}</a></li>
-                    <li><a href="#">{% trans "List Your Tool" %}</a></li>
-                    <li><a href="#">{% trans "Dashboard" %}</a></li>
+                    <li><a href="{% url 'listings:home' %}">{% trans "Home" %}</a></li>
+                    <li><a href="{% url 'listings:browse' %}">{% trans "Browse Tools" %}</a></li>
+                    <li><a href="{% url 'listings:tools:add_tool' %}">{% trans "List Your Tool" %}</a></li>
+                    <li><a href="{% url 'listings:faq' %}">{% trans "FAQ" %}</a></li>
                 </ul>
             </div>
 
@@ -48,11 +48,11 @@
             <div>
                 <h3 class="footer-col__heading">{% trans "Categories" %}</h3>
                 <ul class="footer-col__links">
-                    <li><a href="#">{% trans "Construction" %}</a></li>
-                    <li><a href="#">{% trans "Electrical" %}</a></li>
-                    <li><a href="#">{% trans "Photography" %}</a></li>
-                    <li><a href="#">{% trans "Gardening" %}</a></li>
-                    <li><a href="#">{% trans "Events" %}</a></li>
+                    {% for cat in footer_categories %}
+                    <li><a href="{% url 'listings:browse' %}?category={{ cat.id }}">{{ cat.name }}</a></li>
+                    {% empty %}
+                    <li><a href="{% url 'listings:browse' %}">{% trans "Browse Tools" %}</a></li>
+                    {% endfor %}
                 </ul>
             </div>
 
@@ -60,10 +60,10 @@
             <div>
                 <h3 class="footer-col__heading">{% trans "Company" %}</h3>
                 <ul class="footer-col__links">
-                    <li><a href="#">{% trans "About Us" %}</a></li>
-                    <li><a href="#">{% trans "Contact" %}</a></li>
-                    <li><a href="#">{% trans "Privacy Policy" %}</a></li>
-                    <li><a href="#">{% trans "Terms of Service" %}</a></li>
+                    <li><a href="{% url 'listings:about' %}">{% trans "About Us" %}</a></li>
+                    <li><a href="{% url 'listings:contact' %}">{% trans "Contact" %}</a></li>
+                    <li><a href="{% url 'listings:privacy' %}">{% trans "Privacy Policy" %}</a></li>
+                    <li><a href="{% url 'listings:terms' %}">{% trans "Terms of Service" %}</a></li>
                 </ul>
             </div>
 
@@ -71,10 +71,14 @@
             <div>
                 <h3 class="footer-col__heading">{% trans "Account" %}</h3>
                 <ul class="footer-col__links">
+                    {% if current_user %}
+                    <li><a href="{% url 'users:profile' %}">{% trans "Profile" %}</a></li>
+                    <li><a href="{% url 'listings:dashboard' %}">{% trans "Dashboard" %}</a></li>
+                    <li><a href="{% url 'users:logout' %}">{% trans "Logout" %}</a></li>
+                    {% else %}
                     <li><a href="{% url 'users:login' %}">{% trans "Login" %}</a></li>
                     <li><a href="{% url 'users:register' %}">{% trans "Register" %}</a></li>
-                    <li><a href="#">{% trans "Profile" %}</a></li>
-                    <li><a href="#">{% trans "Dashboard" %}</a></li>
+                    {% endif %}
                 </ul>
             </div>
 
