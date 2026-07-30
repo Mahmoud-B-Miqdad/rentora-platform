@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Messages" %} | Rentora{% endblock %}
+
+{% block content %}
+
+<style>
+  .msgs-page { max-width: 760px; margin: 48px auto 80px; padding: 0 24px; }
+  .msgs-head { margin-bottom: 32px; }
+  .msgs-head h1 { font-size: 30px; font-weight: 800; color: #0f172a; letter-spacing: -0.6px; margin-bottom: 6px; }
+  .msgs-head p { font-size: 15px; color: #64748b; }
+
+  .ticket {
+    background: #fff;
+    border: 1px solid var(--clr-border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  }
+  .ticket__top {
+    display: flex; align-items: center; gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .ticket__subject { font-size: 17px; font-weight: 700; color: #0f172a; margin-inline-end: auto; }
+  .ticket__cat { font-size: 12px; font-weight: 600; color: #475569; background: #f1f5f9; padding: 4px 10px; border-radius: 999px; }
+  .ticket__date { font-size: 12.5px; color: #94a3b8; }
+
+  .badge { font-size: 11.5px; font-weight: 700; padding: 4px 11px; border-radius: 999px; letter-spacing: .3px; }
+  .badge--new         { background: #fef3c7; color: #92400e; }
+  .badge--in_progress { background: #e0e7ff; color: #3730a3; }
+  .badge--resolved    { background: #d1fae5; color: #047857; }
+  .badge--closed      { background: #f1f5f9; color: #475569; }
+
+  /* Conversation bubbles */
+  .bubble { border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+  .bubble__label { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 7px; }
+  .bubble p { font-size: 14.5px; line-height: 1.7; white-space: pre-line; margin: 0; }
+
+  .bubble--you   { background: #f8fafc; border: 1px solid #e2e8f0; }
+  .bubble--you .bubble__label { color: #64748b; }
+  .bubble--you p { color: #334155; }
+
+  .bubble--staff { background: #f0fdfa; border: 1px solid #99f6e4; }
+  .bubble--staff .bubble__label { color: #0f766e; }
+  .bubble--staff p { color: #134e4a; }
+
+  .awaiting { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #94a3b8; padding: 6px 2px; }
+
+  .msgs-empty { text-align: center; padding: 64px 24px; background: #fff; border: 1px solid var(--clr-border); border-radius: 18px; }
+  .msgs-empty i { font-size: 40px; color: #cbd5e1; margin-bottom: 16px; display: block; }
+  .msgs-empty p { font-size: 16px; color: #64748b; margin-bottom: 22px; }
+  .msgs-empty a { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; background: #0f766e; color: #fff; border-radius: 10px; font-weight: 600; text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .msgs-page { margin: 32px auto 56px; padding: 0 16px; }
+    .msgs-head h1 { font-size: 24px; }
+    .ticket { padding: 18px; }
+  }
+</style>
+
+<div class="msgs-page">
+
+  <div class="msgs-head">
+    <h1>{% trans "My Messages" %}</h1>
+    <p>{% trans "Your support requests and our replies." %}</p>
+  </div>
+
+  {% for t in tickets %}
+  <div class="ticket">
+    <div class="ticket__top">
+      <span class="ticket__subject">{{ t.subject }}</span>
+      <span class="ticket__cat">{{ t.get_category_display }}</span>
+      <span class="badge badge--{{ t.status }}">
+        {% if t.status == 'new' %}{% trans "New" %}
+        {% elif t.status == 'in_progress' %}{% trans "In Progress" %}
+        {% elif t.status == 'resolved' %}{% trans "Resolved" %}
+        {% else %}{% trans "Closed" %}{% endif %}
+      </span>
+    </div>
+
+    <div class="bubble bubble--you">
+      <span class="bubble__label"><i class="fa-solid fa-user"></i> {% trans "You" %} · {{ t.created_at|date:"M d, Y" }}</span>
+      <p>{{ t.message }}</p>
+    </div>
+
+    {% if t.staff_response %}
+    <div class="bubble bubble--staff">
+      <span class="bubble__label"><i class="fa-solid fa-headset"></i> {% trans "Rentora Support" %}{% if t.resolved_at %} · {{ t.resolved_at|date:"M d, Y" }}{% endif %}</span>
+      <p>{{ t.staff_response }}</p>
+    </div>
+    {% else %}
+    <div class="awaiting"><i class="fa-regular fa-clock"></i> {% trans "Awaiting a reply — we usually respond within 24 hours." %}</div>
+    {% endif %}
+  </div>
+  {% empty %}
+  <div class="msgs-empty">
+    <i class="fa-regular fa-envelope"></i>
+    <p>{% trans "You haven't sent any messages yet." %}</p>
+    <a href="{% url 'listings:contact' %}"><i class="fa-solid fa-paper-plane"></i> {% trans "Contact Support" %}</a>
+  </div>
+  {% endfor %}
+
+</div>
+
+{% endblock %}

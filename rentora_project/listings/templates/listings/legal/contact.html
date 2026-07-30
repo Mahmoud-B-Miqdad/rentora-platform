@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Contact Us" %} | Rentora{% endblock %}
+
+{% block content %}
+
+<style>
+  .contact-page {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 0 24px;
+  }
+
+  .contact-page h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #0f172a;
+    text-align: center;
+  }
+
+  .contact-page .page-subtitle {
+    font-size: 16px;
+    color: #64748b;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .contact-form {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #0f172a;
+    background: #f8fafc;
+    transition: border 0.2s, background 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .form-group textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+
+  .form-group .error {
+    color: #dc2626;
+    font-size: 14px;
+    margin-top: 6px;
+    display: block;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .submit-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+
+  .success-message {
+    background: #d1fae5;
+    border: 1px solid #6ee7b7;
+    border-radius: 10px;
+    padding: 16px;
+    color: #047857;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .success-message i {
+    font-size: 20px;
+  }
+
+  .error-message {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: 10px;
+    padding: 16px;
+    color: #dc2626;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .contact-page {
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    .contact-page h1 {
+      font-size: 26px;
+    }
+
+    .contact-form {
+      padding: 28px 20px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      font-size: 16px;
+    }
+  }
+</style>
+
+<div class="contact-page">
+
+  <h1>{% trans "Get in Touch" %}</h1>
+  <p class="page-subtitle">{% trans "Have a question or need help? We're here for you. Respond within 24 hours." %}</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="success-message">
+        <i class="fa-solid fa-check-circle"></i>
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST" class="contact-form" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name">{% trans "Full Name" %} <span style="color: #dc2626;">*</span></label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="{% trans 'Your full name' %}"
+        value="{{ form_data.name|default:'' }}"
+        required
+      >
+      {% if errors.name %}
+        <span class="error">{{ errors.name }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">{% trans "Email Address" %} <span style="color: #dc2626;">*</span></label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="{% trans 'your@email.com' %}"
+        value="{{ form_data.email|default:'' }}"
+        required
+      >
+      {% if errors.email %}
+        <span class="error">{{ errors.email }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Subject -->
+    <div class="form-group">
+      <label for="subject">{% trans "Subject" %} <span style="color: #dc2626;">*</span></label>
+      <input
+        type="text"
+        id="subject"
+        name="subject"
+        placeholder="{% trans 'What is this about?' %}"
+        value="{{ form_data.subject|default:'' }}"
+        required
+      >
+      {% if errors.subject %}
+        <span class="error">{{ errors.subject }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Category -->
+    <div class="form-group">
+      <label for="category">{% trans "Category" %} <span style="color: #dc2626;">*</span></label>
+      <select id="category" name="category" required>
+        <option value="">{% trans "Select a category..." %}</option>
+        <option value="payment" {% if form_data.category == 'payment' %}selected{% endif %}>{% trans "Payment Issue" %}</option>
+        <option value="booking" {% if form_data.category == 'booking' %}selected{% endif %}>{% trans "Booking Problem" %}</option>
+        <option value="dispute" {% if form_data.category == 'dispute' %}selected{% endif %}>{% trans "Report/Dispute" %}</option>
+        <option value="feature" {% if form_data.category == 'feature' %}selected{% endif %}>{% trans "Feature Request" %}</option>
+        <option value="technical" {% if form_data.category == 'technical' %}selected{% endif %}>{% trans "Technical Issue" %}</option>
+        <option value="other" {% if form_data.category == 'other' %}selected{% endif %}>{% trans "Other" %}</option>
+      </select>
+    </div>
+
+    <!-- Message -->
+    <div class="form-group">
+      <label for="message">{% trans "Message" %} <span style="color: #dc2626;">*</span></label>
+      <textarea
+        id="message"
+        name="message"
+        placeholder="{% trans 'Please describe your issue or question in detail...' %}"
+        required
+      >{{ form_data.message|default:'' }}</textarea>
+      {% if errors.message %}
+        <span class="error">{{ errors.message }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Attachment -->
+    <div class="form-group">
+      <label>{% trans "Attachment" %} <span style="color:#94a3b8;font-weight:400;">({% trans "optional" %})</span></label>
+      <label class="file-drop" for="attachment" data-file-drop>
+        <span class="file-drop__icon"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+        <span class="file-drop__title" data-file-drop-title>{% trans "Click to choose a file" %}</span>
+        <span class="file-drop__sub">{% trans "Photo, screenshot, or PDF — max 10 MB. Only support staff can see it." %}</span>
+        <input type="file" id="attachment" name="attachment" accept="image/*,.pdf">
+      </label>
+      {% if errors.attachment %}
+        <span class="error">{{ errors.attachment }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="submit-btn">
+      <i class="fa-solid fa-paper-plane" style="margin-right: 8px;"></i>
+      {% trans "Send Message" %}
+    </button>
+
+  </form>
+
+  <!-- Contact Info -->
+  <div style="margin-top: 48px; text-align: center; color: #64748b;">
+    <p>{% trans "Or email us directly at:" %}</p>
+    <p style="font-size: 16px; color: #0f172a; font-weight: 600;">
+      <a href="mailto:support@rentora.ps" style="color: #2563eb; text-decoration: none;">support@rentora.ps</a>
+    </p>
+  </div>
+
+</div>
+
+{% endblock %}
