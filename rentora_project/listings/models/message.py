@@ -54,7 +54,11 @@ class Message(models.Model):
         on_delete=models.CASCADE,
         related_name="sent_messages",
     )
-    text       = models.TextField()
+    text       = models.TextField(blank=True)
+    image      = models.ImageField(
+        upload_to="chat/%Y/%m/%d/", null=True, blank=True,
+        help_text="Optional photo shared in the conversation (e.g. tool condition).",
+    )
     is_read    = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
