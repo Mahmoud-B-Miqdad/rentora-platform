@@ -3,7 +3,8 @@ import urllib.parse
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from django.db.models import Avg, Count, Prefetch, Q
+import math
+from django.db.models import Avg, Count, Prefetch, Q, Max
 from django.urls import reverse
 
 from listings.models import Category, Tool, ToolImage, Booking, Review, BookingStatus, ReviewType, Wishlist
@@ -127,13 +128,20 @@ def browse_view(request):
         )
     )
 
+    # ── Price ceiling: highest available rate, rounded up to a tidy number.
+    #    Drives the slider's max AND its default, so no tool is hidden until
+    #    the user actually narrows the price. (Previously a hard default of
+    #    200 silently hid every tool priced above $200.)
+    highest_rate = Tool.objects.filter(is_available=True).aggregate(m=Max('daily_rate'))['m'] or 200
+    price_ceiling = max(50, int(math.ceil(float(highest_rate) / 50.0) * 50))
+
     # ── Read GET params ───────────────────────────────────────────────────────
     q            = request.GET.get('q', '').strip()
     category_id  = request.GET.get('category', '').strip()
     try:
-        max_price = float(request.GET.get('max_price', 200))
+        max_price = float(request.GET.get('max_price', price_ceiling))
     except ValueError:
-        max_price = 200
+        max_price = price_ceiling
     availability = request.GET.get('availability', '')
     location     = request.GET.get('location', '').strip()
     sort         = request.GET.get('sort', 'newest')
@@ -145,7 +153,10 @@ def browse_view(request):
         )
     if category_id:
         tools_qs = tools_qs.filter(category_id=category_id)
-    if max_price:
+    # Only narrow by price when the user actually lowered the slider below the
+    # ceiling; at the ceiling this is a no-op that would otherwise exclude
+    # nothing anyway.
+    if max_price and max_price < price_ceiling:
         tools_qs = tools_qs.filter(daily_rate__lte=max_price)
     if availability == '1':
         tools_qs = tools_qs.filter(is_available=True)
@@ -189,6 +200,7 @@ def browse_view(request):
         'categories':   categories,
         'locations':    locations,
         'wishlist_ids': wishlist_ids,
+        'price_ceiling': price_ceiling,
         'filters': {
             'q':           q,
             'category':    category_id,
