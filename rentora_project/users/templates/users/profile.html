@@ -4,7 +4,7 @@
 {% block title %}{{ profile_user.name }} — {% trans "Profile" %} — Rentora{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'users/css/profile.css' %}?v=3">
 {% endblock %}
 
 {% block content %}
@@ -265,28 +265,52 @@
             {% if reviews_received %}
             <div class="profile-reviews-grid">
               {% for review in reviews_received %}
-              <div class="rcard">
-                <div class="rcard__header">
-                  {% if review.reviewer.profile_image %}
-                  <img src="{{ review.reviewer.profile_image.url }}" alt="{{ review.reviewer.name }}" class="rcard__avatar">
-                  {% else %}
-                  <div class="rcard__avatar rcard__avatar--init">{{ review.reviewer.name|first|upper }}</div>
-                  {% endif %}
-                  <div class="rcard__meta">
-                    <div class="rcard__name-row">
+              <article class="rcard {% if review.review_type == 'for_tool' %}rcard--tool{% elif review.review_type == 'for_owner' %}rcard--owner{% else %}rcard--renter{% endif %}">
+
+                {# Whole card links to the reviewed tool, or to the reviewer's profile #}
+                {% if review.review_type == 'for_tool' %}
+                <a class="rcard__stretch" href="{% url 'listings:tools:detail' review.booking.tool.pk %}"
+                   aria-label="{% trans 'View tool' %}: {{ review.booking.tool.title }}"></a>
+                {% else %}
+                <a class="rcard__stretch" href="{% url 'users:public_profile' review.reviewer.pk %}"
+                   aria-label="{% trans 'View profile' %}: {{ review.reviewer.name }}"></a>
+                {% endif %}
+
+                <div class="rcard__top">
+                  <a class="rcard__who" href="{% url 'users:public_profile' review.reviewer.pk %}">
+                    {% if review.reviewer.profile_image %}
+                    <img src="{{ review.reviewer.profile_image.url }}" alt="" class="rcard__avatar">
+                    {% else %}
+                    <span class="rcard__avatar rcard__avatar--init">{{ review.reviewer.name|first|upper }}</span>
+                    {% endif %}
+                    <span class="rcard__idcol">
                       <span class="rcard__name">{{ review.reviewer.name }}</span>
-                      <span class="rcard__badge">{% if review.review_type == 'for_renter' %}{% trans "Owner" %}{% else %}{% trans "Renter" %}{% endif %}</span>
-                    </div>
-                    <div class="rcard__stars">
-                      {% for i in "12345" %}
-                        <i class="{% if forloop.counter <= review.rating %}fa-solid{% else %}fa-regular{% endif %} fa-star"></i>
-                      {% endfor %}
                       <span class="rcard__date">{{ review.created_at|date:"M j, Y" }}</span>
-                    </div>
+                    </span>
+                  </a>
+                  <div class="rcard__stars" aria-label="{{ review.rating }}/5">
+                    {% for i in "12345" %}<i class="{% if forloop.counter <= review.rating %}fa-solid{% else %}fa-regular{% endif %} fa-star"></i>{% endfor %}
                   </div>
                 </div>
+
+                {# Context bar — wording adapts to whose profile is being viewed #}
+                <div class="rcard__context">
+                  {% if review.review_type == 'for_tool' %}
+                    <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+                    <span class="rcard__context-label">{% if is_owner %}{% trans "Reviewed your tool" %}{% else %}{% trans "Reviewed the tool" %}{% endif %}</span>
+                    <span class="rcard__context-subject">{{ review.booking.tool.title }}</span>
+                  {% elif review.review_type == 'for_owner' %}
+                    <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                    <span class="rcard__context-label">{% if is_owner %}{% trans "Rated you as the owner" %}{% else %}{% blocktrans with name=profile_user.name %}Rated {{ name }} as the owner{% endblocktrans %}{% endif %}</span>
+                  {% else %}
+                    <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                    <span class="rcard__context-label">{% if is_owner %}{% trans "Rated you as the renter" %}{% else %}{% blocktrans with name=profile_user.name %}Rated {{ name }} as the renter{% endblocktrans %}{% endif %}</span>
+                  {% endif %}
+                  <i class="fa-solid fa-chevron-right rcard__go" aria-hidden="true"></i>
+                </div>
+
                 {% if review.comment %}<p class="rcard__text">{{ review.comment }}</p>{% endif %}
-              </div>
+              </article>
               {% endfor %}
             </div>
             {% else %}
@@ -301,24 +325,70 @@
             {% if reviews_given %}
             <div class="profile-reviews-grid">
               {% for review in reviews_given %}
-              <div class="rcard">
-                <div class="rcard__header">
-                  <div class="rcard__avatar rcard__avatar--init">{{ review.booking.tool.title|first|upper }}</div>
-                  <div class="rcard__meta">
-                    <div class="rcard__name-row">
-                      <span class="rcard__name">{{ review.booking.tool.title }}</span>
-                      <span class="rcard__badge rcard__badge--given">{{ review.get_review_type_display }}</span>
-                    </div>
-                    <div class="rcard__stars">
-                      {% for i in "12345" %}
-                        <i class="{% if forloop.counter <= review.rating %}fa-solid{% else %}fa-regular{% endif %} fa-star"></i>
-                      {% endfor %}
+              <article class="rcard {% if review.review_type == 'for_tool' %}rcard--tool{% elif review.review_type == 'for_owner' %}rcard--owner{% else %}rcard--renter{% endif %}">
+
+                {# Whole card links to the thing that was reviewed #}
+                {% if review.review_type == 'for_tool' %}
+                <a class="rcard__stretch" href="{% url 'listings:tools:detail' review.booking.tool.pk %}"
+                   aria-label="{% trans 'View tool' %}: {{ review.booking.tool.title }}"></a>
+                {% elif review.review_type == 'for_owner' %}
+                <a class="rcard__stretch" href="{% url 'users:public_profile' review.booking.tool.owner.pk %}"
+                   aria-label="{% trans 'View profile' %}: {{ review.booking.tool.owner.name }}"></a>
+                {% else %}
+                <a class="rcard__stretch" href="{% url 'users:public_profile' review.booking.renter.pk %}"
+                   aria-label="{% trans 'View profile' %}: {{ review.booking.renter.name }}"></a>
+                {% endif %}
+
+                <div class="rcard__top">
+                  <div class="rcard__who">
+                    {% if review.review_type == 'for_tool' %}
+                      <span class="rcard__avatar rcard__avatar--icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                    {% elif review.review_type == 'for_owner' %}
+                      {% if review.booking.tool.owner.profile_image %}
+                      <img src="{{ review.booking.tool.owner.profile_image.url }}" alt="" class="rcard__avatar">
+                      {% else %}
+                      <span class="rcard__avatar rcard__avatar--init">{{ review.booking.tool.owner.name|first|upper }}</span>
+                      {% endif %}
+                    {% else %}
+                      {% if review.booking.renter.profile_image %}
+                      <img src="{{ review.booking.renter.profile_image.url }}" alt="" class="rcard__avatar">
+                      {% else %}
+                      <span class="rcard__avatar rcard__avatar--init">{{ review.booking.renter.name|first|upper }}</span>
+                      {% endif %}
+                    {% endif %}
+                    <span class="rcard__idcol">
+                      <span class="rcard__name">
+                        {% if review.review_type == 'for_tool' %}{{ review.booking.tool.title }}
+                        {% elif review.review_type == 'for_owner' %}{{ review.booking.tool.owner.name }}
+                        {% else %}{{ review.booking.renter.name }}{% endif %}
+                      </span>
                       <span class="rcard__date">{{ review.created_at|date:"M j, Y" }}</span>
-                    </div>
+                    </span>
+                  </div>
+                  <div class="rcard__stars" aria-label="{{ review.rating }}/5">
+                    {% for i in "12345" %}<i class="{% if forloop.counter <= review.rating %}fa-solid{% else %}fa-regular{% endif %} fa-star"></i>{% endfor %}
                   </div>
                 </div>
+
+                {# Context bar — wording adapts to whose profile is being viewed #}
+                <div class="rcard__context">
+                  {% if review.review_type == 'for_tool' %}
+                    <i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i>
+                    <span class="rcard__context-label">{% if is_owner %}{% trans "You reviewed this tool" %}{% else %}{% blocktrans with name=profile_user.name %}{{ name }} reviewed this tool{% endblocktrans %}{% endif %}</span>
+                  {% elif review.review_type == 'for_owner' %}
+                    <i class="fa-solid fa-handshake" aria-hidden="true"></i>
+                    <span class="rcard__context-label">{% if is_owner %}{% trans "You rated the owner" %}{% else %}{% blocktrans with name=profile_user.name %}{{ name }} rated the owner{% endblocktrans %}{% endif %}</span>
+                    <span class="rcard__context-subject">{{ review.booking.tool.title }}</span>
+                  {% else %}
+                    <i class="fa-solid fa-user-check" aria-hidden="true"></i>
+                    <span class="rcard__context-label">{% if is_owner %}{% trans "You rated the renter" %}{% else %}{% blocktrans with name=profile_user.name %}{{ name }} rated the renter{% endblocktrans %}{% endif %}</span>
+                    <span class="rcard__context-subject">{{ review.booking.tool.title }}</span>
+                  {% endif %}
+                  <i class="fa-solid fa-chevron-right rcard__go" aria-hidden="true"></i>
+                </div>
+
                 {% if review.comment %}<p class="rcard__text">{{ review.comment }}</p>{% endif %}
-              </div>
+              </article>
               {% endfor %}
             </div>
             {% else %}
