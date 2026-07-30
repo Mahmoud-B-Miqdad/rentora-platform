@@ -1,0 +1,92 @@
+{% extends "console/base_console.html" %}
+{% block title %}Ticket #{{ ticket.id }}{% endblock %}
+{% block page_title %}Ticket #{{ ticket.id }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'console:support' %}" class="con-back"><i class="fa-solid fa-arrow-left"></i> Back to inbox</a>
+
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-envelope-open-text"></i> {{ ticket.subject }}</h2>
+    <div>
+      {% if ticket.status == 'new' %}<span class="con-pill con-pill--amber">New</span>
+      {% elif ticket.status == 'in_progress' %}<span class="con-pill con-pill--gray">In progress</span>
+      {% elif ticket.status == 'resolved' %}<span class="con-pill con-pill--green">Resolved</span>
+      {% else %}<span class="con-pill con-pill--gray">Closed</span>{% endif %}
+    </div>
+  </header>
+  <div class="con-card__body">
+    <div class="con-meta-grid">
+      <div><small class="con-td-muted">From</small><p><strong>{{ ticket.name }}</strong></p></div>
+      <div><small class="con-td-muted">Email</small><p><a href="mailto:{{ ticket.email }}">{{ ticket.email }}</a></p></div>
+      <div><small class="con-td-muted">Category</small><p>{{ ticket.get_category_display }}</p></div>
+      <div><small class="con-td-muted">Received</small><p>{{ ticket.created_at|date:"M d, Y · H:i" }}</p></div>
+      {% if ticket.user %}<div><small class="con-td-muted">Account</small><p><a href="{% url 'console:user_detail' ticket.user.id %}">{{ ticket.user.name }}</a></p></div>{% endif %}
+      {% if ticket.assigned_to %}<div><small class="con-td-muted">Handled by</small><p>{{ ticket.assigned_to.name }}</p></div>{% endif %}
+    </div>
+
+    <div class="con-message-body">
+      <small class="con-td-muted">Message</small>
+      <p>{{ ticket.message|linebreaksbr }}</p>
+    </div>
+
+    {% if ticket.attachment %}
+    <div class="con-message-body" style="margin-top:16px;">
+      <small class="con-td-muted">Attachment</small>
+      {% with url=ticket.attachment.url %}
+        {% if url|lower|slice:"-4:" == ".pdf" %}
+        <p><a class="con-btn con-btn--ghost con-btn--sm" href="{{ url }}" target="_blank" rel="noopener">
+          <i class="fa-solid fa-file-pdf"></i> Open PDF
+        </a></p>
+        {% else %}
+        <a href="{{ url }}" target="_blank" rel="noopener">
+          <img src="{{ url }}" alt="Attachment" style="max-width:260px;max-height:260px;border-radius:9px;margin-top:6px;display:block;cursor:zoom-in;">
+        </a>
+        {% endif %}
+      {% endwith %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if ticket.staff_response %}
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-reply"></i> Your response</h2></header>
+  <div class="con-card__body">
+    <p>{{ ticket.staff_response|linebreaksbr }}</p>
+    {% if ticket.resolved_at %}<small class="con-td-muted">Sent {{ ticket.resolved_at|date:"M d, Y · H:i" }}</small>{% endif %}
+  </div>
+</section>
+{% endif %}
+
+{% if ticket.status != 'closed' %}
+<section class="con-card">
+  <header class="con-card__head"><h2><i class="fa-solid fa-pen-to-square"></i> Respond</h2></header>
+  <div class="con-card__body">
+    <form method="POST" action="{% url 'console:support_action' ticket.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="respond">
+      <textarea name="response" rows="6" class="con-input" placeholder="Type your reply — it will be emailed to {{ ticket.email }}…" required>{{ ticket.staff_response }}</textarea>
+      <div class="con-actions">
+        <button type="submit" class="con-btn con-btn--primary"><i class="fa-solid fa-paper-plane"></i> Send response &amp; resolve</button>
+      </div>
+    </form>
+    <form method="POST" action="{% url 'console:support_action' ticket.id %}" style="margin-top:10px;">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="close">
+      <button type="submit" class="con-btn con-btn--ghost"><i class="fa-solid fa-xmark"></i> Close without responding</button>
+    </form>
+  </div>
+</section>
+{% else %}
+<section class="con-card">
+  <div class="con-card__body">
+    <form method="POST" action="{% url 'console:support_action' ticket.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="reopen">
+      <button type="submit" class="con-btn con-btn--ghost"><i class="fa-solid fa-rotate-left"></i> Reopen ticket</button>
+    </form>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

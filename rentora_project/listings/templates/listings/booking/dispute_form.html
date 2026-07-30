@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Dispute the return" %} | Rentora{% endblock %}
+
+{% block content %}
+<style>
+  .dsp-wrap { max-width: 640px; margin: 48px auto 80px; padding: 0 20px; }
+
+  .dsp-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(15,23,42,.06); overflow: hidden;
+  }
+  .dsp-head {
+    display: flex; align-items: center; gap: 14px;
+    padding: 22px 26px; border-bottom: 1px solid #eef2f7;
+  }
+  .dsp-head__icon {
+    width: 46px; height: 46px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #fef2f2; color: #dc2626; border-radius: 12px; font-size: 18px;
+  }
+  .dsp-head h1 { font-size: 19px; font-weight: 700; color: #0f172a; margin: 0 0 3px; }
+  .dsp-head p  { font-size: 13.5px; color: #64748b; margin: 0; }
+
+  .dsp-body { padding: 24px 26px 28px; }
+
+  .dsp-booking {
+    display: flex; align-items: center; gap: 12px;
+    background: #f8fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 22px;
+  }
+  .dsp-booking__name { font-size: 14.5px; font-weight: 700; color: #0f172a; }
+  .dsp-booking__meta { font-size: 12.5px; color: #64748b; margin-top: 2px; }
+
+  .dsp-note {
+    background: #eff6ff; border: 1px solid #bfdbfe;
+    border-inline-start: 4px solid #2563eb;
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 22px;
+  }
+  .dsp-note p { margin: 0; font-size: 13.5px; color: #1e40af; line-height: 1.6; }
+
+  .dsp-field { margin-bottom: 20px; }
+  .dsp-field label {
+    display: block; font-size: 13.5px; font-weight: 600;
+    color: #0f172a; margin-bottom: 7px;
+  }
+  .dsp-field textarea, .dsp-field input[type="file"] {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid #e2e8f0; border-radius: 10px;
+    font-family: inherit; font-size: 14.5px; color: #0f172a;
+    background: #f8fafc; transition: border-color .15s, background .15s;
+  }
+  .dsp-field textarea { min-height: 130px; resize: vertical; line-height: 1.6; }
+  .dsp-field textarea:focus, .dsp-field input[type="file"]:focus {
+    outline: none; border-color: #0f766e; background: #fff;
+    box-shadow: 0 0 0 3px rgba(15,118,110,.10);
+  }
+  .dsp-field small { display: block; margin-top: 6px; font-size: 12.5px; color: #64748b; }
+
+  .dsp-error {
+    background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c;
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; font-size: 13.5px;
+  }
+
+  .dsp-actions { display: flex; gap: 10px; margin-top: 26px; }
+  .dsp-btn {
+    flex: 1; padding: 12px 18px; border-radius: 10px;
+    font-size: 14.5px; font-weight: 600; font-family: inherit;
+    cursor: pointer; text-align: center; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    border: 1px solid transparent; transition: background .15s, transform .1s;
+  }
+  .dsp-btn--ghost { background: #fff; border-color: #e2e8f0; color: #334155; }
+  .dsp-btn--ghost:hover { background: #f8fafc; }
+  .dsp-btn--danger { background: #dc2626; color: #fff; box-shadow: 0 4px 14px rgba(220,38,38,.24); }
+  .dsp-btn--danger:hover { background: #b91c1c; transform: translateY(-1px); }
+
+  @media (max-width: 520px) {
+    .dsp-wrap { margin: 30px auto 60px; }
+    .dsp-body { padding: 20px 18px 24px; }
+    .dsp-actions { flex-direction: column-reverse; }
+  }
+</style>
+
+<div class="dsp-wrap">
+  <div class="dsp-card">
+
+    <div class="dsp-head">
+      <div class="dsp-head__icon"><i class="fa-solid fa-scale-balanced"></i></div>
+      <div>
+        <h1>{% trans "Dispute the return" %}</h1>
+        <p>{% trans "Tell us what happened and attach evidence if you have it." %}</p>
+      </div>
+    </div>
+
+    <div class="dsp-body">
+
+      <div class="dsp-booking">
+        <div>
+          <div class="dsp-booking__name">{{ booking.tool.title }}</div>
+          <div class="dsp-booking__meta">
+            {{ booking.tool.owner.name }} · {{ booking.start_date }} → {{ booking.end_date }}
+          </div>
+        </div>
+      </div>
+
+      <div class="dsp-note">
+        <p>{% trans "Opening a dispute puts the rental on hold — no late fees are added while our staff review it. We aim to decide within 5 business days and will email you the outcome." %}</p>
+      </div>
+
+      {% if error %}<div class="dsp-error">{{ error }}</div>{% endif %}
+
+      <form method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        <div class="dsp-field">
+          <label for="reason">{% trans "What is the problem?" %} <span style="color:#dc2626;">*</span></label>
+          <textarea id="reason" name="reason" required
+                    placeholder="{% trans 'For example: the tool was not actually handed back yet, or it was already damaged when I received it.' %}">{{ reason|default:'' }}</textarea>
+          <small>{% trans "Be specific — dates, condition, and what was agreed all help us decide fairly." %}</small>
+        </div>
+
+        <div class="dsp-field">
+          <label for="evidence">{% trans "Evidence (optional)" %}</label>
+          <input type="file" id="evidence" name="evidence" accept="image/*,video/*">
+          <small>{% trans "Attach a photo or short video of the tool's condition. Staff see this — other users do not." %}</small>
+        </div>
+
+        <div class="dsp-actions">
+          <a href="/dashboard/?tab=my-rentals" class="dsp-btn dsp-btn--ghost">{% trans "Go back" %}</a>
+          <button type="submit" class="dsp-btn dsp-btn--danger">
+            <i class="fa-solid fa-scale-balanced"></i> {% trans "Submit dispute" %}
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

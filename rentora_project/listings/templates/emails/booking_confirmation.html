@@ -1,0 +1,36 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}teal{% endblock %}
+{% block heading %}{% if awaiting_payment %} {% trans "Request approved" %}{% else %} {% trans "Booking requested" %}{% endif %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Hi {{ renter_name }},{% endblocktrans %}</p>
+
+  {% if awaiting_payment %}
+    <p>{% blocktrans %}<strong>{{ owner_name }}</strong> approved your request for <strong>{{ tool_title }}</strong>. Complete the payment to lock in your dates.{% endblocktrans %}</p>
+  {% else %}
+    <p>{% blocktrans %}We sent your request for <strong>{{ tool_title }}</strong> to <strong>{{ owner_name }}</strong>. You will hear back once they approve it — nothing is charged until then.{% endblocktrans %}</p>
+  {% endif %}
+
+  <div class="panel">
+    <div class="row"><span>{% trans "Tool" %}</span><span>{{ tool_title }}</span></div>
+    <div class="row"><span>{% trans "Owner" %}</span><span>{{ owner_name }}</span></div>
+    <div class="row"><span>{% trans "Dates" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
+    <div class="row"><span>{% trans "Total" %}</span><span>${{ booking.total_price }}</span></div>
+  </div>
+
+  <p><strong>{% trans "What happens next" %}</strong></p>
+  <ul>
+    {% if awaiting_payment %}
+    <li>{% trans "Pay from your dashboard to confirm the rental." %}</li>
+    <li>{% trans "Arrange pickup with the owner." %}</li>
+    {% else %}
+    <li>{% trans "The owner reviews your request." %}</li>
+    <li>{% trans "If approved, you pay and the dates are yours." %}</li>
+    {% endif %}
+    <li>{% trans "At handover back, ask the owner to mark the tool returned and confirm it yourself right away." %}</li>
+  </ul>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=my-rentals">{% trans "View my rental" %}</a>
+{% endblock %}

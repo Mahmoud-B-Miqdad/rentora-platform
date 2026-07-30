@@ -11,6 +11,7 @@ class NotificationType(models.TextChoices):
     RETURN_REMINDER   = "return_reminder",   "Return Reminder"
     NEW_MESSAGE       = "new_message",       "New Message"
     NEW_REVIEW        = "new_review",        "New Review"
+    SUPPORT_REPLY     = "support_reply",     "Support Reply"
 
 
 # Maps each type to (fa-icon-class, css-color-token)
@@ -24,6 +25,7 @@ _TYPE_META = {
     NotificationType.RETURN_REMINDER  : ("fa-clock",            "notif-amber"),
     NotificationType.NEW_MESSAGE      : ("fa-message",          "notif-blue"),
     NotificationType.NEW_REVIEW       : ("fa-star",             "notif-amber"),
+    NotificationType.SUPPORT_REPLY    : ("fa-headset",          "notif-blue"),
 }
 
 
@@ -99,6 +101,11 @@ class Notification(models.Model):
 
     @property
     def booking_url(self):
+        # Support replies aren't tied to a booking — send the user to their
+        # own messages page where the ticket and staff reply are shown.
+        if self.notification_type == NotificationType.SUPPORT_REPLY:
+            return "/my-messages/"
+
         if not self.booking_id:
             return "/dashboard/"
 

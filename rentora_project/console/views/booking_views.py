@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
  
 from console import services
 from console.decorators import staff_required
-from listings.models import Booking
+from listings.models import Booking, DepositDispute
  
 STATUS_TABS = [
     ("", "All"),
@@ -67,10 +67,17 @@ def returns_queue(request):
                .select_related("tool", "renter", "tool__owner")
                .order_by("end_date"))
  
+    disputes = (DepositDispute.objects
+                .filter(status__in=("open", "staff_reviewing"))
+                .select_related("booking", "booking__tool",
+                                "booking__renter", "booking__tool__owner")
+                .order_by("-created_at"))
+
     return render(request, "console/returns.html", {
         "active_tab": "returns",
         "waiting": waiting,
         "overdue": overdue,
+        "disputes": disputes,
         "today": today,
     })
  

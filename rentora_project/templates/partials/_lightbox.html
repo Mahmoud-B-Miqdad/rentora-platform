@@ -1,0 +1,99 @@
+{% load i18n %}
+{% comment %}
+Site-wide image lightbox. Any <a> that wraps an <img> and points to an image
+file opens here instead of a new tab. Self-contained; safe on light & dark.
+{% endcomment %}
+<div id="rLightbox" class="rlb" aria-hidden="true" role="dialog" aria-modal="true">
+  <button class="rlb__close" type="button" aria-label="{% trans 'Close' %}">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+  <figure class="rlb__figure">
+    <img id="rLightboxImg" class="rlb__img" src="" alt="">
+  </figure>
+</div>
+
+<style>
+  .rlb {
+    position: fixed; inset: 0; z-index: 4000;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 40px;
+    background: rgba(2, 6, 23, .82);
+    backdrop-filter: blur(6px);
+    animation: rlb-fade .18s ease-out;
+  }
+  .rlb.rlb--open { display: flex; }
+  @keyframes rlb-fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .rlb__figure { margin: 0; max-width: 100%; max-height: 100%; display: flex; }
+  .rlb__img {
+    max-width: min(1100px, 94vw);
+    max-height: 88vh;
+    width: auto; height: auto;
+    border-radius: 12px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .55);
+    animation: rlb-zoom .2s cubic-bezier(.2, .8, .2, 1);
+    object-fit: contain;
+  }
+  @keyframes rlb-zoom { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .rlb__close {
+    position: absolute; top: 18px; inset-inline-end: 22px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border: none; border-radius: 50%;
+    background: rgba(255, 255, 255, .12);
+    color: #fff; font-size: 20px; cursor: pointer;
+    transition: background .15s, transform .15s;
+  }
+  .rlb__close:hover { background: rgba(255, 255, 255, .24); transform: rotate(90deg); }
+
+  @media (max-width: 560px) {
+    .rlb { padding: 16px; }
+    .rlb__close { top: 10px; inset-inline-end: 12px; }
+  }
+</style>
+
+<script>
+(function () {
+  var lb    = document.getElementById('rLightbox');
+  var lbImg = document.getElementById('rLightboxImg');
+  if (!lb || !lbImg) return;
+
+  var IMG_RE = /\.(jpe?g|png|gif|webp|bmp|avif|svg)(\?.*)?$/i;
+
+  function open(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lb.classList.add('rlb--open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lb.classList.remove('rlb--open');
+    lb.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  // Delegate: intercept clicks on links that wrap an image and target an image file.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a');
+    if (!a || lb.contains(a)) return;
+    var href = a.getAttribute('href') || '';
+    if (a.querySelector('img') && IMG_RE.test(href)) {
+      e.preventDefault();
+      var img = a.querySelector('img');
+      open(href, img ? img.alt : '');
+    }
+  });
+
+  // Close: X button, backdrop click (not the image), Esc.
+  lb.addEventListener('click', function (e) {
+    if (e.target === lb || e.target.closest('.rlb__close')) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lb.classList.contains('rlb--open')) close();
+  });
+})();
+</script>

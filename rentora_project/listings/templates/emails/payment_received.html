@@ -1,0 +1,32 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}green{% endblock %}
+{% block heading %}{% trans "Payment received" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans with title=booking.tool.title %}Payment has cleared for <strong>{{ title }}</strong> — the rental is now active.{% endblocktrans %}</p>
+
+  <div class="panel">
+    {% if breakdown %}
+    <div class="amount">${{ breakdown.owner_payout }}</div>
+    <p class="muted">{% trans "Your payout" %}</p>
+    <div class="row"><span>{% trans "Renter paid" %}</span><span>${{ breakdown.total_charged_to_renter }}</span></div>
+    <div class="row"><span>{% trans "Platform fee" %}</span><span>&minus;${{ breakdown.platform_fee }}</span></div>
+    {% else %}
+    <div class="amount">${{ booking.total_price }}</div>
+    <p class="muted">{% trans "Rental total" %}</p>
+    {% endif %}
+    <div class="row"><span>{% trans "Dates" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
+    <div class="row"><span>{% trans "Renter" %}</span><span>{{ booking.renter.name }}</span></div>
+  </div>
+
+  <p><strong>{% trans "At return time" %}</strong></p>
+  <ul>
+    <li>{% trans "Inspect the tool with the renter present." %}</li>
+    <li>{% trans "Press \"Mark as Returned\" there and then, so the renter can confirm on the spot." %}</li>
+    <li>{% trans "This two-step handshake protects you both and stops late fees fairly." %}</li>
+  </ul>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=booking-requests">{% trans "Open dashboard" %}</a>
+{% endblock %}

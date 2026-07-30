@@ -5,6 +5,62 @@
 {% block content %}
 <section class="con-card">
   <header class="con-card__head">
+    <h2><i class="fa-solid fa-scale-balanced"></i> Open disputes</h2>
+  </header>
+  <div class="con-card__body">
+    {% if disputes %}
+    <table class="con-table con-table--hover">
+      <thead><tr><th>Tool</th><th>Raised by</th><th>Reason</th><th>Evidence</th><th>Opened</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for d in disputes %}
+        <tr onclick="window.location='{% url 'console:dispute_detail' d.id %}'" style="cursor:pointer;">
+          <td>
+            <strong>{{ d.booking.tool.title }}</strong>
+            <small style="display:block;color:#64748b;">
+              {{ d.booking.start_date }} → {{ d.booking.end_date }}
+            </small>
+          </td>
+          <td>
+            {% if d.initiated_by == 'renter' %}
+              <a href="{% url 'console:user_detail' d.booking.renter.id %}">{{ d.booking.renter.name }}</a>
+              <span class="con-pill con-pill--gray">renter</span>
+            {% else %}
+              <a href="{% url 'console:user_detail' d.booking.tool.owner.id %}">{{ d.booking.tool.owner.name }}</a>
+              <span class="con-pill con-pill--gray">owner</span>
+            {% endif %}
+          </td>
+          <td style="max-width:320px;">{{ d.reason|truncatechars:140 }}</td>
+          <td>
+            {% if d.dispute_evidence %}
+              <a href="{{ d.dispute_evidence.url }}" target="_blank" rel="noopener">
+                <i class="fa-solid fa-paperclip"></i> View
+              </a>
+            {% else %}
+              <span class="con-td-muted">—</span>
+            {% endif %}
+          </td>
+          <td class="con-td-muted">{{ d.created_at|timesince }} ago</td>
+          <td>
+            <span class="con-pill {% if d.status == 'open' %}con-pill--amber{% else %}con-pill--gray{% endif %}">
+              {{ d.get_status_display }}
+            </span>
+          </td>
+          <td><i class="fa-solid fa-chevron-right con-td-muted"></i></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="con-td-muted" style="margin-top:12px;font-size:12px;">
+      Open a dispute to review the evidence, record the owner's side, and issue a decision.
+    </p>
+    {% else %}
+    <p class="con-empty"><i class="fa-solid fa-circle-check"></i> No open disputes.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="con-card">
+  <header class="con-card__head">
     <h2><i class="fa-solid fa-hourglass-half"></i> Awaiting renter confirmation</h2>
   </header>
   <div class="con-card__body">
