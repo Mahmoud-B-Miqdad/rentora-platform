@@ -63,8 +63,11 @@ dropZone.addEventListener('click', () => imageInput.click());
 
 // File input change (browser dialog)
 imageInput.addEventListener('change', function () {
+    // NOTE: do NOT reset this.value here. addFiles() assigns the accumulated
+    // dt.files back onto this input, which is what gets submitted. Clearing
+    // value wipes that FileList, so browsed images would silently not upload
+    // (drag & drop worked only because it never hit this reset).
     addFiles(Array.from(this.files));
-    this.value = '';          // reset so the same file can be re-added if removed
 });
 
 // Drag events
