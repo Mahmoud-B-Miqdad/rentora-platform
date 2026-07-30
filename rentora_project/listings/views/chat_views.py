@@ -101,23 +101,38 @@ def send_message_view(request, booking_id):
     if user.pk not in {booking.renter_id, booking.tool.owner_id}:
         return JsonResponse({"ok": False, "error": "Forbidden"}, status=403)
 
-    try:
-        body = json.loads(request.body)
-        text = body.get("text", "").strip()
-    except (json.JSONDecodeError, AttributeError):
-        text = request.POST.get("text", "").strip()
+    # Text-only messages arrive as JSON; a message with a photo arrives as
+    # multipart form-data. Branch on content type: reading request.FILES and
+    # request.body on the same request is mutually exclusive (whichever is read
+    # first consumes the stream), so never touch both.
+    if request.content_type and request.content_type.startswith("multipart/"):
+        text  = request.POST.get("text", "").strip()
+        image = request.FILES.get("image")
+    else:
+        image = None
+        try:
+            text = json.loads(request.body).get("text", "").strip()
+        except (json.JSONDecodeError, AttributeError, ValueError):
+            text = request.POST.get("text", "").strip()
 
-    if not text:
+    if not text and not image:
         return JsonResponse({"ok": False, "error": "Empty message"}, status=400)
 
     if len(text) > 2000:
         return JsonResponse({"ok": False, "error": "Message too long"}, status=400)
+
+    if image:
+        if not image.content_type.startswith("image/"):
+            return JsonResponse({"ok": False, "error": "Only image files are allowed"}, status=400)
+        if image.size > 8 * 1024 * 1024:
+            return JsonResponse({"ok": False, "error": "Image must be under 8 MB"}, status=400)
 
     conversation = Conversation.objects.get_or_create_for_booking(booking)
     msg = Message.objects.create(
         conversation=conversation,
         sender=user,
         text=text,
+        image=image,
     )
     # Touch updated_at on conversation for ordering
     conversation.save()
@@ -132,10 +147,11 @@ def send_message_view(request, booking_id):
         booking=booking,
         notification_type=NotificationType.NEW_MESSAGE,
     ).delete()
+    preview = "sent you a photo" if (image and not text) else "sent you a message"
     Notification.objects.create_for(
         user=other,
         notification_type=NotificationType.NEW_MESSAGE,
-        message=f"{user.name} sent you a message about \"{booking.tool.title}\".",
+        message=f"{user.name} {preview} about \"{booking.tool.title}\".",
         booking=booking,
     )
 
@@ -207,6 +223,7 @@ def _serialize_message(msg, current_user):
     return {
         "id":         msg.pk,
         "text":       msg.text,
+        "image_url":  msg.image.url if msg.image else "",
         "is_mine":    msg.sender_id == current_user.pk,
         "is_read":    msg.is_read,
         "sender":     msg.sender.name,

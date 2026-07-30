@@ -1,0 +1,60 @@
+{% extends "console/base_console.html" %}
+{% block title %}Support{% endblock %}
+{% block page_title %}Support inbox{% endblock %}
+
+{% block content %}
+<section class="con-card">
+  <header class="con-card__head">
+    <h2><i class="fa-solid fa-headset"></i> Contact messages</h2>
+    <div class="con-filters">
+      <a href="{% url 'console:support' %}" class="con-pill {% if not status %}con-pill--amber{% else %}con-pill--gray{% endif %}">All</a>
+      <a href="?status=new" class="con-pill {% if status == 'new' %}con-pill--amber{% else %}con-pill--gray{% endif %}">New{% if new_count %} · {{ new_count }}{% endif %}</a>
+      <a href="?status=in_progress" class="con-pill {% if status == 'in_progress' %}con-pill--amber{% else %}con-pill--gray{% endif %}">In progress</a>
+      <a href="?status=resolved" class="con-pill {% if status == 'resolved' %}con-pill--amber{% else %}con-pill--gray{% endif %}">Resolved</a>
+      <a href="?status=closed" class="con-pill {% if status == 'closed' %}con-pill--amber{% else %}con-pill--gray{% endif %}">Closed</a>
+    </div>
+  </header>
+  <div class="con-card__body">
+    {% if page.object_list %}
+    <table class="con-table con-table--hover">
+      <thead><tr><th>From</th><th>Subject</th><th>Category</th><th>Status</th><th>Received</th><th></th></tr></thead>
+      <tbody>
+        {% for m in page.object_list %}
+        <tr onclick="window.location='{% url 'console:support_detail' m.id %}'">
+          <td>
+            <div class="con-user">
+              <span class="con-avatar">{{ m.name|first|upper }}</span>
+              <div>
+                <strong>{{ m.name }}</strong>
+                <small>{{ m.email }}</small>
+              </div>
+            </div>
+          </td>
+          <td>{{ m.subject|truncatechars:48 }}</td>
+          <td><span class="con-pill con-pill--gray">{{ m.get_category_display }}</span></td>
+          <td>
+            {% if m.status == 'new' %}<span class="con-pill con-pill--amber">New</span>
+            {% elif m.status == 'in_progress' %}<span class="con-pill con-pill--gray">In progress</span>
+            {% elif m.status == 'resolved' %}<span class="con-pill con-pill--green">Resolved</span>
+            {% else %}<span class="con-pill con-pill--gray">Closed</span>{% endif %}
+          </td>
+          <td class="con-td-muted">{{ m.created_at|timesince }} ago</td>
+          <td><i class="fa-solid fa-chevron-right con-td-muted"></i></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="con-empty"><i class="fa-solid fa-circle-check"></i> No messages in this view.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if page.paginator.num_pages > 1 %}
+<div class="con-pagination">
+  {% if page.has_previous %}<a href="?status={{ status }}&page={{ page.previous_page_number }}" class="con-pill con-pill--gray">Prev</a>{% endif %}
+  <span class="con-td-muted">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a href="?status={{ status }}&page={{ page.next_page_number }}" class="con-pill con-pill--gray">Next</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

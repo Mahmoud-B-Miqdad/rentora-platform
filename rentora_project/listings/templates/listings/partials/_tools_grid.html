@@ -2,7 +2,7 @@
 {% for tool in page_obj %}
 {% with primary=tool.primary_images.0 %}
 
-<a href="{% url 'listings:detail' tool.pk %}" class="bcard">
+<a href="{% url 'listings:tools:detail' tool.pk %}" class="bcard">
     <div class="bcard__img-wrap">
         {% if primary %}
         <img class="bcard__img" src="{{ primary.image.url }}" alt="{{ tool.title }}" loading="lazy">

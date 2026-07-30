@@ -1,0 +1,22 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}amber{% endblock %}
+{% block heading %}⏰ {% trans "Return coming up" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Your rental of <strong>{{ tool_title }}</strong> ends on {{ end_date }}.{% endblocktrans %}</p>
+
+  <div class="panel panel--warn">
+    <p><strong>{% trans "How to close the rental cleanly:" %}</strong></p>
+    <ul>
+      <li>{% blocktrans %}Return the tool to {{ owner_name }} in person on or before the end date.{% endblocktrans %}</li>
+      <li>{% trans "Ask the owner to press \"Mark as Returned\" at handover." %}</li>
+      <li>{% trans "Confirm the return from your dashboard immediately — late fees stop the moment you confirm." %}</li>
+    </ul>
+  </div>
+
+  <p class="muted">{% trans "Keeping the tool past the end date adds one extra rental day per day late." %}</p>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=my-rentals">{% trans "View my rental" %}</a>
+{% endblock %}

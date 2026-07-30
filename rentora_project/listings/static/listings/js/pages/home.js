@@ -46,16 +46,21 @@
     var input = document.getElementById('heroSearchInput');
     var btn   = document.getElementById('heroSearchBtn');
  
+    var idleLabel    = (btn && btn.dataset.labelIdle)    || 'AI Search';
+    var loadingLabel = (btn && btn.dataset.labelLoading) || 'AI thinking…';
+
     function setLoading(on) {
         if (!btn) return;
         if (on) {
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span>AI thinking…</span>';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i><span></span>';
+            btn.querySelector('span').textContent = loadingLabel;
             btn.classList.add('hero__search-btn--loading');
             if (input) input.disabled = true;
         } else {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-robot"></i><span>AI Search</span>';
+            btn.innerHTML = '<i class="fa-solid fa-robot"></i><span></span>';
+            btn.querySelector('span').textContent = idleLabel;
             btn.classList.remove('hero__search-btn--loading');
             if (input) input.disabled = false;
         }

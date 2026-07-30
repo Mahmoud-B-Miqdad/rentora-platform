@@ -118,9 +118,8 @@
                            id="priceRange"
                            name="max_price"
                            class="filter-range"
-                           min="0" max="500" step="5"
-                           value="{{ filters.max_price }}"
-                           style="--pct:{{ filters.max_price|floatformat:0 }}%">
+                           min="0" max="{{ price_ceiling }}" step="5"
+                           value="{{ filters.max_price }}">
                 </div>
 
                 <!-- Availability -->

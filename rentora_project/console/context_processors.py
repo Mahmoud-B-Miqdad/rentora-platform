@@ -5,9 +5,10 @@ def console_counts(request):
     if not getattr(request, "staff_user", None):
         return {}
  
-    from listings.models import Booking, Report
- 
+    from listings.models import Booking, Report, ContactMessage
+
     return {
         "nav_pending_reports": Report.objects.filter(status="pending").count(),
         "nav_returns_waiting": Booking.objects.filter(status="return_pending").count(),
+        "nav_new_support": ContactMessage.objects.filter(status="new").count(),
     }

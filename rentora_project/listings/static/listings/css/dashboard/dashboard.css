@@ -1050,3 +1050,100 @@
   .booking-actions,
   .completed-actions { padding-left: 0; } /* full-width on very small screens */
 }
+
+/* ═══════════════════════════════════════════════════════════
+   DELETE TOOL CONFIRMATION MODAL
+   Replaces the native browser confirm(). Mirrors .review-modal
+   (same scrim, blur and modal-in animation) with a danger accent.
+═══════════════════════════════════════════════════════════ */
+.del-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,.52); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center;
+  z-index: 1100; padding: 20px;
+}
+.del-modal-overlay.active { display: flex; }
+
+.del-modal {
+  background: var(--card); border-radius: var(--r-lg);
+  box-shadow: 0 24px 64px rgba(0,0,0,.28);
+  width: 100%; max-width: 400px;
+  padding: 30px 26px 24px;
+  text-align: center;
+  animation: modal-in .2s ease-out;
+}
+
+.del-modal__icon {
+  width: 62px; height: 62px; margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--red-lt); color: var(--red);
+  border-radius: 50%; font-size: 24px;
+  box-shadow: 0 0 0 8px rgba(220,38,38,.06);
+}
+
+.del-modal__title {
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--txt); margin: 0 0 12px;
+}
+
+.del-modal__tool {
+  background: var(--pg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;
+  font-size: .87rem; font-weight: 600; color: var(--txt);
+  overflow-wrap: anywhere;
+}
+
+.del-modal__text {
+  font-size: .81rem; color: var(--txt-lt);
+  line-height: 1.6; margin: 0 0 22px;
+}
+
+.del-modal__actions { display: flex; gap: 10px; }
+
+.del-btn {
+  flex: 1; padding: 11px 16px; border-radius: 10px;
+  font-size: .85rem; font-weight: 600; font-family: inherit;
+  cursor: pointer; border: 1px solid transparent;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  transition: background .15s, transform .1s, box-shadow .15s;
+}
+.del-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+.del-btn--ghost { background: var(--card); border-color: var(--border); color: var(--txt); }
+.del-btn--ghost:hover { background: var(--pg); }
+
+.del-btn--danger {
+  background: var(--red); color: #fff;
+  box-shadow: 0 4px 14px rgba(220,38,38,.26);
+}
+.del-btn--danger:hover { background: #b91c1c; transform: translateY(-1px); }
+
+@media (max-width: 420px) {
+  .del-modal { padding: 26px 20px 20px; }
+  .del-modal__actions { flex-direction: column-reverse; }
+}
+
+/* ── Cancel booking button (renter, unpaid bookings only) ── */
+.btn-cancel-booking {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 13px;
+  background: var(--card); color: var(--red);
+  border: 1px solid #fecaca; border-radius: 8px;
+  font-size: .78rem; font-weight: 600; font-family: inherit;
+  cursor: pointer; white-space: nowrap;
+  transition: background .13s, border-color .13s, transform .1s;
+}
+.btn-cancel-booking:hover {
+  background: var(--red-lt); border-color: var(--red); transform: translateY(-1px);
+}
+
+/* Renter's "document condition" button in active rentals */
+.btn-document-condition {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 13px; white-space: nowrap;
+  background: var(--teal-lt); color: var(--teal-dk);
+  border: 1px solid #99f6e4; border-radius: 8px;
+  font-size: .78rem; font-weight: 600; text-decoration: none;
+  transition: background .13s, transform .1s;
+}
+.btn-document-condition:hover { background: #ccfbf1; transform: translateY(-1px); }

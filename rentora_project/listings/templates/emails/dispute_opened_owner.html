@@ -1,0 +1,25 @@
+{% extends "emails/_base_email.html" %}
+{% load i18n %}
+
+{% block accent %}red{% endblock %}
+{% block heading %}{% trans "Return disputed" %}{% endblock %}
+
+{% block body %}
+  <p>{% blocktrans %}Hi {{ owner_name }},{% endblocktrans %}</p>
+
+  <p>{% blocktrans %}<strong>{{ renter_name }}</strong> has disputed the return of <strong>{{ tool_title }}</strong>. The rental is on hold until this is resolved.{% endblocktrans %}</p>
+
+  <div class="panel panel--warn">
+    <p><strong>{% trans "Their reason:" %}</strong></p>
+    <p>{{ dispute.reason }}</p>
+  </div>
+
+  <p><strong>{% trans "What happens next" %}</strong></p>
+  <ul>
+    <li>{% trans "Rentora staff review the dispute and any evidence provided." %}</li>
+    <li>{% trans "You may be asked for your side and photos of the tool." %}</li>
+    <li>{% trans "A decision is issued within 5 business days and is final." %}</li>
+  </ul>
+
+  <a class="btn" href="{{ SITE_URL }}/dashboard/?tab=booking-requests">{% trans "Open dashboard" %}</a>
+{% endblock %}

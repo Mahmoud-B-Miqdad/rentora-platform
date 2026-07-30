@@ -187,10 +187,14 @@ def profile_view(request, user_id=None):
         Q(review_type__in=['for_tool', 'for_owner'],
           booking__tool__owner=profile_user)
         | Q(review_type='for_renter', booking__renter=profile_user)
-    ).select_related('reviewer').order_by('-created_at')
+    ).select_related(
+        'reviewer', 'booking__tool'
+    ).order_by('-created_at')
     reviews_given = Review.objects.filter(
         reviewer=profile_user
-    ).select_related('booking__tool').order_by('-created_at')
+    ).select_related(
+        'booking__tool', 'booking__tool__owner', 'booking__renter'
+    ).order_by('-created_at')
     reviews_count = reviews_received.count()
     # Derive the average from the reviews actually received so it always
     # matches the count shown (the stored profile_user.rating field is not

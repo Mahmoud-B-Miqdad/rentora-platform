@@ -47,6 +47,10 @@
     <a href="{% url 'console:categories' %}" class="con-nav__link {% if active_tab == 'categories' %}active{% endif %}">
       <i class="fa-solid fa-layer-group"></i><span>Categories</span>
     </a>
+    <a href="{% url 'console:support' %}"    class="con-nav__link {% if active_tab == 'support' %}active{% endif %}">
+      <i class="fa-solid fa-headset"></i><span>Support</span>
+      {% if nav_new_support %}<em class="con-nav__badge">{{ nav_new_support }}</em>{% endif %}
+    </a>
   </nav>
  
   <div class="con-sidebar__foot">
@@ -81,7 +85,9 @@
     {% block content %}{% endblock %}
   </main>
 </div>
- 
+
+{% include "partials/_lightbox.html" %}
+
 <script src="{% static 'console/js/console.js' %}"></script>
 {% block extra_js %}{% endblock %}
 </body>
