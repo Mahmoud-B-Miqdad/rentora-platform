@@ -1,5 +1,5 @@
 {% extends "emails/_base_email.html" %}
-{% load i18n %}
+{% load i18n currency %}
 
 {% block accent %}blue{% endblock %}
 {% block heading %}{% trans "New rental request" %}{% endblock %}
@@ -13,7 +13,7 @@
     <div class="row"><span>{% trans "Tool" %}</span><span>{{ tool_title }}</span></div>
     <div class="row"><span>{% trans "Renter" %}</span><span>{{ renter_name }}</span></div>
     <div class="row"><span>{% trans "Dates" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
-    <div class="row"><span>{% trans "Total" %}</span><span>${{ booking.total_price }}</span></div>
+    <div class="row"><span>{% trans "Total" %}</span><span>{{ booking.total_price|money_plain }}</span></div>
   </div>
 
   <p class="muted">{% trans "The renter only pays after you approve the request — nothing is charged yet." %}</p>

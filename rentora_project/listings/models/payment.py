@@ -51,7 +51,7 @@ class PaymentBreakdown(models.Model):
     total_charged_to_renter = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        help_text="rental_total + insurance_fee (what Stripe charges)"
+        help_text="rental_total + insurance_fee (total charged to the renter)"
     )
 
     # Owner payout
@@ -61,30 +61,35 @@ class PaymentBreakdown(models.Model):
         help_text="rental_total - platform_fee (owner receives after commission)"
     )
 
-    # Stripe processing fee
+    # Gateway processing fee
     stripe_fee_pct = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         default=Decimal('2.90'),
-        help_text="Stripe percentage (2.9% + $0.30 fixed)"
+        help_text="Gateway percentage fee"
     )
     stripe_fixed_fee = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         default=Decimal('0.30'),
-        help_text="Stripe fixed fee per transaction"
+        help_text="Gateway fixed fee per transaction"
     )
     stripe_fee = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        help_text="Calculated Stripe processing fee"
+        help_text="Calculated gateway processing fee"
     )
 
     # Net platform revenue
     net_platform_revenue = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        help_text="platform_fee + insurance_platform_cut - stripe_fee"
+        help_text="platform_fee + insurance_platform_cut - gateway_fee"
+    )
+
+    gateway_reference = models.CharField(
+        max_length=100, blank=True, default="",
+        help_text="Lahza transaction reference — used to issue refunds.",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

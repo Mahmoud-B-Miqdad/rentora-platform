@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n l10n %}
+{% load static i18n l10n currency %}
 
 {% block title %}{% trans "Rentora — Rent Tools From People Near You" %}{% endblock %}
 {% block body_class %}home-page{% endblock %}
@@ -205,7 +205,7 @@
                   data-tool-id="{{ tool.pk }}" aria-label="{% trans 'Save' %}">
             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
           </button>
-          <div class="tool-card__price">${{ tool.daily_rate }}<span>/{% trans "day" %}</span></div>
+          <div class="tool-card__price">{{ tool.daily_rate|money }}<span>/{% trans "day" %}</span></div>
         </div>
 
         <div class="tool-card__body">

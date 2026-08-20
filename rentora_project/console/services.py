@@ -143,6 +143,24 @@ def resolve_dispute(dispute, *, staff, decision, notes, refund_amount=None,
         breakdown.owner_payout = claim
         breakdown.save(update_fields=["owner_payout", "updated_at"])
 
+    # Issue the renter's refund through the gateway. A gateway failure must not
+    # block the resolution — the settlement record stands as the source of truth
+    # and staff can retry the payout; we just log it.
+    if refund > 0 and breakdown is not None and breakdown.gateway_reference:
+        from decimal import Decimal as _D
+        from listings.services.payments import get_payment_provider, to_subunits, PaymentError
+        try:
+            get_payment_provider().refund(
+                breakdown.gateway_reference,
+                amount_subunits=to_subunits(refund),
+            )
+        except PaymentError:
+            import logging
+            logging.getLogger(__name__).exception(
+                "Gateway refund failed for dispute #%s (ref %s, amount %s)",
+                dispute.id, breakdown.gateway_reference, refund,
+            )
+
     label = dict(dispute.STAFF_DECISION_CHOICES).get(decision, decision)
     for party in (booking.renter, booking.tool.owner):
         Notification.objects.create_for(

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n currency %}
 
 {% block title %}{% trans "Chat" %} — {{ booking.tool.title }} | Rentora{% endblock %}
 
@@ -37,7 +37,7 @@
           <i class="fa-regular fa-calendar"></i>
           {{ booking.start_date|date:"M d" }} &rarr; {{ booking.end_date|date:"M d, Y" }}
         </div>
-        <div class="chat-tool-price">${{ booking.total_price }}</div>
+        <div class="chat-tool-price">{{ booking.total_price|money }}</div>
       </div>
     </div>
 
@@ -72,7 +72,7 @@
         <span class="chat-detail-label">
           <i class="fa-solid fa-tag"></i> {% trans "Daily Rate" %}
         </span>
-        <span class="chat-detail-value">${{ booking.tool.daily_rate }}</span>
+        <span class="chat-detail-value">{{ booking.tool.daily_rate|money }}</span>
       </div>
 
       <div class="chat-detail-row">

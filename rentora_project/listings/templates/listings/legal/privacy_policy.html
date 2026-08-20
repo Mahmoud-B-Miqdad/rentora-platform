@@ -49,7 +49,7 @@
       <ul>
         <li><strong>{% trans "Account Information:" %}</strong> {% trans "Full name, email, phone number, and password (hashed with bcrypt)" %}</li>
         <li><strong>{% trans "Location Data:" %}</strong> {% trans "City, region, and coordinates for tool location mapping" %}</li>
-        <li><strong>{% trans "Payment Information:" %}</strong> {% trans "Processed by Stripe — we do NOT store card details" %}</li>
+        <li><strong>{% trans "Payment Information:" %}</strong> {% trans "Processed by Lahza (our payment processor) — we do NOT store card details" %}</li>
         <li><strong>{% trans "Profile Information:" %}</strong> {% trans "Profile picture, bio, verification status, and rating" %}</li>
         <li><strong>{% trans "Tool & Booking Data:" %}</strong> {% trans "Listings, photos, rental dates, messages, and reviews" %}</li>
       </ul>
@@ -78,7 +78,7 @@
       <h2><span class="sec-num">4</span> {% trans "Data Sharing & Third Parties" %}</h2>
       <p>{% trans "We share your information only with:" %}</p>
       <ul>
-        <li><strong>Stripe:</strong> {% trans "Payment processing" %}</li>
+        <li><strong>Lahza:</strong> {% trans "Payment processing" %}</li>
         <li><strong>Google Gemini:</strong> {% trans "Anonymized tool descriptions for smart search" %}</li>
         <li><strong>Nominatim:</strong> {% trans "Location names geocoded for mapping" %}</li>
         <li><strong>{% trans "Staff:" %}</strong> {% trans "For dispute resolution and account moderation" %}</li>

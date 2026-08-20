@@ -2627,8 +2627,8 @@ msgid ""
 "confirm, the system may keep counting overdue days."
 msgstr ""
 "بمجرد أن يحدد المالك الأداة كمُعادة، ستستلم بريداً إلكترونياً. سجّل الدخول "
-"إلى رينتورا وأكّد الإرجاع من تبويب \"استئجاراتي\". وحتى تؤكّد، قد يستمر النظام"
-" في احتساب أيام التأخير."
+"إلى رينتورا وأكّد الإرجاع من تبويب \"استئجاراتي\". وحتى تؤكّد، قد يستمر "
+"النظام في احتساب أيام التأخير."
 
 msgid "Renters pay the total amount shown at checkout, which includes:"
 msgstr "يدفع المستأجرون المبلغ الإجمالي المعروض عند الدفع، والذي يشمل:"
@@ -2917,8 +2917,8 @@ msgid ""
 "Yes. Open <strong>My Rentals</strong> and press <strong>Cancel</strong> on "
 "the booking. What happens depends on the stage:"
 msgstr ""
-"نعم. افتح <strong>استئجاراتي</strong> واضغط <strong>إلغاء</strong> على الحجز. "
-"وما يحدث يعتمد على المرحلة:"
+"نعم. افتح <strong>استئجاراتي</strong> واضغط <strong>إلغاء</strong> على "
+"الحجز. وما يحدث يعتمد على المرحلة:"
 
 msgid "Before you have paid:"
 msgstr "قبل الدفع:"
@@ -3304,3 +3304,149 @@ msgstr "إلزامي — حتى 8 صور، صور فقط، بحد أقصى 8 م�
 
 msgid "Save photos"
 msgstr "حفظ الصور"
+
+msgid ""
+"1. Sign up for a free Rentora account<br>2. Browse available tools by "
+"category or search<br>3. Click on a tool to view details, photos, and "
+"reviews<br>4. Select your rental dates and send the request — nothing is "
+"charged yet<br>5. You land on a confirmation page and get an email; the "
+"owner reviews your request<br>6. Once approved, pay securely from \"My "
+"Rentals\" and the dates are yours"
+msgstr ""
+"1. أنشئ حساباً مجانياً في رينتورا<br>2. تصفّح الأدوات المتاحة حسب الفئة أو "
+"البحث<br>3. اضغط على أداة لعرض التفاصيل والصور والتقييمات<br>4. اختر تواريخ "
+"الإيجار وأرسل الطلب — لا يُخصم شيء بعد<br>5. تصل إلى صفحة تأكيد ويصلك بريد؛ "
+"يراجع المالك طلبك<br>6. بعد الموافقة، ادفع بأمان من \"إيجاراتي\" وتصبح "
+"التواريخ لك"
+
+msgid ""
+"Your earning = (rental price × days) - 15% platform fee - payment processing"
+" fee."
+msgstr ""
+"أرباحك = (سعر الإيجار × الأيام) - 15% رسوم المنصة - رسوم معالجة الدفع."
+
+msgid "Payments processed securely by Lahza (Palestine)"
+msgstr "المدفوعات تُعالَج بأمان عبر Lahza (فلسطين)"
+
+msgid ""
+"Processed by Lahza (our payment processor) — we do NOT store card details"
+msgstr "تُعالَج عبر Lahza (معالج الدفع لدينا) — نحن لا نخزّن بيانات البطاقة"
+
+msgid ""
+"Payments are processed securely via Lahza, our Palestinian payment "
+"processor. Rentora does not store your payment card information."
+msgstr ""
+"تُعالَج المدفوعات بأمان عبر Lahza، معالج الدفع الفلسطيني لدينا. لا تخزّن "
+"رينتورا معلومات بطاقة الدفع الخاصة بك."
+
+msgid "Payout Account"
+msgstr "حساب استلام الأرباح"
+
+msgid ""
+"Connect a bank account so your rental earnings are paid to you "
+"automatically. Rentora's %(fee)s%% platform fee is deducted at payment time "
+"— you receive the rest directly."
+msgstr ""
+"اربط حساباً بنكياً لتصلك أرباح الإيجار تلقائياً. تُقتطع عمولة المنصة "
+"%(fee)s%% وقت الدفع — وتستلم الباقي مباشرةً."
+
+msgid "Payouts are connected"
+msgstr "حساب الاستلام مربوط"
+
+msgid "Bank %(payout_bank_code)s · account ending %(payout_account_last4)s"
+msgstr "بنك %(payout_bank_code)s · حساب ينتهي بـ %(payout_account_last4)s"
+
+msgid "Submitting again will replace your current payout account."
+msgstr "الإرسال مرة أخرى سيستبدل حساب الاستلام الحالي."
+
+msgid ""
+"Your account number is sent securely to Lahza (our payment processor) and is"
+" never stored on Rentora — we only keep the last 4 digits for reference."
+msgstr ""
+"يُرسَل رقم حسابك بأمان إلى Lahza (معالج الدفع لدينا) ولا يُخزَّن على رينتورا"
+" — نحتفظ فقط بآخر 4 أرقام للمرجعية."
+
+msgid "Your bank"
+msgstr "بنكك"
+
+msgid "Select your bank..."
+msgstr "اختر بنكك..."
+
+msgid "Could not load the bank list right now — please try again shortly."
+msgstr "تعذّر تحميل قائمة البنوك الآن — حاول مجدداً بعد قليل."
+
+msgid "Account number / IBAN"
+msgstr "رقم الحساب / IBAN"
+
+msgid "Your settlement account number"
+msgstr "رقم حساب التسوية الخاص بك"
+
+msgid "Earnings from your rentals are deposited here."
+msgstr "تُودَع أرباح إيجاراتك هنا."
+
+msgid "Connect payout account"
+msgstr "اربط حساب الاستلام"
+
+msgid "Connect a payout account to get paid"
+msgstr "اربط حساب استلام لتحصل على أموالك"
+
+msgid "Add your bank account so rental earnings reach you automatically."
+msgstr "أضف حسابك البنكي لتصلك أرباح الإيجار تلقائياً."
+
+msgid "Set up"
+msgstr "إعداد"
+
+msgid "Payouts connected"
+msgstr "حساب الاستلام مربوط"
+
+msgid "Bank %(bank)s · account ending %(last4)s"
+msgstr "بنك %(bank)s · حساب ينتهي بـ %(last4)s"
+
+msgid "Manage"
+msgstr "إدارة"
+
+msgid "Price / Day (%(CURRENCY_SYMBOL)s)"
+msgstr "السعر / يوم (%(CURRENCY_SYMBOL)s)"
+
+msgid "Deposit (%(CURRENCY_SYMBOL)s)"
+msgstr "التأمين (%(CURRENCY_SYMBOL)s)"
+
+msgid "Up to %(price)s"
+msgstr "حتى %(price)s"
+
+msgid "+10 ₪ for accidental damage coverage"
+msgstr "+10 ₪ لتغطية الأضرار العرضية"
+
+msgid "+10 ₪ for coverage up to the deposit amount"
+msgstr "+10 ₪ لتغطية حتى مبلغ التأمين"
+
+msgid "Example: at 10 ₪/day, returning 2 days late adds 20 ₪ to your total."
+msgstr "مثال: بسعر 10 ₪ يومياً، التأخر يومين يضيف 20 ₪ إلى إجماليك."
+
+msgid ""
+"We recommend 5-10% of the tool's original price per day. Example: 500 ₪ tool"
+" → 25-50 ₪/day."
+msgstr ""
+"نوصي بنسبة 5-10% من السعر الأصلي للأداة يومياً. مثال: أداة بـ500 ₪ ← 25-50 ₪"
+" يومياً."
+
+msgid "Example: 3-day rental at 25 ₪/day"
+msgstr "مثال: إيجار 3 أيام بسعر 25 ₪ يومياً"
+
+msgid "Renter pays: 75 ₪"
+msgstr "يدفع المستأجر: 75 ₪"
+
+msgid "Platform fee (15%): 11.25 ₪"
+msgstr "رسوم المنصة (15%): 11.25 ₪"
+
+msgid "You receive: 63.75 ₪"
+msgstr "أنت تستلم: 63.75 ₪"
+
+msgid ""
+"Our founder needed a concrete drill for a weekend project. After paying 300 "
+"₪ to buy one he'd use once, he realized: his neighbor had the exact same "
+"tool sitting unused. Rentora was born from that frustration."
+msgstr ""
+"احتاج مؤسسنا إلى مثقاب خرسانة لمشروع عطلة نهاية الأسبوع. بعد دفع 300 ₪ لشراء"
+" واحد سيستخدمه مرة واحدة، أدرك أن جاره يملك نفس الأداة بالضبط غير مستخدمة. "
+"وُلدت رينتورا من هذا الإحباط."

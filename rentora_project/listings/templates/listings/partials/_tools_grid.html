@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n currency %}
 {% for tool in page_obj %}
 {% with primary=tool.primary_images.0 %}
 
@@ -20,7 +20,7 @@
             <i class="{% if tool.pk in wishlist_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart" aria-hidden="true"></i>
         </button>
 
-        <div class="bcard__price-badge">${{ tool.daily_rate }}<span>/{% trans "day" %}</span></div>
+        <div class="bcard__price-badge">{{ tool.daily_rate|money }}<span>/{% trans "day" %}</span></div>
     </div>
 
     <div class="bcard__body">

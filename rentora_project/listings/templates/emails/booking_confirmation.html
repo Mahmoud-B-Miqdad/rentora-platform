@@ -1,5 +1,5 @@
 {% extends "emails/_base_email.html" %}
-{% load i18n %}
+{% load i18n currency %}
 
 {% block accent %}teal{% endblock %}
 {% block heading %}{% if awaiting_payment %} {% trans "Request approved" %}{% else %} {% trans "Booking requested" %}{% endif %}{% endblock %}
@@ -17,7 +17,7 @@
     <div class="row"><span>{% trans "Tool" %}</span><span>{{ tool_title }}</span></div>
     <div class="row"><span>{% trans "Owner" %}</span><span>{{ owner_name }}</span></div>
     <div class="row"><span>{% trans "Dates" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
-    <div class="row"><span>{% trans "Total" %}</span><span>${{ booking.total_price }}</span></div>
+    <div class="row"><span>{% trans "Total" %}</span><span>{{ booking.total_price|money_plain }}</span></div>
   </div>
 
   <p><strong>{% trans "What happens next" %}</strong></p>

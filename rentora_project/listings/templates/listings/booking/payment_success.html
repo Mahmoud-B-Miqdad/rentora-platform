@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n currency %}
 
 {% block title %}{% trans "Payment Successful" %} — Rentora{% endblock %}
 
@@ -50,7 +50,7 @@
       <!-- Amount -->
       <div class="amount-paid">
         <div class="amount-label"><i class="fa-solid fa-circle-check"></i> {% trans "Amount Paid" %}</div>
-        <div class="amount-value">${{ booking.total_price }}</div>
+        <div class="amount-value">{{ booking.total_price|money }}</div>
         <div class="amount-sub">{% trans "Held securely · Released to owner after return" %}</div>
       </div>
 
