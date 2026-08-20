@@ -1,4 +1,5 @@
 {% extends "console/base_console.html" %}
+{% load currency %}
 {% block title %}Bookings{% endblock %}
 {% block page_title %}Bookings monitor{% endblock %}
  
@@ -29,7 +30,7 @@
               <small class="con-td-muted">by {{ b.tool.owner.name }}</small></td>
           <td><a href="{% url 'console:user_detail' b.renter.id %}">{{ b.renter.name }}</a></td>
           <td class="con-td-muted">{{ b.start_date|date:"M d" }} → {{ b.end_date|date:"M d" }}</td>
-          <td>${{ b.total_price }}</td>
+          <td>{{ b.total_price|money }}</td>
           <td>
             {% if b.status == 'pending' %}<span class="con-pill con-pill--amber">pending</span>
             {% elif b.status == 'payment_pending' %}

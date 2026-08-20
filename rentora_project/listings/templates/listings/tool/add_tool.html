@@ -132,7 +132,7 @@
 
                     <div class="form-group">
                         <div class="label-row">
-                            <label for="id_rate">{% trans "Price / Day ($)" %} <span class="req">*</span></label>
+                            <label for="id_rate">{% blocktrans %}Price / Day ({{ CURRENCY_SYMBOL }}){% endblocktrans %} <span class="req">*</span></label>
                             <button type="button" class="ai-action-btn amber" id="btnSuggest">
                                 <i class="fa-solid fa-lightbulb"></i> {% trans "Suggest" %}
                             </button>
@@ -150,7 +150,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="id_deposit">{% trans "Deposit ($)" %}</label>
+                        <label for="id_deposit">{% blocktrans %}Deposit ({{ CURRENCY_SYMBOL }}){% endblocktrans %}</label>
                         <input
                             type="number"
                             id="id_deposit"

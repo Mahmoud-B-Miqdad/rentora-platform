@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
-{% load static i18n %}
+{% load static i18n currency %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'listings/css/dashboard/dashboard.css' %}?v=4">
+<link rel="stylesheet" href="{% static 'listings/css/dashboard/dashboard.css' %}?v=5">
 {% endblock %}
 
 {% block content %}
@@ -87,7 +87,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
-          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-value">{{ total_earnings|money }}</div>
           <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
@@ -120,7 +120,7 @@
               <div class="tool-info">
                 <div class="tool-name">{{ tool.title }}</div>
                 <div class="tool-meta">
-                  <span>${{ tool.daily_rate }}/{% trans "day" %}</span>
+                  <span>{{ tool.daily_rate|money }}/{% trans "day" %}</span>
                   <span>· {{ tool.category.name }}</span>
                 </div>
               </div>
@@ -152,7 +152,7 @@
               </div>
               <div class="booking-info">
                 <div class="booking-tool-name">{{ booking.tool.title }}</div>
-                <div class="booking-meta">{{ booking.renter.name }} · ${{ booking.total_price }}</div>
+                <div class="booking-meta">{{ booking.renter.name }} · {{ booking.total_price|money }}</div>
               </div>
               <div class="booking-actions">
                 <form method="POST" action="{% url 'listings:approve_booking' booking.id %}" style="display:inline">
@@ -189,6 +189,26 @@
         <p class="page-subtitle">{% blocktrans with name=user.name %}Welcome back, {{ name }}{% endblocktrans %}</p>
       </div>
 
+      {% if not user.lahza_subaccount_code %}
+      <a href="{% url 'listings:payout_setup' %}" class="payout-banner">
+        <span class="payout-banner__icon"><i class="fa-solid fa-building-columns"></i></span>
+        <span class="payout-banner__text">
+          <strong>{% trans "Connect a payout account to get paid" %}</strong>
+          <span>{% trans "Add your bank account so rental earnings reach you automatically." %}</span>
+        </span>
+        <span class="payout-banner__cta">{% trans "Set up" %} <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      {% else %}
+      <a href="{% url 'listings:payout_setup' %}" class="payout-banner payout-banner--ok">
+        <span class="payout-banner__icon"><i class="fa-solid fa-circle-check"></i></span>
+        <span class="payout-banner__text">
+          <strong>{% trans "Payouts connected" %}</strong>
+          <span>{% blocktrans with bank=user.payout_bank_code last4=user.payout_account_last4 %}Bank {{ bank }} · account ending {{ last4 }}{% endblocktrans %}</span>
+        </span>
+        <span class="payout-banner__cta">{% trans "Manage" %} <i class="fa-solid fa-arrow-right"></i></span>
+      </a>
+      {% endif %}
+
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon teal"><i class="fa-solid fa-screwdriver-wrench"></i></div>
@@ -202,7 +222,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
-          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-value">{{ total_earnings|money }}</div>
           <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
@@ -242,7 +262,7 @@
             <div class="tool-card-body">
               <div class="tool-card-name">{{ tool.title }}</div>
               <div class="tool-card-meta">
-                <span class="tool-card-price">${{ tool.daily_rate }}<span>/{% trans "day" %}</span></span>
+                <span class="tool-card-price">{{ tool.daily_rate|money }}<span>/{% trans "day" %}</span></span>
                 <span class="tool-card-cat">{{ tool.category.name }}</span>
               </div>
             </div>
@@ -298,7 +318,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
-          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-value">{{ total_earnings|money }}</div>
           <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
@@ -351,7 +371,7 @@
                 </a>
                 <span class="meta-sep">·</span>
                 {{ booking.start_date }} → {{ booking.end_date }}
-                <span class="meta-price">${{ booking.total_price }}</span>
+                <span class="meta-price">{{ booking.total_price|money }}</span>
               </div>
             </div>
             <div class="booking-actions">
@@ -403,7 +423,7 @@
                 </a>
                 <span class="meta-sep">·</span>
                 {{ booking.start_date }} → {{ booking.end_date }}
-                <span class="meta-price">${{ booking.total_price }}</span>
+                <span class="meta-price">{{ booking.total_price|money }}</span>
               </div>
             </div>
             <div class="booking-actions">
@@ -466,7 +486,7 @@
                 </a>
                 <span class="meta-sep">·</span>
                 {{ booking.start_date }} → {{ booking.end_date }}
-                <span class="meta-price">${{ booking.total_price }}</span>
+                <span class="meta-price">{{ booking.total_price|money }}</span>
               </div>
             </div>
             <span class="badge badge-rejected">{% trans "Rejected" %}</span>
@@ -503,19 +523,19 @@
                 <span class="meta-sep">·</span>
                 {{ booking.start_date }} → {{ booking.end_date }}
                 {% if booking.overdue_days %}
-                  <del class="price-original">${{ booking.original_total }}</del>
-                  <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
+                  <del class="price-original">{{ booking.original_total|money }}</del>
+                  <span class="meta-price meta-price--overdue">{{ booking.total_price|money }}</span>
                   <span class="price-adjustment price-adjustment--overdue">
                     <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}{% trans "d overdue" %}
                   </span>
                 {% elif booking.early_return_days %}
-                  <del class="price-original">${{ booking.original_total }}</del>
-                  <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
+                  <del class="price-original">{{ booking.original_total|money }}</del>
+                  <span class="meta-price meta-price--early">{{ booking.total_price|money }}</span>
                   <span class="price-adjustment price-adjustment--early">
                     <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}{% trans "d early" %}
                   </span>
                 {% else %}
-                  <span class="meta-price">${{ booking.total_price }}</span>
+                  <span class="meta-price">{{ booking.total_price|money }}</span>
                 {% endif %}
               </div>
             </div>
@@ -602,7 +622,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-icon orange"><i class="fa-solid fa-coins"></i></div>
-          <div class="stat-value">${{ total_earnings }}</div>
+          <div class="stat-value">{{ total_earnings|money }}</div>
           <div class="stat-label">{% trans "Total Earnings" %}</div>
         </div>
         <div class="stat-card">
@@ -645,7 +665,7 @@
                     <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
                   </a>
                   <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
-                  <span class="meta-price">${{ booking.total_price }}</span>
+                  <span class="meta-price">{{ booking.total_price|money }}</span>
                 </div>
               </div>
               <div class="booking-actions">
@@ -692,7 +712,7 @@
                       <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
                     </a>
                     <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
-                    <span class="meta-price">${{ booking.total_price }}</span>
+                    <span class="meta-price">{{ booking.total_price|money }}</span>
                   </div>
                 </div>
               </div>
@@ -735,7 +755,7 @@
                     <i class="fa-solid fa-arrow-up-right-from-square renter-chip__icon"></i>
                   </a>
                   <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
-                  <span class="meta-price">${{ booking.total_price }}</span>
+                  <span class="meta-price">{{ booking.total_price|money }}</span>
                 </div>
               </div>
               <a href="{% url 'listings:document_pickup' booking.id %}" class="btn-document-condition"
@@ -775,19 +795,19 @@
                   </a>
                   <span class="meta-sep">·</span>{{ booking.start_date }} → {{ booking.end_date }}
                   {% if booking.status == 'completed' and booking.overdue_days %}
-                    <del class="price-original">${{ booking.original_total }}</del>
-                    <span class="meta-price meta-price--overdue">${{ booking.total_price }}</span>
+                    <del class="price-original">{{ booking.original_total|money }}</del>
+                    <span class="meta-price meta-price--overdue">{{ booking.total_price|money }}</span>
                     <span class="price-adjustment price-adjustment--overdue">
                       <i class="fa-solid fa-clock"></i> +{{ booking.overdue_days }}{% trans "d overdue" %}
                     </span>
                   {% elif booking.status == 'completed' and booking.early_return_days %}
-                    <del class="price-original">${{ booking.original_total }}</del>
-                    <span class="meta-price meta-price--early">${{ booking.total_price }}</span>
+                    <del class="price-original">{{ booking.original_total|money }}</del>
+                    <span class="meta-price meta-price--early">{{ booking.total_price|money }}</span>
                     <span class="price-adjustment price-adjustment--early">
                       <i class="fa-solid fa-leaf"></i> -{{ booking.early_return_days }}{% trans "d early return" %}
                     </span>
                   {% else %}
-                    <span class="meta-price">${{ booking.total_price }}</span>
+                    <span class="meta-price">{{ booking.total_price|money }}</span>
                   {% endif %}
                 </div>
               </div>

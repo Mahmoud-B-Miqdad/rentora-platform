@@ -41,6 +41,8 @@ def current_user(request):
 def site_settings(request):
     return {
         "SITE_URL": getattr(settings, "SITE_URL", ""),
+        "CURRENCY_CODE": getattr(settings, "CURRENCY_CODE", "ILS"),
+        "CURRENCY_SYMBOL": getattr(settings, "CURRENCY_SYMBOL", "₪"),
     }
 
 

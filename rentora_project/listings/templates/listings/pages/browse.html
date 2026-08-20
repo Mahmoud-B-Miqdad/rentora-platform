@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n currency %}
 
 {% block title %}{% trans "Browse Tools" %} — Rentora{% endblock %}
 {% block body_class %}browse-page{% endblock %}
@@ -111,8 +111,8 @@
                 <div class="filter-group">
                     <span class="filter-group__label">{% trans "Price Range" %}</span>
                     <div class="filter-price-row">
-                        <span>$0</span>
-                        <strong id="priceLabel">{% blocktrans with price=filters.max_price %}Up to ${{ price }}{% endblocktrans %}</strong>
+                        <span>{{ 0|money }}</span>
+                        <strong id="priceLabel">{% blocktrans with price=filters.max_price|money %}Up to {{ price }}{% endblocktrans %}</strong>
                     </div>
                     <input type="range"
                            id="priceRange"
@@ -216,7 +216,7 @@
 
                         <!-- Price badge -->
                         <div class="bcard__price-badge">
-                            ${{ tool.daily_rate }}<span>/{% trans "day" %}</span>
+                            {{ tool.daily_rate|money }}<span>/{% trans "day" %}</span>
                         </div>
                     </div>
 
@@ -339,6 +339,7 @@ window.AppConfig = {
     toggleWishlistUrl: '{% url "listings:tools:toggle_wishlist" 0 %}',
     loginUrl:          '{% url "users:login" %}',
     browseUrl:         '{% url "listings:browse" %}',
+    currencySymbol:    '{{ CURRENCY_SYMBOL }}',
 };
 </script>
 <script src="{% static 'listings/js/pages/browse.js' %}"></script>

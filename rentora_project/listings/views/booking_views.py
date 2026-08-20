@@ -8,7 +8,6 @@ from django.urls      import reverse
 from django.contrib   import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http      import HttpResponse
-import stripe
 
 from listings.models import Tool, Booking, ToolImage, Review, BookingStatus, DepositDispute
 from listings.services.email_service import (
@@ -200,6 +199,14 @@ def approve_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, tool__owner=user)
 
     if booking.status == 'pending':
+        if not user.lahza_subaccount_code:
+            messages.error(
+                request,
+                "Connect your payout bank account before approving bookings, "
+                "so your rental earnings have somewhere to go."
+            )
+            return redirect('listings:payout_setup')
+
         booking.status = 'payment_pending'
         booking.save()
 
@@ -237,92 +244,7 @@ def reject_booking(request, booking_id):
     return redirect('/dashboard/?tab=booking-requests&subtab=btab-rejected')
 
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
-def payment_view(request, booking_id):
-    """Redirect the renter to the Stripe-hosted checkout page."""
-    booking = get_object_or_404(Booking, id=booking_id, status='payment_pending')
-
-    session = stripe.checkout.Session.create(
-        payment_method_types=['card'],
-        client_reference_id=str(booking_id),
-        line_items=[{
-            'price_data': {
-                'currency': 'usd',
-                'product_data': {'name': booking.tool.title},
-                'unit_amount': int(booking.total_price * 100),
-            },
-            'quantity': 1,
-        }],
-        mode='payment',
-        success_url=request.build_absolute_uri(
-            reverse('listings:payment_success', args=[booking.id])
-        ),
-        cancel_url=request.build_absolute_uri(
-            reverse('listings:payment', args=[booking.id])
-        ),
-    )
-
-    return redirect(session.url)
-
-@csrf_exempt
-def stripe_webhook(request):
-    payload    = request.body
-    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-        )
-    except (ValueError, stripe.error.SignatureVerificationError):
-        return HttpResponse(status=400)
-
-    if event['type'] == 'checkout.session.completed':
-        session    = event['data']['object']
-        booking_id = session.get('client_reference_id')
-        if booking_id:
-            try:
-                booking = Booking.objects.get(id=int(booking_id))
-                if booking.status == 'payment_pending':
-                    booking.status = 'confirmed'
-                    booking.save()
-                    Notification.objects.create_for(
-                        user=booking.tool.owner,
-                        notification_type=NotificationType.PAYMENT_RECEIVED,
-                        message=f"{booking.renter.name} completed payment for \"{booking.tool.title}\".",
-                        booking=booking,
-                    )
-                    send_payment_received_emails(booking)
-            except Booking.DoesNotExist:
-                pass
-
-    return HttpResponse(status=200)
-
-
-def payment_success_view(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id)
-
-    # Fallback in case the Stripe webhook hasn't fired yet when the user
-    # lands on this page (network delay / webhook misconfiguration).
-    if booking.status == 'payment_pending':
-        booking.status = 'confirmed'
-        booking.save()
-        Notification.objects.create_for(
-            user=booking.tool.owner,
-            notification_type=NotificationType.PAYMENT_RECEIVED,
-            message=f"{booking.renter.name} completed payment for \"{booking.tool.title}\".",
-            booking=booking,
-        )
-        send_payment_received_emails(booking)
-
-    user = User.objects.filter(id=request.session.get('user_id')).first()
-
-    return render(request, "listings/booking/payment_success.html", {
-        "booking": booking,
-        "user":    user,
-    })
-
+# Payment is handled by the Lahza gateway in listings/views/payment_views.py.
 
 
 @login_required_session

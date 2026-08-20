@@ -14,7 +14,6 @@ import os
 import environ
 from pathlib import Path
 import sys
-import stripe
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,9 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 sys.path.insert(0, os.path.join(BASE_DIR, 'rentora_project'))
 
-# تهيئة مكتبة environ لقراءة المتغيرات البيئية
 env = environ.Env()
-# قراءة ملف .env الموجود في جذر المشروع بجانب manage.py
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,6 +47,20 @@ USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+
+# ── Production security hardening ───────────────────────────
+# Only enforced when DEBUG=False, so local development over plain
+# http://127.0.0.1:8000 (and ngrok testing with DEBUG=True) keeps working.
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True          # http:// -> https:// redirect
+    SESSION_COOKIE_SECURE = True        # session cookie only sent over https
+    CSRF_COOKIE_SECURE = True           # csrf cookie only sent over https
+    CSRF_COOKIE_HTTPONLY = True         # JS never reads it (csrf_token is rendered server-side)
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    # Start small; raise once HTTPS has been stable for a while, and only add
+    # includeSubDomains/preload after that — both are hard to undo site-wide.
+    SECURE_HSTS_SECONDS = env.int('SECURE_HSTS_SECONDS', default=3600)
 
 
 # Application definition
@@ -191,8 +202,23 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL  = env('DEFAULT_FROM_EMAIL',  default='Rentora <noreply@rentora.ps>')
 
 
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
-STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default="")
-STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="") 
+# ─────────────────────────────────────────────
+#  Lahza payment gateway (Palestine)
+#  Docs: https://docs.lahza.io  |  https://api-docs.lahza.io
+#  Get keys from the Lahza dashboard → Settings → API Keys.
+#  Use the TEST (sandbox) keys until the merchant account is approved for LIVE.
+# ─────────────────────────────────────────────
+LAHZA_SECRET_KEY   = env("LAHZA_SECRET_KEY",   default="")   # sk_test_... / sk_live_...
+LAHZA_PUBLIC_KEY   = env("LAHZA_PUBLIC_KEY",   default="")   # pk_test_... / pk_live_...
+LAHZA_WEBHOOK_SECRET = env("LAHZA_WEBHOOK_SECRET", default="")  # for verifying webhook signatures
+LAHZA_API_BASE     = env("LAHZA_API_BASE",     default="https://api.lahza.io")
+# 3-letter code Lahza charges in. Confirm which your account settles in (ILS / JOD / USD).
+LAHZA_CURRENCY     = env("LAHZA_CURRENCY",     default="ILS")
+# Platform commission taken from every rental, as a percentage (e.g. 15 = 15%).
+PLATFORM_FEE_PERCENT = env.int("PLATFORM_FEE_PERCENT", default=15)
 
-stripe.api_key = STRIPE_SECRET_KEY
+# Single source of truth for how money is DISPLAYED across the site (templates,
+# emails, JS). Must stay in sync with LAHZA_CURRENCY, since that is what is
+# actually charged — showing "$" while billing ILS was a real bug.
+CURRENCY_CODE   = LAHZA_CURRENCY                    # 'ILS'
+CURRENCY_SYMBOL = {"ILS": "₪", "JOD": "د.أ", "USD": "$"}.get(LAHZA_CURRENCY, LAHZA_CURRENCY)

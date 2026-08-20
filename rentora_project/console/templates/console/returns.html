@@ -1,4 +1,5 @@
 {% extends "console/base_console.html" %}
+{% load currency %}
 {% block title %}Returns & Disputes{% endblock %}
 {% block page_title %}Returns &amp; Disputes{% endblock %}
  
@@ -74,7 +75,7 @@
           <td><a href="{% url 'console:user_detail' b.tool.owner.id %}">{{ b.tool.owner.name }}</a></td>
           <td><a href="{% url 'console:user_detail' b.renter.id %}">{{ b.renter.name }}</a></td>
           <td class="con-td-muted">{{ b.return_requested_at|timesince }} ago</td>
-          <td>${{ b.total_price }}</td>
+          <td>{{ b.total_price|money }}</td>
           <td>
             <button class="con-btn con-btn--ghost con-btn--sm" data-modal-open="closeModal-{{ b.id }}">
               <i class="fa-solid fa-gavel"></i> Close manually
@@ -105,7 +106,7 @@
           <td><a href="{% url 'console:user_detail' b.renter.id %}">{{ b.renter.name }}</a></td>
           <td class="con-td-muted">{{ b.end_date }}</td>
           <td><span class="con-count con-count--hot">{{ b.end_date|timesince }}</span></td>
-          <td>${{ b.total_price }}</td>
+          <td>{{ b.total_price|money }}</td>
           <td>
             <button class="con-btn con-btn--ghost con-btn--sm" data-modal-open="closeModal-{{ b.id }}">
               <i class="fa-solid fa-gavel"></i> Close manually

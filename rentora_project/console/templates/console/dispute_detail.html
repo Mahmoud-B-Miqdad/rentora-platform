@@ -1,4 +1,5 @@
 {% extends "console/base_console.html" %}
+{% load currency %}
 {% block title %}Dispute #{{ dispute.id }}{% endblock %}
 {% block page_title %}Dispute #{{ dispute.id }}{% endblock %}
 
@@ -22,11 +23,11 @@
       <div><small class="con-td-muted">Rental period</small>
         <p>{{ booking.start_date }} → {{ booking.end_date }}</p></div>
       <div><small class="con-td-muted">Rental total</small>
-        <p>${{ booking.total_price }}</p></div>
+        <p>{{ booking.total_price|money }}</p></div>
       <div><small class="con-td-muted">Amount in dispute (paid by renter)</small>
-        <p><strong>${{ dispute.deposit_amount }}</strong></p></div>
+        <p><strong>{{ dispute.deposit_amount|money }}</strong></p></div>
       <div><small class="con-td-muted">Tool's stated deposit (reference)</small>
-        <p><strong>${{ booking.tool.deposit|default:"0" }}</strong></p></div>
+        <p><strong>{{ booking.tool.deposit|default:"0"|money }}</strong></p></div>
       <div><small class="con-td-muted">Opened</small>
         <p>{{ dispute.created_at|date:"M d, Y · H:i" }}</p></div>
     </div>
@@ -158,8 +159,8 @@
   <div class="con-card__body">
     <div class="con-meta-grid">
       <div><small class="con-td-muted">Outcome</small><p><strong>{{ dispute.get_staff_decision_display }}</strong></p></div>
-      <div><small class="con-td-muted">Refunded to renter</small><p>${{ dispute.refund_amount }}</p></div>
-      <div><small class="con-td-muted">Paid to owner</small><p>${{ dispute.claim_amount }}</p></div>
+      <div><small class="con-td-muted">Refunded to renter</small><p>{{ dispute.refund_amount|money }}</p></div>
+      <div><small class="con-td-muted">Paid to owner</small><p>{{ dispute.claim_amount|money }}</p></div>
       <div><small class="con-td-muted">Resolved by</small><p>{{ dispute.resolved_by.name|default:"—" }}</p></div>
       <div><small class="con-td-muted">Resolved at</small><p>{{ dispute.resolved_at|date:"M d, Y · H:i" }}</p></div>
     </div>
@@ -175,7 +176,7 @@
   <div class="con-card__body">
     <p class="con-td-muted" style="margin-bottom:16px;font-size:13px;">
       The rental is on hold and no late fees are accruing. You are splitting the
-      <strong>${{ dispute.deposit_amount }}</strong> the renter paid — the two shares
+      <strong>{{ dispute.deposit_amount|money }}</strong> the renter paid — the two shares
       always total exactly that, so whatever you do not refund goes to the owner and
       becomes their earnings for this rental. Resolving closes the rental and emails
       your reason to both parties.
@@ -187,7 +188,7 @@
       <div class="dsp-choices">
         <label class="dsp-choice">
           <input type="radio" name="decision" value="refund_full" required>
-          <span><strong>Full refund to renter</strong><small>Renter was right — all ${{ dispute.deposit_amount }} back, owner earns $0.</small></span>
+          <span><strong>Full refund to renter</strong><small>Renter was right — all {{ dispute.deposit_amount|money }} back, owner earns {{ 0|money }}.</small></span>
         </label>
         <label class="dsp-choice">
           <input type="radio" name="decision" value="owner_claim">
@@ -199,7 +200,7 @@
         </label>
         <label class="dsp-choice">
           <input type="radio" name="decision" value="split_50_50">
-          <span><strong>Split 50 / 50</strong><small>Evidence inconclusive — each side gets half of ${{ dispute.deposit_amount }}.</small></span>
+          <span><strong>Split 50 / 50</strong><small>Evidence inconclusive — each side gets half of {{ dispute.deposit_amount|money }}.</small></span>
         </label>
         <label class="dsp-choice">
           <input type="radio" name="decision" value="dismiss">
@@ -209,20 +210,20 @@
 
       <div class="dsp-amounts">
         <div>
-          <label class="con-td-muted" for="refund_amount">Refund to renter ($) — for “Partial refund”</label>
+          <label class="con-td-muted" for="refund_amount">Refund to renter ({{ CURRENCY_SYMBOL }}) — for “Partial refund”</label>
           <input type="number" step="0.01" min="0" max="{{ dispute.deposit_amount }}"
                  id="refund_amount" name="refund_amount" class="con-input" placeholder="0.00">
           <small class="con-td-muted" style="font-size:11.5px;">Owner receives the rest.</small>
         </div>
         <div>
-          <label class="con-td-muted" for="claim_amount">Pay owner ($) — for “Pay owner”</label>
+          <label class="con-td-muted" for="claim_amount">Pay owner ({{ CURRENCY_SYMBOL }}) — for “Pay owner”</label>
           <input type="number" step="0.01" min="0" max="{{ dispute.deposit_amount }}"
                  id="claim_amount" name="claim_amount" class="con-input" placeholder="0.00">
           <small class="con-td-muted" style="font-size:11.5px;">Renter is refunded the rest.</small>
         </div>
       </div>
       <p class="con-td-muted" style="margin-top:10px;font-size:12px;">
-        Maximum on either field is <strong>${{ dispute.deposit_amount }}</strong> — the shares
+        Maximum on either field is <strong>{{ dispute.deposit_amount|money }}</strong> — the shares
         always add up to the amount in dispute.
       </p>
 

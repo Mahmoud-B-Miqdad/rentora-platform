@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n currency %}
 
 {% block extra_js %}
 <script>
@@ -138,7 +138,7 @@ function wishlistRemove(btn, toolId) {
 
                     <div class="tool-card__footer">
                         <div class="tool-card__price-box">
-                            <span class="tool-card__price">${{ record.tool.daily_rate }}</span>
+                            <span class="tool-card__price">{{ record.tool.daily_rate|money }}</span>
                             <span class="tool-card__unit">/ {% trans "day" %}</span>
                         </div>
                         <a href="{% url 'listings:tools:detail' record.tool.id %}"
