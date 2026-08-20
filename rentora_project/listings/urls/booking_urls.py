@@ -6,9 +6,10 @@ from listings.views.booking_views import (
     request_return, confirm_return, dispute_return,
     cancel_booking, document_pickup,
     booking_confirmation_view,
-    payment_view, payment_success_view,
-    stripe_webhook,
 	report_user
+)
+from listings.views.payment_views import (
+    payout_setup, start_payment, payment_callback, lahza_webhook,
 )
 
 urlpatterns = [
@@ -22,8 +23,14 @@ urlpatterns = [
     path('booking/<int:booking_id>/cancel/',      cancel_booking,           name='cancel_booking'),
     path('booking/<int:booking_id>/condition/',   document_pickup,          name='document_pickup'),
     path('booking/<int:booking_id>/confirm/',     booking_confirmation_view,name='booking_confirmation'),
-    path('booking/<int:booking_id>/pay/',         payment_view,             name='payment'),
-    path('booking/<int:booking_id>/pay/success/', payment_success_view,     name='payment_success'),
 	path('report/<int:user_id>/',                  report_user,              name='report_user'),
-    path('stripe/webhook/',                       stripe_webhook,            name='stripe_webhook'),
+
+    # ── Payments (Lahza) ──────────────────────────────────────────────
+    path('payouts/setup/',                        payout_setup,             name='payout_setup'),
+    path('booking/<int:booking_id>/pay/',         start_payment,            name='payment'),
+    path('booking/<int:booking_id>/pay/callback/', payment_callback,        name='payment_callback'),
+    path('payments/lahza/webhook/',               lahza_webhook,            name='lahza_webhook'),
+    # Alias without the trailing slash — POST is not auto-redirected by Django,
+    # so accept both spellings of the webhook URL the gateway may call.
+    path('payments/lahza/webhook',                lahza_webhook),
 ]

@@ -300,6 +300,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text="Trust badge granted after identity confirmation.",
     )
+
+    # ── Payouts (Lahza subaccount) ─────────────────────────────────────────
+    # When set, rental payments split automatically: this owner's share goes to
+    # their Lahza subaccount, the platform keeps its commission.
+    lahza_subaccount_code = models.CharField(
+        max_length=64, blank=True, default="",
+        help_text="Lahza subaccount code (ACCT_...) that receives this owner's payouts.",
+    )
+    payout_bank_code = models.CharField(
+        max_length=20, blank=True, default="",
+        help_text="Settlement bank code from Lahza (e.g. AIB).",
+    )
+    payout_account_last4 = models.CharField(
+        max_length=4, blank=True, default="",
+        help_text="Last 4 digits of the payout account, for display only.",
+    )
+
     # Required by Django's admin and permission system.
     is_active = models.BooleanField(
         default=True,

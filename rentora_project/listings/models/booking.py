@@ -13,8 +13,8 @@ from django.utils.translation import gettext_lazy as _
 class BookingStatus(models.TextChoices):
     PENDING         = "pending",         _("Pending")
     PAYMENT_PENDING = "payment_pending", _("Payment Pending")
-    APPROVED        = "approved",        _("Approved")   # legacy pre-Stripe bookings
-    CONFIRMED       = "confirmed",       _("Confirmed")  # payment received via Stripe
+    APPROVED        = "approved",        _("Approved")   # legacy pre-payment-gateway bookings
+    CONFIRMED       = "confirmed",       _("Confirmed")  # payment received via the gateway
     REJECTED        = "rejected",        _("Rejected")
     RETURN_PENDING  = "return_pending",  _("Return Pending")
     COMPLETED       = "completed",       _("Completed")
