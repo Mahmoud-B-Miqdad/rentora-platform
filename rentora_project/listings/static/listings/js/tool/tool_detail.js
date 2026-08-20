@@ -7,6 +7,7 @@
     var cfg       = window.AppConfig || {};
     var images    = cfg.images    || [];
     var dailyRate = cfg.dailyRate || 0;
+    var currency  = cfg.currencySymbol || '₪';
 
     /* ── Image Slider ───────────────────────────────────────────────────── */
     if (images.length > 1) {
@@ -56,7 +57,7 @@
         var days  = Math.max(Math.ceil((e - s) / 86400000), 1);
         var total = (days * dailyRate).toFixed(2);
         if (estimateVal) {
-            estimateVal.textContent = '$' + total + ' (' + days + ' day' + (days > 1 ? 's' : '') + ')';
+            estimateVal.textContent = total + ' ' + currency + ' (' + days + ' day' + (days > 1 ? 's' : '') + ')';
         }
         estimateBox.style.display = 'flex';
     }

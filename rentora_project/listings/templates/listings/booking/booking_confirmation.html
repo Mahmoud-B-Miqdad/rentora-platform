@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n currency %}
 
 {% block title %}{% trans "Booking Confirmed" %} — Rentora{% endblock %}
 
@@ -63,7 +63,7 @@
         </div>
         <div class="detail-item highlight">
           <div class="detail-label"><i class="fa-solid fa-coins"></i> {% trans "Total Price" %}</div>
-          <div class="detail-value">${{ booking.total_price }}</div>
+          <div class="detail-value">{{ booking.total_price|money }}</div>
         </div>
       </div>
 

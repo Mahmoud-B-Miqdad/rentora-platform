@@ -52,7 +52,7 @@
         function updateSlider() {
             var pct = (range.value / range.max) * 100;
             range.style.setProperty('--pct', pct + '%');
-            label.textContent = 'Up to $' + range.value;
+            label.textContent = 'Up to ' + range.value + ' ' + (cfg.currencySymbol || '₪');
         }
         range.addEventListener('input', updateSlider);
         updateSlider();

@@ -1,5 +1,5 @@
 {% extends "emails/_base_email.html" %}
-{% load i18n %}
+{% load i18n currency %}
 
 {% block accent %}red{% endblock %}
 {% block heading %}{% trans "Rental is overdue" %}{% endblock %}
@@ -8,9 +8,9 @@
   <p>{% blocktrans %}<strong>{{ tool_title }}</strong> was due back on {{ end_date }} and is now {{ days_overdue }} day(s) overdue.{% endblocktrans %}</p>
 
   <div class="panel panel--warn">
-    <div class="row"><span>{% trans "Daily rate" %}</span><span>${{ daily_rate }}</span></div>
+    <div class="row"><span>{% trans "Daily rate" %}</span><span>{{ daily_rate|money_plain }}</span></div>
     <div class="row"><span>{% trans "Days overdue" %}</span><span>{{ days_overdue }}</span></div>
-    <div class="row"><span>{% trans "Extra charge so far" %}</span><span>${{ overdue_charge }}</span></div>
+    <div class="row"><span>{% trans "Extra charge so far" %}</span><span>{{ overdue_charge|money_plain }}</span></div>
   </div>
 
   <p>{% blocktrans %}Return the tool to {{ owner_name }} as soon as you can. Charges stop the moment the owner marks it returned and you confirm.{% endblocktrans %}</p>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n currency %}
 
 {% block title %}{{ profile_user.name }} — {% trans "Profile" %} — Rentora{% endblock %}
 
@@ -234,7 +234,7 @@
                 <h3 class="ptool-card__title">{{ tool.title }}</h3>
                 <div class="ptool-card__meta">
                   <span class="ptool-card__cat">{% if tool.category %}{{ tool.category.name }}{% else %}{% trans "Uncategorized" %}{% endif %}</span>
-                  <span class="ptool-card__price">${{ tool.daily_rate }}/{% trans "day" %}</span>
+                  <span class="ptool-card__price">{{ tool.daily_rate|money }}/{% trans "day" %}</span>
                 </div>
               </div>
             </a>

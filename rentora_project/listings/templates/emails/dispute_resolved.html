@@ -1,5 +1,5 @@
 {% extends "emails/_base_email.html" %}
-{% load i18n %}
+{% load i18n currency %}
 
 {% block accent %}teal{% endblock %}
 {% block heading %}{% trans "Dispute resolved" %}{% endblock %}
@@ -10,9 +10,9 @@
   <div class="panel">
     <div class="row"><span>{% trans "Decision" %}</span><span>{{ decision_label }}</span></div>
     {% if recipient_role == "renter" %}
-      <div class="row"><span>{% trans "Refunded to you" %}</span><span>${{ refund_amount }}</span></div>
+      <div class="row"><span>{% trans "Refunded to you" %}</span><span>{{ refund_amount|money_plain }}</span></div>
     {% else %}
-      <div class="row"><span>{% trans "Paid to you from the deposit" %}</span><span>${{ claim_amount }}</span></div>
+      <div class="row"><span>{% trans "Paid to you from the deposit" %}</span><span>{{ claim_amount|money_plain }}</span></div>
     {% endif %}
     <div class="row"><span>{% trans "Rental" %}</span><span>{{ booking.start_date }} → {{ booking.end_date }}</span></div>
   </div>

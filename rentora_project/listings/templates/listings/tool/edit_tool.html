@@ -263,12 +263,12 @@
                  value="{{ tool.location }}" required>
         </div>
         <div class="form-group">
-          <label for="id_rate">{% trans "Price / Day ($)" %} <span class="req">*</span></label>
+          <label for="id_rate">{% blocktrans %}Price / Day ({{ CURRENCY_SYMBOL }}){% endblocktrans %} <span class="req">*</span></label>
           <input type="number" id="id_rate" name="daily_rate"
                  value="{{ tool.daily_rate }}" step="0.01" min="0" required>
         </div>
         <div class="form-group">
-          <label for="id_deposit">{% trans "Deposit ($)" %}</label>
+          <label for="id_deposit">{% blocktrans %}Deposit ({{ CURRENCY_SYMBOL }}){% endblocktrans %}</label>
           <input type="number" id="id_deposit" name="deposit"
                  value="{{ tool.deposit|default:'' }}" step="0.01" min="0">
           <small>{% trans "Refundable upon safe return" %}</small>
