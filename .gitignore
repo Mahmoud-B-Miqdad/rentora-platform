@@ -40,3 +40,5 @@ CLAUDE.md
 
 media/
 >>>>>>> develop
+.env.save
+rentora_project/staticfiles/
