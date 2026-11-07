@@ -3,6 +3,7 @@ from django.contrib    import messages
 
 from users.models    import User, EmailVerification
 from users.services  import send_verification_email
+from listings.services.abuse_guard import allow, throttle
 from listings.models import Tool, Booking, Review, ToolImage
 from listings.models.report import Report
 from django.db.models import Prefetch, Q, Avg
@@ -12,22 +13,14 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-def test_email(request):
-    send_mail(
-        subject="Rentora Test Email",
-        message="Hello! This is a test email from Rentora.",
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=["monaalakhars00@gmail.com"],
-        fail_silently=False,
-    )
-
-    return HttpResponse("Email sent successfully!")
-
-
 # ─────────────────────────────────────────────
 #  Register View
 # ─────────────────────────────────────────────
 
+# Each signup mails a verification link to whatever address is typed, so cap it
+# per IP and per target address (stops mail-bombing one victim from many IPs).
+@throttle("register-ip", 10, 3600)
+@throttle("register-email", 3, 3600, key="post:email")
 def register_view(request):
     if request.method == "POST":
         errors = User.objects.register_validator(request.POST)
@@ -131,6 +124,10 @@ def resend_verification_view(request):
 
     if user.is_verified:
         messages.info(request, "Your account is already verified.")
+        return redirect("users:profile")
+
+    if not allow("resend-verification", user.pk, 3, 3600):
+        messages.error(request, "Too many requests. Please wait before asking for another email.")
         return redirect("users:profile")
 
     try:

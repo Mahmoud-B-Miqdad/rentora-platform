@@ -14,6 +14,7 @@ import os
 import environ
 from pathlib import Path
 import sys
+import tempfile
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -122,6 +123,23 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+
+# ── Abuse throttling ──────────────────────────────────────────
+# File-based so every gunicorn worker on the host shares the same counters
+# (LocMemCache is per-process, which would multiply each limit by the worker
+# count). Used only by listings.services.abuse_guard.
+CACHES = {
+    'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
+    'throttle': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': env('THROTTLE_CACHE_DIR',
+                        default=str(Path(tempfile.gettempdir()) / 'rentora_throttle')),
+    },
+}
+
+# Number of reverse proxies (Nginx = 1) in front of gunicorn. Used to find the
+# real client IP in X-Forwarded-For; set 0 if gunicorn is exposed directly.
+TRUSTED_PROXY_COUNT = env.int('TRUSTED_PROXY_COUNT', default=1)
 
 DATABASES = {
     'default': env.db(

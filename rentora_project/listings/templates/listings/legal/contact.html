@@ -165,8 +165,18 @@
     {% endfor %}
   {% endif %}
 
+  {% if errors.form %}
+    <div class="error-message">{{ errors.form }}</div>
+  {% endif %}
+
   <form method="POST" class="contact-form" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
+    <input type="hidden" name="form_token" value="{{ form_token }}">
+    {# Honeypot: hidden from people, filled in by bots. Leave empty. #}
+    <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;height:0;overflow:hidden;">
+      <label for="website">Website</label>
+      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" value="">
+    </div>
 
     <!-- Name -->
     <div class="form-group">
@@ -228,6 +238,9 @@
         <option value="technical" {% if form_data.category == 'technical' %}selected{% endif %}>{% trans "Technical Issue" %}</option>
         <option value="other" {% if form_data.category == 'other' %}selected{% endif %}>{% trans "Other" %}</option>
       </select>
+      {% if errors.category %}
+        <span class="error">{{ errors.category }}</span>
+      {% endif %}
     </div>
 
     <!-- Message -->
